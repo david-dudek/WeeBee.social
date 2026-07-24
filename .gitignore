@@ -1,0 +1,5 @@
+# macOS
+.DS_Store
+
+# Local, machine-specific AI-tool permissions (not project configuration)
+.claude/settings.local.json
