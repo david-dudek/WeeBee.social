@@ -1,8 +1,10 @@
-# "The Network" — Design Review Requested
+# WeeBee — Design Documents
 
-This repository contains the complete design documents for a **small, private, deliberately anti-viral social network** that has not been built yet. I'm publishing them to request technical review **before** writing the first line of code — when your feedback is cheapest to act on.
+**WeeBee** (`weebee.social`) is a **small, private, deliberately anti-viral social network**. This repository holds its complete design documents. The platform has not been built yet — these documents come first, on purpose, so that the thinking is settled before the first line of code, when changes are cheapest.
 
-**I am a solo founder: an IT professional, not a professional developer.** The platform will be built with AI coding assistance, following these documents step by step. That's why they are unusually explicit — they are written to be executable by AI models and reviewable by humans. You are the humans.
+**I am a solo founder: an IT professional, not a professional developer.** WeeBee will be built with AI coding assistance, following these documents step by step. That's why they are unusually explicit — they are written to be executable by AI models and readable by humans.
+
+**On feedback:** I'm not running an open, public review process. I'll refine these documents in conversation with my AI assistant, and I may share them with a handful of friends who work in technology for a sanity check. If you're one of those friends: thank you — the sections below tell you where a sharp eye is worth the most. Blunt is welcome; "this will fail because X," with a concrete X, is the most useful sentence you can write me.
 
 ## What the project is (60 seconds)
 
@@ -61,14 +63,12 @@ Before commenting "why not [other stack]": §14 has an alternatives-considered t
 - **Where does a solo non-developer most likely get stuck?**
 - **Are the verifications adequate?** Each one is the only quality gate before the next step.
 
-## How to give feedback
+## How to give feedback (for the few I share this with)
 
-- **Open a GitHub Issue.** One topic per issue. Please reference the document and section number (e.g., "SPEC §10.3").
-- **Please don't send pull requests.** These documents change only through a versioned design process on my side; every accepted change gets a version bump and changelog note, and every rejected suggestion gets its reasons recorded. PRs will be closed unmerged — not out of disrespect, but because the process is the point.
+- **However is easiest for you** — a message, a note, a marked-up copy. Please reference the document and section number (e.g., "SPEC §10.3") so I can find what you mean.
+- **Please don't send pull requests.** These documents change only through a versioned design process on my side; every accepted change gets a version bump and changelog note, and every rejected suggestion gets its reasons recorded in-document (see SPEC §4.5's rejected-uniqueness entry for the format). The versioned record is the point.
 - Blunt is fine. "This will fail because X" with a concrete X is the most useful sentence you can write me.
 
-## What happens with your feedback
+## The plan from here
 
-Every issue gets triaged: accepted (document amended, version bumped, credited in the changelog if you wish), rejected (with reasons recorded in the document — see SPEC §4.5's rejected-uniqueness entry for the format), or parked (recorded as a future consideration). Nothing is silently ignored.
-
-Thank you. The best outcome of publishing these documents is someone telling me, precisely and with evidence, where they're wrong.
+Refine the documents to the point where they can be built, then build WeeBee — solo, with AI assistance, following BUILD_PLAN.md. If the core ideas have merit and it gets built and working, it either finds its small audience or the ideas get picked up by others. Either is a good outcome.
