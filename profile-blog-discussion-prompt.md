@@ -18,28 +18,17 @@ This is a design discussion, not an implementation task. Do not edit SPEC.md unl
 - End with (a) a list of decisions I need to make, and (b) draft spec-ready wording for the ones
   where my answer is predictable, marked as drafts.
 
-## Context from the prior session (feed and notifications)
+## Where the last session got to
 
-We just worked through the feed side. Provisional conclusions you should treat as *input*, not
-as settled spec — challenge them if the profile/blog view changes the picture:
+The immediately preceding session worked the feed and notification side, and its conclusions are
+**already written into SPEC v1.15** — read that changelog entry first. In short: relative
+timestamps (§7.5.1), post and comment editing (§7.8), the rewritten notification model with
+per-field profile triggers, coalescing, comment/reaction notifications and post-following (§12),
+the two capped bio fields (§9.4), the friend-request free-text vector with its screening and
+change cooldown (§5.2, §13.6), and structured profile fields considered and rejected (§9.6).
 
-- §9.3 currently notifies friends on three events (new profile post, changed bio, new gallery
-  image) but §7.1 gives only one generic message string, "David updated his profile." That's a
-  contradiction. Leaning toward: notify on new blog posts and profile-photo changes; coalesce
-  gallery additions to at most one notification per author per recipient per day; bio, about,
-  hashtag, and theme changes are silent and self-announcing on visit (the §4.5.1 name-change
-  precedent — "the dual display *is* the announcement").
-- Blog-post notifications carry author, event type, timestamp, and a link — **never an excerpt**,
-  because a notification with body text turns a pull-model profile post into a push-model feed
-  post with a 300-person audience.
-- Post and comment **editing is entirely unspecified** in both SPEC and ARCHITECTURE. Leaning
-  toward: editable until expiry with a permanent plain-text "edited · <timestamp>" marker, no
-  version history, no notification on edit, and five invariants — an edit never re-snapshots the
-  audience (§7.4), never resets the 90-day clock (§7.5), never re-orders the post in the feed
-  (§7.7), always re-runs full content validation (URL allowlist above all, §7.2.3), and the post
-  author may delete but never edit someone else's comment (§8.1).
-- §12's notification list has no entry for comments or reactions on your own content, so under
-  the spec as written an author only discovers them by revisiting the post. Unresolved.
+Treat all of that as settled. Your job is the profile page and blog *as surfaces* — everything
+below is either still open, or newly exposed by those decisions.
 
 ## What I want to work through
 
@@ -48,29 +37,29 @@ as settled spec — challenge them if the profile/blog view changes the picture:
 1. §9.1 fixes the section order (identity header → pinned posts → static about → gallery → blog).
    Is that the right order for the three viewer tiers of §9.2? What does an FoF actually see, and
    what does a hashtag-matched FoF see, section by section? What are the empty states?
-2. The one-line bio and the extended about section have **no length caps** anywhere in §14, while
-   gallery images and profile hashtags do. What should they be, and does the about section obey
-   the same whitespace/preformatted rules as posts (§7.2.1)?
-3. Should the profile ever get **structured fields** (location, birthday, relationship status,
-   occupation)? Weigh "help people form new friendships" (§1.1) against data minimalism (§1.3)
-   and the fact that structured fields are matchable in ways free text isn't. I'm inclined to
-   ship none in v1 — argue me out of it or record it as a decision.
-4. The profile photo: required or optional? Default avatar? §16.3 requires uploader-authored alt
+2. Does the extended bio (§9.4) obey the whitespace rules of §7.2.1? Does it get a preformatted
+   toggle (I assume no)? Does it fold at `BLOG_FOLD_CHARS`, or is 2,000 characters short enough
+   that folding never triggers and the rule would be dead code?
+3. The profile photo: required or optional? Default avatar? §16.3 requires uploader-authored alt
    text on every image *including the profile photo* — what does a sensible prompt for "describe
    your own face" look like, and is "decorative" ever a legitimate answer for a profile photo?
-5. Gallery (§9.4, 8 images): captions? Ordering and reordering? Does replacing an image re-prompt
-   for alt text?
+   (Note the photo is now rate-limited alongside the short bio, §13.6.)
+4. Gallery (§9.4, 8 images): captions? Ordering and reordering? Does replacing an image re-prompt
+   for alt text? Does reordering count as a change for notification purposes (§12.1)?
 
 **B. Permanence — the sharpest tension on this page**
 
-6. §7.5 expires "every post and every comment" at 90 days, but the gallery, bio, about section,
-   and profile photo are not posts, so they appear to be **permanent**. Is that intended? A
+5. §7.5 expires "every post and every comment" at 90 days, but the gallery, both bio fields, and
+   the profile photo are not posts, so they appear to be **permanent**. Is that intended? A
    permanent 8-image gallery sitting on a platform whose defining stance is that nothing outlives
    90 days deserves an explicit decision either way.
-7. Pinned posts (§7.6) are exempt from expiry indefinitely, but §8.1 expires comments at their own
+6. Pinned posts (§7.6) are exempt from expiry indefinitely, but §8.1 expires comments at their own
    90 days regardless. So a pinned post outlives all conversation on it and eventually shows as a
    bare post with its comments silently gone. Intended? Should a pinned post display that it once
    had comments, or nothing at all?
+7. Pinned posts are the **only** content that can reach the long tail of the §7.5.1 timestamp
+   ladder, since everything else dies at 90 days. Given that §7.5 already replaces their expiry
+   countdown with a "pinned" marker, should a pinned post show its age at all?
 8. Does the blog need pagination? Its maximum depth is ~90 days of posts plus up to 10 pinned, so
    it may be self-limiting. Infinite scroll is banned (§16.2) — what's the navigation?
 
@@ -81,12 +70,13 @@ as settled spec — challenge them if the profile/blog view changes the picture:
    assume no.)
 10. Hashtags on a profile post are the FoF visibility gate (§11.3), which means the composer is
     making an audience decision that looks like decoration. How does the composer make that
-    consequence unmissable without nagging?
-11. Related, and possibly the biggest hole we found: a **commenter is never told the audience they
-    are speaking to.** On a hashtag-gated post, their words become readable by people who aren't
-    even the author's friends (§8.1's accepted consequence, one hop further). Should every post
-    display its visibility scope in text to everyone who can see it? And does this make §17's
-    parked "per-post friends-only comments switch" load-bearing enough to un-park?
+    consequence unmissable without nagging? Note that §7.8 invariant 1 now lets an author change
+    that gate *after* posting by editing tags — does the editor need the same warning?
+11. Possibly the biggest hole still open: a **commenter is never told the audience they are
+    speaking to.** On a hashtag-gated post their words become readable by people who aren't even
+    the author's friends — §8.1's accepted consequence, one hop further. Should every post display
+    its visibility scope in text to everyone who can see it? And does this make §17's parked
+    "per-post friends-only comments switch" load-bearing enough to un-park?
 12. §9.1 says the blog is "filtered per viewer." Confirm exactly what a hashtag-matched FoF sees
     in the blog section, and what the pinned-posts section shows them if a pinned post carries no
     matching tag.
@@ -104,7 +94,8 @@ as settled spec — challenge them if the profile/blog view changes the picture:
 16. What does the page look like for: a blocked viewer (§5.4), an unfriended former friend (§7.4),
     an account in its 30-day deletion grace period (§4.7), and the owner themselves?
 17. The report action on a profile (§13.2) — where does it live, and what does it capture given
-    that a profile has no single frozen "content"?
+    that a profile has no single frozen "content"? Note the bio is now screened (§9.4) but the
+    photo is not, so the report queue is the only backstop for an abusive profile image.
 
 **E. Accessibility (§16)**
 
