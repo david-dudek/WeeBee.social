@@ -10,7 +10,9 @@
 
 The core thesis: the reshare/repost button is the original sin of social media. Once content can travel beyond the audience its author chose, virality exists — and virality is the mechanism that commercial and political manipulation exploits. **This platform has no concept of reach. Nothing can go viral.**
 
-Concretely: invite-only membership (permanently), a hard cap of 300 friends, posts pushed to at most 30 hand-picked people, all content auto-deleted after 90 days, no DMs (structured contact-card exchange instead), no likes or counters of any kind, no algorithmic feed, no tracking of any kind, no ads, no API. Friend discovery works only through mutual friends and shared interests — never beyond friends-of-friends. One server, one database, server-rendered pages, everything self-hosted except outbound email.
+Concretely: invite-only membership (permanently), a hard cap of 300 friends, posts pushed to at most 30 hand-picked people, every post and comment auto-deleted after 90 days, no DMs (structured contact-card exchange instead), no likes or counters of any kind, no algorithmic feed, no tracking of any kind, no ads, no API. Friend discovery works only through mutual friends and shared interests — never beyond friends-of-friends. One server, one database, server-rendered pages, everything self-hosted except outbound email.
+
+**On the 90 days, precisely:** what expires is what you *say*. What you *are* — your profile photo, your bio, your gallery of eight pictures — stays until you change it. **Statements expire; descriptions do not** (SPEC §9.7). The one deliberate exception on the other side is a pinned post: up to ten, kept for as long as you keep them pinned, which is the only act of preservation the platform offers.
 
 ## What is NOT up for review
 
@@ -26,7 +28,7 @@ The *existence* of hard caps is philosophy; the **numbers are honest judgment ca
 
 - Friend cap **300** — too generous? too tight?
 - Post audience / group size **30**
-- Content lifetime **90 days** (sticky in both directions once live — lowering it later deletes content people expected to keep, raising it outlives authors' expectations)
+- Post and comment lifetime **90 days** (sticky in both directions once live — lowering it later deletes content people expected to keep, raising it outlives authors' expectations)
 - Invite budget: **5 banked max, +1/month, new accounts start with 2** — is this the right growth throttle?
 - Display-name change cooldown **90 days**, with 90 days of "NewName (formerly OldName)" dual display
 - Pinned posts **10**, gallery images **8**, profile hashtags **10**, contact-card items **12**
