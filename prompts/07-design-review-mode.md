@@ -1,7 +1,7 @@
 # Prompt 07 — What happens when the build meets a wall
 
 > **Run in a fresh session.** Paste everything below the line.
-> **Touches:** BUILD_PLAN.md §0.2 and the Appendix; the status line in all four document headers; CHANGELOG.md
+> **Touches:** BUILD_PLAN.md §0.2, §2.4 and the Appendix; the status line in all four document headers; CHANGELOG.md; possibly `prompts/README.md`
 > **Depends on:** prompt 01.
 > **Expected outcome:** a defined path from "the AI stopped" back to "the build continues," and a defined act that moves a document from DRAFT to founder-approved.
 
@@ -178,6 +178,40 @@ question out of a working session.** That was invented ad hoc. It should be writ
      §2.4 which guard survives a change of tool, so the founder is not relying on a lock
      that quietly stopped applying. Do not overstate the fix — the honest answer may be
      "layer 4 (diffable git history) is what actually survives," which §2.4 already lists.
+
+9. **Is CHANGELOG.md a law file?** *(Founder-raised during the 1.17 session; deferred to
+   here.)* §2.4's guards protect SPEC.md, ARCHITECTURE.md, BUILD_PLAN.md and `constants.py`.
+   CHANGELOG.md did not exist when that list was written and is now part of the versioned
+   record — arguably the most sensitive part, because it is the file that makes an unsynced
+   document *visible*. A changelog quietly rewritten to say ARCHITECTURE was synced when it
+   was not would defeat the mechanism 1.17 was built to create.
+
+   **The tension is real and it is why this was not decided unilaterally:** protecting the
+   file stops an AI rewriting history, but the file must also be *written* in every design
+   session — which is exactly what the deny rules block.
+
+   **Recommendation: add it, and let the repository split do the work.** §2.4's guards are
+   installed in the **build** repository (`thenetwork`) — the deny rules are its
+   `.claude/settings.json`, the hook is its pre-commit hook. Design sessions run in the
+   design-document repository, which has no deny rules at all. A build session has no
+   legitimate reason to touch the changelog, because a build step that wants to change it is
+   by definition a design conversation. The protection lands where the risk is and costs
+   nothing where the writing happens.
+
+   Two things to get right if the answer is yes:
+
+   - **The list is enumerated in four places**, not one, and they must not drift: BUILD_PLAN
+     §0.2 rule 3 (the founder's filename glance), §0.2 rule 5 (the prohibition itself), §2.4
+     guard 1 (the deny rules), and `prompts/README.md`'s "Two kinds of session". Item 6 may
+     be about to move that last one into BUILD_PLAN, which would reduce this to three.
+   - **§2.4's ✅ verification is part of the change.** It currently checks that an attempted
+     edit to SPEC.md is refused. A fifth protected file that nothing verifies is not
+     protected.
+
+   This interacts with item 7's last bullet: if `TODO.md` and `prompts/` are ruled *inside*
+   the versioned record, the same question arises for them — and the answer is probably
+   different, since build sessions may legitimately need to file a discovery-loop proposal
+   into `prompts/` under item 2.
 
 ## Constraints to respect
 
