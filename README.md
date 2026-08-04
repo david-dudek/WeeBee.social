@@ -1,5 +1,9 @@
 # WeeBee — Design Documents
 
+**Project version:** 1.17 · 2026-08-03 · DRAFT pending founder review
+**This file last changed in:** 1.17 (version header added; feedback section now names CHANGELOG.md)
+**History:** see [CHANGELOG.md](CHANGELOG.md)
+
 **WeeBee** (`weebee.social`) is a **small, private, deliberately anti-viral social network**. This repository holds its complete design documents. The platform has not been built yet — these documents come first, on purpose, so that the thinking is settled before the first line of code, when changes are cheapest.
 
 **I am a solo founder: an IT professional, not a professional developer.** WeeBee will be built with AI coding assistance, following these documents step by step. That's why they are unusually explicit — they are written to be executable by AI models and readable by humans.
@@ -68,7 +72,7 @@ Before commenting "why not [other stack]": §14 has an alternatives-considered t
 ## How to give feedback (for the few I share this with)
 
 - **However is easiest for you** — a message, a note, a marked-up copy. Please reference the document and section number (e.g., "SPEC §10.3") so I can find what you mean.
-- **Please don't send pull requests.** These documents change only through a versioned design process on my side; every accepted change gets a version bump and changelog note, and every rejected suggestion gets its reasons recorded in-document (see SPEC §4.5's rejected-uniqueness entry for the format). The versioned record is the point.
+- **Please don't send pull requests.** These documents change only through a versioned design process on my side; every accepted change gets a version bump and an entry in [CHANGELOG.md](CHANGELOG.md), and every rejected suggestion gets its reasons recorded in-document (see SPEC §4.5's rejected-uniqueness entry for the format). The versioned record is the point.
 - Blunt is fine. "This will fail because X" with a concrete X is the most useful sentence you can write me.
 
 ## The plan from here

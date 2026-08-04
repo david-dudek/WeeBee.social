@@ -26,7 +26,7 @@ Status values: `not run` · `in progress` · `done` · `deferred` · `dropped`
 
 | # | Prompt | Touches | Depends on | Status | Landed in |
 |---|---|---|---|---|---|
-| 01 | [Changelog & project-wide versioning](prompts/01-changelog-and-versioning.md) | all four docs, new CHANGELOG.md | — | not run | |
+| 01 | [Changelog & project-wide versioning](prompts/01-changelog-and-versioning.md) | all four docs, new CHANGELOG.md | — | done | 1.17 |
 | 02 | [Small corrections & open items](prompts/02-small-corrections.md) | SPEC, ARCHITECTURE, BUILD_PLAN | 01 | not run | |
 | 03 | [Visibility engine performance](prompts/03-visibility-engine-performance.md) | ARCHITECTURE §5, §9 | 01 | not run | |
 | 04 | [Availability & DDoS posture](prompts/04-availability-and-ddos.md) | ARCHITECTURE §7, §13 | 01 | not run | |
