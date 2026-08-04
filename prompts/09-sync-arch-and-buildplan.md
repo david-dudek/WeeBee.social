@@ -76,6 +76,21 @@ by prompts 02–08.
   now screening, the **send hold**, and the **snapshot**, and the "cooldown is the only
   control that covers the photo" sentence is obsolete — the snapshot is what actually
   covers it now.
+- **The retired constants are in five places, not two.** A third reviewer of v1.16 found
+  them in the data model, which neither earlier review nor `TODO.md` recorded. Work the
+  full list mechanically — a grep for both names is the check:
+  - `ARCHITECTURE.md` §4 `profiles` — defines **`short_bio_changed_at` and
+    `photo_changed_at` as columns**, with the grace-window semantics spelled out. These are
+    storage for a retired mechanism; decide whether the new send-hold needs its own
+    timestamp columns or reuses these renamed, and do not leave both.
+  - `ARCHITECTURE.md` §4 `rate_counters` — names `BIO_CHANGE_COOLDOWN_HOURS` in the list of
+    controls that are elapsed-time checks rather than day tallies. Still true of the
+    replacement; the constant name is wrong.
+  - `ARCHITECTURE.md` §7 — the security argument above.
+  - `BUILD_PLAN.md` §8.1 — the build instruction and its three carve-outs.
+  - `BUILD_PLAN.md` §13.4 — the "confirm the three non-counter controls are wired" check,
+    which names the retired constant and would have the builder verify a mechanism that no
+    longer exists.
 
 ### B. The profile page is a different page (SPEC §9.1, v1.16 (a) and (b))
 
@@ -170,7 +185,11 @@ engine, because it removes an enumerable disclosure.
   extended bio, all line breaks collapsed in the short bio, no preformatted toggle for
   either.
 - The gallery gains author-arranged order with keyboard-operable controls, and has **no
-  caption field** — the alt text is the caption, shown in the expand overlay.
+  caption field** — the alt text is the caption, shown in the expand overlay. **The data
+  model has nowhere to put that order:** ARCHITECTURE §4's `images` table has no
+  `position`, `sort_order` or equivalent column, so a builder reading only that document
+  produces an upload-ordered gallery with no way to rearrange it. Add the column; note that
+  it makes reordering a write to every affected row, which is fine at `GALLERY_MAX` = 8.
 - §8.1's name-linking rule now covers post authors, mutual-friend names and reaction
   lists, not just commenters. **Reactions never render in a list view** (§8.2).
 - The friend-request card gains a report action; §13.2 states what a *profile* report
@@ -181,11 +200,25 @@ engine, because it removes an enumerable disclosure.
   controls, containment of a preformatted post's horizontal scroll inside the post, and
   **server-side** application of the viewer's theme override.
 
-### L. Everything prompts 02–08 decided
+### L. The visibility engine's missing comment check (handed over from prompt 11)
+
+Prompt 11 settles a SPEC contradiction with a direct consequence here: a block makes the
+comment audience a **strict subset** of the post audience (§5.4), so comment visibility is
+not the same question as post visibility. ARCHITECTURE §5 lists `can_see_post`,
+`can_see_profile_tier` and `can_act` — there is no `can_see_comment`, which means every
+template rendering a comment is either doing the block check itself or not doing it at all.
+That is exactly the "one visibility engine" rule being quietly broken. Implement whatever
+prompt 11 decided, and add the case to Phase 4.2's test suite; read CHANGELOG.md for the
+wording it settled on rather than assuming.
+
+### M. Everything prompts 02–08, 10, 11 and 12 decided
 
 Fold in whatever those sessions added — the availability and monitoring work from prompt
-04 is likely the largest, and the visibility-engine caching rule from prompt 03 may want a
-query-count test in Phase 6. Read CHANGELOG.md rather than trusting this list.
+04 is likely the largest, the visibility-engine caching rule from prompt 03 may want a
+query-count test in Phase 6, prompt 10 may have given reactions an expiry that
+`expire_content` must implement, and prompt 12's ban definition needs an account state, an
+admin action and a decision about existing content. Read CHANGELOG.md rather than trusting
+this list.
 
 ---
 

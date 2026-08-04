@@ -67,7 +67,33 @@ This is a real gap in a project that ranks accessibility with the tracking ban.
    moderation, disk, backups and OS updates. If accessibility re-verification is not in
    that runbook, it does not exist.
 
-5. **The honesty rule already covers the failure case.** §16.5 requires that a known
+5. **FOUNDER DECISION ALREADY TAKEN — a qualified person runs the human passes.** A third
+   reviewer of v1.16 made a point neither of the others did: §16.5 asks the founder to run
+   a screen-reader pass, a keyboard-only pass and a 200%/320 px reflow pass, and BUILD_PLAN
+   §2.5 teaches only how to *turn VoiceOver on*. Using one well enough to find defects means
+   navigating by headings, landmarks and form fields and telling a missing label from a
+   live region. An IT professional doing it for the first time will miss real failures or
+   chase false ones for hours — and this is the only quality gate before launch.
+
+   **The founder has decided to find someone qualified to perform this testing.** Fold that
+   into the documents rather than leaving it as an intention:
+
+   - **§16.5's human passes name a qualified tester**, not the founder. The automated passes
+     stay the founder's.
+   - **This is a scheduling dependency, not just a wording change.** A person has to be
+     found and booked; BUILD_PLAN Phase 16 currently assumes the founder is available to
+     himself. Consider whether a `[FOUNDER]` step earlier in the plan should say "line this
+     person up," so it is not discovered at the gate.
+   - **Decide what "qualified" means** — a paid accessibility auditor, or a daily
+     screen-reader user from the founder's own network, who is arguably better placed and
+     is also exactly the kind of person README §16 says this network must not exclude.
+   - **Check it against item 3's re-audit trigger.** A re-audit rule that assumes a free
+     afternoon reads differently when each run needs another person's time. This may be the
+     strongest argument for a modest trigger.
+   - **§16.5's honesty rule still applies**: a defect the tester finds and the founder
+     cannot fix goes in the accessibility statement.
+
+6. **The honesty rule already covers the failure case.** §16.5 requires that a known
    unfixed defect be listed in the accessibility statement rather than papered over. Check
    that the statement (BUILD_PLAN §15.2) is described as a living document rather than a
    launch artifact — a statement written once and never revised quietly becomes a false

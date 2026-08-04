@@ -1,7 +1,7 @@
 # Prompt 05 — The hashtag vocabulary as an operational load
 
 > **Run in a fresh session.** Paste everything below the line.
-> **Touches:** SPEC.md §11.2, §13.5, §14 (possibly §11.4)
+> **Touches:** SPEC.md §11.2, §13.5, §14 (possibly §11.4, §13.2, §7.9)
 > **Depends on:** prompt 01.
 > **Expected outcome:** the curation policy survives, with the operator load bounded.
 
@@ -91,6 +91,35 @@ is also when the founder is busiest with launch.
    sentences, §13.5 gains one, and everything else is operator practice belonging in
    BUILD_PLAN §17.3's runbook. That is a legitimate outcome. Resist the pull to add
    machinery to SPEC for a problem whose real solution is a good starter list.
+
+7. **Reporting tag abuse — founder-directed, and the one genuinely new requirement here.**
+   Prompt 02 settles that the §11.3 gate is satisfied by **any** shared tag, so a post
+   carrying ten tags reaches a wider FoF audience than one carrying a tag. The founder has
+   accepted that widening as correct and asked that **users be encouraged to report abuse
+   of it** — a post tagged #jazz that has nothing to do with jazz.
+
+   Three things shape the answer, and they make this smaller than it first sounds:
+
+   - **The vocabulary already bounds the abuse.** Tags are never free-typed (§11.2), so a
+     spammer picks from the curated list and cannot invent `#freemoney`. The abuse
+     available is *irrelevance* — over-tagging to reach more people — not a malicious tag.
+   - **The reporter is a specific person on a specific surface.** The one who notices is
+     the FoF who received the post *because* of a tag match, and §7.9's stated-visibility
+     line is exactly what tells them so. That line is where the affordance belongs.
+     Consider whether §7.9 needs a sentence, and check it against §7.9's own rules — the
+     line must stay plain text and must never become a number.
+   - **§13.2 captures no reason.** A report carries "reporter, target, and a frozen copy."
+     Nothing distinguishes harassment from mis-tagging, and the two need different operator
+     responses: the second is a tag correction or a word with the author, not a moderation
+     action. Decide whether reports gain a reason field, or whether tag abuse gets its own
+     entry in §13.5's request categories alongside the external-service request.
+
+   **Recommend the smallest thing that works.** A reason field on reports is a schema
+   change that touches ARCHITECTURE and BUILD_PLAN Phase 13; a §13.5 category may be
+   enough. Do not build a tag-specific reporting pipeline. Note also what this does *not*
+   need: no counts of reports per tag surfaced anywhere, and no automated detection of
+   irrelevant tagging — §13.2 already declined automated content-similarity detection on
+   cost/benefit grounds and the same reasoning applies here.
 
 ## Constraints to respect
 

@@ -3,7 +3,7 @@
 > **Run in a fresh session.** Paste everything below the line.
 > **Touches:** SPEC.md, ARCHITECTURE.md, BUILD_PLAN.md
 > **Depends on:** prompt 01 (CHANGELOG.md must exist).
-> **Expected outcome:** one version bump covering twelve small items, two of which are
+> **Expected outcome:** one version bump covering thirteen small items, two of which are
 > founder decisions rather than corrections.
 
 ---
@@ -13,8 +13,8 @@ You are working in the WeeBee design-document repository. Read `README.md`, then
 session**, so the BUILD_PLAN §0.2 rule 5 prohibition on editing those files does not
 apply — it governs build steps, not design conversations.
 
-Twelve items below came out of an external review of version 1.16. Ten are corrections;
-**items 11 and 12 are decisions only the founder can make — ask, do not assume.**
+Thirteen items below came out of external reviews of version 1.16. Eleven are corrections;
+**items 12 and 13 are decisions only the founder can make — ask, do not assume.**
 
 Work through them in order. For each: state what you found in the document, propose the
 exact wording, and get agreement before editing. Several are one-line changes; do not
@@ -157,9 +157,35 @@ source of a behaviour carries test depth proportional to its blast radius, not t
 — and check whether the name and theme helpers need a named test the way the time helper
 does. This may be a two-sentence addition. Do not manufacture work.
 
+## 11. The hashtag gate does not say what multiple tags mean
+
+SPEC §11.3 gates FoF visibility on three conditions that must **all** hold, written
+throughout in the singular: *"A profile post tagged #x is visible to a viewer V … V has #x
+among their own profile hashtags … the post carries #x."* It never says what happens when a
+post carries several tags. Read one way the viewer must match every tag on the post; read
+the other, matching any one tag is enough. §11.4 implies "any," but implication is not
+specification, and a builder implementing exact-match would silently hide posts that should
+be visible.
+
+**The founder has ruled: any.** One shared tag between the viewer's profile hashtags and
+the post's tags satisfies condition 2 — the gate is existential over the post's tags, not
+universal.
+
+**Change:** state it in §11.3 so the rule is readable without inference, and state the
+consequence in the same breath, because it is a real property of the design and not a side
+effect: **a post carrying ten tags reaches a wider FoF audience than a post carrying one.**
+Tagging is therefore an audience control, which is precisely what §7.9's stated-visibility
+line exists to disclose to the author at composition time. Check §7.9's wording actually
+covers it.
+
+The founder has separately accepted the widening as correct behaviour and asked that
+**abuse of it be reportable** — a post tagged #jazz that has nothing to do with jazz. That
+is not this item; it is routed to prompt 05, which owns the vocabulary and §13.5. Do not
+build a reporting mechanism here.
+
 ---
 
-## 11. DECISION — the backup window and the deletion promise
+## 12. DECISION — the backup window and the deletion promise
 
 ARCHITECTURE §10 resolves the backup-versus-deletion tension the standard way: encrypted
 off-server backups, `BACKUP_RETENTION_DAYS` = 30, stated plainly in the privacy policy. It
@@ -175,7 +201,12 @@ and it is the kind of promise that matters most if it is ever tested.
 
 **Ask the founder to decide**, then implement:
 - **(a) Approve the amendment.** SPEC §7.5 and §15.1 gain the honest version, and README's
-  "auto-deleted after 90 days" line is checked for the same precision.
+  "auto-deleted after 90 days" line is checked for the same precision. **§4.7 is the
+  sharpest case and a third reviewer flagged it independently:** it promises "**full
+  erasure** of all data: posts, comments, reactions, images, contact card, groups,
+  friendships, profile" with no caveat at all, on the account-deletion path — the one place
+  a user is most likely to rely on the promise being literal. §4.8's 24-month sweep
+  inherits the same wording by reference.
 - **(b) Something stricter.** Shorter retention, or per-deletion backup scrubbing. Say
   plainly what each costs — scrubbing backups is real engineering on a solo project.
 
@@ -184,7 +215,7 @@ purged from the last encrypted backup within 30 days after that" than as an arit
 day-120 figure, because the figure invites a reader to compute an exact date that depends
 on when the backup ran.
 
-## 12. DECISION — `COMMENT_LENGTH_MAX` was asserted, never discussed
+## 13. DECISION — `COMMENT_LENGTH_MAX` was asserted, never discussed
 
 SPEC's own history records it: "`COMMENT_LENGTH_MAX` = 2,000 asserted, not yet discussed."
 It is still marked ✎ operator-tunable in §14 and still 2,000. It is the only constant
@@ -201,7 +232,7 @@ test in BUILD_PLAN §2.4 will assert is a small trap.
 
 ## Before you finish
 
-- Write the CHANGELOG.md entry for this version: which of the twelve landed, which were
+- Write the CHANGELOG.md entry for this version: which of the thirteen landed, which were
   found already handled, which the founder declined. Declined items keep their reasons —
   README's rule.
 - Mark every file's status in the entry, including unchanged ones.

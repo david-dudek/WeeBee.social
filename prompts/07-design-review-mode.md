@@ -1,16 +1,18 @@
 # Prompt 07 — What happens when the build meets a wall
 
 > **Run in a fresh session.** Paste everything below the line.
-> **Touches:** BUILD_PLAN.md §0.2 and the Appendix
+> **Touches:** BUILD_PLAN.md §0.2 and the Appendix; the status line in all four document headers; CHANGELOG.md
 > **Depends on:** prompt 01.
-> **Expected outcome:** a defined path from "the AI stopped" back to "the build continues."
+> **Expected outcome:** a defined path from "the AI stopped" back to "the build continues," and a defined act that moves a document from DRAFT to founder-approved.
 
 ---
 
 You are working in the WeeBee design-document repository. Read `README.md`, then
-`BUILD_PLAN.md` in full — §0 and the Appendix especially. Skim `SPEC.md` §14 and
-`ARCHITECTURE.md` §5 so you know what the law files actually contain. This is a
-**founder-directed design session**; you may edit BUILD_PLAN.md.
+`BUILD_PLAN.md` in full — §0 and the Appendix especially — then `CHANGELOG.md`'s preamble
+and its 1.17 entry. Skim `SPEC.md` §14 and `ARCHITECTURE.md` §5 so you know what the law
+files actually contain. This is a **founder-directed design session**; you may edit
+BUILD_PLAN.md, and — for item 7 only — the status line in the other three document headers
+and CHANGELOG.md.
 
 ## The finding
 
@@ -106,6 +108,76 @@ question out of a working session.** That was invented ad hoc. It should be writ
    founder directs changes to them), because right now the documents describe only the
    first and every design session has to declare its own exemption ad hoc. **That is a
    small change with unusually good returns** — it makes the existing practice legible.
+
+7. **Founder approval — the act that makes a document stop being a draft.** *(Raised by the
+   founder, not by the reviewers.)* Every document has said "DRAFT pending founder review"
+   for nine versions and there is no defined act that changes it. The founder wants to be
+   able to record that he has read a file end to end and signed off, to send a version out
+   for outside eyes, and to mark a file finally approved.
+
+   The evidence that this is missing: the whole project contains exactly **two**
+   founder-approval records, both ad hoc and both buried — ARCHITECTURE's old status line
+   ("1.3 and earlier approved as a whole by founder 2026-07-08", now in CHANGELOG's 1.7
+   entry) and SPEC Appendix A ("All ten were reviewed and confirmed by the founder on
+   2026-07-07"). Neither is findable, and nothing has been approved since.
+
+   Points to settle:
+
+   - **Founder approval and external review are independent facts, not two rungs of one
+     ladder.** v1.16 was reviewed by ChatGPT and DeepSeek — both review files are in this
+     repository and 35 findings were triaged into `TODO.md` — while every document still
+     said "DRAFT pending founder review." Any three-state ladder that puts external review
+     *after* founder approval cannot represent a state this project has already been in,
+     and will be in again.
+
+   - **Recommended shape: the header records founder approval and the version it was given
+     at.** `**Project version:** 1.18 · <date> · founder-approved at 1.17` — when the file
+     changes and approval is not renewed, the mismatch between the two numbers is visible
+     at a glance. That is the same mechanism that makes an unsynced document visible, which
+     is the whole reason 1.17 exists. `DRAFT` before first approval. Approval is **per
+     file**, since SPEC will be approved long before ARCHITECTURE is synced to it.
+
+   - **External review becomes a CHANGELOG event, not a status.** "v1.16 reviewed by
+     ChatGPT and DeepSeek" is a thing that happened to a version, and belongs in that
+     version's entry. It does not change a document's authority; only the founder's
+     approval does. A reviewer looking for what is open to challenge reads README's "What
+     IS up for review", which already exists for exactly that job.
+
+   - **Approval must not bump the project version.** If approving 1.17 produces 1.18, then
+     1.18 is unapproved and the process never converges. State that approval is an
+     annotation on an existing CHANGELOG entry plus the header line, and bumps nothing.
+     This rule is load-bearing — without it the scheme eats itself.
+
+   - **The trigger is a sentence in chat; the record is the file.** Settle the words the
+     founder says to make it official, and confirm that a session receiving them writes the
+     CHANGELOG annotation and the header line and nothing else.
+
+   - **Settle what the versioned record actually covers.** CHANGELOG.md names README, SPEC,
+     ARCHITECTURE, BUILD_PLAN and itself. `TODO.md` and `prompts/` are changed by almost
+     every design session and appear in no entry — including 1.17, which changed `TODO.md`
+     without recording it. Decide whether they are inside the record or explicitly outside
+     it as working files, and say which in CHANGELOG's preamble either way.
+
+8. **The tripwire paradox, and what the guards actually depend on.** A third reviewer of
+   v1.16 raised two points about §2.4 that the earlier reviews missed.
+
+   - **The tripwire has no defined "expected failure" path.** Guard 3 asserts every SPEC §14
+     constant's exact value, and SPEC §1.3 explicitly permits raising a cap (caps are
+     raise-only by design). So the *correct* act of raising `FRIEND_CAP` makes the test
+     suite fail, and nothing tells the founder whether that failure is the system working or
+     something broken. Worse, the fix — editing the tripwire — is the exact action the guard
+     exists to make suspicious. Define the sequence: SPEC §14 changes first in a design
+     session, then `constants.py`, then the tripwire, all in one founder-authored commit,
+     and state that a tripwire failure at any other time is a real alarm. This is the same
+     shape of problem as item 7's approval flow — a legitimate act that trips a mechanism
+     built to catch illegitimate ones.
+   - **Two of the three guards are tool-specific.** The deny rules live in Claude Code's
+     settings; a different assistant, a web interface, or a manual paste bypasses them
+     without any refusal appearing. The pre-commit hook is the only tool-agnostic guard, and
+     prompt 02 item 6 already records that it is the weakest of the three. Say plainly in
+     §2.4 which guard survives a change of tool, so the founder is not relying on a lock
+     that quietly stopped applying. Do not overstate the fix — the honest answer may be
+     "layer 4 (diffable git history) is what actually survives," which §2.4 already lists.
 
 ## Constraints to respect
 

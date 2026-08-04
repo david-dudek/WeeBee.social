@@ -30,29 +30,34 @@ Status values: `not run` · `in progress` · `done` · `deferred` · `dropped`
 | 02 | [Small corrections & open items](prompts/02-small-corrections.md) | SPEC, ARCHITECTURE, BUILD_PLAN | 01 | not run | |
 | 03 | [Visibility engine performance](prompts/03-visibility-engine-performance.md) | ARCHITECTURE §5, §9 | 01 | not run | |
 | 04 | [Availability & DDoS posture](prompts/04-availability-and-ddos.md) | ARCHITECTURE §7, §13 | 01 | not run | |
-| 05 | [Hashtag vocabulary operations](prompts/05-hashtag-vocabulary-operations.md) | SPEC §11.2, §13.5 | 01 | not run | |
+| 05 | [Hashtag vocabulary operations](prompts/05-hashtag-vocabulary-operations.md) | SPEC §11.2, §13.5, §13.2, §7.9 | 01 | not run | |
 | 06 | [Accessibility: regression & the admin](prompts/06-accessibility-regression.md) | SPEC §16, ARCHITECTURE §9, BUILD_PLAN §16 | 01 | not run | |
-| 07 | [How documents change during the build](prompts/07-design-review-mode.md) | BUILD_PLAN §0.2 | 01 | not run | |
+| 07 | [How documents change during the build](prompts/07-design-review-mode.md) | BUILD_PLAN §0.2, all four headers, CHANGELOG | 01 | not run | |
 | 08 | [Document boundaries: SPEC vs ARCHITECTURE](prompts/08-document-boundaries.md) | SPEC, ARCHITECTURE | 01 | not run | |
-| 09 | [The sync: ARCHITECTURE + BUILD_PLAN to current SPEC](prompts/09-sync-arch-and-buildplan.md) | ARCHITECTURE, BUILD_PLAN | **02–08** | not run | |
+| 10 | [Reactions: look, lifecycle, expiry](prompts/10-reactions.md) | SPEC §8.2, §7.6, §9.7, §14; ARCHITECTURE §4, §6 | 01 | not run | |
+| 11 | [Three internal contradictions in SPEC](prompts/11-spec-contradictions.md) | SPEC §9.1/§5.2, §8.1/§5.4, §4.6.1/§12.3; ARCHITECTURE §5 | 01 | not run | |
+| 12 | [What a ban actually does](prompts/12-moderation-outcomes.md) | SPEC §13.2, §4.7, §12 | 01 | not run | |
+| 09 | [The sync: ARCHITECTURE + BUILD_PLAN to current SPEC](prompts/09-sync-arch-and-buildplan.md) | ARCHITECTURE, BUILD_PLAN | **02–08, 10–12** | not run | |
 
-**Run 09 last.** Prompts 02–08 may each amend SPEC and ARCHITECTURE; syncing BUILD_PLAN
-once against a settled SPEC means writing those build steps a single time.
+**Run 09 last.** Prompts 02–08 and 10–12 may each amend SPEC and ARCHITECTURE; syncing
+BUILD_PLAN once against a settled SPEC means writing those build steps a single time.
 
-**Do not start Phase 2 of BUILD_PLAN until 09 is done.** Both ARCHITECTURE §7 and
-BUILD_PLAN §8.1 currently instruct the builder to implement `BIO_CHANGE_COOLDOWN_HOURS`
-and `BIO_EDIT_GRACE_MINUTES`, which SPEC §14 marks **retired v1.16**. A build session
-following those files today would write the wrong mechanism.
+**Do not start Phase 2 of BUILD_PLAN until 09 is done.** `BIO_CHANGE_COOLDOWN_HOURS` and
+`BIO_EDIT_GRACE_MINUTES`, which SPEC §14 marks **retired v1.16**, are still live
+instructions in **five** places: ARCHITECTURE §4 (`profiles`, where they are *columns*),
+ARCHITECTURE §4 (`rate_counters`), ARCHITECTURE §7 (inside a security argument),
+BUILD_PLAN §8.1, and BUILD_PLAN §13.4. A build session following those files today would
+write the wrong mechanism. This file previously named only two of the five.
 
 ---
 
 ## Appendix A — Where the queue came from
 
 Version 1.16 of README.md, SPEC.md, ARCHITECTURE.md and BUILD_PLAN.md was reviewed by
-ChatGPT (`1.16_ChatGPT_review.md`, 8 findings) and DeepSeek (`1.16_DeepSeek_review.md`,
-27 findings). Every finding was checked against the actual documents. The triage below
-records what happened to each one, so no finding is silently dropped and none needs
-re-litigating.
+ChatGPT (`1.16_ChatGPT_review.md`, 8 findings), DeepSeek (`1.16_DeepSeek_review.md`,
+27 findings) and Kimi (`1.16_Kimi_review.md`, 12 findings — see Appendix B). Every finding
+was checked against the actual documents. The triage below records what happened to each
+one, so no finding is silently dropped and none needs re-litigating.
 
 ### Findings that became prompts
 
@@ -138,3 +143,37 @@ where noted. Recorded here so they are not raised again as new.
   design work — do it during Phase 10.
 - **Constant values as a whole.** README §1 invites review of every cap. No reviewer
   engaged with the numbers. Still open.
+
+---
+
+## Appendix B — the Kimi review of 1.16
+
+`1.16_Kimi_review.md` arrived after the queue above was built. All 12 findings were checked
+against the document text; **none was factually wrong**, which was not true of the other two
+reviews. Eight raise something neither earlier reviewer mentioned.
+
+The calibration note worth keeping: **ChatGPT and DeepSeek both explicitly certified that no
+internal contradictions existed** ("I didn't find an outright contradiction among the current
+versions"; "The documents are internally consistent"). Kimi found three, all verified. A
+reviewer's summary judgment is not evidence.
+
+| # | Finding | Verdict | Routed to |
+|---|---|---|---|
+| 1 | BUILD_PLAN/ARCHITECTURE behind SPEC 1.16 | extends DeepSeek 24, 25 | 09 §A — the retired constants are in **five** places, not the two this file used to name |
+| 2 | Request card: "one component" (§9.1) vs snapshot (§5.2) | new | 11 |
+| 3 | §8.1 "exactly" vs §5.4 blocks; no `can_see_comment` | new | 11, then 09 §L |
+| 4 | Security emails: §4.6.1 timestamps vs §12.3 "no timestamp" | new | 11 |
+| 5 | §4.7 "full erasure" ignores the 30-day backup window | duplicate of DeepSeek 10 | 02 item 12 — sharpens the target to §4.7 |
+| 6 | `friend_requests` lacks snapshot columns | new to the reviews | already covered by 09 §G |
+| 7 | `images` lacks a gallery-order column | new | 09 §K |
+| 8 | "Ban" (and "warn") never defined, §13.2 | new | 12 |
+| 9 | The founder cannot interpret a screen reader | extends DeepSeek 17, 22 | 06 item 5 — **founder has decided to engage a qualified tester** |
+| 10 | Tripwire paradox; guards are tool-specific | extends DeepSeek 16 | 07 item 8 |
+| 11 | Reactions on pinned posts never expire | new | 10 |
+| 12 | Hashtag gate ambiguous for multi-tagged posts | new | 02 item 11 — **founder ruled: any shared tag**; abuse reporting → 05 item 7 |
+
+Two findings needed no new work: **#6** was already in prompt 09's inventory (§G asks
+ARCHITECTURE §4 for the snapshot fields including a stored image copy), and most of **#1**
+was too — 09's inventory was built from SPEC directly rather than from reviewer findings, so
+it already covered the four-tab profile, the friends page, the stated-visibility line, the
+avatar picker and the pending-request expiry.
