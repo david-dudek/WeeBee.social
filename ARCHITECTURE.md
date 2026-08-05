@@ -1,7 +1,7 @@
 # Architecture & Technology Stack — WeeBee
 
-**Project version:** 1.17 · 2026-08-03 · DRAFT pending founder review
-**This file last changed in:** 1.17 (structural only; last content change 1.15)
+**Project version:** 1.18 · 2026-08-04 · DRAFT pending founder review
+**This file last changed in:** 1.18 (Argon2id into the stack table; restore verification; the blast-radius test rule)
 **History:** see [CHANGELOG.md](CHANGELOG.md)
 **Companion to:** SPEC.md v1.15 (deliverable b per SPEC §18)
 **Audience:** The founder (an IT professional, not a professional developer) and the AI coding models that will build the platform. Written in plain language; every technology choice is justified. Where a term of art is unavoidable, it is explained the first time it appears.
@@ -91,7 +91,7 @@ This module gets the densest automated tests in the project (§11).
 
 ### Decision 5 — Scheduled jobs by cron, not a job-queue system
 
-The platform runs on the calendar: content expiry at 90 days, invite +1/month, inactivity warnings at 6/12/22/23 months, deletion after the 30-day grace, moderation-copy purges. Professional stacks often add a queue system (Celery + Redis) for such work. **We refuse that complexity.** Every one of these tasks is fine running once per hour or per day; none needs to fire the instant it is due. So each is a small named command, and **cron** — the standard Unix scheduler present on every server, literally an alarm clock for programs — runs them on schedule. Two moving parts fewer (no queue, no Redis), and each job can also be run by hand for testing.
+The platform runs on the calendar: content expiry at 90 days, invite +1 every 30 days, inactivity warnings at 180/365/670/700 days, deletion after the 30-day grace, moderation-copy purges. (All of those are **counts of days, never calendar months** — SPEC §4.8, §4.2.) Professional stacks often add a queue system (Celery + Redis) for such work. **We refuse that complexity.** Every one of these tasks is fine running once per hour or per day; none needs to fire the instant it is due. So each is a small named command, and **cron** — the standard Unix scheduler present on every server, literally an alarm clock for programs — runs them on schedule. Two moving parts fewer (no queue, no Redis), and each job can also be run by hand for testing.
 
 ---
 
@@ -101,6 +101,7 @@ The platform runs on the calendar: content expiry at 90 days, invite +1/month, i
 |---|---|---|
 | Language | **Python 3.12+** | The single language of the whole project |
 | Web framework | **Django (current LTS)** | Pages, database access, login, admin — batteries included |
+| Password hashing | **Argon2id** via `django[argon2]` | Slow, memory-hard hash — required by SPEC §4.6.1 |
 | Database | **PostgreSQL 16+** | Stores everything except image files |
 | Web server / HTTPS | **Caddy** | Encryption certificates handled automatically |
 | App runner | **Gunicorn** | The standard way a Django app runs in production |
@@ -269,12 +270,13 @@ Each is a Django management command — runnable by hand, scheduled by cron. All
 |---|---|---|
 | `expire_content` | hourly | Delete posts/comments > 90 days (unpinned), their images, reactions (§7.5) |
 | `purge_moderation` | daily | Purge frozen copies past their date; hard cap 90 days (§13.3) |
-| `replenish_invites` | daily | +1 invite to anyone a month past last replenish, cap 5 (§4.2); expire 14-day-old invites back to budget (§4.1) |
+| `replenish_invites` | daily | +1 invite to anyone `INVITE_REPLENISH_DAYS` = 30 days past last replenish, cap 5 (§4.2); expire 14-day-old invites back to budget (§4.1) |
 | `process_deletions` | daily | Erase accounts past 30-day grace; write anonymized invite-tree stubs (§4.7, §4.3) |
-| `inactivity_sweep` | daily | Send 6/12/22/23-month warnings; delete at 24 months (§4.8) |
+| `inactivity_sweep` | daily | Send `INACTIVITY_WARN_DAYS` warnings (180/365/670/700 days since last login); delete at `INACTIVITY_DELETE_DAYS` = 730 (§4.8). **Days, not calendar months** |
 | `reset_rate_counters` | daily | Clear yesterday's rate-limit counts (§13.6). Leaves the timestamp-based controls alone — feed-post spacing and the bio/photo cooldowns are elapsed-time checks, not counters (§4) |
 | `expire_notifications` | daily | Delete notifications whose subject no longer exists (expired or deleted post, deleted comment, deleted account) and any older than `CONTENT_TTL_DAYS`. Without this, the feed accumulates links to content the 90-day promise has already destroyed (§7.5, §12) |
 | `backup` | nightly | §10 below |
+| `verify_restore` | weekly | Restore the newest backup into a scratch database, run a smoke query, drop it, record the result; email the operator on any failure (§10). Checks free disk first and alerts rather than restoring if there is not room — a verification job that fills the disk is worse than none |
 
 ---
 
@@ -286,7 +288,7 @@ Each is a Django management command — runnable by hand, scheduled by cron. All
   - *Codes, not links.* Password reset, login-email change, and registration email-verification use a short-lived numeric code (`RESET_CODE_TTL_MINUTES`, `RESET_CODE_LENGTH`), stored **hashed** in a small `credential_codes` table with a single-use flag and an attempt cap, entered on a page the user navigated to themselves — never delivered as a login link. Only invites are links (a new user has no open page). This is deliberately *not* a signed-URL/token scheme, because the whole point is that no clickable login link ever exists to imitate.
   - *Multiple credential types from day one.* Login credentials live in their own `credentials` table keyed to the user (`type` = password | passkey, plus type-specific material), so a WebAuthn/passkey credential can be added later without touching the user model. v1 creates only password rows; passkeys are deferred (SPEC §4.6.1). The password's slow hash (below) is stored here.
   - *Breach-password check.* At registration and password change, the backend makes a **server-to-server** k-anonymity range request to the Have I Been Pwned Pwned-Passwords API (send the first 5 hex characters of the password's SHA-1; match the returned suffix list locally). Only a hash prefix ever leaves the server — never the password, never any user identifier — and it is a backend HTTPS call, not a browser script, so it is §15.2-clean. Fail-open on API outage (a third party being down must never block a signup), logged.
-- **The standard attacks** (CSRF, SQL injection, XSS) are covered by Django defaults; the build plan will state the few settings to verify rather than trust. **Password hashing uses Argon2id** (SPEC §4.6.1) rather than Django's PBKDF2 default — Django supports it as a first-class hasher; this pulls in one dependency (`argon2-cffi`, via `django[argon2]`), the **only** addition to the §3 stack for the security layer, flagged for founder approval per the build-plan dependency rule (Appendix rule 6).
+- **The standard attacks** (CSRF, SQL injection, XSS) are covered by Django defaults; the build plan will state the few settings to verify rather than trust. **Password hashing uses Argon2id** (SPEC §4.6.1) rather than Django's PBKDF2 default — Django supports it as a first-class hasher, installed as part of the §3 stack via `django[argon2]` (which pulls in `argon2-cffi`). **It is not an addition anybody elected (v1.18):** SPEC §4.6.1 requires the slow memory-hard hash, so the dependency is implied by the specification and belongs in the stack table, which is where §3 now carries it. Framing a mandatory dependency as an approved exception invites a later builder to treat it as optional.
 - **Link validation (SPEC §7.2.3):** the URL allowlist is one of the controls SPEC §4.6.1 leans on to close in-platform phishing delivery, so it is implemented as a **validator, not a substring check**. One shared function validates every URL in every post and comment — **on every save, create and edit alike** (SPEC §7.8 invariant 4). A validator wired only into the create path is a **defective implementation**, and a quiet one: it would let an author publish clean text, pass the check, and then edit a disallowed link into the stored post, defeating the entire control without ever raising an error. The same "revalidate on every save" rule governs length caps, whitespace normalization, hashtag-vocabulary membership, and image EXIF-stripping on a replaced image. Practically, this means content validation belongs to the model/form layer that both paths share, never to the create view. The validator must:
   1. Parse the URL properly (never regex-match a raw string) and require `https`.
   2. Match the **host exactly or as a subdomain of an allowlisted host** — never a substring, never a suffix test (`evil-youtube.com` and `youtube.com.attacker.net` must both fail).
@@ -316,9 +318,15 @@ Each is a Django management command — runnable by hand, scheduled by cron. All
 
 Full test-pyramid ceremony would drown a solo project, but SPEC's promises are exactly the kind that silent bugs break. The rule: **test depth proportional to harm.**
 
+**A second rule with the same logic, stated in v1.18: test depth proportional to *blast radius*.** §4 funnels several behaviours through exactly one implementation each — the visibility engine (§5), the name helper, the time helper, the alt-text accessor, the theme selector, the URL validator (§7), and the accessible partials of §3.8. That is the right design, and its cost is that a bug in any one of them is never a bug on one page: it is the same wrong behaviour on every page at once. A single-source helper therefore earns tests in proportion to how many surfaces it reaches, **not** in proportion to how much code it contains — which is why a thirty-line time helper carries the second-densest test in this project.
+
 - **Dense automated tests on the visibility engine** — blocks, tier boundaries, cascade conflicts, hashtag-gate edge cases, snapshot-plus-current-friendship. This is where a bug = a privacy breach.
 - **Automated tests on the lifecycle jobs** — expiry, deletion-with-stub, invite replenishment, notification expiry. A bug here breaks a promise made to users (§7.5's "nothing outlives 3 months").
 - **A boundary table test on the time helper** (SPEC §7.5.1) — one case per ladder row, asserted at the boundary and one unit either side, plus a test that the ladder is **total**: for a large sweep of elapsed values, every one returns a non-empty phrase. The ladder's failure mode is a silent gap between two bounds rendering an empty string, which no feature test would notice and no user would report as anything but "the date is missing sometimes." Cheap to write once, and it is the whole reason the helper is single-source (§4).
+- **A named test for the two helpers that had none (v1.18)** — the blast-radius rule applied to the time helper's siblings, and both are small:
+  - **The name helper** (SPEC §4.5.1) — a boundary test on the transition window: the "(formerly …)" tag is present on the last day of `NAME_TRANSITION_DAYS`, absent on the first day after, and absent altogether for a user who has never renamed.
+  - **The theme selector** (SPEC §9.1) — a truth table over its three inputs (the viewer's own theme, the page owner's theme, the viewer override on/off), asserting the rule that is easiest to get wrong: **the viewer's override wins on someone else's profile.** The `THEME_SET` contrast test below proves every theme is legible; nothing else proves the right theme was the one emitted.
+  The **alt-text accessor** needs no test of its own: the template smoke tests below already assert that every rendered image carries the stored value, which is the whole of that helper's job.
 - **Tests on the edit path specifically** — that editing re-runs the URL validator (post a clean body, edit in a disallowed link, assert refusal), that `edited_at` never affects feed order or expiry, that an edit writes no `post_audience` rows, and that a post author cannot reach an update path for someone else's comment. These are small tests guarding SPEC §7.8's five invariants, and invariant 4 is a security test, not a feature test.
 - **Tests on notification coalescing and follow delivery** — that a second event updates the open unread row rather than inserting a duplicate, that removed reactions and deleted comments vanish from a rendered notification, that no query returns a follower list or an unread count, and that unfriending/blocking/a dropped hashtag silently ends delivery to a follower who still has a `post_follows` row. The last one is a visibility-engine test wearing a notification costume.
 - **Ordinary features** (rendering, forms): light tests plus human use. The prototype's friendly first users are the beta test.
@@ -333,13 +341,20 @@ Full test-pyramid ceremony would drown a solo project, but SPEC's promises are e
 
 ## 10. Backups — and an Honest Tension with the Deletion Promise
 
-Nightly: database dump + image folder, **encrypted, sent off the server** (e.g., restic to a storage box or B2 bucket; exact target chosen in the build plan). Restore is rehearsed once during setup, because an untested backup is a rumor.
+Nightly: database dump + image folder, **encrypted, sent off the server** (e.g., restic to a storage box or B2 bucket; exact target chosen in the build plan).
+
+**The restore path is verified on two schedules (v1.18), because an untested backup is a rumor — and the rumor restarts the day after the last test.** Backups fail loudly; restores fail silently, and what rots is the restore path (a schema that moved on, an expired storage credential, a rotated encryption key) and the runbook itself. A last-success line on the backup job reports none of that.
+
+- **Weekly, automatically:** `verify_restore` (§6) fetches the newest backup, restores it into a scratch database on the server, runs a smoke query, drops it, and emails the operator if any step fails. This catches credential, key and schema rot within a week of its happening.
+- **Yearly, by hand:** the founder restores onto their own Mac and logs into the restored copy, following the runbook (build-plan Steps 5.6, 16.4, 17.3).
+
+Neither replaces the other, and the manual one is the one that matters most: the automated job proves the server can read its own backups using credentials already sitting in its own environment, while the scenario worth surviving is the one where the server is gone and the operator has a laptop, a runbook and nothing else.
 
 **The tension:** backups are copies, so a post deleted today still exists inside last week's backup. Refusing backups would honor deletion purism but risks total loss of everyone's data. The industry-standard, GDPR-accepted resolution, which this architecture adopts:
 
 > Backups are kept **`BACKUP_RETENTION_DAYS` = 30 days**, then destroyed. Deleted content therefore fully ceases to exist within at most 30 days of its deletion (and backups are encrypted, offline-ish, and never queried). The privacy policy states this plainly.
 
-This slightly amends the mental model of §7.5 ("deleted at 90 days" → "deleted from the live system at 90 days, gone from the last backup by day 120") — flagged here for explicit founder approval since SPEC is authoritative.
+This amends the mental model of §7.5, and **SPEC now carries the amendment itself (v1.18)**: SPEC §7.5, §4.7 and §15.1 state the honest promise directly — *deleted at 90 days, and purged from the last encrypted backup within 30 days after that* — and `BACKUP_RETENTION_DAYS` is a SPEC §14 constant rather than an architecture detail, because a number a user-facing promise rests on belongs in the authoritative document. The wording is deliberately not "gone by day 120": that figure invites a reader to compute an exact date which in truth depends on when the last backup ran. The founder approved the retention policy on 2026-07-07 (§15 item 1); what had never happened, until 1.18, was propagating it into SPEC, which left the two documents contradicting each other on a promise — the kind that matters most if it is ever tested.
 
 ---
 
@@ -350,7 +365,7 @@ This slightly amends the mental model of §7.5 ("deleted at 90 days" → "delete
 | VPS (e.g., Hetzner ~€6–12, DigitalOcean $8–14 class) | $7–15 |
 | Backup storage (Hetzner Storage Box / Backblaze B2) | $1–4 |
 | Domain name (`weebee.social`, renews ~$33/yr) | ~$3 (billed yearly) |
-| Email provider | $0–15 (free tiers cover prototype volume) |
+| Email provider | $0–15 — **the free tier does not cover launch volume**; budget the paid step from the launch month (build-plan §5.1) |
 | **Total** | **≈ $10–35/month**, low end realistic for the prototype |
 
 All within SPEC §15.3's phase-1 posture. Software costs $0 — everything in the stack is free and open source.
@@ -425,7 +440,7 @@ The true bottleneck at scale, per prior analysis, is **human moderation time, no
 
 ## 15. Open Points — Resolution Record
 
-1. **Backup-retention amendment** (§10): deleted content persists in encrypted backups up to 30 days. — **APPROVED by founder 2026-07-07.**
+1. **Backup-retention amendment** (§10): deleted content persists in encrypted backups up to 30 days. — **APPROVED by founder 2026-07-07**, and **propagated into SPEC §7.5, §4.7, §15.1 and §14 in project version 1.18** (2026-08-04), which is the step that had been missing: the approval was recorded here while SPEC continued to promise plain deletion.
 2. **Email provider** (§3.6): founder deferred the final pick to the build plan (deliverable c), 2026-07-08. Postmark remains the recommendation.
 3. **VPS provider and location** (§11): founder deferred the final pick to the build plan (deliverable c), 2026-07-08. Hetzner remains the recommendation; location depends on where the first users are.
 4. **The document as a whole: APPROVED by founder 2026-07-08.**

@@ -4,8 +4,9 @@ Tracker for the design conversations still to be held. Each numbered item has a
 self-contained prompt file in `prompts/`, written to be pasted into a **fresh**
 session (BUILD_PLAN §0.2 rule 4: long chats degrade; prompts carry their own context).
 
-**Project version at time of writing: 1.16.** Under the new scheme (prompt 01) the
-version number belongs to the whole project, not to individual files.
+**This file was written at project version 1.16; the project is now at 1.18.** Under the
+scheme prompt 01 introduced, the version number belongs to the whole project, not to
+individual files.
 
 ---
 
@@ -27,7 +28,7 @@ Status values: `not run` · `in progress` · `done` · `deferred` · `dropped`
 | # | Prompt | Touches | Depends on | Status | Landed in |
 |---|---|---|---|---|---|
 | 01 | [Changelog & project-wide versioning](prompts/01-changelog-and-versioning.md) | all four docs, new CHANGELOG.md | — | done | 1.17 |
-| 02 | [Small corrections & open items](prompts/02-small-corrections.md) | SPEC, ARCHITECTURE, BUILD_PLAN | 01 | not run | |
+| 02 | [Small corrections & open items](prompts/02-small-corrections.md) | SPEC, ARCHITECTURE, BUILD_PLAN, README | 01 | done | 1.18 |
 | 03 | [Visibility engine performance](prompts/03-visibility-engine-performance.md) | ARCHITECTURE §5, §9 | 01 | not run | |
 | 04 | [Availability & DDoS posture](prompts/04-availability-and-ddos.md) | ARCHITECTURE §7, §13 | 01 | not run | |
 | 05 | [Hashtag vocabulary operations](prompts/05-hashtag-vocabulary-operations.md) | SPEC §11.2, §13.5, §13.2, §7.9 | 01 | not run | |

@@ -1,7 +1,7 @@
 # WeeBee — Design Documents
 
-**Project version:** 1.17 · 2026-08-03 · DRAFT pending founder review
-**This file last changed in:** 1.17 (version header added; feedback section now names CHANGELOG.md)
+**Project version:** 1.18 · 2026-08-04 · DRAFT pending founder review
+**This file last changed in:** 1.18 (the 90-day line now states the 30-day backup window)
 **History:** see [CHANGELOG.md](CHANGELOG.md)
 
 **WeeBee** (`weebee.social`) is a **small, private, deliberately anti-viral social network**. This repository holds its complete design documents. The platform has not been built yet — these documents come first, on purpose, so that the thinking is settled before the first line of code, when changes are cheapest.
@@ -14,9 +14,9 @@
 
 The core thesis: the reshare/repost button is the original sin of social media. Once content can travel beyond the audience its author chose, virality exists — and virality is the mechanism that commercial and political manipulation exploits. **This platform has no concept of reach. Nothing can go viral.**
 
-Concretely: invite-only membership (permanently), a hard cap of 300 friends, posts pushed to at most 30 hand-picked people, every post and comment auto-deleted after 90 days, no DMs (structured contact-card exchange instead), no likes or counters of any kind, no algorithmic feed, no tracking of any kind, no ads, no API. Friend discovery works only through mutual friends and shared interests — never beyond friends-of-friends. One server, one database, server-rendered pages, everything self-hosted except outbound email.
+Concretely: invite-only membership (permanently), a hard cap of 300 friends, posts pushed to at most 30 hand-picked people, every post and comment auto-deleted after 90 days (and purged from the last encrypted backup within 30 days after that), no DMs (structured contact-card exchange instead), no likes or counters of any kind, no algorithmic feed, no tracking of any kind, no ads, no API. Friend discovery works only through mutual friends and shared interests — never beyond friends-of-friends. One server, one database, server-rendered pages, everything self-hosted except outbound email.
 
-**On the 90 days, precisely:** what expires is what you *say*. What you *are* — your profile photo, your bio, your gallery of eight pictures — stays until you change it. **Statements expire; descriptions do not** (SPEC §9.7). The one deliberate exception on the other side is a pinned post: up to ten, kept for as long as you keep them pinned, which is the only act of preservation the platform offers.
+**On the 90 days, precisely:** what expires is what you *say*. What you *are* — your profile photo, your bio, your gallery of eight pictures — stays until you change it. **Statements expire; descriptions do not** (SPEC §9.7). The one deliberate exception on the other side is a pinned post: up to ten, kept for as long as you keep them pinned, which is the only act of preservation the platform offers. And one honest caveat in the other direction: deletion is immediate and permanent in the live system, but nightly encrypted backups exist, so a deleted thing survives there until the backup ages out — **30 days at most** (SPEC §7.5, §4.7). Claiming instantaneous total erasure while running backups would be a lie; the documents say the true thing instead.
 
 ## What is NOT up for review
 

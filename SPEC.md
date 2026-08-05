@@ -1,7 +1,7 @@
 # WeeBee — Platform Specification
 
-**Project version:** 1.17 · 2026-08-03 · DRAFT pending founder review
-**This file last changed in:** 1.17 (structural only; last content change 1.16)
+**Project version:** 1.18 · 2026-08-04 · DRAFT pending founder review
+**This file last changed in:** 1.18 (small corrections; the backup window and the comment cap settled)
 **History:** see [CHANGELOG.md](CHANGELOG.md)
 **Purpose of this document:** The single authoritative description of what the platform is and how every feature behaves. It is written to be self-contained: a developer or an AI coding model with no access to prior conversations must be able to build from this document alone. Architecture, technology choices, and build steps live in separate documents (see §18).
 
@@ -74,7 +74,7 @@ What keeps it self-limiting rather than exploitable is that every hop must pay f
 
 ### 4.2 Invite budgets
 - Maximum banked invites per user: `INVITE_BANK_MAX` = 5.
-- Replenishment: +1 per month, never exceeding the bank max.
+- Replenishment: +1 every `INVITE_REPLENISH_DAYS` = **30 days** since the last replenishment, never exceeding the bank max. (In days, not calendar months, for the reason given in §4.8.)
 - New accounts start with `INVITE_NEW_ACCOUNT` = 2 (prevents a newly-invited bad actor from immediately chain-inviting).
 
 ### 4.3 Invite tree
@@ -134,13 +134,15 @@ Authentication is the one place where the platform's structural anti-abuse desig
 
 ### 4.7 Account deletion (user-initiated)
 - Deletion request → account immediately deactivates (invisible to all users) → **30-day grace period** (`DELETE_GRACE_DAYS`) during which the user can log in to cancel → after grace, **full erasure** of all data: posts, comments, reactions, images, contact card, groups, friendships, profile.
+- **What "full erasure" means precisely, and its one honest caveat (v1.18).** Erasure from the live system is immediate and permanent at the end of the grace period. As with every deletion here, an encrypted off-server backup may still hold a copy until it ages out at `BACKUP_RETENTION_DAYS` = 30 days, and is then destroyed (§7.5, ARCHITECTURE §10). Backups are encrypted, never queried, and never used to restore an individual account — only the whole system after a disaster. The promise is therefore: **erased from the platform at once, and gone from the last encrypted backup within 30 days after that.** This is stated here rather than left to §7.5 because account deletion is the one place a user is most likely to rely on the promise being literal.
 - Sole exception: the anonymized invite-tree stub (§4.3) and content-free moderation counters (§13.4).
 - Deletion of a user removes their comments and reactions everywhere.
 - **What "deactivates" means (v1.16).** The account **and all of its content** become invisible everywhere, reversibly: profile, blog, gallery, and the user's comments and reactions on other people's posts. Nobody is notified — the silent precedent of §5.3. Notifications naming them drop out on their own, because §12.2 renders from current state rather than from event-time state. A visitor gets the response of §9.3, indistinguishable from a profile that never existed. The user's own view keeps working so they can cancel, carrying a banner with the **absolute** erasure date — an account event, and therefore one of §7.5.1's two narrow exceptions to relative time.
 
 ### 4.8 Inactivity deletion
-- Accounts with no login for **24 months** are deleted (full erasure as §4.7).
-- Warning emails at 6, 12, 22, and 23 months of inactivity. The early ones are gentle "your account is dormant" notes; the final two are explicit deletion warnings.
+- Accounts with no login for `INACTIVITY_DELETE_DAYS` = **730 days** (two years) are deleted (full erasure as §4.7).
+- Warning emails at `INACTIVITY_WARN_DAYS` = **180, 365, 670 and 700 days** since last login. The first two are gentle "your account is dormant" notes; the final two — 60 and 30 days before deletion — are explicit deletion warnings.
+- **Every interval here is a count of days, never calendar months (v1.18).** The sweep is a daily job (ARCHITECTURE §6) and every other time quantity in this document is a count of days; "six months" would leave a builder to choose between 180 days and six calendar months, which do not agree.
 
 ### 4.9 Data export
 Every user can download a complete, well-structured copy of their data (profile, posts, comments they authored, friend list, groups, contact card, images) in an open format (JSON + image files). This serves three purposes: GDPR compliance, "credible exit" (users are never hostage), and any future migration.
@@ -235,7 +237,7 @@ Browsers collapse whitespace by default; the behaviors below are therefore expli
   - Up to **two consecutive spaces** are preserved (sentence spacing survives); longer runs collapse to two.
   - Leading and trailing whitespace on the post as a whole is trimmed.
 - **Preformatted posts (per-post toggle).** The composer offers a per-post **"preformatted" toggle** for text tables, diagrams, and ASCII art. A preformatted post renders in a **monospace font** and preserves runs of spaces **exactly** (the space-collapsing rule above does not apply; blank-line runs still collapse, at a looser bound of **three**). Long lines **never soft-wrap** — on screens narrower than the content (a phone shows ~40 monospace characters) the post scrolls horizontally instead, because wrapping would destroy the artwork. (This is the platform's single documented exception to the reflow requirement of §16.3, permitted by WCAG 1.4.10's two-dimensional-layout exemption; the scrolling region must be keyboard-scrollable and named, and the explainer must say so.) The toggle is accompanied by a **brief explainer, linked directly from the composer**, stating what the mode is for and its shortcomings (exact spacing, no wrapping, horizontal scrolling on narrow screens). Monospace here is **structural, not decorative** — it is part of the content, like the one-image allowance, not part of any theme; see §9.1 for the interaction with viewer theming. Comments have no preformatted toggle (§8.1).
-- **Length caps.** A post may contain at most `POST_LENGTH_MAX` = **10,000 characters** (roughly 1,500–2,000 words — genuine long-form writing is welcome; the cap is an abuse bound required by the bounded-everything principle (§1.3), not a style nudge). A comment may contain at most `COMMENT_LENGTH_MAX` = 2,000 characters (asserted default, operator-tunable). Exceeding a cap produces an honest character count in the composer; text is never silently truncated.
+- **Length caps.** A post may contain at most `POST_LENGTH_MAX` = **10,000 characters** (roughly 1,500–2,000 words — genuine long-form writing is welcome; the cap is an abuse bound required by the bounded-everything principle (§1.3), not a style nudge). A comment may contain at most `COMMENT_LENGTH_MAX` = 2,000 characters — roughly 300 words, **confirmed by the founder 2026-08-04**, having stood as an undiscussed assertion since v1.6; long enough that comments need a fold of their own (§8.1). Exceeding a cap produces an honest character count in the composer; text is never silently truncated.
 
 ### 7.2.2 Images: size and display (v1.7)
 Applies to **every uploaded image** — post images, gallery images (§9.4), and the profile photo — and extends the existing upload pipeline of §7.2 (EXIF stripping, server-side re-encoding).
@@ -272,6 +274,7 @@ Nor should it. Sharing something you did not make in order to *talk about it* wi
 
 ### 7.5 Expiry — nothing outlives 3 months
 - **Every post and every comment is permanently deleted `CONTENT_TTL_DAYS` = 90 days after creation, with one exception: posts that are currently pinned (§7.6).** No archive, no soft-delete, no operator copy (sole exception: frozen moderation copies, §13.3). The exception is stated here, and not only in §7.6, because an expiry job written from this bullet alone would delete pinned posts. **Comments have no such exception** — a comment on a pinned post expires at its own 90 days regardless of the pin.
+- **And in the backups, for up to 30 days more (v1.18).** Deletion — by expiry, by its author, or by account erasure (§4.7) — is immediate and permanent in the live system. The encrypted off-server backups (ARCHITECTURE §10) still hold a copy until they age out at `BACKUP_RETENTION_DAYS` = 30 days, and are then destroyed. They are encrypted, never queried, and never serve a page. The honest form of the promise, used in all user-facing and project-facing copy: **deleted at 90 days, and purged from the last encrypted backup within 30 days after that.** Deliberately not "gone by day 120": that figure invites a reader to compute an exact date which in truth depends on when the last backup happened to run.
 - **What this rule does not govern.** Expiry applies to posts and comments. The profile photo, the gallery, both bio fields, profile hashtags, the contact card, groups and the friend list are **account state**, not statements, and do not expire — see §9.7.
 - Deletion includes attached images and all comments/reactions on the expired post.
 - Authors can delete their own posts at any time before expiry (immediate, permanent).
@@ -329,7 +332,7 @@ Notes on three of the choices, so they are not "corrected" later by someone who 
 ### 7.7 The feed
 - A user's feed contains, in **strict reverse-chronological order**: feed posts they are in the audience of, profile-update notifications from friends, and system notifications (friend requests, introductions, contact-card events, warnings).
 - **No algorithmic ranking, ever. No suggested content, no inserted people, no ads, nothing the user did not subscribe to by friendship.** The feed is a mailbox, not a machine.
-- **Long-post folding (v1.6):** a post longer than the surface's threshold is shown folded — the first characters up to that threshold (cut at a whitespace boundary) plus a "read more" control that expands the post **in place** — so one essay does not push everything else off the screen. Thresholds per reading surface: **`FEED_FOLD_CHARS` = 500** in the feed (a shared space where many authors compete for the screen) **and on the Pinned tab** (§7.6, §9.1), **`BLOG_FOLD_CHARS` = 2,000** on the Blog tab of a profile (§9.1; the reader deliberately visited this author's own space). Folding is display-only: it never changes what is stored or who can see it. A post opened directly (e.g., from a notification) is always shown in full.
+- **Long-post folding (v1.6):** a post longer than the surface's threshold is shown folded — the first characters up to that threshold (cut at a whitespace boundary) plus a "read more" control that expands the post **in place** — so one essay does not push everything else off the screen. Thresholds per reading surface: **`FEED_FOLD_CHARS` = 500** in the feed (a shared space where many authors compete for the screen) **and on the Pinned tab** (§7.6, §9.1), **`BLOG_FOLD_CHARS` = 2,000** on the Blog tab of a profile (§9.1; the reader deliberately visited this author's own space). Folding is display-only: it never changes what is stored or who can see it. A post opened directly (e.g., from a notification) is always shown in full. **Comments fold on a threshold of their own**, `COMMENT_FOLD_CHARS`, on every surface they appear on (§8.1).
 
 ### 7.7.1 Paging long lists (v1.16)
 
@@ -376,7 +379,7 @@ Editing was unspecified before v1.15 — this document defined only deletion (§
 |---|---|
 | Feed post | *"Visible to: the friends David sent this to."* |
 | Profile post, untagged | *"Visible to: all of David's friends."* |
-| Profile post, tagged | *"Visible to: all of David's friends, and friends-of-friends with #hiking."* |
+| Profile post, tagged | *"Visible to: all of David's friends, and friends-of-friends with **any of** #hiking, #jazz."* |
 
 At the comment box: *"Your comment will be visible to the same people."*
 
@@ -384,6 +387,7 @@ At the comment box: *"Your comment will be visible to the same people."*
 
 **Rules.**
 - **The line is derived from the post's own type and tags, never from the viewer** — one string per post, not a per-viewer computation.
+- **Every tag on the post is named, and the word is "any of" (v1.18).** One shared tag satisfies the gate (§11.3), so the line lists all of the post's tags and says so. A line naming one tag on a post carrying three would understate the audience to the one person who most needs it stated correctly — the author, at the moment they can still change it.
 - **Never a number.** A live count of matching friends-of-friends would be a visible count (§17) and, worse, a **privacy oracle**: added one tag at a time and watched, it would enumerate how many of the author's FoFs carry each interest. §1.2's own argument is that a campaign which cannot be measured cannot be optimized; a match counter is a measuring instrument. Naming the rule reveals nothing; naming the number reveals the graph.
 - **Never the audience itself** on a feed post. Naming or numbering the recipients would expose the author's audience choices to every recipient — a real disclosure and a social minefield. The fixed phrase says only what the model already guarantees.
 - It is **real text**, not an icon or a colour (§16.4), and updates in the composer and editor through a polite live region (§16.3, 4.1.3).
@@ -404,6 +408,7 @@ At the comment box: *"Your comment will be visible to the same people."*
 - **Every post states its audience** (§7.9), and the comment box repeats it, so a commenter always knows who they are speaking to before they speak.
 - **Flat** — one linear list per post; no nested replies in v1.
 - Same content rules as posts (§7.2, §7.2.1) except: no images in comments, no preformatted toggle, and the smaller `COMMENT_LENGTH_MAX` = 2,000 length cap. Whitespace normalization applies as for normal posts.
+- **Long comments fold (v1.18).** A comment longer than `COMMENT_FOLD_CHARS` = **300 characters** is shown folded — the first characters up to that threshold, cut at a whitespace boundary, plus a "read more" control expanding it **in place** — on every surface a comment appears on. The mechanism is §7.7's exactly, and display-only in the same way: nothing stored changes and nobody's access changes. The threshold is deliberately tighter than the feed's `FEED_FOLD_CHARS`, because a comment is a guest in the post's space and a thread is many voices competing at once: at `COMMENT_LENGTH_MAX` = 2,000 a handful of unfolded comments would bury the post they belong to, which is the same failure long-post folding exists to prevent. Each control carries its own distinct accessible name (§16.3) — *"Read more of Alice's comment"* — because a thread produces many of them.
 - Comment authors can delete their own comments, and may **edit** them under §7.8. **The post's author can delete any comment on their post** (host's rules — the cheapest moderation tool) but can never edit one (§7.8).
 - Comments and reactions on a post generate a coalesced notification to the post's author, and to anyone following the post (§12.1, §12.3).
 - Comments expire with their post, or at their own 90 days, whichever comes first. **A pinned post is not an exception**: it is exempt from expiry itself (§7.6), but comments on it still die at 90 days and leave no trace, and the post stays open to new ones.
@@ -469,6 +474,7 @@ Fixed layout (no freeform customization), with limited theming: font choice and 
 
 ### 9.3 Access rules
 - No profile, post, or image is ever accessible without login. **No deep links:** URLs must not function as shareable pointers to profiles or posts; internal identifiers must be non-guessable, and every request is permission-checked against the viewer (a leaked URL shows a stranger nothing).
+- **An address is never built from a name (v1.18).** The address of a profile or a post derives from the account's permanent internal identifier (§4.6), never from a display name — which is neither unique (§4.5) nor stable (§4.5.1). Two people may hold the same name, so a name-derived address would collide between them; a name may change, so it would break for whoever changed theirs. Two behaviours follow, and they are the reason this belongs in the specification rather than only in the architecture: an address keeps working across a name change, and no address can be constructed by guessing at a name.
 - **What "no deep links" does and does not promise (v1.16).** In-app links exist and are required — commenter and author names (§8.1), discovery (§11.4), the friends page (§11.6), notifications (§12.2). URLs are **stable and non-guessable**, and the guarantee is the permission check, not the URL: a leaked address shows a stranger nothing. It follows that an address copied out of the browser and sent to someone over another channel **does** work if that person already has permission. That is manual re-propagation, which §17 places out of scope, and it is stated here so this section is not read as promising more than it delivers.
 - **A viewer who may not see a profile gets one response**, identical for a block (§5.4), no mutual friend, a deactivated account (§4.7), and a profile that never existed. Any variation between those cases is an oracle.
 - Profile updates generate **only a notification**, and only for the event types listed in §12.1 — most changes are silent. Content is never pushed, and a notification never carries an excerpt (§12.2).
@@ -520,7 +526,7 @@ Anything a person wants said about their life can be said in a bio or a post, in
 
 **Statements expire; descriptions do not.**
 
-§7.5's 90-day rule governs **posts and comments** — things said at a moment, to an audience, with responses attached. It does not govern **account state**: the profile photo, the gallery, both bio fields, profile hashtags, the contact card, groups, and the friend list. These persist until the user changes or removes them, and are destroyed with the account on erasure (§4.7) or after 24 months of inactivity (§4.8). "Permanent" here therefore means *until you change it, delete it, or go dormant for two years*.
+§7.5's 90-day rule governs **posts and comments** — things said at a moment, to an audience, with responses attached. It does not govern **account state**: the profile photo, the gallery, both bio fields, profile hashtags, the contact card, groups, and the friend list. These persist until the user changes or removes them, and are destroyed with the account on erasure (§4.7) or after two years of inactivity (`INACTIVITY_DELETE_DAYS`, §4.8). "Permanent" here therefore means *until you change it, delete it, or go dormant for two years*.
 
 Until v1.16 this was true only by silence, which is not a decision. The distinction itself was already half-written in §7.8: *"A bio is a current description of a person, not a statement made at a moment to a snapshotted audience with responses attached to it."* Expiry follows the same line.
 
@@ -574,11 +580,16 @@ All discovery is limited to **friends-of-friends: exactly one mutual friend in b
 - **Clickable hashtags (v1.3):** clicking a hashtag anywhere opens the **discover page filtered to that tag** (§11.4). This passes the No-Reach Test because it only reorganizes what the viewer can already see — it never widens any audience and does not loosen the §11.3 gate.
 
 ### 11.3 Hashtag-gated FoF visibility (symmetric consent)
-A profile post tagged #x is visible to a viewer V (beyond the author's friends) iff **all** hold:
+A profile post is visible to a viewer V (beyond the author's friends) iff **all** hold:
 1. V is a FoF of the author (≥ 1 mutual friend, no block between them), and
-2. V has #x among their own **profile** hashtags (viewer declared the interest), and
-3. the post carries #x (author declared it discoverable by tagging it).
-Such viewers may also **comment** on that post (author-delete and block are the safety net). Access is evaluated live: if the tag is removed from either side, or the mutual friendship lapses, access ends.
+2. the post carries at least one hashtag (the author declared it discoverable by tagging it), and
+3. **at least one** of the post's hashtags is also among V's own **profile** hashtags (the viewer declared the interest) — one shared tag is enough.
+
+**One shared tag, not all of them (v1.18).** Condition 3 is existential over the post's tags, never universal: a post tagged #hiking #jazz #cornwall is visible to a FoF carrying any one of the three, not only to a FoF carrying all three. Earlier wording put the whole rule in the singular ("a post tagged #x … V has #x") and left the multi-tag case to inference. §9.2 and §11.4 both already assumed "any", so this corrects §11.3 to match the rest of the document rather than deciding anything new — and the failure it forecloses is a silent one: a builder implementing "all" would simply have hidden posts that should have appeared, with nothing anywhere raising an error.
+
+**The consequence, stated in the same breath because it is a property of the design and not a side effect: a post carrying ten tags reaches a wider friend-of-friend audience than a post carrying one.** Tagging a profile post is therefore an **audience control**, not a filing decision. That is precisely what §7.9's stated-visibility line exists to put in front of the author while they compose, and again whenever they edit tags (§7.8).
+
+Such viewers may also **comment** on that post (author-delete and block are the safety net). Access is evaluated live: if the last shared tag disappears from either side, or the mutual friendship lapses, access ends.
 
 ### 11.4 The discover page (pull-only)
 One dedicated page the user must deliberately visit. It contains:
@@ -595,7 +606,7 @@ On a profile, a viewer sees **only the friends they have in common with that per
 ### 11.6 Reaching a profile (v1.16)
 The routes to a profile are enumerated here because §9.3's no-deep-links rule makes them the *only* routes, and because the commonest one was absent from every prior version.
 
-- **The friends page.** A user's own friend list, listed alphabetically by display name — no other sort order, since any other ordering would be the platform inferring who matters (§1.3). It carries a **filter box over that list**. This is not the global search §17 forbids: global search is discovery of strangers across the network; filtering at most `FRIEND_CAP` = 300 names the user already has is navigation, and at 300 names it is necessary.
+- **The friends page.** A user's own friend list, listed alphabetically by display name — no other sort order, since any other ordering would be the platform inferring who matters (§1.3). It carries a **filter box over that list**. This is not the global search §17 forbids: global search is discovery of strangers across the network; filtering at most `FRIEND_CAP` = 300 names the user already has is navigation, and at 300 names it is necessary. **The box is labelled "Filter your friends" (v1.18)** — a visible label, never placeholder text (§16.3); any placeholder repeats the idea ("Start typing a name"). The label is a requirement, not a copy suggestion: a box labelled "Search" on this page tells the user the platform has a search, on a platform whose central promise is that it has none (§17), and nothing corrects that impression except trying it. The exact string may change; that it says *filter*, and says *your friends*, may not.
 - **Names rendered anywhere else** — post authors, commenters, mutual-friend context, an author's private reaction list — under the single visibility-aware linking rule of §8.1.
 - **The discover page** (§11.4), friend requests and introductions (§5.2, §5.5), and notification links (§12.2).
 - **There is no in-app way to point one friend at another** besides an introduction (§5.5). That is the designed answer, not an omission; the honest residual about copied URLs is stated in §9.3.
@@ -722,11 +733,12 @@ All caps are named constants; **raise-only** (§1.3). Suggested v1 values; those
 | `FRIEND_CAP` | 300 | §5.1 |
 | `POST_AUDIENCE_MAX` | 30 | §7.1 |
 | `POST_LENGTH_MAX` | 10,000 characters | §7.2.1 |
-| `COMMENT_LENGTH_MAX` ✎ | 2,000 characters (asserted default) | §7.2.1, §8.1 |
+| `COMMENT_LENGTH_MAX` | 2,000 characters (**confirmed by founder 2026-08-04**, having stood as an undiscussed assertion since v1.6) | §7.2.1, §8.1 |
 | `BIO_SHORT_MAX` | 200 characters (basic tier, FoF-visible; no links) | §9.4 |
 | `BIO_EXTENDED_MAX` | 2,000 characters (friends only; allowlisted links permitted) | §9.4 |
 | `FEED_FOLD_CHARS` ✎ | 500 characters (display-only fold threshold — the feed, and the profile's Pinned tab) | §7.7, §7.6, §9.1 |
 | `BLOG_FOLD_CHARS` ✎ | 2,000 characters (display-only fold threshold, profile Blog tab) | §7.7, §9.1 |
+| `COMMENT_FOLD_CHARS` ✎ | 300 characters (display-only fold threshold for comments, on every surface) | §8.1, §7.7 |
 | `POSTS_PER_PAGE_DEFAULT` ✎ | 20 (items per page, feed and profile Blog tab) | §7.7.1 |
 | `POSTS_PER_PAGE_OPTIONS` ✎ | 20 / 40 / 60 (viewer-chosen, one setting, applies everywhere) | §7.7.1 |
 | `IMAGE_MAX_PX` | 3,840 (long edge of stored images; larger uploads downscaled) | §7.2.2 |
@@ -742,12 +754,15 @@ All caps are named constants; **raise-only** (§1.3). Suggested v1 values; those
 | `NAME_TRANSITION_DAYS` | 90 (dual "formerly" display) | §4.5.1 |
 | `NAME_BLOCKLIST` ✎ | operator-curated blocked name strings | §4.5 |
 | `HASHTAG_VOCAB` ✎ | operator-curated interest vocabulary | §11.2 |
-| `INVITE_BANK_MAX` / replenish / new-account start | 5 / +1 per month / 2 | §4.2 |
+| `INVITE_BANK_MAX` / new-account start | 5 / 2 | §4.2 |
+| `INVITE_REPLENISH_DAYS` | 30 days since last replenish (+1 invite, capped at `INVITE_BANK_MAX`) | §4.2 |
 | `INVITE_EXPIRY_DAYS` ✎ | 14 | §4.1 |
 | `CONTENT_TTL_DAYS` | 90 (reconfirmed by founder 2026-07-08; sticky in both directions once live — lowering deletes content early, raising outlives authors' expectations) | §7.5 |
 | `EXPIRY_COUNTDOWN_DAYS` | 14 | §7.5 |
 | `DELETE_GRACE_DAYS` | 30 | §4.7 |
-| Inactivity deletion / warnings | 24 months / 6, 12, 22, 23 | §4.8 |
+| `BACKUP_RETENTION_DAYS` | 30 days (encrypted off-server backups; the window in which a copy of deleted content still exists — the promise of §7.5 and §4.7 rests on this number) | §7.5, §4.7, §15.1 |
+| `INACTIVITY_DELETE_DAYS` | 730 days since last login (≈ 24 months) | §4.8 |
+| `INACTIVITY_WARN_DAYS` | 180 / 365 / 670 / 700 days since last login (≈ 6, 12, 22, 23 months; the last two land 60 and 30 days before deletion) | §4.8 |
 | Report freeze: appeal / hard cap | 30 / 90 days | §13.3 |
 | Re-request cooldown after declined friend request ✎ | 90 days | §5.2 |
 | `REACTION_SET` ✎ | ~6 operator-curated phrases | §8.2 |
@@ -770,7 +785,7 @@ All caps are named constants; **raise-only** (§1.3). Suggested v1 values; those
 ## 15. Privacy, Legal, Money
 
 ### 15.1 Legal posture
-- 18+ only (§4.4). No geo-restrictions; GDPR-compatible by design (minimal collection, guaranteed erasure and expiry, export, no profiling). Privacy policy and Terms of Service are build-plan deliverables, written plainly. A real attorney reviews before any public phase.
+- 18+ only (§4.4). No geo-restrictions; GDPR-compatible by design (minimal collection, guaranteed erasure and expiry, export, no profiling). **The privacy policy states the backup window plainly (v1.18):** deleted content leaves the live system at once and the last encrypted backup within `BACKUP_RETENTION_DAYS` = 30 days (§7.5, §4.7, ARCHITECTURE §10). This is the standard, GDPR-accepted resolution of the backup-versus-erasure tension; the alternative — claiming instantaneous and total erasure while nightly backups exist — would simply be untrue. Privacy policy and Terms of Service are build-plan deliverables, written plainly. A real attorney reviews before any public phase.
 - Monitored risk, no v1 impact: spreading age/identity-verification laws could someday force verification machinery; nothing in this design blocks adding it.
 
 ### 15.2 Tracking — banned absolutely
