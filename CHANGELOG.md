@@ -1,7 +1,8 @@
 # Changelog — WeeBee
 
 WeeBee has **one version number for the whole project**, not a version number per
-document. It is currently **1.17**, inherited from SPEC.md because SPEC is the spine.
+document. **The current number is always the newest entry below**; the scheme began at
+**1.17**, inheriting SPEC.md's number because SPEC is the spine.
 A version bump covers whatever changed in that round: if a change touches SPEC.md and
 README.md only, the project still goes to the next number, and the other documents are
 "at" that version too — identical in content to their previous selves, and said so here
@@ -15,6 +16,53 @@ in the four document headers; the prose is moved verbatim. Where the source text
 record something — a date, a file's status in a given round — this file says
 "not recorded" rather than guessing. See the mapping appendix at the bottom for the
 translation between the old per-file version numbers and these project versions.
+
+---
+
+## 1.19 — 2026-08-05
+
+| File | Status |
+|---|---|
+| README.md | unchanged — version header only |
+| SPEC.md | **unchanged — version header only, and deliberately so** |
+| ARCHITECTURE.md | changed — Decision 4, §5 (rewritten and subdivided), §6, §7, §9, §13.2, §14, §15 |
+| BUILD_PLAN.md | unchanged — version header only; the build steps this implies are handed to prompt 09 |
+| CHANGELOG.md | changed — this entry, and the opening paragraph that still said "currently 1.17" |
+| TODO.md | changed — prompt 03 marked done; prompt 09's inventory gains a section |
+
+One finding, from prompt 03: **the visibility engine had no performance rules at all.** ChatGPT's review of 1.16 (finding 3) raised it, and the founder judged it the strongest technical point in the external reviews — everything routes through one engine, which is architecturally right, and §5 stated that rule in absolute terms while saying nothing about how often the engine runs or what a run costs.
+
+**Why this was worth a version.** The load is real and the recent spec versions increased it: a reader on `POSTS_PER_PAGE_OPTIONS` = 60 is ordinary (SPEC §7.7.1), v1.16 extended SPEC §8.1's link-or-plain-text rule from commenters to post authors, mutual-friend context and reaction lists, and SPEC §11.5 renders mutual friends by name. A sixty-post page therefore asks the engine several hundred questions, most of them the same three questions about the same handful of people, whose answers cannot change while the page is being built.
+
+**And the reason it is an architecture change rather than a tuning note:** the failure mode is not a crash but a four-second feed, and a four-second feed gets repaired by inlining a query into a template — which is precisely what Decision 4 exists to forbid, in a list, where a permission bug is least visible. **The performance gap was a threat to the architectural rule before it was a threat to speed.** Left unstated, the rule would have been broken in the field by someone doing an obviously sensible thing.
+
+**SPEC was not touched, on purpose.** Caching is invisible to users; a wish to edit SPEC here would have been drift (prompt 08). **No new infrastructure either**: a request-scoped dictionary needs no Redis, and Redis is now recorded as rejected for this purpose at every scale, including the one where §13.2 eventually admits it for other things.
+
+**The judgment call of the session, recorded because it was a call and not a deduction.** Prompt 03 flagged the bulk-query question as possibly a redesign deserving its own prompt. It was adopted here instead, on an argument that turned out not to be about performance at all: **a queryset filter is a visibility decision**, so a list that builds its own filter has already broken Decision 4 — and before this version the engine offered no way to build a list any other way. The plural forms are what make the rule obeyable for lists, not merely faster. They cost one thing honestly: a rule expressed twice, in SQL and in Python, which is the drift this document warns about in five other places. That cost is paid by one equivalence test rather than waved away.
+
+### ARCHITECTURE.md
+
+(a) **§5 is rewritten and subdivided** into §5.1 the rule (unchanged text, now a named subsection), §5.2 what the rule costs, §5.3 request-scoped memoization, §5.4 the plural forms, §5.5 what is never cached. Nothing in the original rule was weakened; the four new subsections are all *inside* the module, and a caller that knows a cache or a batch exists is stated to be the wrong design.
+
+(b) **§5.3 — memoization, scoped hard.** One HTTP request, populated on first use, discarded when the response is sent, never written to disk, never shared between requests or users. A table names what may be remembered and what it costs: the viewer's friend set (one query, ≤ `FRIEND_CAP` = 300 ids), their block set in both directions, their own profile hashtags (≤ `PROFILE_HASHTAG_MAX` = 10) — all per-viewer — plus per-pair connection status, mutual friends, profile tier and resolved contact card, plus the five answers themselves keyed on the full argument tuple. The per-viewer rows are the ones that do the work: the viewer's whole social position fits in three small queries, after which most of a page's questions are set membership and touch the database not at all. Three further rules, each closing a specific failure: the store is a `contextvars.ContextVar` set by middleware and cleared in a `finally` (a thread-local would break on async workers; an uncleared dictionary would leak into the next request on that thread); **every key begins with the viewer, and it is the viewer the engine was *called with*** — SPEC §9.5's preview-as substitutes a different viewer inside one request, so a key on the object alone would serve the owner's answers to the preview or the reverse, in the one feature built to show the owner somebody else's view; and **any write to a relation the engine reads discards the whole dictionary**, bluntly rather than selectively, because selective invalidation is how one gets a privacy bug nobody can reproduce. Finally, **no request, no memo**: cron jobs (§6) run uncached, deliberately, because a job runs for minutes and `post_follows` delivery re-asks the engine per recipient precisely so a mid-run block takes effect at once.
+
+(c) **§5.4 — the plural forms.** Two shapes and no third: **one queryset per list**, owned by the engine (the feed, the Blog and Pinned tabs, discover, the friends page), with the caller owning ordering, folding and paging and nothing else; and **`profile_tiers(viewer, people)`**, one batch call over every name that will appear on the page. The batch call has a pleasing property worth recording: the single query that resolves FoF status for the non-friends also returns *which* mutual friends they share, which is exactly what SPEC §11.5's "knows Alice and Tom" and SPEC §9.2's basic tier need to render — one result, two requirements, neither computed twice. The singular functions of Decision 4 remain the item-level API (single-post view, notification delivery, the permission-checked image view, the data export) and, where possible, are implemented *as* the plural form over a set of one, so each rule has one implementation.
+
+(d) **§5.5 — what is never cached, and the three ways it will be tried.** Cross-request caching of a visibility answer is forbidden, on SPEC's authority rather than preference: §11.3 requires the hashtag gate be evaluated live, §7.4 pairs a snapshot audience with *current* friendship, §5.4 makes blocks immediate. In each case a stale "yes" is a person seeing something the platform promised they could not, with nothing in any log. Three mechanisms are named so they are not proposed as obvious improvements — a module-level `functools.lru_cache` (the smallest-looking change and the worst: it lives for the life of the worker process), Django's cache framework on permission-checked pages or fragments, and a precomputed `visible_to` table. The third gets an explicit disambiguation: **`post_audience` is not an instance of it**, because SPEC §7.4 defines the posting-time snapshot as a stored fact and the engine still applies the live tests on top of it every read. Two clarifications keep the ban from being read too wide: it concerns visibility answers, not sessions or rate counters, and `select_related`/`prefetch_related` on an engine-supplied queryset are ordinary good practice.
+
+(e) **Four tests in §9.** The first asserts a cost rather than a behaviour — the only place in the project that does — and it earns that under v1.18's own blast-radius rule, because what it protects is Decision 4 rather than the page's speed; the other three are ordinary correctness tests whose failures happen to be privacy failures. **The shape test**: render the same seeded feed at 20 and at 60 and assert the query counts are **equal**, and both under a stated ceiling. The equality is the durable assertion — it says cost does not grow with item count — and it is recorded that **the ceiling may be revised with a changelog line while the equality may not**. **The equivalence test**: the posts a list queryset returns are exactly the posts for which `can_see_post` returns true, over a fixture seeded with blocks, lapsed friendships, snapshot mismatches and live gates — this is the test that pays for having a plural form at all. **The viewer-in-the-key test** and **the flush-on-write test** guard §5.3's two failure modes. All four use `assertNumQueries` and the test client; no new dependency, and deliberately no wall-clock assertion, which would measure the machine rather than the code.
+
+(f) **Decision 4 gains a paragraph** — the "one engine" principle is argued there, so the cost of that principle is named there too, with the point that a slow feed is Decision 4 failing in the field rather than losing an argument. A stale cross-reference in the same paragraph is corrected in passing: the engine's tests are in §9, not §11.
+
+(g) **Smaller placements.** §6's intro states that jobs run outside any request and therefore uncached. §7 gains a security bullet, because the failure of a cached permission answer is silent and looks exactly like correct behaviour, and §7 is where a builder looks for what can leak. §13.2 records that when Redis eventually arrives on measurement, visibility answers still stay out of it. §14 gains four rejected rows (Redis for this purpose, `lru_cache`, the Django cache framework on per-viewer output, a precomputed visibility table). §15 gains item 5, recording both calls — plural forms adopted rather than deferred, no new infrastructure — as **awaiting founder confirmation**.
+
+### BUILD_PLAN.md
+
+Unchanged here by design (prompt 03's own instruction): Phase 4 already builds the engine and Phase 6 the feed, so this needs no new step. What it does need is for five existing places to stop describing a smaller engine than the architecture now specifies, and that is written up as a new **§N in `prompts/09-sync-arch-and-buildplan.md`**: Step 4.1 builds the plural forms and the memo middleware *with* the engine rather than retrofitting them after a slow feed; Step 4.2 gains three of the four new tests; Step 6.4 hosts the shape test and states that the feed's queryset comes from the engine; Step 7.1's name linking is fed by one `profile_tiers` call; and Appendix rule 2 — "all visibility decisions call the visibility engine — never inline" — gains a second sentence, because a builder reads "inline" as being about templates and the sharpest case is a view's own queryset filter.
+
+### SPEC.md, README.md
+
+Unchanged apart from the project-version header. SPEC's status is the deliberate one: this version added a caching rule and a bulk API, neither of which a user can observe, and prompt 03's own constraint was that wanting to edit SPEC here would be the signal of having drifted.
 
 ---
 

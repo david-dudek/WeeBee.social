@@ -4,7 +4,7 @@ Tracker for the design conversations still to be held. Each numbered item has a
 self-contained prompt file in `prompts/`, written to be pasted into a **fresh**
 session (BUILD_PLAN §0.2 rule 4: long chats degrade; prompts carry their own context).
 
-**This file was written at project version 1.16; the project is now at 1.18.** Under the
+**This file was written at project version 1.16; the project is now at 1.19.** Under the
 scheme prompt 01 introduced, the version number belongs to the whole project, not to
 individual files.
 
@@ -29,7 +29,7 @@ Status values: `not run` · `in progress` · `done` · `deferred` · `dropped`
 |---|---|---|---|---|---|
 | 01 | [Changelog & project-wide versioning](prompts/01-changelog-and-versioning.md) | all four docs, new CHANGELOG.md | — | done | 1.17 |
 | 02 | [Small corrections & open items](prompts/02-small-corrections.md) | SPEC, ARCHITECTURE, BUILD_PLAN, README | 01 | done | 1.18 |
-| 03 | [Visibility engine performance](prompts/03-visibility-engine-performance.md) | ARCHITECTURE §5, §9 | 01 | not run | |
+| 03 | [Visibility engine performance](prompts/03-visibility-engine-performance.md) | ARCHITECTURE §5, §9 | 01 | done | 1.19 |
 | 04 | [Availability & DDoS posture](prompts/04-availability-and-ddos.md) | ARCHITECTURE §7, §13 | 01 | not run | |
 | 05 | [Hashtag vocabulary operations](prompts/05-hashtag-vocabulary-operations.md) | SPEC §11.2, §13.5, §13.2, §7.9 | 01 | not run | |
 | 06 | [Accessibility: regression & the admin](prompts/06-accessibility-regression.md) | SPEC §16, ARCHITECTURE §9, BUILD_PLAN §16 | 01 | not run | |
@@ -42,6 +42,17 @@ Status values: `not run` · `in progress` · `done` · `deferred` · `dropped`
 
 **Run 09 last.** Prompts 02–08 and 10–12 may each amend SPEC and ARCHITECTURE; syncing
 BUILD_PLAN once against a settled SPEC means writing those build steps a single time.
+
+**Prompt 03 handed BUILD_PLAN work to 09 rather than doing it (1.19).** ARCHITECTURE §5 now
+specifies a larger engine than BUILD_PLAN describes — plural forms, a request-scoped memo,
+four new tests. No new phase or step is needed; five existing places need updating, and they
+are itemized as a new **§N** in `prompts/09-sync-arch-and-buildplan.md` so the sync session
+does not have to reconstruct them from CHANGELOG.
+
+**One item awaits a founder decision, and does not block anything.** ARCHITECTURE §15 item 5
+records the two calls prompt 03 made — the plural engine API adopted rather than split into
+its own prompt, and no new infrastructure — as *awaiting founder confirmation*. Confirming or
+reversing it before 09 runs is cheaper than after, since 09 writes the build steps from it.
 
 **Do not start Phase 2 of BUILD_PLAN until 09 is done.** `BIO_CHANGE_COOLDOWN_HOURS` and
 `BIO_EDIT_GRACE_MINUTES`, which SPEC §14 marks **retired v1.16**, are still live

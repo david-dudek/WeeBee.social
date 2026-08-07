@@ -211,14 +211,46 @@ That is exactly the "one visibility engine" rule being quietly broken. Implement
 prompt 11 decided, and add the case to Phase 4.2's test suite; read CHANGELOG.md for the
 wording it settled on rather than assuming.
 
+### N. The visibility engine's performance rules (handed over from prompt 03, landed in 1.19)
+
+Prompt 03 added ARCHITECTURE §5.2–§5.5 and four tests in §9. **No new BUILD_PLAN phase or
+step is needed** — Phase 4 builds the engine and Phase 6 builds the feed — but five
+existing places now describe a smaller engine than the architecture does. Read
+ARCHITECTURE §5 first; this list is the map, not the content.
+
+1. **Step 4.1** currently says "the five functions of ARCHITECTURE Decision 4." The engine
+   now also has **plural forms** (§5.4) — one queryset per list, plus
+   `profile_tiers(viewer, people)` — and a **request-scoped memo** behind a small
+   middleware (§5.3). Both are built *with* the engine in Phase 4, not retrofitted after a
+   slow feed, which is the whole point of putting them in the architecture. Where a
+   singular answer is a plural one over a set of one, it is implemented that way.
+2. **Step 4.2** gains three of §9's four new tests — the queryset/singular equivalence
+   test, the viewer-in-the-key test (preview-as inside one request), and the
+   flush-on-write test. They belong beside the correctness suite because their failures
+   are privacy failures, not slowness.
+3. **Step 6.4** (the feed page) is where the **shape test** lands: render the same seeded
+   feed at 20 and at 60 and assert the query counts are *equal* and under a ceiling. State
+   the ceiling as a number in the step so the founder can check it, and state in the step
+   that the equality is the assertion that may never be relaxed. Also say plainly that the
+   feed's queryset comes **from the engine** — a view writing its own
+   `Post.objects.filter(audience__user=viewer, …)` is the defect this step exists to
+   prevent, and it fails silently because the page still looks right.
+4. **Step 7.1** (comments) renders many names; its name-linking rule should be fed by one
+   `profile_tiers` call over the page's cast, not one call per name.
+5. **Appendix rule 2** is the natural home for a second sentence: lists take their base
+   queryset from the engine, because **a queryset filter is a visibility decision**. Rule 2
+   currently says "never inline," which a builder reads as being about templates.
+
+Check also that no step tells anyone to add a cache: §5.5 bans cross-request caching of
+visibility answers in three named forms, and §14 carries them as rejected rows.
+
 ### M. Everything prompts 02–08, 10, 11 and 12 decided
 
 Fold in whatever those sessions added — the availability and monitoring work from prompt
-04 is likely the largest, the visibility-engine caching rule from prompt 03 may want a
-query-count test in Phase 6, prompt 10 may have given reactions an expiry that
+04 is likely the largest, prompt 10 may have given reactions an expiry that
 `expire_content` must implement, and prompt 12's ban definition needs an account state, an
 admin action and a decision about existing content. Read CHANGELOG.md rather than trusting
-this list.
+this list. (Prompt 03 is already itemized in §N above.)
 
 ---
 

@@ -1,6 +1,6 @@
 # Build Plan — WeeBee
 
-**Project version:** 1.18 · 2026-08-04 · under founder review
+**Project version:** 1.19 · 2026-08-05 · under founder review
 **This file last changed in:** 1.18 (verification matrix §0.4; honest guard strengths + checksum tripwire; email headroom; restore verification)
 **History:** see [CHANGELOG.md](CHANGELOG.md)
 **Companion to:** SPEC.md v1.15 (§7.5.1, §7.8, §9.4, §12) and ARCHITECTURE.md v1.7 (§3.8, §4, §7). This is deliverable (c) per SPEC §18. The actual AI-coding prompts are deliverable (d); every `[AI]` step below will have a matching numbered prompt there.
