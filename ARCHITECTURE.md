@@ -1,6 +1,6 @@
 # Architecture & Technology Stack — WeeBee
 
-**Project version:** 1.19 · 2026-08-05 · DRAFT pending founder review
+**Project version:** 1.19 · 2026-08-06 · DRAFT pending founder review
 **This file last changed in:** 1.19 (the visibility engine's performance rules: request-scoped memoization, the plural forms, and the caching that stays banned)
 **History:** see [CHANGELOG.md](CHANGELOG.md)
 **Companion to:** SPEC.md v1.15 (deliverable b per SPEC §18)
@@ -277,11 +277,15 @@ The load is not hypothetical, and recent spec versions increased it:
 
 So a sixty-post page carries at least sixty author names, sixty audience lines and, on any surface that renders comments inline, several commenter names each. Written naively — every item asking its own question, every question reading its own rows — that page asks the engine several hundred times and issues several hundred queries, of which the large majority are **the same question asked again about the same handful of people**: is this pair blocked, are these two connected, what tier does this viewer hold. **None of those answers can change while a single page is being built.**
 
+What makes several hundred queries expensive is worth stating, because the intuitive answer is the wrong one. It is **not** the volume of data — every one of those answers is a handful of bytes. It is that each query is a **separate round trip**: the application sends it and waits, the database parses it, plans it and runs it, and sends back. That overhead is paid per query and is largely independent of how much comes back, so several hundred queries in sequence cost several hundred times the overhead of one. This is also why the bulk form of §5.4 moves *less* data rather than more: the repeated questions were re-reading the same rows over and over.
+
 The failure mode is not a crash. It is a feed that takes four seconds on the €8 VPS of §11 — and the danger is not the four seconds. It is what a four-second feed makes someone do. The obvious local fix is to reach into the template or the view and fetch the friendship directly, once, for the whole list. That is a five-line change, it makes the page fast, it looks right in review because the output is right, and it quietly breaks Decision 4 in the one place — a list — where a permission bug is hardest to see and most expensive when the rules later change. **The performance gap is a threat to the architectural rule before it is a threat to speed. That is why it is answered here, in the architecture, rather than left to whoever eventually finds the page slow.**
 
 The answer has two halves, and both live **inside** the module where no caller can see them: the engine remembers, within one request, what it has already worked out (§5.3), and it accepts questions in the plural so that a page of sixty items costs the same number of queries as a page of twenty (§5.4). Nothing a template, view, job or export does changes because of either. If a proposal ever requires a caller to know that a cache or a batch exists, it is the wrong proposal.
 
 ### 5.3 Request-scoped memoization — the only cache in this system (v1.19)
+
+**Memoization** is remembering an answer already worked out, so that the same question is never worked out twice. Nothing more exotic than that: while one page is being built, the engine keeps a note of what it has already established about the viewer, and consults its own notes before it consults the database.
 
 **The scope, stated first and hard, because everything else depends on it: one HTTP request. Populated on first use, discarded when the response is sent, never written to disk, never shared between requests, never shared between users.** It is a scratch pad for one page render, not a cache in the ordinary sense of the word.
 
@@ -313,7 +317,11 @@ Note what is *per-viewer* and what is *per-pair*. The first three rows are per-v
 
 ### 5.4 Asking in bulk — the plural forms (v1.19)
 
-**Memoization removes repeats. It does not remove sixty separate questions.** A page that asks `can_see_post` sixty times about sixty different posts repeats nothing and still touches the database sixty times. So the engine answers in the plural as well as the singular. There are exactly two plural shapes and no third.
+**Memoization removes repeats. It does not remove sixty separate questions.** A page that asks `can_see_post` sixty times about sixty *different* posts repeats nothing at all and still makes sixty round trips.
+
+So the engine also answers **in bulk**: handed a whole set, it returns all the answers together. *"Which of these sixty posts may this viewer see?"* asked once, instead of *"may this viewer see this post?"* asked sixty times. The rules applied are identical, the decision still belongs entirely to the engine, and the caller learns nothing it could not have learned one question at a time — **only the number of questions changes.** Below, the two are called the **plural** and **singular** forms of the same question.
+
+There are exactly two plural shapes and no third.
 
 **1. One queryset per list, owned by the engine.** Every list on the platform takes its base queryset from the module: the feed (SPEC §7.7), an author's Blog tab and Pinned tab (SPEC §9.1, §9.2, §11.3), the discover page's matched posts and suggested people (SPEC §11.4), the friends page (SPEC §11.6). **The engine owns every condition that decides who sees what; the caller owns ordering, folding and paging** (SPEC §7.7.1) and may add nothing else. This also keeps paging honest — the database applies the limit, so a reader on 60 does not cause 90 days of posts to be loaded into memory and filtered.
 
@@ -541,7 +549,8 @@ The true bottleneck at scale, per prior analysis, is **human moderation time, no
 2. **Email provider** (§3.6): founder deferred the final pick to the build plan (deliverable c), 2026-07-08. Postmark remains the recommendation.
 3. **VPS provider and location** (§11): founder deferred the final pick to the build plan (deliverable c), 2026-07-08. Hetzner remains the recommendation; location depends on where the first users are.
 4. **The document as a whole: APPROVED by founder 2026-07-08.**
-5. **The engine's performance rules** (§5.2–§5.5, §9), worked out in project version 1.19 from an external review of 1.16. Two calls are recorded here rather than buried in §5, because both were judgment rather than deduction. (a) **The plural forms were adopted, not deferred.** Memoization alone does not fix a page asking sixty separate questions, and the decisive argument was not speed: a list that builds its own queryset has *already* broken Decision 4, so the plural form is what makes a list obeyable rather than merely faster. The cost — one rule expressed twice, in SQL and in Python — is real, is stated in §5.4, and is closed by the equivalence test in §9. (b) **No new infrastructure was added**: a request-scoped dictionary needs no Redis, and Redis is recorded in §14 as rejected for this purpose at every scale. SPEC was not touched, and should not be: caching is invisible to users. — **awaiting founder confirmation.**
+5. **The engine's bulk (plural) forms** (§5.4): adopted in project version 1.19 rather than split into a later design session — **APPROVED by founder 2026-08-06**. The argument that decided it was not speed. A list that builds its own queryset has *already* broken Decision 4, and before 1.19 the engine offered a list no other way to be built; the bulk form is therefore what makes a list **able to obey** the rule, and the efficiency is a side effect of closing that gap properly. The cost is not speed either, and is recorded rather than waved away: one rule ends up expressed twice, in SQL and in Python, which is the drift this document warns about in five other places. §5.4 states it; the equivalence test in §9 closes it.
+   Recorded beside it as fact rather than as an open question: **no new infrastructure was added.** A request-scoped dictionary needs no Redis, and §14 carries Redis as rejected for this purpose at every scale — including the one where §13.2 eventually admits it for other things. **SPEC was not touched, and should not be:** memoization and batching are invisible to users, and a wish to edit SPEC here would have been the signal of having drifted.
 
 ---
 

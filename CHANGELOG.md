@@ -19,7 +19,7 @@ translation between the old per-file version numbers and these project versions.
 
 ---
 
-## 1.19 — 2026-08-05
+## 1.19 — 2026-08-06
 
 | File | Status |
 |---|---|
@@ -38,7 +38,7 @@ One finding, from prompt 03: **the visibility engine had no performance rules at
 
 **SPEC was not touched, on purpose.** Caching is invisible to users; a wish to edit SPEC here would have been drift (prompt 08). **No new infrastructure either**: a request-scoped dictionary needs no Redis, and Redis is now recorded as rejected for this purpose at every scale, including the one where §13.2 eventually admits it for other things.
 
-**The judgment call of the session, recorded because it was a call and not a deduction.** Prompt 03 flagged the bulk-query question as possibly a redesign deserving its own prompt. It was adopted here instead, on an argument that turned out not to be about performance at all: **a queryset filter is a visibility decision**, so a list that builds its own filter has already broken Decision 4 — and before this version the engine offered no way to build a list any other way. The plural forms are what make the rule obeyable for lists, not merely faster. They cost one thing honestly: a rule expressed twice, in SQL and in Python, which is the drift this document warns about in five other places. That cost is paid by one equivalence test rather than waved away.
+**The judgment call of the session — put to the founder and approved 2026-08-06.** Prompt 03 flagged the bulk-query question as possibly a redesign deserving its own prompt, and instructed that it be split rather than decided tired. It was adopted here instead, on an argument that turned out not to be about performance at all: **a queryset filter is a visibility decision**, so a list that builds its own filter has already broken Decision 4 — and before this version the engine offered no way to build a list any other way. The plural forms are what make the rule obeyable for lists, not merely faster. They cost one thing honestly: a rule expressed twice, in SQL and in Python, which is the drift this document warns about in five other places. That cost is paid by one equivalence test rather than waved away. The founder was given the reversal's consequence before deciding — pulling §5.4 would take the shape test with it, since that test's assertion (a 60-item page costs what a 20-item page costs) holds only if the bulk form exists — and confirmed it stays.
 
 ### ARCHITECTURE.md
 
@@ -54,7 +54,9 @@ One finding, from prompt 03: **the visibility engine had no performance rules at
 
 (f) **Decision 4 gains a paragraph** — the "one engine" principle is argued there, so the cost of that principle is named there too, with the point that a slow feed is Decision 4 failing in the field rather than losing an argument. A stale cross-reference in the same paragraph is corrected in passing: the engine's tests are in §9, not §11.
 
-(g) **Smaller placements.** §6's intro states that jobs run outside any request and therefore uncached. §7 gains a security bullet, because the failure of a cached permission answer is silent and looks exactly like correct behaviour, and §7 is where a builder looks for what can leak. §13.2 records that when Redis eventually arrives on measurement, visibility answers still stay out of it. §14 gains four rejected rows (Redis for this purpose, `lru_cache`, the Django cache framework on per-viewer output, a precomputed visibility table). §15 gains item 5, recording both calls — plural forms adopted rather than deferred, no new infrastructure — as **awaiting founder confirmation**.
+(g) **Smaller placements.** §6's intro states that jobs run outside any request and therefore uncached. §7 gains a security bullet, because the failure of a cached permission answer is silent and looks exactly like correct behaviour, and §7 is where a builder looks for what can leak. §13.2 records that when Redis eventually arrives on measurement, visibility answers still stay out of it. §14 gains four rejected rows (Redis for this purpose, `lru_cache`, the Django cache framework on per-viewer output, a precomputed visibility table). §15 gains item 5, recording the bulk forms as **APPROVED by founder 2026-08-06** with the reasoning that decided it, and recording "no new infrastructure" beside it as fact rather than as an open question.
+
+(h) **Two terms are glossed in plain language where they first appear**, because this document's own header promises that "where a term of art is unavoidable, it is explained the first time it appears" and neither met it — a defect found the way such defects should be, by the founder reading the section and stopping at the word. **Memoization** (§5.3) is now defined as remembering an answer already worked out so the same question is never worked out twice; **asking in bulk** (§5.4) as handing the engine a whole set and getting all the answers back together, with the rules applied and the decision unchanged and only the number of questions differing. §5.2 also gains a paragraph on *why* several hundred queries are slow, since the intuitive answer is the wrong one: the cost is the per-query round trip, not the volume of data — which is also why the bulk form moves **less** data than the singular one, not more. That correction matters beyond readability, because "fewer requests but bigger ones" is the tradeoff a reader will assume is being made here, and it is not the tradeoff at all.
 
 ### BUILD_PLAN.md
 

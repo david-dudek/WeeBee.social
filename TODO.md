@@ -49,10 +49,10 @@ four new tests. No new phase or step is needed; five existing places need updati
 are itemized as a new **§N** in `prompts/09-sync-arch-and-buildplan.md` so the sync session
 does not have to reconstruct them from CHANGELOG.
 
-**One item awaits a founder decision, and does not block anything.** ARCHITECTURE §15 item 5
-records the two calls prompt 03 made — the plural engine API adopted rather than split into
-its own prompt, and no new infrastructure — as *awaiting founder confirmation*. Confirming or
-reversing it before 09 runs is cheaper than after, since 09 writes the build steps from it.
+**Prompt 03's one open call is settled.** The bulk (plural) engine API was adopted rather than
+split into a later prompt — **approved by founder 2026-08-06**, recorded with its reasoning in
+ARCHITECTURE §15 item 5. Prompt 09 writes the Phase 4 and Phase 6 steps from it without
+re-opening the question.
 
 **Do not start Phase 2 of BUILD_PLAN until 09 is done.** `BIO_CHANGE_COOLDOWN_HOURS` and
 `BIO_EDIT_GRACE_MINUTES`, which SPEC §14 marks **retired v1.16**, are still live
