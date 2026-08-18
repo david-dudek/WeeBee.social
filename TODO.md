@@ -4,7 +4,7 @@ Tracker for the design conversations still to be held. Each numbered item has a
 self-contained prompt file in `prompts/`, written to be pasted into a **fresh**
 session (BUILD_PLAN §0.2 rule 4: long chats degrade; prompts carry their own context).
 
-**This file was written at project version 1.16; the project is now at 1.19.** Under the
+**This file was written at project version 1.16; the project is now at 1.20.** Under the
 scheme prompt 01 introduced, the version number belongs to the whole project, not to
 individual files.
 
@@ -30,7 +30,7 @@ Status values: `not run` · `in progress` · `done` · `deferred` · `dropped`
 | 01 | [Changelog & project-wide versioning](prompts/01-changelog-and-versioning.md) | all four docs, new CHANGELOG.md | — | done | 1.17 |
 | 02 | [Small corrections & open items](prompts/02-small-corrections.md) | SPEC, ARCHITECTURE, BUILD_PLAN, README | 01 | done | 1.18 |
 | 03 | [Visibility engine performance](prompts/03-visibility-engine-performance.md) | ARCHITECTURE §5, §9 | 01 | done | 1.19 |
-| 04 | [Availability & DDoS posture](prompts/04-availability-and-ddos.md) | ARCHITECTURE §7, §13 | 01 | not run | |
+| 04 | [Availability & DDoS posture](prompts/04-availability-and-ddos.md) | ARCHITECTURE §4, §6, §7, §8, §10, §11, §13, §14, §15; BUILD_PLAN §5, §15, §16, §17 | 01 | done | 1.20 |
 | 05 | [Hashtag vocabulary operations](prompts/05-hashtag-vocabulary-operations.md) | SPEC §11.2, §13.5, §13.2, §7.9 | 01 | not run | |
 | 06 | [Accessibility: regression & the admin](prompts/06-accessibility-regression.md) | SPEC §16, ARCHITECTURE §9, BUILD_PLAN §16 | 01 | not run | |
 | 07 | [How documents change during the build](prompts/07-design-review-mode.md) | BUILD_PLAN §0.2 + §2.4, all four headers, CHANGELOG | 01 | not run | |
@@ -54,10 +54,33 @@ split into a later prompt — **approved by founder 2026-08-06**, recorded with 
 ARCHITECTURE §15 item 5. Prompt 09 writes the Phase 4 and Phase 6 steps from it without
 re-opening the question.
 
+**Prompt 04 handed BUILD_PLAN work to nobody — it wrote its own steps (1.20).** Unlike prompt 03,
+04's build steps were unambiguous and land in existing phases (5.2, 5.4, 5.6, new 5.7, 15.1,
+new 16.6, 17.3, Appendix rule 7). Prompt 09 inherits **one** item from it, below.
+
+**New for prompt 08 (from 1.20).** ARCHITECTURE §7.3 adds an unauthenticated route, `/healthz`,
+and argues it is not a *page* and therefore does not contradict SPEC §2's "no public pages
+except login/registration/invite-acceptance." That argument is written down in ARCHITECTURE
+rather than acted on in SPEC. **08 decides whether SPEC §2 should name the route**, which is a
+boundary question of exactly the kind 08 owns. Note while you are there that §2's list is
+already slightly narrower than the built system: the privacy policy and accessibility
+statement are linked from login (BUILD_PLAN §15.1, §15.2) and are therefore also reachable
+logged out.
+
+**New for prompt 09 (from 1.20) — nothing to decide, one thing to leave alone.** External
+uptime/heartbeat monitoring is **deferred with intent to build**: the founder's position is
+email alerts for launch and the watchdog built out if the platform actually gets used
+(ARCHITECTURE §15 item 6). It has deliberately **no numbered build step**, because its trigger
+is the platform being used rather than a phase being reached; it lives instead as section 11
+of the operator runbook (BUILD_PLAN §17.3), alongside the yearly restore rehearsal, which is
+the same shape of standing item. **09 should not relocate it into a phase.** Everything it will
+need in the application — `/healthz`, `job_runs`, `check_health` — is already built at Step
+5.7, so the future work is a signup and two monitors, not code.
+
 **Do not start Phase 2 of BUILD_PLAN until 09 is done.** `BIO_CHANGE_COOLDOWN_HOURS` and
 `BIO_EDIT_GRACE_MINUTES`, which SPEC §14 marks **retired v1.16**, are still live
 instructions in **five** places: ARCHITECTURE §4 (`profiles`, where they are *columns*),
-ARCHITECTURE §4 (`rate_counters`), ARCHITECTURE §7 (inside a security argument),
+ARCHITECTURE §4 (`rate_counters`), ARCHITECTURE **§7.1** (inside a security argument — §7 was subdivided in 1.20, and the retired constants are in the first subsection),
 BUILD_PLAN §8.1, and BUILD_PLAN §13.4. A build session following those files today would
 write the wrong mechanism. This file previously named only two of the five.
 
@@ -88,7 +111,7 @@ one, so no finding is silently dropped and none needs re-litigating.
 | Restore rehearsed twice, never again | DeepSeek 18 | 02 |
 | Shared helpers are single points of correctness | ChatGPT 6 | 02 |
 | Visibility engine may issue N×M queries; needs request-scoped caching | ChatGPT 3 | 03 |
-| Cloudflare proxy ban leaves no DDoS mitigation | DeepSeek 9 | 04 |
+| Cloudflare proxy ban leaves no DDoS mitigation | DeepSeek 9 | 04 — **done in 1.20**; the finding itself was wrong (§13.3 already answered it) but checking it exposed that §7 said nothing about availability at all |
 | Hashtag vocabulary makes the operator a single point of failure | DeepSeek 3 | 05 |
 | Accessibility is audited once, never regression-tested | DeepSeek 22 | 06 |
 | Django admin WCAG exception is a hedge, not a decision | DeepSeek 12 | 06 |
@@ -155,6 +178,11 @@ where noted. Recorded here so they are not raised again as new.
   design work — do it during Phase 10.
 - **Constant values as a whole.** README §1 invites review of every cap. No reviewer
   engaged with the numbers. Still open.
+- **README §3's pager question is answered as of 1.20** — *"what does a person who has
+  carried a pager know that this plan forgot? (Monitoring, alerting, failure recovery, the
+  2 a.m. scenarios.)"* No reviewer answered it; prompt 04 did. ARCHITECTURE §7.2–§7.4 and
+  §11.1 are the answer, and BUILD_PLAN §5.7, §16.6 and §17.3 are how it gets built. Recorded
+  here so the question is not re-asked as though still open.
 
 ---
 

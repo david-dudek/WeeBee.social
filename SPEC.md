@@ -1,6 +1,6 @@
 # WeeBee — Platform Specification
 
-**Project version:** 1.19 · 2026-08-06 · DRAFT pending founder review
+**Project version:** 1.20 · 2026-08-17 · DRAFT pending founder review
 **This file last changed in:** 1.18 (small corrections; the backup window and the comment cap settled)
 **History:** see [CHANGELOG.md](CHANGELOG.md)
 **Purpose of this document:** The single authoritative description of what the platform is and how every feature behaves. It is written to be self-contained: a developer or an AI coding model with no access to prior conversations must be able to build from this document alone. Architecture, technology choices, and build steps live in separate documents (see §18).

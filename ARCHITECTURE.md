@@ -1,7 +1,7 @@
 # Architecture & Technology Stack — WeeBee
 
-**Project version:** 1.19 · 2026-08-06 · DRAFT pending founder review
-**This file last changed in:** 1.19 (the visibility engine's performance rules: request-scoped memoization, the plural forms, and the caching that stays banned)
+**Project version:** 1.20 · 2026-08-17 · DRAFT pending founder review
+**This file last changed in:** 1.20 (§7 subdivided and given an availability posture: what keeps the service running, how a silent failure becomes loud, and the v1 DDoS answer)
 **History:** see [CHANGELOG.md](CHANGELOG.md)
 **Companion to:** SPEC.md v1.15 (deliverable b per SPEC §18)
 **Audience:** The founder (an IT professional, not a professional developer) and the AI coding models that will build the platform. Written in plain language; every technology choice is justified. Where a term of art is unavoidable, it is explained the first time it appears.
@@ -234,6 +234,7 @@ Plain-language inventory of the ~20 database tables. (Exact fields are deliverab
 - **reports** — reporter, target, category, **frozen copy**, status, purge-by date (§13.2–13.3); handled in Django admin.
 - **operator_requests** — the §13.5 form submissions (category, text, submitter).
 - **upheld_report_counters** — the content-free per-account counts that outlive everything else (§13.4).
+- **job_runs** (v1.20) — one row per run of every §6 command: job name, started/finished timestamps, outcome, a short detail string, and a count of items acted on. **Content-free by design** — it counts, it never names — so it says nothing §15.2 would object to being kept. Written in a `finally` block, so a job that crashes still records a failure rather than leaving no row at all, which is the case that matters: this table is the only thing that distinguishes "the job ran and found nothing to do" from "the job has not run since Tuesday" (§7.3). Read by `check_health` and visible in Django admin.
 - **rate_counters** — per user/action/day counts for §13.6 (in the database, not Redis — Decision 5's simplicity again). Note that **three of §13.6's controls are not day counters and do not live here**: the feed-post spacing (`POST_MIN_INTERVAL_MINUTES`) and the two bio/photo cooldowns (`BIO_CHANGE_COOLDOWN_HOURS`) are *elapsed-time-since-last* checks against timestamps on `posts` and `profiles`, and login backoff has its own `login_attempts` table. A day tally cannot express "not again for 12 hours."
 - **url_allowlist** — operator-curated domains (SPEC §7.2, §7.2.3), edited in admin. **Not a bare domain list.** Each row carries the host, the **admitting category** (convening / hosts-what-we-cannot-host / messenger handoff — SPEC §7.2.3, so the operator's own filter stays legible over time), and **redirector-rejection patterns**: the paths and query parameters on that host which must be refused even though the host is allowed. Rows are seeded with the known cases (`youtube.com/redirect`, `google.com/url`, and any `?q=`/`?url=`/`?redirect_uri=`-style parameter carrying an absolute URL). A row may also be marked inactive rather than deleted, so an operator can withdraw a domain without losing the reason it was added.
 
@@ -359,6 +360,8 @@ Two clarifications, so the ban is not read wider than it is. It concerns **visib
 
 Each is a Django management command — runnable by hand, scheduled by cron. All must be **idempotent** (safe to run twice; a re-run finds nothing left to do), because cron sometimes double-fires or gets run manually during testing.
 
+**Two rules added in v1.20, both about failure rather than function.** First, **every job writes one `job_runs` row per run** (§4), in a `finally` block so that a crash records a failure instead of nothing; that table is the only reason anybody ever finds out a job stopped (§7.3). Second, **a job that sends email records the send only once the provider has accepted it** — idempotency then makes the next run a retry rather than a skip, which is what stops an email outage silently swallowing an inactivity warning that SPEC §4.8 makes legally serious (§7.2).
+
 They also run **outside any HTTP request**, which means the visibility engine's request-scoped memo does not exist for them and every question they ask is answered from current state (§5.3). That is deliberate rather than a concession: a job may run for minutes, and the delivery paths that re-ask the engine per recipient (§4, `post_follows`) do so precisely so that a block or an unfriending taking effect mid-run stops the very next notification.
 
 | Job | Schedule | Does (SPEC ref) |
@@ -370,12 +373,24 @@ They also run **outside any HTTP request**, which means the visibility engine's 
 | `inactivity_sweep` | daily | Send `INACTIVITY_WARN_DAYS` warnings (180/365/670/700 days since last login); delete at `INACTIVITY_DELETE_DAYS` = 730 (§4.8). **Days, not calendar months** |
 | `reset_rate_counters` | daily | Clear yesterday's rate-limit counts (§13.6). Leaves the timestamp-based controls alone — feed-post spacing and the bio/photo cooldowns are elapsed-time checks, not counters (§4) |
 | `expire_notifications` | daily | Delete notifications whose subject no longer exists (expired or deleted post, deleted comment, deleted account) and any older than `CONTENT_TTL_DAYS`. Without this, the feed accumulates links to content the 90-day promise has already destroyed (§7.5, §12) |
+| `check_health` | daily | Compare every job's last success against its window, read disk usage, count the last 24 hours of unhandled errors; **email the operator only if something is wrong** (§7.3) |
+| `check_health --digest` | weekly | The same report, **sent whether or not anything is wrong** — the fixed-day green email whose *absence* is the signal that the machine or cron has stopped (§7.3) |
 | `backup` | nightly | §10 below |
 | `verify_restore` | weekly | Restore the newest backup into a scratch database, run a smoke query, drop it, record the result; email the operator on any failure (§10). Checks free disk first and alerts rather than restoring if there is not room — a verification job that fills the disk is worse than none |
 
 ---
 
-## 7. Security Posture (what protects what)
+## 7. Security Posture, and Staying Up
+
+Until v1.20 this section answered one question — what protects the data — and said nothing
+about what keeps the service running. Both belong here, because to a user they are the same
+question asked twice, and because the two failures that matter most on this platform are
+**a leak** and **a promise quietly not being kept**. It is now four subsections: §7.1 what
+protects the data (unchanged text), §7.2 what keeps it running, §7.3 how anyone finds out
+something has broken, and §7.4 the v1 answer on DDoS, promoted here from the scaling chapter
+so that a reader of §7 meets it.
+
+### 7.1 What protects the data
 
 - **Transport:** HTTPS everywhere via Caddy; HTTP redirects to HTTPS; modern TLS only.
 - **Sessions, not tokens:** Django's cookie-based login sessions (httponly, secure, sensible expiry). Logged-out users can reach exactly three pages: login, password reset, invite redemption (SPEC §2).
@@ -399,12 +414,227 @@ They also run **outside any HTTP request**, which means the visibility engine's 
 - **Server hygiene** (founder-performed, detailed in build plan): SSH keys only, firewall allowing only 80/443/SSH, automatic OS security updates, Django admin reachable at a non-default path.
 - **Logs:** operational/error logs only, IP-lean, short retention — aligned with §15.2's "minimal and short-lived."
 
+### 7.2 What keeps it running (v1.20)
+
+One machine, one database, one person with a day job. That is not a gap to be apologized
+for; it is the design (Decision 2). What follows is what that design actually promises, said
+plainly, because an unstated promise is heard as a bigger one than anybody meant.
+
+**The two numbers, stated rather than implied.**
+
+- **How much a disaster can lose: up to 24 hours.** Backups are nightly (§10). A machine lost
+  at 23:00 loses that day's posts, comments, friendships and account changes. This is
+  written down because "we have backups" is routinely heard as "we lose nothing," and that is
+  not what nightly backups mean. If it ever stops being acceptable the answer is a second
+  daily dump, not streaming replication.
+- **How long recovery takes: hours, most of them the founder being asleep.** The rebuild is
+  §3.4's four steps — install Docker, copy the project, restore the backup, `docker compose
+  up` — plus DNS. Perhaps an hour of work once somebody is at a keyboard.
+
+**The machine.** Three rules, none of them costing anything:
+
+- **Everything restarts itself.** `restart: unless-stopped` on every container and Docker
+  enabled at boot. This is the highest-value availability line in the project: a crashed
+  worker, an out-of-memory kill, and the reboot that follows an automatic security update all
+  recover with nobody awake. A Compose `healthcheck:` on `app` (using §7.3's health endpoint)
+  restarts a process that is alive but wedged rather than letting it serve errors until
+  morning, and one on `db` makes the app wait for Postgres instead of crash-looping at boot.
+- **DNS is part of the recovery path.** §13.2's recovery ends with "repoint DNS," and at a
+  registrar's default TTL that repoint takes most of a day to reach everyone. The A records
+  carry a **300-second TTL**, set once at build-plan Step 5.2. It costs nothing and it is the
+  difference between a two-hour recovery and a two-day one.
+- **No standby server, deliberately.** A hot spare doubles the cost and the running
+  complexity to protect against host death — which the provider's own storage redundancy
+  largely covers — while doing nothing about the failures that actually happen here: a full
+  disk, a bad migration, a mistake. §14 carries the row.
+
+**The database.** It lives on the same machine, and its realistic deaths are a full disk
+(§7.3) and a bad migration. Both are answered by restore (§10). Note the ordering: **Postgres
+refuses writes on a full disk, so the disk alarm is a database alarm** that happens to arrive
+early.
+
+**The email provider.** It is the one thing that fails *independently* of the server: the site
+is fine and email is not. Two consequences, and the first is more serious than it looks:
+
+1. **A job records an email as sent only once the provider has accepted it.** The inactivity
+   warnings of SPEC §4.8 are legally serious, and an email outage must **delay** them, never
+   skip them. Because every job is idempotent (§6), the next run retries. It follows that
+   **deletion at `INACTIVITY_DELETE_DAYS` requires the warnings to have actually been sent** —
+   an email outage postpones an erasure rather than erasing an account whose owner was never
+   warned. Marking a send complete before the provider accepted it would turn a provider
+   outage into silent data loss with a legal edge.
+2. Every alert in §7.3 travels over that same provider. That circularity is named there.
+
+**A job stops running.** The failure that matters most, and the only one with no symptom at
+all — §7.3 is about that.
+
+**Planned downtime, and the maintenance page.** Caddy is the front door and stays up when the
+app is down, so the maintenance page lives in Caddy: one static, first-party page, served with
+**HTTP 503 and a `Retry-After` header** — never 200, which lies to every checker and invites
+the browser to cache the outage. It is a user-facing surface, so SPEC §16 applies to it as much
+as to any other: `lang`, a page title, one `<h1>`, contrast that does not depend on a theme
+being loaded, and — per §7.1 — nothing fetched from anywhere.
+
+### 7.3 Knowing when something has broken (v1.20)
+
+Failures here come in three kinds, and they are not equally loud.
+
+- **Loud by itself:** the site is down. Somebody says so. At twenty users the friends *are* the
+  uptime monitor, and no machinery improves on that much.
+- **Loud if asked:** the disk filling, errors climbing. Nothing announces these; something has
+  to look.
+- **Silent, always:** a scheduled job that stopped running. This is the one the rest of this
+  section exists for. A failing `expire_content` throws no error page and generates no
+  complaint, because nothing a user can see is different. It produces a database quietly
+  retaining content the platform promised to destroy — **the central promise of the project,
+  broken invisibly, and discovered whenever somebody next happens to look.**
+
+**Every job records what it did.** A `job_runs` table (§4): job name, start and finish times,
+outcome, a short detail string, and a count of items acted on. Every command in §6 writes
+exactly one row per run, in a `finally` block, so a crash still leaves a failure recorded
+rather than nothing at all. The table is **content-free** — it counts, it never names — and it
+is visible in Django admin, which is where the runbook sends the operator first.
+
+**`check_health`, daily.** It compares each job's newest success against a window (an hourly
+job is late at 3 hours, a daily at 26, a weekly at 8 days — deliberately loose, so that one
+slow night is not an alarm), reads disk usage, and counts the last 24 hours of unhandled
+errors. **It emails the operator only when something is wrong.** Idempotent and runnable by
+hand, like every other job (§6).
+
+**Silence is not evidence, so there is a weekly digest.** On a fixed day, sent whether or not
+anything is wrong: each job's last success, disk percentage, error count, and the results of
+`backup` and `verify_restore`. It exists for exactly one reason — under failure-only alerting,
+a quiet inbox and a dead machine look identical — and it makes the founder the thing that
+notices. **Weekly rather than daily, deliberately:** a daily green email is read for a
+fortnight and ignored forever after, and an alarm that is ignored is worse than no alarm,
+because it is still believed to be working. This *replaces* the manual "go and check" of
+build-plan §17.3: the weekly routine becomes reading one email, and an email that does not
+arrive is itself the finding.
+
+**Disk.** Warn at **75%**, alarm at **90%**, counting the image folder, the Postgres volume,
+Docker's own images and logs, and the restic cache. 75% is not caution for its own sake: the
+remedies — attach a volume, resize the server, prune — take a person with a day job days of
+calendar time, so the warning has to be measured in weeks of runway rather than hours. Two
+rules already in this document belong beside it: `verify_restore` (§6, §10) checks free disk
+before it restores, being the largest transient consumer on the machine, and Docker's
+container logs are capped by size and count at build-plan Step 5.4, because unbounded
+`json-file` logs are the classic way a small server fills up with nothing.
+
+**Errors, and what an alert is allowed to contain.** Unhandled exceptions are logged on the
+server; the alert carries **counts and exception types only** — never a request body, never a
+traceback with local variables, never a URL with an identifier in it. Django's built-in
+`mail_admins` handler is therefore **not** used as it ships: its emails carry request data,
+which would send user content off the server to the mail provider and turn an operational
+alert into precisely the kind of leak §7.1 exists to prevent. The detail stays in the log,
+under §7.1's "operational, IP-lean, short retention"; the alert's job is to say *go and look*.
+
+**The health endpoint.** `GET /healthz`, unauthenticated, returning **200 with the literal
+body `ok`** when the application can reach the database (one `SELECT 1`), and **503**
+otherwise. Every constraint on it is deliberate:
+
+- **It answers nothing else.** No version string, no counts, no per-component breakdown, no
+  timestamps, no JSON. It must never become an oracle for whether the platform has users,
+  whether a given person exists, or how much of anything there is. *Is the database
+  answering* is the whole question and the whole reply.
+- **It touches no user table**, creates no session, sets no cookie, and appears in no counter.
+- **It is not a page** — no HTML, no template, no theme — which is why it does not contradict
+  SPEC §2's "no public pages except login/registration/invite-acceptance." That reasoning is
+  written down here rather than left for a reader to reconstruct; whether SPEC should name the
+  route at all is a boundary question, flagged for prompt 08.
+- Its consumers today are Docker's container healthcheck (§7.2) and the founder from a phone.
+  Its value over simply loading the site is that it distinguishes *responding* from
+  *responding and the database is alive*, which the login page cannot.
+
+**What is not watched yet, and the standing commitment to fix it — the decision of
+2026-08-17.** Nothing outside this machine checks that it is alive. The founder's decision is
+**email alerts for launch, and the external watchdog built out if the platform actually gets
+used** — a deferral with an intent to build, not a rejection. The cost of the deferral belongs
+in the text rather than in a footnote: **`check_health` is itself a cron job, so it cannot
+report its own death.** If cron stops, or the container stops, or the machine stops, or the
+network goes, then no alert is sent *and* no alert is missing — the inbox looks exactly as it
+does on a healthy Tuesday. What covers the gap in the meantime is people: the absence of the
+weekly digest, and friends saying the site is down.
+
+That is a reasonable trade at twenty friends and an unreasonable one at any size above it. The
+honest reason it can wait is the same reason it may never be needed: **this platform may stay
+at twenty friends forever, and that is an acceptable outcome** (README, "The plan from here").
+Building operational machinery for a growth that has not happened is how a solo project runs
+out of afternoons before it runs out of features.
+
+**But "later" is where deferrals go to die, so the trigger is named rather than felt.** Build
+it when **any one** of these is true — they are a tripwire, not a schedule, and no one of them
+requires the others:
+
+1. **Before any public phase** (SPEC §2's "public later", SPEC §15.1). Non-negotiable: a public
+   platform whose operator learns it is down from a stranger has no operational posture at all.
+2. **When the circle outgrows the people who would tell you.** The whole basis of the current
+   arrangement is that at twenty users the friends *are* the uptime monitor. That stops being
+   true the moment there are active users the founder does not speak with in an ordinary week —
+   somewhere around fifty accounts, though the condition is the relationship and not the
+   number, and it is deliberately **not** a SPEC §14 constant.
+3. **The first time a user reports an outage the founder did not already know about.** This one
+   is self-triggering and needs no judgment: it is direct evidence that the human layer has
+   already failed once. Nothing else needs to be argued after that happens.
+
+**What building it means, so the future session does not have to rediscover it:**
+
+> **One free account with an uptime service** (UptimeRobot or Better Stack class) and two
+> monitors: an HTTPS check against `/healthz` every few minutes, and a **heartbeat** — a
+> "dead man's switch," meaning a URL the server pings each time `check_health` finishes green,
+> where the *absence* of the ping is what raises the alarm. Roughly twenty minutes of setup
+> and **no code change**, because the endpoint and the daily check already exist. It inverts
+> the failure that cannot currently be detected: silence stops meaning health.
+
+That the work is this small is the point of doing the design now: `/healthz`, `job_runs` and
+`check_health` are built at build-plan Step 5.7 whether or not the watchdog ever arrives, so
+the deferral costs a signup and nothing else. When it does arrive it adds an outside party the
+privacy policy must name (build-plan §15.1) — **though not a processor of user data**, since
+nothing about any user reaches it. That is the point of `/healthz` replying `ok` and nothing
+more.
+
+**One circularity, accepted rather than overlooked.** Every alert leaves over the email
+provider, which is itself one of the things that can fail. At this size it does not matter
+much: a provider outage is visible in its own right (no invites, no reset codes, and users
+saying so), and a long one is caught by the weekly digest not arriving. Recorded as a decision.
+
+### 7.4 DDoS, at v1 (v1.20)
+
+§13.3 answers this for the platform with staff. The v1 answer is shorter, and §7 should not be
+silent on it just because the reasoning was first written in a chapter about scale.
+
+- **The provider's network-level scrubbing is included, on by default, and enough for the
+  ordinary case.** Hetzner-class providers filter volumetric junk upstream **without
+  decrypting anything**, which is why it is fully compatible with the settled rule that TLS
+  terminates only on machines this project administers (§13.3). This layer handles the
+  overwhelming majority of attacks that actually occur.
+- **What is knowingly given up** is application-level filtering: floods of well-formed HTTPS
+  requests, which can only be told from real traffic by something that reads them. That is
+  what an orange-cloud proxy is, and it is the one thing the TLS rule costs.
+- **What stands in for it here, all of it already built:** everything but three routes and
+  `/healthz` requires a login; login has per-account and per-source backoff with lockout
+  (§7.1); fail2ban guards SSH; §13.6's rate limits cap what any account can do in a day; and
+  the app can simply be stopped.
+- **What the founder actually does.** First, nothing: check the provider's status page and
+  wait, because the common case is a bot sweep or somebody else's trouble on shared
+  infrastructure rather than an attack aimed here. If it persists, ask the provider — network-
+  level mitigation is theirs to apply — and firewall a single source if it is one. In the
+  worst case, rebuild on a fresh IP and repoint DNS, which the 300-second TTL of §7.2 makes a
+  matter of minutes.
+- **And the honest part.** A determined application-layer attack on a prototype for friends is
+  **survivable downtime, not a catastrophe.** No one's livelihood runs on it, there is no
+  revenue to lose, no SLA to breach and no public audience to disappoint. Saying so is the
+  correct posture; buying machinery whose real product would be reassurance is not. If this
+  platform ever becomes worth attacking, §13.3 is the answer, and by then it arrives with
+  staff.
+
 ---
 
 ## 8. Development → Production Flow
 
 1. **Develop on the Mac.** The identical Docker Compose stack runs locally; a seeded set of fake users/posts makes every feature testable without real people.
 2. **Version control with git** from day one (the coding models' work is reviewable and reversible). A private GitHub repository is acceptable as offsite code backup — *code* only; no data, no secrets ever committed. Secrets (database password, email API key) live in an environment file on the server, outside git.
+
+   **With one exception that is not a detail (v1.20): the backup encryption key must also exist somewhere that is not the server.** Backups are encrypted (§10), and a key stored only in the environment file of the machine the backups exist to survive is a key that dies in the same fire. The result is not a slow recovery; it is a storage bucket full of ciphertext nobody can ever open again. **The restic password/key, the backup-storage credentials, the VPS login and the DNS registrar login belong in the founder's password manager**, off the server and out of git, and the runbook (build-plan §17.3) says where they are. Neither restore rehearsal catches this on its own — the founder would copy the key off the server that morning without ever noticing it was the only copy.
 3. **Deploy** = copy the new code to the VPS and restart the containers (a three-line script; later, if wanted, a git-pull-based one). No app stores, no build farms.
 4. **Migrations** (database shape changes) are generated and applied by Django's built-in system — this is what makes "add a feature next month" safe.
 
@@ -444,6 +674,10 @@ Full test-pyramid ceremony would drown a solo project, but SPEC's promises are e
 
 Nightly: database dump + image folder, **encrypted, sent off the server** (e.g., restic to a storage box or B2 bucket; exact target chosen in the build plan).
 
+**Nightly means up to a day of loss, and §7.2 now says so out loud.** A machine lost at 23:00 takes that day's posts, comments and friendships with it. That is accepted for this platform, but it is stated rather than left to inference, because "we have backups" is heard by almost everybody as "we lose nothing."
+
+**And the key lives off the server (§8, v1.20).** Encrypted backups plus an encryption key stored only on the encrypted machine's own disk is not a backup at all; the restic key and the storage credentials belong in the founder's password manager.
+
 **The restore path is verified on two schedules (v1.18), because an untested backup is a rumor — and the rumor restarts the day after the last test.** Backups fail loudly; restores fail silently, and what rots is the restore path (a schema that moved on, an expired storage credential, a rotated encryption key) and the runbook itself. A last-success line on the backup job reports none of that.
 
 - **Weekly, automatically:** `verify_restore` (§6) fetches the newest backup, restores it into a scratch database on the server, runs a smoke query, drops it, and emails the operator if any step fails. This catches credential, key and schema rot within a week of its happening.
@@ -471,11 +705,31 @@ This amends the mental model of §7.5, and **SPEC now carries the amendment itse
 
 All within SPEC §15.3's phase-1 posture. Software costs $0 — everything in the stack is free and open source.
 
+### 11.1 The one line that grows with users: disk (v1.20)
+
+Every other row above is flat. Disk is not, and it is worth an arithmetic paragraph here rather than a surprise later, because **a full disk stops Postgres and takes the site down hard** (§7.2) and the fixes all take calendar days.
+
+Images are the only unbounded store in the system. `IMAGE_UPLOAD_MAX_MB` = 20 is the *upload* cap and not the storage figure: SPEC §7.2.2 downscales anything over `IMAGE_MAX_PX` = 3,840 on the long edge and re-encodes it, so a stored photo plus its display renditions is of the order of **3 MB**, not 20. What matters is which of them never expire:
+
+| Per user | Count | Lifetime |
+|---|---|---|
+| Profile photo | 1 | until replaced |
+| Gallery (`GALLERY_MAX`) | 8 | until replaced — **descriptions do not expire** (SPEC §9.7) |
+| Pinned posts with an image (`PIN_LIMIT`) | ≤ 10 | until unpinned (SPEC §7.6) |
+| Feed and profile post images | unbounded rate, **90-day rolling** | `CONTENT_TTL_DAYS` (SPEC §7.5) |
+
+So each user carries a **permanent** ceiling of ~19 images ≈ 60 MB, plus a rolling 90 days of everything else. A heavy user reaches roughly 100 MB in steady state; a typical one 30–50 MB. Two figures follow, and the second is the one that decides a purchase:
+
+- **100 users ≈ 10 GB.**
+- **500 users ≈ 50 GB** — README's own "what breaks first when 500 real people use it daily" question. It is not the CPU and not the database: **it is the disk**, and 50 GB does not fit the 40 GB-class instance the €6 tier ships with.
+
+Hence the build-plan choice at Step 5.2: **take the 80 GB-class instance** (a few euros more per month, already inside the range in the table above) rather than discover this at 90% full. Backup storage tracks the same curve — restic deduplicates and images never change, so the backup is roughly one copy of the image corpus plus 30 days of database dumps — which is why the backup line is a range rather than a number. Thresholds and alerting are §7.3's; the money is here.
+
 ---
 
 ## 12. What the Founder Will Do Himself (preview of deliverable c)
 
-Steps that happen outside an AI chat, to be spelled out with exact instructions in the build plan: choose and register a domain · create VPS and backup-storage accounts · sign up with the email provider and verify the domain · run the documented server-setup commands · perform deploys · rehearse a backup restore · act as operator in the Django admin (moderation, hashtag vocabulary, URL allowlist, reaction set). Everything else — all code — is written by AI models following deliverable (d).
+Steps that happen outside an AI chat, to be spelled out with exact instructions in the build plan: choose and register a domain · create VPS and backup-storage accounts · sign up with the email provider and verify the domain · run the documented server-setup commands · perform deploys · **keep the backup encryption key and the recovery logins in a password manager, off the server** (§8) · rehearse a backup restore · **read the weekly digest, and notice when it does not arrive** (§7.3) · act as operator in the Django admin (moderation, hashtag vocabulary, URL allowlist, reaction set). Everything else — all code — is written by AI models following deliverable (d).
 
 ---
 
@@ -506,7 +760,7 @@ The two banned tools — CDNs and decrypting proxies (e.g., Cloudflare's orange-
 > **TLS may terminate only on machines this project administers.** Hardware may be rented anywhere; decrypted user traffic is never handed to a third-party *service*. At scale, you build your own front door instead of renting one. Never rent a middleman that reads the traffic; at scale, become your own middleman.
 
 - **Global latency:** the standard fix (CDN caching near users) would be nearly useless here anyway — all content is private and per-viewer, so almost nothing is cacheable. What actually helps: regional read replicas and, eventually, self-administered points of presence. Honestly noted: a single-region site serves the world at ~150 ms for far-away users, and major services ran that way for years.
-- **DDoS:** at millions of users the platform *is* a real target — this is proxy mode's strongest sales pitch. DDoS defense comes in two layers: **network-level scrubbing** (filtering junk traffic without decrypting anything — Hetzner-class providers include it, and dedicated scrubbing services operate this way), which handles the overwhelming majority of attacks and is fully compatible with this architecture; and **application-level filtering**, which requires decryption and is what orange-cloud is. Only the second is given up — knowingly, with staff, at scale; never by accident in year one.
+- **DDoS:** at millions of users the platform *is* a real target — this is proxy mode's strongest sales pitch. DDoS defense comes in two layers: **network-level scrubbing** (filtering junk traffic without decrypting anything — Hetzner-class providers include it, and dedicated scrubbing services operate this way), which handles the overwhelming majority of attacks and is fully compatible with this architecture; and **application-level filtering**, which requires decryption and is what orange-cloud is. Only the second is given up — knowingly, with staff, at scale; never by accident in year one. **The v1 form of this answer now lives in §7.4** (v1.20), because a reader looking for the security posture of the platform being built today should not have to find it in the chapter about becoming large.
 
 ### 13.4 The real bottleneck
 
@@ -539,6 +793,12 @@ The true bottleneck at scale, per prior analysis, is **human moderation time, no
 | **Redis (or any shared cache) for visibility answers** | Rejected | Would be new infrastructure against Decision 2, and unnecessary: the repeats all happen *within* one page render, which a request-scoped dictionary removes for free (§5.3). The remaining cost is per-item questions, which bulk queries fix without a cache at all (§5.4). If measurement ever brings Redis in at §13.2's Stage 2, visibility answers still stay out of it |
 | **`functools.lru_cache` on an engine function** | Rejected, permanently | The smallest-looking change in this table and the most dangerous: a module-level cache lives for the life of the worker **process** and is shared by every request it serves — stale permission answers at best, one user's answers served to another if the key omits the viewer (§5.5) |
 | **Django cache framework on permission-checked pages or fragments** (`@cache_page`, template fragment caching) | Rejected | Every page here is shaped by the viewer's permissions, so caching the output is caching the answer (§5.5). Caching genuinely viewer-independent output is not banned; there is almost none of it (§13.3) |
+| **External uptime / heartbeat monitoring service** (UptimeRobot, Better Stack, Healthchecks.io class) | **Deferred with intent to build — founder decision 2026-08-17** | Not rejected: email alerts for launch, the watchdog built out **if the platform actually gets used**. It is the only thing that can detect the machine's total death, because `check_health` cannot report its own (§7.3). Deferred on the ground that at twenty friends the people *are* the monitor; the accepted cost and **three named triggers** — any public phase, users the founder does not speak with weekly, or the first outage a user reports first — are in §7.3, with a twenty-minute build that needs no code change |
+| Prometheus + Grafana, or any metrics/dashboard stack | Rejected | Two more services to run and keep patched on the machine they are meant to watch, in exchange for graphs nobody looks at at this size. What was actually missing was not measurement but **notification** — a job that stopped, said out loud. A table and one daily command deliver that (§7.3) |
+| A daily "all clear" email | Rejected | Read for a fortnight, filtered forever after. An alarm that is ignored is worse than none, because it is still believed to be working. The digest is **weekly** and on a fixed day for exactly that reason (§7.3) |
+| Django's `mail_admins` error handler as it ships | Rejected | Its emails carry request data — potentially a user's own post text — which would ship user content off the server to the mail provider and make an operational alert into the leak §7.1 exists to prevent. Errors are logged on the server; the alert carries **counts and exception types only** (§7.3) |
+| A hot standby / replica server | Rejected for v1 | Doubles cost and running complexity to cover host death, which the provider's storage redundancy largely covers anyway, while doing nothing for the failures that actually occur here: a full disk, a bad migration, a mistake. Restore from backup is the answer, and §7.2 states the 24-hour loss window honestly instead (§10) |
+| A public status page | Rejected | It would be the platform's first public page (SPEC §2 has none) and, hosted on the same machine, it would be down exactly when needed. Twenty friends are told directly |
 | **A precomputed `visible_to` table / materialized audience** | Rejected | Converts SPEC's live rules (§11.3's gate, §7.4's current-friendship test, §5.4's blocks) into a cache with no expiry and a refresh job nobody wrote. Recorded here so it is not proposed as an obvious database-level optimization. **`post_audience` is not this** — it stores the posting-time snapshot SPEC §7.4 defines as a stored fact, and the engine still applies the live tests on top of it every read (§5.5) |
 
 ---
@@ -551,6 +811,13 @@ The true bottleneck at scale, per prior analysis, is **human moderation time, no
 4. **The document as a whole: APPROVED by founder 2026-07-08.**
 5. **The engine's bulk (plural) forms** (§5.4): adopted in project version 1.19 rather than split into a later design session — **APPROVED by founder 2026-08-06**. The argument that decided it was not speed. A list that builds its own queryset has *already* broken Decision 4, and before 1.19 the engine offered a list no other way to be built; the bulk form is therefore what makes a list **able to obey** the rule, and the efficiency is a side effect of closing that gap properly. The cost is not speed either, and is recorded rather than waved away: one rule ends up expressed twice, in SQL and in Python, which is the drift this document warns about in five other places. §5.4 states it; the equivalence test in §9 closes it.
    Recorded beside it as fact rather than as an open question: **no new infrastructure was added.** A request-scoped dictionary needs no Redis, and §14 carries Redis as rejected for this purpose at every scale — including the one where §13.2 eventually admits it for other things. **SPEC was not touched, and should not be:** memoization and batching are invisible to users, and a wish to edit SPEC here would have been the signal of having drifted.
+
+6. **Availability posture and the three calls of 2026-08-17** (§7.2–§7.4, §11.1): the session that wrote them put three questions to the founder, and one answer went against the recommendation, which is why it is recorded here in full rather than summarized.
+   - **External monitoring: deferred with intent to build — founder decision 2026-08-17.** The recommendation was one free account doing both an uptime check and a heartbeat, on the argument that a watchdog cannot live on the machine it watches. The founder chose **email alerts for launch**, and, on being shown what that costs, refined it within the same session to **"build out the watchdog later if this platform actually gets used"** — which is a deferral, not the rejection the first answer read as. The consequence of the interim state is not hidden: `check_health` is a cron job and cannot report its own death, so a stopped machine produces an inbox indistinguishable from a healthy one. Three things follow, all in §7.3 rather than left as regret — the **weekly green digest** on a fixed day, which makes a *missing* email the signal and which replaces the manual check in build-plan §17.3; **three named triggers** (any public phase; active users the founder does not speak with in an ordinary week; the first outage a user reports before the founder knew), because "later" is where deferrals go to die and a felt trigger is not a trigger; and the twenty-minute build itself, which needs **no code change** because Step 5.7 builds `/healthz`, `job_runs` and `check_health` regardless. The deferral therefore costs a signup and nothing else, which is what makes it honest rather than merely cheap.
+   - **Disk: the 80 GB-class instance, warn at 75%, alarm at 90% — APPROVED by founder 2026-08-17**, with the growth arithmetic placed in §11.1. The arithmetic is what decided it: images are the only unbounded store, ~19 of them per user never expire, and 500 users land near 50 GB, which does not fit the 40 GB instance the cheapest tier ships. 75% is chosen against the *human* recovery time, not the machine's — the remedies take a person with a day job days of calendar time.
+   - **Nothing wakes the founder — APPROVED by founder 2026-08-17.** All alerts arrive by email and are read in the morning; §7.2 and §7.4 say plainly that an overnight outage on a prototype for friends is survivable downtime. This is the decision that keeps the section one page instead of an incident-response programme, and it is the reason there is no escalation tier to configure or ignore.
+
+   Recorded beside them as fact rather than as open questions: **no new dependency and no new outside party** were added (§3's stack is untouched; the declined monitoring service was the only candidate, and the privacy policy therefore gains no processor), and **SPEC was not edited**. One SPEC-boundary question is left open on purpose rather than answered here: whether SPEC §2's "no public pages except login/registration/invite-acceptance" should name `/healthz`. §7.3 argues it need not, an endpoint serving no page not being a page — the call belongs to prompt 08.
 
 ---
 
