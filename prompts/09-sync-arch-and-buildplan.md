@@ -244,13 +244,53 @@ ARCHITECTURE §5 first; this list is the map, not the content.
 Check also that no step tells anyone to add a cache: §5.5 bans cross-request caching of
 visibility answers in three named forms, and §14 carries them as rejected rows.
 
+### O. Reactions (handed over from prompt 10, landed in 1.25)
+
+Prompt 10 rewrote SPEC §8.2 and added §8.2.1 (a reaction expires 90 days after it was last
+set, on its own clock, pinned post or not), §8.2.2 (what a reaction looks like on screen) and
+§8.2.3 (the curation criteria and the retire-never-repurpose rule). ARCHITECTURE §4 and §6
+were amended in the same session. **BUILD_PLAN was deliberately not touched**, on the 1.19
+precedent — prompt 10's build work lands in existing steps and is written once, here. Read
+SPEC §8.2–§8.2.3 and ARCHITECTURE §15 item 8 first; this list is the map, not the content.
+
+1. **Step 7.2** is two lines describing a section that is now three subsections. It needs:
+   the **own-clock expiry**; **one reaction per user per target, and none on your own
+   content**; the **visible-to-exactly-one-person** rule, *including that a reaction on a
+   comment is invisible to the post's author*; the **`<details>`/`<summary>` picker** with
+   its distinct accessible names per post and per comment (SPEC §16.3's repeated-controls
+   rule) and its 320 px wrap; the **"React" / "Reacted: Love it!"** control text, which is
+   how a reactor knows and is the only thing a reactor sees of their own reaction; and
+   **no empty state** — nothing rendered when nothing has been given.
+2. **Step 6.5** (or wherever `expire_content` is built — check) must sweep reactions **by
+   their own `set_at`**, not only as a cascade from a deleted post. State the pinned-post
+   case in the step, because it is the only case that fails and it will never show up in
+   ordinary seed data. A backdated-91-days reaction on a **pinned** post is the milestone
+   check worth adding.
+3. **Step 2.2 / the constants step** must not put `REACTION_SET` in `constants.py`. It is
+   the `reaction_phrases` **table** (ARCHITECTURE §4, new in 1.25), with text, display
+   order and an `active` flag. While there, check the same step against `HASHTAG_VOCAB`,
+   `NAME_BLOCKLIST` and the URL allowlist — ARCHITECTURE §4's new carve-out paragraph says
+   the operator-curated *sets* are all tables, and the constants step may currently say
+   otherwise.
+4. **Step 13.3** already builds a `REACTION_SET` editor in the admin. It now has a rule to
+   enforce: rows are **retired by clearing `active`, never deleted**, and a row's text may
+   be corrected but never repurposed (SPEC §8.2.3). Same shape as the URL-allowlist
+   editor's "deactivating beats deleting" in the same step.
+5. **Step 12.4** (notification rendering) gains one clause: **a notification left with no
+   actors at all is not rendered and is deleted** (SPEC §12.2, v1.25), and
+   `expire_notifications` sweeps any the render path misses.
+6. **The `REACTION_SET` content step.** BUILD_PLAN §0 lists "the reaction phrases" as a
+   `[FOUNDER+AI]` example but no numbered step writes them. Give them one, next to the
+   `HASHTAG_VOCAB` content step of Phase 10, and point it at SPEC §8.2.3's six criteria.
+   Carry the recommendation with it so it reaches the founder at the moment the list is
+   actually written: **drop "Ha!", add "Thank you!"** — SPEC §8.2.3 states why.
+
 ### M. Everything prompts 02–08, 10, 11 and 12 decided
 
 Fold in whatever those sessions added — the availability and monitoring work from prompt
-04 is likely the largest, prompt 10 may have given reactions an expiry that
-`expire_content` must implement, and prompt 12's ban definition needs an account state, an
+04 is likely the largest, and prompt 12's ban definition needs an account state, an
 admin action and a decision about existing content. Read CHANGELOG.md rather than trusting
-this list. (Prompt 03 is already itemized in §N above.)
+this list. (Prompts 03 and 10 are already itemized in §N and §O above.)
 
 ---
 

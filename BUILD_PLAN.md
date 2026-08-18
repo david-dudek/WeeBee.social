@@ -1,9 +1,10 @@
 # Build Plan — WeeBee
 
-**Project version:** 1.23 · 2026-08-18 · DRAFT — not yet founder-approved
-**This file last changed in:** 1.23 (what happens after an AI stops: the stop note and the two kinds of session at new §0.7, the conformance check at new §0.6, CHANGELOG.md added to the law files, and Step 2.4's guards told apart by what each one actually survives)
+**Project version:** 1.25 · 2026-08-18 · DRAFT — not yet founder-approved
+**This file last changed in:** 1.24 (a citations line in the header, and an Appendix lead-in stating that this document defines no rule of its own)
 **History:** see [CHANGELOG.md](CHANGELOG.md)
 **Companion to:** SPEC.md v1.15 (§7.5.1, §7.8, §9.4, §12) and ARCHITECTURE.md v1.7 (§3.8, §4, §7). This is deliverable (c) per SPEC §18. The actual AI-coding prompts are deliverable (d); every `[AI]` step below will have a matching numbered prompt there.
+**Citations:** `SPEC §x` and `ARCHITECTURE §x` name another document; a bare **§x** is a section of *this* one and `Step x.y` is a step of it. **This document defines no rule of its own** — every rule below is SPEC's or ARCHITECTURE's, cited to its owner (SPEC §18).
 **Audience:** The founder, and the AI coding models that will execute the `[AI]` steps.
 
 ---
@@ -573,7 +574,7 @@ Both are "find the open row and update it," never "insert another row."
 
 ## Appendix — Cross-Phase Rules for the AI Coding Models
 
-Deliverable (d) will restate these in every prompt's preamble; they live here as the master copy.
+Deliverable (d) will restate these in every prompt's preamble; they live here as the master copy **of the restatement, not of the rule**. Every rule below belongs to SPEC or ARCHITECTURE and cites its owner (SPEC §18): if one of these lines and the document it cites ever disagree, the cited document is right and the disagreement is a stop (§0.7), not a judgment call. The citation is also what tells you which document to change first when a rule genuinely has to move.
 
 **Wherever a rule below says "stop and say so," it means §0.7's stop note (v1.23)** — the five-field block, printed in the chat, nothing applied and nothing committed. That is the defined form of stopping, and it is the same form for all of them.
 

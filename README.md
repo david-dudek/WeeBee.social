@@ -1,6 +1,6 @@
 # WeeBee — Design Documents
 
-**Project version:** 1.23 · 2026-08-18 · DRAFT — not yet founder-approved
+**Project version:** 1.25 · 2026-08-18 · DRAFT — not yet founder-approved
 **This file last changed in:** 1.18 (the 90-day line now states the 30-day backup window)
 **History:** see [CHANGELOG.md](CHANGELOG.md)
 

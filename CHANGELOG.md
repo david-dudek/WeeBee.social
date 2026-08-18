@@ -105,6 +105,137 @@ no other trace.
 
 ---
 
+## 1.25 — 2026-08-18
+
+| File | Status |
+|---|---|
+| README.md | changed — version header only; no content change |
+| SPEC.md | changed — §8.2 rewritten and extended with three new subsections (§8.2.1 lifetime, §8.2.2 rendering, §8.2.3 curation); §7.5, §7.6, §9.7, §12.1, §12.2, §12.3, §14 and §16.3 updated to name reactions |
+| ARCHITECTURE.md | changed — §4 `reactions` gains its own expiry clock, new `reaction_phrases` table, a carve-out stating that operator-curated *sets* are tables rather than constants, and the empty-notification rule; §6 `expire_content` and `expire_notifications` amended; §15 gains item 8 |
+| BUILD_PLAN.md | changed — version header only; no content change. Step 7.2 is now a two-line summary of a section that has grown to three subsections, and the sync is prompt 09's, per the precedent set at 1.19 |
+| CHANGELOG.md | changed — this entry |
+
+From prompt 10, on a finding from the v1.16 review by Kimi. The reviewer was right on every factual point, and the gap was in the documents rather than in the design.
+
+**The finding.** SPEC §7.6 says at length that comments on a pinned post expire at their own 90 days and said nothing at all about reactions. SPEC §9.7's two permanence lists — the expiring side and the account-state side — named reactions on neither. ARCHITECTURE §6's `expire_content` deleted reactions only as a cascade from a deleted parent. **A pinned post is never deleted**, so reactions on one were permanent: a post standing for two years could carry every reaction it had ever received.
+
+### The lifetime (questions 1 and 2)
+
+**A reaction expires 90 days after it was last set, on a clock of its own, and its disappearance leaves no trace.** §7.6 had already decided this and had not said so — *"an author may preserve their own words indefinitely, and may never preserve anyone else's"* — and a reaction is another person's statement, attached to them by name, on content its author chose to keep. The reactor has even less notice than the commenter, having spoken in two words from a fixed list rather than in a paragraph they wrote. The rule is now written into §8.2.1 rather than left to be derived, and §7.5, §7.6 and §9.7 each name reactions where they previously named only posts and comments. **§9.7 puts them on the expiring side**, which is not a close call: a reaction is the shortest statement the platform permits, but it is a statement, made at a moment, about one specific piece of content.
+
+**The clock runs from when the reaction was last set, and the apparent conflict with §7.8 invariant 2 is answered rather than ignored.** Invariant 2 forbids an edit resetting a post's clock, so that editing cannot confer immortality and pinning stays the only act of preservation. It does not transfer: a reaction is not readable content — no audience, not findable, not linkable, not followable, not countable, and exactly one person will ever see it. What §7.5 refuses is an accumulating archive, and a two-word private note re-affirmed by the person who wrote it is not one. **The consequence is stated rather than engineered against:** re-picking a phrase every eighty-nine days keeps it alive indefinitely, which is a person keeping *their own* words alive — the side of §7.6's principle that is expressly permitted.
+
+### What a reaction looks like (question 3)
+
+§8.2 was written almost entirely in negatives, and a builder knew what a reaction must never become without knowing where it goes on the page. §8.2.2 settles it, and every rule in it is downstream of one already in the documents.
+
+- **The reaction line** sits under the content it belongs to and above that content's comments, on a single-post view only; it is a real list with an accessible name, its names rendered through the shared helper under §8.1's link-or-plain-text rule. **It is complete — never truncated, folded or summarized**, because "and 4 others" is a number wearing a coat, and because the audience cap and the new 90-day expiry already bound it. **When nothing has been given, nothing is rendered**: "no reactions yet" is a count of zero written out in words.
+- **The picker is a native `<details>` / `<summary>` disclosure** — no script, no ARIA menu pattern to implement correctly, the same posture as §9.1's server-rendered tabs. Every post and comment carries one, shown to everyone who may see that content whether or not anyone has reacted, so its presence reveals nothing.
+- **A reactor tells they have already reacted from the control's own text** — *"React"* against *"Reacted: Love it!"* — never from a colour or a highlighted button (§16.3, 1.4.1). That text is also the whole of what a reactor sees of their own reaction; the reaction line belongs to the recipient.
+- **The 320 px case and the accessible names.** Phrase buttons wrap onto as many rows as they need and nothing scrolls sideways; §7.2.1's preformatted post remains the platform's only reflow exemption. A thread produces one picker per comment plus one for the post, so §16.3's repeated-controls rule applies exactly as it does to "read more": *"React to Alice's comment"*, and each phrase button *"Love it! — react to Alice's comment"*. §16.3 now names the picker alongside the read-more and gallery controls.
+- **Nobody reacts to their own content**, which had never been stated either way. A reaction to yourself would put your own name in your own list, and a private tally of self-approval is scorekeeping with a sample of one.
+
+### Reactions on comments (question 4)
+
+**A reaction is visible to exactly one person: the author of the thing it is attached to.** On a comment that is the commenter, **and not the post's author.** The prompt's instinct was right and is now the stated reason: a post author who saw the reactions on every comment on their own post would be handed a column of reaction lines, one per commenter, down a single page — a scoreboard assembled out of other people's warmth, and the same failure the v1.16 list-view rule exists to prevent, arriving by a different door. A host's power over their own post is to **delete** a comment (§8.1); it was never to read the private replies to it.
+
+### Changing and removing (question 5)
+
+**§8.2 and §12.2 were consistent, and a third case fell between them.** Reactions render live, so a removed reaction drops out of every notification that named its giver — but nothing said what happens when the *last* actor drops out. A notification whose only comment was deleted, or whose only reaction was removed, would have rendered as a nameless event or an empty line: live rendering producing the one thing it exists to prevent, a notification that survives what it was about. **§12.2 now deletes it**, and `expire_notifications` sweeps any the render path misses.
+
+Stated once, in §8.2.1, rather than in two half-places: giving notifies, **changing does not** (§7.8's reasoning about edits — a change that costs something socially is a change people stop making), removal is silent because retraction is never announced, and removing and re-giving is a new reaction that notifies as one. **The accepted cost is named:** that last path is a poke channel, bounded by the daily reaction rate limit and by unfriending, and it wins nothing measurable because there is no counter to move. Also settled while there: **a reaction carries no age and no expiry countdown** — ages beside each name would turn a warm line into a log, and a per-reaction countdown would tell the recipient how much longer each piece of warmth has left.
+
+### `REACTION_SET` curation (question 6)
+
+**The set is not frozen here, and the criteria are.** This follows §11.2.1's division for `HASHTAG_VOCAB`: the tests a phrase must pass are durable and belong in SPEC; writing the actual list is content work and belongs to the build plan's [FOUNDER+AI] step. Appendix A item 8 already records the six as placeholders and is unchanged. The six criteria are in §8.2.3; the first decides the list — **a phrase must be warm on the worst post it could land on**, because it can be attached to a post about a death and the only reader is the bereaved.
+
+**One recommendation on the current six, put where the founder will see it at the curation step. "Ha!" fails criteria 1 and 3** — laughing *with* and laughing *at* are the same three characters and the recipient cannot tell which they were sent — and **"Thank you!" is recommended in its place**, gratitude being the commonest warm answer to a post about oneself and the set having no way to say it. This is a recommendation in the text, not a change to §14's row.
+
+**What happens to existing reactions when the operator changes the set — and the answer that made it easy.** Phrases are **retired, never repurposed**: a retired phrase leaves the picker at once and existing reactions keep rendering it, unchanged, until they expire. Text may be **corrected** (a typo) and never **replaced** — turning "Ha!" into "Thank you!" in the same slot puts words in the mouths of everyone who chose it, which is the ventriloquism §7.8 forbids a host over a comment. And **because reactions now expire, a retired phrase is gone from the platform within 90 days with no migration written and no user-facing event.** Question 1's answer solved question 6's hard part; §8.2.3 names the pattern, because on this platform expiry is frequently the cheapest migration available.
+
+**A moderation control was considered and rejected (2026-08-18).** A per-recipient "remove this reaction from my post" — §8.1's host's-rules power extended to reactions. What it defends against is a phrase that lands cruelly, and criterion 1 removes those at curation time, once, for everyone, before anyone is hurt. It also cannot be made to work cleanly: removal would have to be silent, yet the reactor sees their own reaction in the control's text and would learn of it anyway, and a removal the reactor can undo by reacting again is not a remedy. **If `REACTION_SET` is ever curated loosely enough that this control starts to look necessary, the set is the defect.**
+
+### The architecture side
+
+**`reactions` gains `set_at` and `expire_content` sweeps on it**, rather than only cascading from a deleted post. ARCHITECTURE §15 item 8 records it as a shape lesson rather than a bug fix: every other expiring thing in this system hangs off a parent that expires, and the reaction was the one child whose parent could outlive it — so a job written from the cascade alone is correct for every row it will ever see in testing and wrong for the only case that matters.
+
+**`REACTION_SET` is a table, not a constant.** SPEC §8.2.3 requires that a retired phrase stop being offered while existing reactions keep rendering it, which a Python literal cannot express and an admin editor cannot edit. The new `reaction_phrases` row carries text, display order and an `active` flag, on the same "deactivating beats deleting" discipline as `url_allowlist`.
+
+**Found while there and fixed: ARCHITECTURE's constants paragraph was wrong about more than reactions.** It said the SPEC §14 constants live in one `constants.py`, while `HASHTAG_VOCAB`, `NAME_BLOCKLIST` and the URL allowlist had had tables of their own in §4 since the first draft. §4 now states the carve-out — **the operator-curated *sets* are tables; the numbers are constants** — which is the distinction SPEC §14's ✎ mark already draws, and which is what stops a builder putting a curated list in `constants.py` and then finding the admin editor has nothing to edit. **Two more were flagged and deliberately not invented:** `THEME_SET` and `DEFAULT_AVATAR_SET` are operator-curated and both get an admin editor at BUILD_PLAN Step 13.3, and §4 gives neither a table — whether a theme is a database row or a file the operator deploys is a real question, it was outside this prompt, and it is queued rather than answered.
+
+### What was not done, and why
+
+**BUILD_PLAN Step 7.2 was not rewritten.** It is two lines describing a section that is now three subsections, and it is genuinely stale — but prompt 09 syncs the build plan against a settled SPEC, and TODO's "run 09 last" rule exists so those steps are written once. This is the precedent set at 1.19, where prompt 03 handed its build steps to 09 rather than doing them. The items are itemized in `prompts/09-sync-arch-and-buildplan.md` so the sync session does not have to reconstruct them from this entry.
+
+**One error in the prompt, recorded so nobody hunts for it.** Prompt 10 twice asks for enough detail "for Phase 8 to be built." Reactions are **Phase 7**, Step 7.2; Phase 8 is Profile Pages and Theming. The work landed against Phase 7 regardless.
+
+**Nothing was reopened that the prompt placed out of scope:** no counts anywhere, author-only visibility untouched, no free text and no arbitrary emoji, reactions still never render in a list view, and whether reactions should exist at all was not revisited.
+
+### Working files (outside the record)
+
+`TODO.md`: prompt 10 marked done at 1.25; one sync item added for prompt 09 covering Step 7.2, the `reaction_phrases` table and the two amended jobs; the `REACTION_SET` curation recommendation noted against the Phase 10-style content step so it reaches the founder at the moment the list is actually written.
+
+---
+
+## 1.24 — 2026-08-18
+
+| File | Status |
+|---|---|
+| README.md | changed — version header only; no content change |
+| SPEC.md | changed — §2 (the `/healthz` ruling, as a pointer), §18 (rule ownership, the citation convention, and the declined split) |
+| ARCHITECTURE.md | changed — header gains a citations line; Decision 1 reason 4 and §3.1 leg 3 reworded; 50 cross-document references relabelled `SPEC §x`; §7.3 and §15 item 6 record the `/healthz` ruling |
+| BUILD_PLAN.md | changed — header gains a citations line; Appendix lead-in states the document defines no rule of its own |
+| CHANGELOG.md | changed — this entry |
+
+From prompt 08, the lowest-priority item in the queue, whose expected outcome was "possibly nothing." It is close to nothing, and the reason is worth more than the edits.
+
+**The finding.** ChatGPT called this the biggest long-term risk in the project, above any product or technical concern: SPEC specifies implementation details that are architectural decisions, those details also appear in ARCHITECTURE, and a change to one document before the other produces conflicting sources of truth. The prompt for this session went further and said it was already happening, citing four rules stated in three or four places each.
+
+**The inventory, built before any edit, because the prompt made that the gate.** Roughly thirty to forty rule *families* are stated in more than one document — not the dozen that would have made this trivial, nor the hundred that would have made it somebody else's session. But the count is the wrong measure, and finding that out is what decided the session. **The remedy ChatGPT's finding points at is already the house convention, at scale:**
+
+- **ARCHITECTURE cites `SPEC §x` 148 times.** BUILD_PLAN cites SPEC 121 times and ARCHITECTURE 56. Every Appendix rule already names its owner — rule 10 cites SPEC §7.8 invariant 4, rule 11 cites ARCHITECTURE §4.
+- **SPEC's own discipline is perfect.** Of its 679 section references, **zero** point outside SPEC without naming the document. Where SPEC hands off, it says so ("Mechanics: ARCHITECTURE §7, build-plan Step 5.5").
+
+So the answer to *"when the same rule is stated in three places and one of them changes, how does anyone notice?"* is that the citation already tells a reader which copy is the definition — in almost every case. What this session found was the exception, and it is a different defect from the one reported.
+
+**The real defect: ARCHITECTURE's section numbers collide with SPEC's, and 14 of its references resolved to the wrong section.** ARCHITECTURE used a bare `§x` for both its own sections and SPEC's. The two documents' numbering overlaps across most of its range, so `§7.2` is *Content rules and the URL allowlist* in one document and *What keeps it running* in the other; `§5.4` is *Blocking* and *Asking in bulk*; `§6` is *Groups* and *The housekeeping jobs*; `§13.3` is *Reported-content lifecycle* and *The privacy rules at scale*. **179 references sat on numbers that exist in both documents**, and fourteen of them sent a reader — or a model that was handed only ARCHITECTURE — into the wrong section of the wrong subject. Four samples, all now fixed: *"the URL allowlist editor (§7.2)"*, *"≤30 members (§6)"*, *"hard cap 90 days (§13.3)"*, *"the audience picker with its live ≤30 count (§7.3)"*.
+
+That is the "conflicting sources of truth" risk in a form nobody predicted: not two documents disagreeing, but a citation that lands in the wrong one. It is also exactly what the prompt's own recommended remedy fixes, and fixing it deletes nothing and decides nothing. **50 references in ARCHITECTURE were relabelled `SPEC §x`**, each classified individually rather than by pattern; the convention is now that a bare `§x` always means the document you are reading, and it is stated in SPEC §18 with pointers from both other headers.
+
+**The split ChatGPT proposed was tested on its own four examples and declined — three of the four do not survive it.** The proposal was to divide each rule in two: SPEC keeps *"editing must perform the same validation as creation"*, ARCHITECTURE takes *"implemented by routing both through the shared validator."* Clean as a principle. Against the passages:
+
+- **SPEC §7.8 invariant 4 (edit-path revalidation).** The line is already drawn where the proposal wants it. SPEC states the rule, what is revalidated, and why a create-only validator fails *silently*; the implementation half — *"validation belongs to the model/form layer that both paths share, never to the create view"* — appears **only** in ARCHITECTURE §7.1. What is stated four times is not the rule but the *argument*, and the prompt's own point 4 is why: an instruction a builder can skip is not made safer by being shorter. Nothing to move.
+- **SPEC §4.6.1 (credential security).** Partly a misreading, and the correction matters: **SPEC does not specify hashed codes or attempt caps** — those live in ARCHITECTURE §4's `credential_codes` row and §7.1 alone. SPEC says *single-use, time-limited*. Of what SPEC does name, **SPF/DKIM/DMARC at `p=reject` already ends with the citation the proposal asks for**, and it is a policy with a user-visible consequence rather than a mechanism. Only **Argon2id** is a clean split candidate — and the project already settled that boundary in the other direction at v1.18, when ARCHITECTURE §7.1 recorded that *"framing a mandatory dependency as an approved exception invites a later builder to treat it as optional."* Removing the name from SPEC would reopen a question already closed, and would be a content change besides.
+- **SPEC §7.9, *"one string per post, not a per-viewer computation."*** Read as a performance instruction, which is how it sounds. **In context it is the privacy rule of the bullet it sits in** — *"derived from the post's own type and tags, never from the viewer"* — restated in implementation vocabulary, in a section whose other three rules are *never a number*, *never the audience itself*, and *never an oracle*. A line that varied by viewer would leak. Split off as performance, it would be deleted from the one document that needs it. **The wording invites the misreading and was left alone anyway**, because rewording it is a content change and this session makes none; it is queued.
+- **The single-shared-helper rule (SPEC §4.5.1, §7.5.1, §8.1).** The one case with teeth: *"one shared helper"* is a code-structure instruction, and the behavioural half ("every surface renders the same thing; content never shows a stale name") survives without it. It was still not moved, and the reason is three lines above it in the same document: **SPEC's Purpose line promises that "a developer or an AI coding model with no access to prior conversations must be able to build from this document alone."** A SPEC that names the guarantee and withholds the one instruction that makes it checkable fails its own stated purpose. Whether that promise is the right one is a real question and a substantive one; it is queued rather than answered here.
+
+**The changelog discipline was evaluated honestly and needs nothing (the prompt's item 5).** It is doing its job and can be shown doing it: `BIO_CHANGE_COOLDOWN_HOURS` and `BIO_EDIT_GRACE_MINUTES` were retired in SPEC §14 at v1.16 and are still live instructions in five places across ARCHITECTURE and BUILD_PLAN — **and TODO.md names all five, by section, with a warning not to start Phase 2 until prompt 09 clears them.** The drift was caught, recorded and queued by exactly the mechanism 1.17 built. What the status table makes visible is an unsynced *file*; it was never going to make an unsynced *rule* visible, and nothing in this session's findings asks it to. No new procedure was added, and the one that exists was not touched.
+
+**`/healthz` and SPEC §2 — the boundary question TODO handed to this prompt. Founder decision 2026-08-18: SPEC §2 does not name the route.** §2's rule is about *pages*; an endpoint returning the literal body `ok`, with no HTML, no template, no theme and nothing about any user, is not one. ARCHITECTURE §7.3 owns the endpoint and already carried the argument; **SPEC §2 gained a pointer to it rather than a restatement of it**, which is the citation convention applied to the first case that came up under it. §7.3 and §15 item 6 now record the question as answered rather than open, and §7.3 states what a *future* unauthenticated route must meet — the test, not this route's precedent.
+
+**Found while there and deliberately not fixed:** SPEC §2's list is narrower than the built system in a second way, unrelated to `/healthz`. The privacy policy and accessibility statement are linked from login (BUILD_PLAN §15.1, §15.2), and **SPEC §16.1's own scope line names a different three pages than §2 does** — "login, password reset, invite redemption" against "login/registration/invite-acceptance." Correcting a normative list is a content change; it is queued in `TODO.md`.
+
+### The second item — reasoning that will not age well
+
+**Adopted as recommended, and it was smaller than expected: two paragraphs.** ChatGPT's point was that decisions justified as "easier for AI models" will read as dated in five years, and that "sub-Fable" names a model generation that is already meaningless outside this project. Checked across all four documents, **"sub-Fable" appeared exactly twice, both in ARCHITECTURE** — Decision 1 reason 4, and §3.1 leg 3 of the Django argument. SPEC §2 already used the durable phrasing the reviewer asked for ("less capable AI models"), so the outlier was two sentences, not a theme.
+
+**What was done, and what was deliberately not.** Both paragraphs now lead with the reason that holds whoever writes the code and keep the AI-capability reason **named** rather than removed:
+
+- **Decision 1 reason 4** becomes *"Fewer moving parts, so fewer places to be wrong"* — a property of the design, not of its builder — with SPEC §2's requirement kept as the named second reason.
+- **§3.1 leg 3** becomes *"Strong conventions and secure defaults — the safest stack for whoever assembles it"*, and says in the text why the AI argument is stated second: **the leg stands without it, which is why it is not the leg's name.** The training-data argument is retained in full, in the same paragraph.
+
+**Nothing was scrubbed.** The AI-capability argument is a real and honest reason, this project's whole method depends on it, and deleting it would make the documents less honest — which is the objection this project makes to every other cosmetic tidy. **README was left alone**: its "written to be executable by AI models" is a description of how this repository actually works, not a justification for a technical choice, and it names no model generation. **BUILD_PLAN's tool names were left alone** — Step 1.3 and Step 2.4 name Claude Code as an example, hedged with "e.g." and "any capable coding agent works," which is an installation instruction rather than an argument.
+
+### What was not done, and why
+
+**No rule was moved, no reasoning was deleted, no section was renumbered, and no product or technical question was decided.** Three things surfaced that would have required a substantive decision, and all three are queued rather than taken: whether SPEC's Purpose line should promise buildability from SPEC alone (which is the real question under ChatGPT's finding), whether SPEC §7.9's performance-sounding clause should be reworded to the privacy rule it actually states, and whether SPEC §2's list should be corrected to match what is genuinely reachable logged out.
+
+### Working files (outside the record)
+
+`TODO.md`: prompt 08 marked done at 1.24; the `/healthz` note resolved with its answer; the three queued questions added; one sync item added for prompt 09 (both ARCHITECTURE's and BUILD_PLAN's `Companion to:` lines still cite per-file SPEC versions — v1.15 and v1.7 — a scheme retired at 1.17, and they were left alone here precisely because they carry honest information about staleness that only the sync can clear).
+
+---
+
 ## 1.23 — 2026-08-18
 
 | File | Status |
