@@ -4,7 +4,7 @@ Tracker for the design conversations still to be held. Each numbered item has a
 self-contained prompt file in `prompts/`, written to be pasted into a **fresh**
 session (BUILD_PLAN §0.2 rule 4: long chats degrade; prompts carry their own context).
 
-**This file was written at project version 1.16; the project is now at 1.21.** Under the
+**This file was written at project version 1.16; the project is now at 1.23.** Under the
 scheme prompt 01 introduced, the version number belongs to the whole project, not to
 individual files.
 
@@ -18,6 +18,12 @@ individual files.
    and confirm the session wrote its CHANGELOG.md entry.
 4. A prompt that ends in "no change" is still *done* — record the decision and its
    reasons in-document, per README's rule that rejected suggestions keep their reasons.
+5. **This file and `prompts/` are working files, outside the versioned record** (CHANGELOG's
+   preamble, v1.23). They get no row in an entry's status table; a session says in prose
+   what it did to them. Changing them is not a version bump.
+6. **The queue has a second inlet now (v1.23):** a *stop note* from a build session that hit
+   a wall. It lands in the stopped-steps table below rather than in `prompts/`, and it is
+   already self-contained enough to open a design session with — BUILD_PLAN §0.7.
 
 Status values: `not run` · `in progress` · `done` · `deferred` · `dropped`
 
@@ -32,8 +38,8 @@ Status values: `not run` · `in progress` · `done` · `deferred` · `dropped`
 | 03 | [Visibility engine performance](prompts/03-visibility-engine-performance.md) | ARCHITECTURE §5, §9 | 01 | done | 1.19 |
 | 04 | [Availability & DDoS posture](prompts/04-availability-and-ddos.md) | ARCHITECTURE §4, §6, §7, §8, §10, §11, §13, §14, §15; BUILD_PLAN §5, §15, §16, §17 | 01 | done | 1.20 |
 | 05 | [Hashtag vocabulary operations](prompts/05-hashtag-vocabulary-operations.md) | SPEC §11.2, §13.5, §13.2, §7.9, §14, §17; ARCHITECTURE §4; BUILD_PLAN §10, §13.1, §17.3 | 01 | done | 1.21 |
-| 06 | [Accessibility: regression & the admin](prompts/06-accessibility-regression.md) | SPEC §16, ARCHITECTURE §9, BUILD_PLAN §16 | 01 | not run | |
-| 07 | [How documents change during the build](prompts/07-design-review-mode.md) | BUILD_PLAN §0.2 + §2.4, all four headers, CHANGELOG | 01 | not run | |
+| 06 | [Accessibility: regression & the admin](prompts/06-accessibility-regression.md) | SPEC §16.1, §16.5, §17; ARCHITECTURE §3.8, §9, §15; BUILD_PLAN §0.1, §0.3, §0.5, §2.5, §8.2, §15.2, §15.3, §16.5, §17.3, Appendix | 01 | done | 1.22 |
+| 07 | [How documents change during the build](prompts/07-design-review-mode.md) | BUILD_PLAN §0.2 + §2.4, all four headers, CHANGELOG | 01 | done | 1.23 |
 | 08 | [Document boundaries: SPEC vs ARCHITECTURE](prompts/08-document-boundaries.md) | SPEC, ARCHITECTURE | 01 | not run | |
 | 10 | [Reactions: look, lifecycle, expiry](prompts/10-reactions.md) | SPEC §8.2, §7.6, §9.7, §14; ARCHITECTURE §4, §6 | 01 | not run | |
 | 11 | [Three internal contradictions in SPEC](prompts/11-spec-contradictions.md) | SPEC §9.1/§5.2, §8.1/§5.4, §4.6.1/§12.3; ARCHITECTURE §5 | 01 | not run | |
@@ -84,12 +90,56 @@ target, category, frozen copy, status, purge-by date* — **no note column**. Th
 column was already there (which is why v1.21 needed no schema change for report reasons); the
 note appears to have been missed when §13.2 was written a version later. Check it and add it.
 
+**New for prompt 09 (from 1.22) — one page-list sync, and one thing to leave alone.** Step 2.5
+now builds the **template smoke tests**, whose page list must grow with every phase that adds a
+page (Appendix rule 9). When 09 syncs BUILD_PLAN against a settled SPEC, check that the phases
+it touches say so where a new page type appears — the feed, the composers, the four profile
+tabs, discover, the contact card, settings, and the error and empty states. **Leave the
+accessibility tester where it is:** Step 15.3 is a `[FOUNDER]` booking step deliberately placed
+in Phase 15 and told to start during Phase 13, and the re-audit rule it serves lives in the
+operator runbook (§17.3 section 13) rather than in a phase — the same shape as the watchdog,
+and for the same reason: its trigger is the platform changing, not a step being reached.
+
+**New for prompt 09 (from 1.23) — two sentences to carry into ARCHITECTURE, and two things
+to leave alone.** BUILD_PLAN Appendix rule 4 now requires **every test to cite the SPEC or
+ARCHITECTURE section it enforces**, by number, somewhere a plain text search will find it —
+that is what makes the new §0.6 conformance check possible, and **ARCHITECTURE §9 should say
+it too**, since §9 is where this project describes what its tests are for. While there,
+§9 may want one line acknowledging §0.6's stated limit: none of these tests catches an
+assertion that is weaker than the rule it cites. **Leave two things where they are.** SPEC
+Appendix A's "reviewed and confirmed by the founder on 2026-07-07" stays as written — it is
+a record of a specific act on ten specific defaults, not a status line, and the v1.23
+approval scheme does not replace it. And the **stopped-steps table above stays in this file**
+rather than moving into BUILD_PLAN: BUILD_PLAN is a law file locked during build sessions,
+and a queue that cannot be written to during a build is not a queue.
+
 **Do not start Phase 2 of BUILD_PLAN until 09 is done.** `BIO_CHANGE_COOLDOWN_HOURS` and
 `BIO_EDIT_GRACE_MINUTES`, which SPEC §14 marks **retired v1.16**, are still live
 instructions in **five** places: ARCHITECTURE §4 (`profiles`, where they are *columns*),
 ARCHITECTURE §4 (`rate_counters`), ARCHITECTURE **§7.1** (inside a security argument — §7 was subdivided in 1.20, and the retired constants are in the first subsection),
 BUILD_PLAN §8.1, and BUILD_PLAN §13.4. A build session following those files today would
 write the wrong mechanism. This file previously named only two of the five.
+
+---
+
+## Stopped build steps
+
+Empty until the build starts, and it should stay short. When an `[AI]` build step cannot be
+done as written, the session prints a **stop note** (BUILD_PLAN §0.7) and stops; paste it
+into a row here with the date. That is the whole of the founder's part — thirty seconds,
+and it turns "the AI stopped" into a queued design conversation instead of a dead end.
+
+Before queuing one, run §0.7's thirty-second check: search the document for the quoted
+sentence. Not found → the model guessed; that is not a stop, and the fix is to re-run the
+step in a fresh chat (BUILD_PLAN §0.2 rule 6) rather than to open a design session.
+
+| Date | Step | The sentence in the way | Resolved into | Status |
+|---|---|---|---|---|
+| — | — | — | — | *(none yet)* |
+
+**Resolved into** is one of: a SPEC/ARCHITECTURE change (name the version), a new build step
+(name it — Step 6.2a and so on), a corrected prompt in deliverable (d), or nothing (the
+model was confused). Then re-run the step from its prompt and mark the row done.
 
 ---
 
@@ -120,11 +170,11 @@ one, so no finding is silently dropped and none needs re-litigating.
 | Visibility engine may issue N×M queries; needs request-scoped caching | ChatGPT 3 | 03 |
 | Cloudflare proxy ban leaves no DDoS mitigation | DeepSeek 9 | 04 — **done in 1.20**; the finding itself was wrong (§13.3 already answered it) but checking it exposed that §7 said nothing about availability at all |
 | Hashtag vocabulary makes the operator a single point of failure | DeepSeek 3 | 05 — **done in 1.21**; the finding was right and **both** proposed fixes were wrong, and both are now recorded as rejected in SPEC §11.2.1 so they do not return as new. The real answers were a good starter list and **search aliases**, which turn a declined synonym into a permanent fix |
-| Accessibility is audited once, never regression-tested | DeepSeek 22 | 06 |
-| Django admin WCAG exception is a hedge, not a decision | DeepSeek 12 | 06 |
-| AI cannot even *propose* a document correction | ChatGPT 2 | 07 |
-| No "discovery loop" for steps found missing mid-build | DeepSeek 14 | 07 |
-| AI won't recognize when it needs to change a law file | DeepSeek 15 | 07 |
+| Accessibility is audited once, never regression-tested | DeepSeek 22 | 06 — **done in 1.22**; the finding was right, and checking it found a defect the reviewer had missed: ARCHITECTURE §9's **template smoke tests had no build step at all** and existed only inside the pre-launch audit. Conformance now runs on three clocks (SPEC §16.5), the scan moves to a milestone cadence, and the ongoing duty lives in the runbook |
+| Django admin WCAG exception is a hedge, not a decision | DeepSeek 12 | 06 — **done in 1.22**; "a cop-out" was too strong, but the sentence stated no obligation and could be satisfied by doing nothing. Settled as a **bounded commitment** (SPEC §16.1.1): a named subset over §13's four weekly surfaces, everything else out of scope with the §3.1-leg-2 reason stated, and the future-operator remedy named |
+| AI cannot even *propose* a document correction | ChatGPT 2 | 07 — **done in 1.23**; the finding was right about the gap and wrong about its shape. The locks were stronger than the reviewer credited; what was missing was that **nothing existed on the other side of the stop**. Answered by the **stop note** (BUILD_PLAN §0.7), not by the proposed "Design Review Mode" — design sessions have run here for twenty-two versions and needed a route in, not a switch |
+| No "discovery loop" for steps found missing mid-build | DeepSeek 14 | 07 — **done in 1.23**; granted. Insert with a letter at the point of need (Step 6.2a), **never renumber** — renumbering falsifies git commit messages, CHANGELOG references and prompt filenames, which are history. The founder writes the step, it gets its own ✅, and the preceding verification is re-run. It is one of the four things a stop note resolves into, not a separate mechanism |
+| AI won't recognize when it needs to change a law file | DeepSeek 15 | 07 — **done in 1.23**, and it is the finding this session could least fully answer. The half that is answerable is coverage: **new BUILD_PLAN §0.6** has the founder read two columns of section numbers at each phase milestone, which catches a SPEC clause that got no code and therefore no test. The half that is not is stated in the document rather than papered over — **a test that cites the right section and asserts the wrong thing is caught by nothing here** |
 | SPEC is absorbing architectural concerns | ChatGPT 1 | 08 |
 | Decisions justified as "easier for AI" will age badly | ChatGPT 4 | 08 |
 | Missing build step for the friends page | DeepSeek 24 | 09 |
@@ -160,8 +210,11 @@ where noted. Recorded here so they are not raised again as new.
 - **Accessibility is manual only, with no automated scanning** (DeepSeek 17). Wrong:
   BUILD_PLAN §16.5 pass 1 runs an axe/`pa11y` scan, ARCHITECTURE §9 specifies template
   smoke tests and a contrast test over every theme, and passes 2–4 are the keyboard,
-  screen-reader and zoom checks the reviewer said were absent. *Residual, and it is
-  DeepSeek 22's point rather than 17's:* all of it runs once, as a pre-launch gate.
+  screen-reader and zoom checks the reviewer said were absent. *Residual, and it was
+  DeepSeek 22's point rather than 17's — **closed in 1.22**:* all of it ran once, as a
+  pre-launch gate. One correction to the record while closing it: of the two automated
+  tests, only the contrast test was genuinely continuous. **The smoke tests were specified
+  and never built**, which is why 1.22 gave them Step 2.5 rather than merely "saying so".
 - **DMARC should start at `p=none` and be verified with a lookup tool** (DeepSeek 11).
   BUILD_PLAN §5.5 already says both, including the MXToolbox check. *Residual, minor:*
   SPF and DKIM get no independent verification step.
@@ -198,6 +251,12 @@ where noted. Recorded here so they are not raised again as new.
   trial stays honest: **the founder approves every entry**, nothing is loaded unread, and
   §10.1a's "done when" is the acceptance bar (search ten interests the way five different
   people would phrase them; land on a tag every time). Recorded in BUILD_PLAN §10.1a.
+- **The starting page list for the template smoke tests (new, parked 2026-08-18).** Not a
+  design question — a five-minute build question, recorded so it is not forgotten. Step 2.5
+  builds the tests against login, reset and lockout, and Appendix rule 9 says every later
+  step adds its pages. Nobody has written the *list*, and the failure mode is silent: a
+  suite whose page list stops growing passes forever while checking nothing. Worth one
+  glance at each phase milestone (BUILD_PLAN §0.5), where the scan already runs.
 - **Constant values as a whole.** README §1 invites review of every cap. No reviewer
   engaged with the numbers. Still open.
 - **README §3's pager question is answered as of 1.20** — *"what does a person who has
@@ -229,8 +288,8 @@ reviewer's summary judgment is not evidence.
 | 6 | `friend_requests` lacks snapshot columns | new to the reviews | already covered by 09 §G |
 | 7 | `images` lacks a gallery-order column | new | 09 §K |
 | 8 | "Ban" (and "warn") never defined, §13.2 | new | 12 |
-| 9 | The founder cannot interpret a screen reader | extends DeepSeek 17, 22 | 06 item 5 — **founder has decided to engage a qualified tester** |
-| 10 | Tripwire paradox; guards are tool-specific | extends DeepSeek 16 | 07 item 8 |
+| 9 | The founder cannot interpret a screen reader | extends DeepSeek 17, 22 | 06 item 5 — **done in 1.22**. SPEC §16.5.1 defines *qualified* (a daily screen-reader user, paid, before a professional auditor) and BUILD_PLAN §15.3 books the person from Phase 13 — the decision's real cost was scheduling, not wording |
+| 10 | Tripwire paradox; guards are tool-specific | extends DeepSeek 16 | 07 item 8 — **done in 1.23**. Both halves were right. §2.4 now defines the legitimate cap-raising sequence (SPEC §14 → `constants.py` → tripwire → checksums, one founder commit, `--no-verify`) and makes a constants failure at any other time a real alarm; and it says plainly that guard 1 does not survive a change of tool, guard 2 does not survive `--no-verify` or a fresh clone, and **layer 4 is what is actually being relied on** |
 | 11 | Reactions on pinned posts never expire | new | 10 |
 | 12 | Hashtag gate ambiguous for multi-tagged posts | new | 02 item 11 — **founder ruled: any shared tag**; abuse reporting → 05 item 7 |
 

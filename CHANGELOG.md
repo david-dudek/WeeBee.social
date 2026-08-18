@@ -17,6 +17,217 @@ record something — a date, a file's status in a given round — this file says
 "not recorded" rather than guessing. See the mapping appendix at the bottom for the
 translation between the old per-file version numbers and these project versions.
 
+## What the versioned record covers (v1.23)
+
+**Five files:** README.md, SPEC.md, ARCHITECTURE.md, BUILD_PLAN.md and this one. From
+1.23 forward, every entry's status table names all five and no others.
+
+**`TODO.md` and `prompts/` are working files, deliberately outside the record.** They get
+no table row and never an "unchanged" status, and the reason is not tidiness: the table
+exists to make an *unsynced* document visible, and neither of them can be unsynced with
+anything. `TODO.md` records what has not been decided yet; `prompts/` records what a
+session was asked. Neither is a statement about the platform, and nobody builds from
+either. An entry should still say in prose what a session did to them — the parked
+questions and the triage record in `TODO.md` are decisions with reasons — but that prose
+is not a status. Earlier entries varied: 1.17 changed `TODO.md` without recording it and
+1.22 gave it a table row. Neither is corrected, for the reason two sections below.
+
+## Founder approval (v1.23)
+
+Every document said "DRAFT pending founder review" for nine versions — BUILD_PLAN said
+"under founder review," which was the same thing in different words and is itself the
+evidence that no vocabulary existed — and no defined act ever changed it. There is one
+now, and it is small.
+
+**The record is a status field in the document's own header**, in one of exactly two
+forms:
+
+- `DRAFT — not yet founder-approved`
+- `founder-approved at 1.22`
+
+`founder-approved at N` means: *at project version N, the founder read this file end to
+end and approved it.* It stays current for as long as **N is at or above that file's
+"This file last changed in" number**, which sits on the very next line of the same
+header. When the file next changes in substance, that number moves past N and **the
+approval lapses visibly, with nobody having had to remember anything.** Two numbers,
+adjacent, one comparison — the same mechanism that makes an unsynced document visible,
+which is the whole reason this file exists.
+
+Comparing against the *file's* last-changed number rather than against the project
+version is what makes it work: every header carries the current project version whether
+or not that file changed, so a project-version comparison would show README as stale
+every time SPEC moved. For the same reason, **editing a header's status field does not
+count as the file changing** — otherwise approving a file would instantly mark it
+unapproved.
+
+- **Approval is per file.** SPEC will be approved long before ARCHITECTURE is synced to
+  it, and a scheme that could not say so would be describing a different project.
+- **Approval bumps nothing.** This rule is load-bearing: if approving 1.22 produced 1.23,
+  then 1.23 would be unapproved and the process could never converge. An approval is an
+  annotation on an existing entry plus one header field, and it is the one edit in this
+  project that changes files without a version bump.
+- **The trigger is a sentence in chat; the record is the file.** The sentence is *"I have
+  read `<FILE>` end to end and I approve it at `<version>`."* It names the file, names the
+  version and asserts the reading, which are the three things the session needs; a session
+  given anything vaguer asks rather than guessing, and refuses to record an approval at a
+  version older than the file's last-changed number. The session then writes **exactly
+  two things and stops**: the header's status field, and one annotation line on that
+  version's entry here. No other edit, no tidying.
+- **CHANGELOG.md carries no approval status.** It is a record of events rather than a
+  statement to be approved, and it has no version header of its own — the newest entry
+  *is* the version.
+- **Founder approval and external review are independent facts, not two rungs of one
+  ladder.** v1.16 was reviewed by three outside models while every document still said
+  DRAFT, so any ladder placing external review after founder approval could not describe
+  a state this project has already been in and will be in again.
+
+**External review is an event, not a status.** "v1.16 reviewed by ChatGPT, DeepSeek and
+Kimi" is something that happened to a version, and it belongs in that version's entry
+below. It changes no document's authority; only the founder's approval does that. A
+reviewer looking for what is open to challenge reads README's "What IS up for review,"
+which exists for exactly that job.
+
+## Entries are appended, not rewritten (v1.23)
+
+A design session **adds a new entry at the top and leaves the existing ones alone.** The
+only two permitted touches to an entry already written are *additions* rather than
+rewrites: a **founder-approval annotation**, and an **external-review event** on the
+version that was reviewed. Anything else that seems to require editing an old entry is a
+stop, not an edit.
+
+This is the discipline that actually protects this file. BUILD_PLAN §2.4 makes
+CHANGELOG.md a law file and locks it in the build repository, but design sessions run in
+the design repository, which has no lock and must write here every time. So what guards
+the history is a rule and a diff: `git diff CHANGELOG.md` should show a new entry at the
+top and nothing else. A changelog quietly rewritten to say ARCHITECTURE had been synced
+when it had not would defeat the mechanism 1.17 was built to create, and it would leave
+no other trace.
+
+---
+
+## 1.23 — 2026-08-18
+
+| File | Status |
+|---|---|
+| README.md | changed — header status field only, to the new approval vocabulary; no content change |
+| SPEC.md | changed — header status field only; no content change |
+| ARCHITECTURE.md | changed — header status field only; no content change |
+| BUILD_PLAN.md | changed — §0.2 rules 3 and 5, new §0.6, new §0.7, Step 1.2, Step 2.4 rewritten, Appendix lead-in and rules 1 and 4 |
+| CHANGELOG.md | changed — this entry, three new preamble sections, and one annotation added to the 1.16 entry |
+
+From prompt 07, and it answers the same question from nine directions: **what happens after an AI stops.**
+
+**The finding, and what survived checking it.** Two reviewers of 1.16 reached the same place from opposite sides. ChatGPT: the law-file locks are excellent protection against AI drift, but "the AI cannot even produce a proposed correction," and proposed a **Design Review Mode**. DeepSeek: the rule "assumes the AI will recognize when it needs to change a law file. It won't." Checking both against the documents found the mechanisms **stronger than ChatGPT credited** — four layers at §2.4, the founder's filename glance at §0.2 rule 3, and four Appendix rules each ending in "stop and say so." **The gap was never the lock. It was that there was nothing on the other side of it.** §0.2 rule 5 said "stop — that's a design conversation," and the plan ended there: nothing said what the AI should produce when it stopped, where that went, how it became a document change, or how the build resumed. On a project where the founder is not the coder, **the handoff is the mechanism**, and it was the one part not written down. The live proof was in this repository the whole time: `prompts/` and `TODO.md` exist *because* there was no defined way to route a document question out of a working session, so a route was invented on the spot and never recorded.
+
+**One decision refused, and it is the reason the rest is small.** ChatGPT's "Design Review Mode" is not adopted **as a mode**. Design sessions have been running here for twenty-two versions; there is nothing to switch on, and the founder is the switch — a session is a design session because he opened it as one. What was missing was not a mode but a **route into one from a build session**. So the answer is one artifact rather than a state machine, and the practice that already existed is simply written where a build session will read it (**new BUILD_PLAN §0.7**). Every design prompt to date has had to declare its own exemption from §0.2 rule 5 in its opening paragraph; that stops being necessary.
+
+**The stop note.** Five fields, printed in the chat, under a screen: the step, the sentence in the way (verbatim, or an honest "no sentence — SPEC does not cover this, it would belong in §7.4"), what could not be done, the smallest change that would resolve it, and the state of the working tree. **Never applied, never committed, and no files written** — a session that has just stopped is the last one that should be creating artifacts, and in any case `prompts/` and `TODO.md` live in the other repository. Three acts follow and only the middle one is the founder's: the AI prints and stops, the founder pastes it into `TODO.md`'s new stopped-steps table, and it is later opened as a design session by pasting the note back in. **The note is deliberately not a prompt file.** It already carries what `prompts/README.md` asks of one — step, finding quoted, wall, proposal — in miniature; a full prompt file gets written only when the question turns out to be bigger than the note, which is the exception. The alternative considered and rejected was having the build session write a prompt file directly: it lands in the wrong repository, and it asks a model that has just hit a wall to produce a two-screen design document, which is the wrong size by an order of magnitude.
+
+**The cheap test for whether a stop is real, and its honest limit.** A model saying "this contradicts SPEC §7.4" is the system working; a model saying "I can't do this" because it is confused, or has found a design it likes better, looks identical from where the founder sits. The rule adopted is one line: **a stop note must be falsifiable by reading one named place in one named document.** Search for the quoted sentence — found and it says what the note claims (real), not found (the model guessed; not a stop, re-run the step), found but meaning something else in context (one paragraph of reading settles it), or a "no sentence" note whose named section turns out to cover the case after all (not a stop). Stated plainly in the document: **this does not detect motive, and nothing can.** What it does is convert an unanswerable question — *is this model being straight with me* — into an answerable one: **is there a sentence, and does it say that.** If the conflict is real the motive stops mattering, and a verbatim quote is cheap to check and expensive to fake, which is all a test at 10 p.m. needs to be. Two permitted forms rather than one, because **gaps are the commonest true stop** — far more common than contradictions — and a format that only accepted quotes would push a model to manufacture one.
+
+**A distinction §0.2 rule 5 had blurred.** That rule read every refusal as the system working — "it means the model wanted to move a goalpost." But an AI that *reports it could not edit a law file* **tried and was refused**: a deny rule fired, the hook rejected a commit, the tripwire went red. That is the lock working, and it is now also a rule violation, because the instruction is to stop and write a note rather than to attempt the edit. An AI that produces a stop note **did not try** — that is the plan working. Two different events with two different reactions, and they should not feel the same.
+
+**The discovery loop.** DeepSeek's separate point — the plan "assumes that everything you'll need in step 12 is known at step 1" — is granted. A genuinely missing step is **inserted with a letter at the point of need** (Step 6.2a, which this plan has already done once), **never by renumbering**: renumbering would falsify every git commit message, every reference here and every prompt filename, and those are *history* rather than text one is free to correct. Appending to the end of a phase remains available where nothing depends on the new step, which is the rarer case — a step that turns out to be missing is usually missing *before* something. Four rules ride with it: letters do not nest; **the founder writes it into BUILD_PLAN, not the AI** (the discovery loop makes no exception to §0.2 rule 5); **it gets its own ✅**, since a step nobody can write a verification for is not a step but an unfinished design question — a free test of whether the insertion is ready; and the preceding step's verification is re-run once the new step is built. The loop is not a separate mechanism: it is one of the **four things a stop note resolves into**, alongside a SPEC/ARCHITECTURE change, a corrected prompt (no version bump — no law file changed), and nothing at all.
+
+**DeepSeek's harder point, which the locks do not touch at all: code that quietly diverges from SPEC.** The guards stop the AI editing the *documents*; nothing stops it writing code the documents never asked for, while every step-level verification passes — because those verifications test the feature that was just built, not its conformance to the spec. **New §0.6** generalizes the one pattern in this plan that already worked: Step 4.2 has the founder read the visibility engine's test *names* and check they read like SPEC's rules restated, auditing coverage without reading code. At each phase milestone, in the sitting that already runs §0.4's browser matrix and §0.5's scan, the founder reads two columns — **A**, the SPEC and ARCHITECTURE sections this phase's steps name, and **B**, the sections this phase's tests cite (Appendix rule 4 now requires every test to cite one, which is what makes column B exist). **A section in A and not in B is the finding.** Step 4.2 keeps its deeper read; §0.6 is what scales to seventeen phases.
+
+**And §0.6 states what it does not catch, because an overstated guard is worse than a stated limit.** A test that cites the right section and asserts the wrong thing is invisible to this check and to the founder, and **nothing in this plan catches it** — that sentence is in the document, not only here. Behaviour the code has that no document mentions opens no gap in either column. A rule right in the test's world and wrong on the page is only partly covered, by the founder's own hand-run ✅ verifications, the milestone browser matrix, and eventually the first users (ARCHITECTURE §9). What the check genuinely proves is that **every section the phase was meant to implement was thought about by name**, which is the failure that actually happens: a clause gets no code, therefore no test, and nothing anywhere goes red.
+
+**Founder approval — the act that makes a document stop being a draft** *(founder-raised, not from any review)*. Nine versions of "DRAFT pending founder review" with no defined act to change it, and exactly two approval records in the whole project, both ad hoc and both buried. The scheme is in this file's preamble; three things about it are worth recording here.
+
+- **The recommended shape needed one correction to work.** The proposal was to compare the approval version against the project version in the header. That fails: under the 1.17 scheme *every* file's header carries the current project version whether or not that file changed, so README would read as stale every time SPEC moved. The comparison is against the file's own **"This file last changed in"** number, which already sits on the next line of the same header — machinery that existed and was not being used. Two adjacent numbers, one comparison, and **the staleness marker maintains itself**: last-changed moves whenever the file changes, approved-at moves only when approval is renewed, so nobody has to remember to mark anything stale. It follows that **editing a header's status field does not count as the file changing**, or approving a file would instantly mark it unapproved.
+- **Approval bumps nothing**, and this is the load-bearing rule: if approving 1.22 produced 1.23 then 1.23 would be unapproved and the process would never converge. It is the one edit in this project that changes files without a version bump — permissible because its content is fully specified in advance and mechanical: one header field, one annotation line, nothing else. It does trip the checksum tripwire, like any other founder-authored law-file change, and the fix is the same single `shasum` command.
+- **The versioned record is now stated rather than assumed.** Five files. `TODO.md` and `prompts/` are **working files, explicitly outside it**, and the reason is structural rather than tidy-minded: the status table exists to make an *unsynced* document visible, and neither of them can be unsynced with anything. Earlier entries varied — 1.17 changed `TODO.md` silently, 1.22 gave it a table row — and **neither is corrected**, because entries are appended and not rewritten, which is now a stated rule with two narrow exceptions, both additions rather than rewrites.
+
+**The tripwire paradox** *(Kimi 10, which the earlier two reviews missed)*. SPEC §1.3 permits raising a cap, so the *correct* act of raising `FRIEND_CAP` turns the suite red — and the fix, editing the tripwire's expected value, is the exact action the guard exists to make suspicious. §2.4 now defines the sequence: **SPEC §14 first** in a design session, then `constants.py`, then the tripwire, then the checksums, **all in one founder-authored commit with `--no-verify`** — and **a constants assertion that fails at any other time is a real alarm.** Two things make it navigable rather than alarming. The two assertions now **fail differently and say so**: a checksum failure means *a document changed* and is expected after every design session, while a constants failure means *`constants.py` changed* and is expected only inside that sequence; both failure messages are specified verbatim, as the checksum one already was. And §2.4 now says plainly that **there are three copies of every constant** — SPEC §14, `constants.py`, the tripwire — which is the price of the alarm and is deliberate: a tripwire that read SPEC's table would agree with SPEC by construction and would therefore assert nothing about it. This is the same shape of problem as the approval flow above — a legitimate act that trips a mechanism built to catch illegitimate ones — and the answer is the same in both cases: name the legitimate sequence, and make everything outside it an alarm.
+
+**Which guard survives a change of tool** *(Kimi 10's second half)*. Stated plainly in §2.4, and the honest answer is not flattering. **Guard 1 does not survive**: the deny rules live in one tool's settings file, and a different assistant, a web interface or a manual paste finds them simply absent — **with no refusal appearing, because there is nothing left to refuse.** Re-creating them is now named as the first task of adopting any new tool, with the step's ✅ as the proof. **Guard 2 survives a tool change but little else** — `--no-verify` skips it, and `.git/hooks/` is not cloned, so a fresh clone on a new machine silently has no hook at all; the script therefore lives in the repository with a one-line install command in the README. **Guard 3 survives everything and prevents nothing** — an ordinary test that goes red at the next step for anybody, and the only tool-agnostic guard that cannot be bypassed. **Layer 4 is what is actually being relied on**: outside copies and diffable git history, whose one requirement is that somebody looks, which is what §0.2 rule 3's five-second filename glance is — and why that glance is less of an afterthought than it looks.
+
+**Is CHANGELOG.md a law file? Yes — with one honest qualification the recommendation did not carry.** It is now the fifth law file (§0.2 rule 5), it travels to the build repository with the other three (Step 1.2), and it is in the deny rules and the checksums (§2.4). The reasoning holds: a build session has no legitimate reason to touch it, because a build step that wants to change the changelog is by definition a design conversation, so the protection costs nothing where the writing happens. Two arguments strengthen it beyond the original case — a coding model asked to tidy up after itself **reaches for a changelog by habit**, which is exactly the accidental edit guard 1 is good at; and a build repository *without* one invites an AI to create a **rival changelog** that diverges silently. **But the guards do not reach the place the file is actually at risk.** It is written in every design session, in the design repository, which has no deny rules and no hook by design. What protects it there is a discipline and a diff — appended, not rewritten, two exceptions, `git diff CHANGELOG.md` as the check — which is why that rule is in this file's preamble as well as in §2.4. Saying the guard covers it would have been the overstatement this project keeps refusing to make.
+
+**One gap found while writing the resume path, which no reviewer raised.** §2.4 told the founder to re-bless the checksums after a design conversation and to commit the blessing "alongside the changed document" — but **nothing anywhere told him to carry the changed document across from the design repository to the build repository at all.** Step 1.2 copies the law files once, at the very beginning, and that was the only copy instruction in the plan. A build session reading a SPEC three versions stale would look exactly like everything working. §0.7 now closes with the three acts that resume a build — copy, re-bless, commit with `--no-verify` — and Step 1.2 says the copy is not a one-time act.
+
+**Deliberately not done.** No lock was weakened: the deny rules, the hook, the tripwire and the rule that an AI never edits a law file during a build step all stand, and the only change in that direction is that the list of protected files got longer. `constants.py` values remain founder-only, through SPEC §14 first. Nothing in SPEC or ARCHITECTURE was touched, this being a BUILD_PLAN session; the one place that needs a matching sentence — ARCHITECTURE §9, which should carry Appendix rule 4's new requirement that every test cites its section — is handed to prompt 09 in `TODO.md`, along with a note that SPEC Appendix A's own 2026-07-07 approval record stays as it is, being a record of a specific act rather than a status line.
+
+### BUILD_PLAN.md
+
+**New §0.7, "Two kinds of session, and the one route between them,"** carries the build/design distinction, the stop note's five fields and three rules, the three-act route, the thirty-second falsifiability check, the four things a stop note resolves into, the discovery loop, and the three acts that resume the build. **New §0.6, "The standing conformance check,"** puts the two-column section-number read on the same milestone cadence as §0.4 and §0.5, with its limits stated. **§0.2 rule 3** adds CHANGELOG.md to the filename glance and states that an unfinished step is not committed. **§0.2 rule 5** becomes the single definition of the five law files, adds CHANGELOG.md with its reason, points at §0.7 for what happens after a stop, and separates a reported refusal from a stop note. **Step 1.2** copies four documents rather than three and says the copy repeats. **Step 2.4 is rewritten**: CHANGELOG.md in the deny rules and the checksums, a second specified failure message for the constants assertion, the four-step cap-raising sequence, the three-copies note, the hook's absence from a fresh clone, a paragraph on which guard survives a change of tool, a paragraph on where CHANGELOG.md is and is not protected, and a ✅ that tests the newest member of the list. **Appendix**: a lead-in defining "stop and say so" as §0.7's stop note, rule 1 requiring the verbatim quote or an honest statement that no sentence exists, and rule 4 requiring every test to cite the section it enforces.
+
+### CHANGELOG.md
+
+Three new preamble sections — **what the versioned record covers** (five files; `TODO.md` and `prompts/` outside it, with the reason), **founder approval** (the two header forms, the comparison against the file's last-changed number, per-file, bumps nothing, the trigger sentence and the two edits it authorizes, and its independence from external review), and **entries are appended, not rewritten** (with the two permitted additions). The **1.16 entry gains an external-review annotation**, which is the first use of that mechanism and is an addition to an existing entry rather than a rewrite.
+
+### README.md · SPEC.md · ARCHITECTURE.md
+
+Header status field only, from "DRAFT pending founder review" to `DRAFT — not yet founder-approved`. No content changed in any of the three. BUILD_PLAN's header, which had said "under founder review," now uses the same words as the others — the divergence being small evidence for the whole item.
+
+### Working files (outside the record)
+
+`TODO.md`: prompt 07 marked done at 1.23; a new **stopped-steps table** for §0.7's route, empty until the build starts; new sync notes for prompt 09. `prompts/README.md`: "Two kinds of session" reduced to a pointer at BUILD_PLAN §0.7 now that the distinction lives there, and stop notes described as the second kind of input to the queue.
+
+---
+
+## 1.22 — 2026-08-18
+
+| File | Status |
+|---|---|
+| README.md | unchanged — version header only |
+| SPEC.md | changed — §16.1 (new §16.1.1), §16.5 rewritten (new §16.5.1), §17 |
+| ARCHITECTURE.md | changed — §3.8 (one bullet), §9 (the accessibility block and the tooling bullet), §15 (new item 7) |
+| BUILD_PLAN.md | changed — §0.1, §0.3, new §0.5, §2.5, §8.2, §15.2, new §15.3, Phase 16 header, §16.5 rewritten, §17.3 (new runbook section 13), Appendix rule 9 |
+| CHANGELOG.md | changed — this entry |
+| TODO.md | changed — prompt 06 marked done; two triage rows annotated with their outcomes; the Kimi #9 row resolved; one new parked question; one new sync item for prompt 09 |
+
+Two items, from prompt 06, and both were places where §16 said something softer than the commitment it sits under.
+
+**The reviewer finding, and what survived checking it.** DeepSeek's review of 1.16 claimed accessibility testing here is manual only, with no automated scanning, and that focus order, keyboard operability, screen-reader announcements and error associations go untested. **Most of that was wrong**, and had already been recorded as wrong: BUILD_PLAN §16.5 pass 1 ran an axe/`pa11y` scan, ARCHITECTURE §9 specified template smoke tests and a contrast test over every theme, and passes 2–4 were the keyboard, screen-reader and zoom checks the reviewer said were absent. What survived was the *second* half of the objection, which is DeepSeek 22's rather than 17's: **every one of those checks was a gate, run once, immediately before launch**, in a project whose build plan ends at Phase 17 while SPEC §17 promises features keep arriving. Accessibility regressions are the easiest defects to introduce and the hardest to notice — nothing looks wrong, no test fails, nobody files a bug, and the person who can no longer use the page simply stops using it, on a network a family member invited them to.
+
+**Checking the claim exposed a real defect the reviewer had not found.** The prompt for this session asserted that two thirds of the mechanical checks already ran continuously and only needed saying so. **Half of that was true.** The `THEME_SET` contrast test is built at Step 8.2 and has been a genuine continuous test since themes existed. **The template smoke tests were built nowhere:** ARCHITECTURE §9 specified them, and BUILD_PLAN's only mention of them was inside Step 16.5 pass 1 — so a check described in one document as a *test* was, in the document that builds things, a *gate run once*. They now belong to **Step 2.5**, with the base template and the shared partials, which is the first step that renders a page worth asserting anything about. Recorded in ARCHITECTURE §15 item 7 as the pattern it is: **a test one document specifies and the other never builds is indistinguishable, from inside either document, from a test that exists.**
+
+**Four decisions, all taken in session on 2026-08-18** (the third had been taken by the founder before it).
+
+1. **Conformance runs on three clocks, not one gate.** *Continuous* — the contrast test and the template smoke tests, on every change forever. *Per milestone* — the axe/`pa11y` scan. *Periodic* — the three human passes, on triggers. SPEC §16.5 now says this in those terms; it previously described only a pre-launch audit, which hid the fact that part of the work was already continuous and disguised the fact that the rest of it was not.
+2. **The axe/`pa11y` scan joins the milestone cadence and stays out of the test suite.** ARCHITECTURE §9 had kept it as optional local tooling on the reasoning that nothing accessibility-related ships to the browser — good reasoning, but it answers a question nobody was asking here. **SPEC §15.2 is satisfied either way**, under every option considered; what rules the scan out of the suite is dependency weight alone — a headless Chromium and a Node toolchain in a Python project's test path, needing a running server. So it runs at each phase milestone from a documented command on the founder's Mac, which turns a third of real problems from a once-ever catch into a dozen. The reasoning is written into §9 so it is not re-proposed as an app dependency by a future session.
+3. **The human passes are run by a qualified tester, not the founder** — the founder's decision, brought to this session already taken, from Kimi's finding 9. §16.5 had asked the founder to run a screen-reader pass while BUILD_PLAN §2.5 taught only how to switch VoiceOver on. **A screen-reader pass is a skill, not a setting**, and it was the only quality gate before launch. **Qualified** is defined in SPEC §16.5.1 with a stated preference: a person who uses a screen reader daily as their primary means of using the web, paid for their time, before a professional auditor — an auditor reports that an accessible name is missing, a daily user reports that the page cannot be used, and the second is the question this section actually asks. The real cost of the decision is not wording but **scheduling**: Phase 16 had quietly assumed the founder was available to himself, so **new Step 15.3** books the person, starting during Phase 13.
+4. **The operator console is a bounded commitment** (SPEC §16.1.1), chosen over an explicit exemption and over full scope.
+
+**On the operator console specifically**, since it is the decision most likely to be re-opened by a future reader. §16.1 said the Django admin was "held to the same standard as far as the framework allows; where it falls short, the shortfall is the operator's own, not a user's." A reviewer called that a cop-out, which is too strong — the reasoning is real and the distinction is genuine on a platform with exactly one operator. But **the sentence stated no obligation**: "as far as the framework allows" is satisfied by doing nothing, in a section whose opening sentence is that a feature which cannot be made accessible is not shipped. Two facts made it worth settling rather than leaving: **the operator will not always be this founder** (§15.3 contemplates funding phases, §2 contemplates going public), and **§13's operator duties are daily-use surfaces** — the moderation queue, the vocabulary editor, the URL allowlist editor with its redirector checks, the request queue — not a settings page visited twice.
+
+- **In scope, over those four surfaces:** keyboard operability with no traps, a visible focus indicator, text contrast, programmatically labelled fields, and errors identified in text. Verified once at Step 16.5, in the sitting already being paid for, in about an hour.
+- **Out of scope:** everything else, and the reason is stated rather than implied. Conformance would mean **owning Django's admin templates** — forking an upstream that must stay patched for security, or replacing the admin with a hand-built operator interface. **That is a stack-level reversal, not a §16 tweak:** ARCHITECTURE §3.1 leg 2 makes "the Django admin is the operator console for free" one of the five reasons Django was chosen. Full scope was weighed on those terms and rejected.
+- **The consequence is acknowledged, not assumed away.** *"The operator is me and I can see fine"* is a statement with an expiry date. If the role is ever held by a person the admin excludes, the project has committed to solving it **then** — by building the operator surfaces as first-party pages, feasible because they are a small number of list-and-act screens — and **never by an overlay**, since §16.4's ban is not narrower for the operator's own screens. A deferral with a named trigger and a named remedy is a decision; the old sentence was not.
+- **And the claim says which.** The accessibility statement names the carve-out in one sentence, because "we conform to WCAG AA" with a silent exclusion inside it is exactly what §16.5's honesty rule exists to prevent.
+
+**The re-audit rule was kept deliberately small, and the tester decision is why.** A rule that assumed a free afternoon reads differently once every run costs another person's time and calendar — which is the strongest argument for modesty, not against it. The human passes repeat on **a new interactive pattern** (scoped to that pattern and its flows, never a full sweep) and **before any widening of who can join** (in full, scheduled with the attorney review that SPEC §15.1 requires at the same moment). **A new page built entirely from the shared partials of ARCHITECTURE §3.8 is explicitly not a trigger** — which is the first time this project has written down a practical reward for the single-source discipline rather than only its obligations. A third trigger is reactive: an accessibility report through §13.5 that the continuous checks did not catch re-audits the *pattern*, not just the page. Alongside them sits **one founder-run keyboard-and-reflow check a year**, in the sitting that already exists for the restore rehearsal, and it is honest about what it is not: it does not replace the tester, and its purpose is the opposite one — the site stands still while browsers, iOS and VoiceOver move underneath it.
+
+**The accessibility statement is now a living document**, which was the last loose end and the one that would have quietly falsified everything else. §16.5's honesty rule forbids papering over a known defect; a statement written once and never revised **becomes a false claim by standing still**, so the same rule forbids letting it go stale. It carries a visible revision date, and its maintenance is a runbook item rather than an intention.
+
+**Two things follow from the decisions and are answered rather than left to be discovered.** First, **a re-audit runs on the live system.** The launch audit is harmless — it precedes Step 17.1's wipe, so nothing the tester sees belongs to anybody — but there is one server and no staging copy, so every later run happens on a platform with real people on it. The answer taken: the returning tester holds **an ordinary member account whose only friend is the founder**, sees the founder's content and nobody else's, and is granted no operator view; where a pattern needs two participants, the second is the founder. An audit that required seeing strangers' content to be thorough would verify accessibility by breaking what accessibility is here to protect. Second, **the tester is now a single point of dependency**, in the same shape as the vocabulary's single operator (§11.2.1) and named the same way rather than solved: an unavailable tester **delays a re-audit and breaks nothing that already works** — the continuous checks keep running and shipped patterns keep behaving as verified. The fallback is the professional auditor, and a trigger that fired and was not run stays open as a known limitation, which puts it in the statement.
+
+**Where the ongoing obligation lives.** BUILD_PLAN ends at Phase 17, and §17.3's operator runbook is the only page describing life after launch — so accessibility re-verification is now **runbook section 13**, beside the disk, the backups and the moderation queue. It carries the four things that outlive the build: what must stay green automatically, what repeats and on what trigger, what the founder does yearly, and the one queue item that is never read in a batch — an accessibility report, which is the signal that both the machine checks and the audit missed something, from the person being excluded, who will not send a second one.
+
+### SPEC.md
+
+(a) **§16.1's scope paragraph** stops asserting a standard for the operator console and points at **new §16.1.1**, "The operator console — a bounded commitment," which carries the named subset, the four surfaces, what is out of scope and why (with the §3.1-leg-2 argument stated in SPEC's own terms), the future-operator trigger and remedy, and the requirement that the statement name the carve-out.
+
+(b) **§16.5 is rewritten** as "Verification, re-verification, and feedback": the three clocks, the re-audit rule with its three triggers, the yearly founder spot-check, the statement as a living document, the accessibility report as the un-batched queue item, and the honesty rule extended to cover a defect the tester finds and the founder cannot fix.
+
+(c) **New §16.5.1**, "Who runs the human passes," carries the founder's decision, the skill-not-a-setting argument, the definition of *qualified* with its preference order and the reason for the preference, and the two consequences the build plan carries (the booking step, and the operator-console hour riding along).
+
+(d) **§17** gains one clause: no full WCAG AA claim for the operator console, pointing at §16.1.1.
+
+### ARCHITECTURE.md
+
+**§3.8** gains a bullet stating the operator-console boundary as an *architectural* one, with the two builder consequences: the admin's templates are not forked to chase criteria, and the remedy if the role ever falls to someone the admin excludes is first-party operator pages, never an overlay. **§9's accessibility block** is rewritten to separate continuous from periodic, to give the smoke tests their build home at Step 2.5 and say plainly that they previously had none, and to name the tester. **A new bullet records the axe/`pa11y` decision in full** — including which constraint actually decided it — so it is not re-proposed. **§15 gains item 7**, the four decisions with their dates, in the format items 5 and 6 established.
+
+### BUILD_PLAN.md
+
+**New §0.5, "The standing accessibility checks,"** states the continuous and per-milestone cadences once, next to §0.4's browser matrix, rather than leaving them scattered. **§0.1** gains the `[FOUNDER + TESTER]` label, used exactly once and explained. **§0.3** names the one step that depends on somebody else's calendar. **§2.5** builds the template smoke tests and writes down the scan command; its verification adds them, and its VoiceOver instruction is re-labelled **familiarization, not verification**. **§8.2** says the contrast test is continuous. **§15.2** becomes a five-part statement with the carve-out and the living-document obligation. **New §15.3 [FOUNDER]** books the tester — who, when to start, what to send, what to book, and the standing relationship. **§16.5 is rebuilt**: what should already be true on arrival, six passes with their owners, the operator-console hour as pass 6, writing the claim, and setting the clock for next time. **§17.3** gains **runbook section 13**. **Appendix rule 9** gains the instruction that every step adding a page adds it to the smoke tests' page list.
+
+### README.md
+
+Unchanged apart from the project-version header. §2's invitation — *"if you use a screen reader, magnification, or keyboard-only navigation, your reading of §16 is the most valuable review this project can get"* — needed no amendment; this version is that sentence turned into a build step.
+
 ---
 
 ## 1.21 — 2026-08-17
@@ -245,6 +456,8 @@ v1.15 and remain unsynced to the v1.16 spec changes. See `TODO.md` prompt 09.
 | SPEC.md | changed (file v1.16) |
 | ARCHITECTURE.md | **unchanged since 1.15 (file v1.7) — not yet synced** |
 | BUILD_PLAN.md | **unchanged since 1.15 (file v1.6) — not yet synced** |
+
+**External review — annotation added 2026-08-18, under the scheme introduced in 1.23.** Version 1.16 of README.md, SPEC.md, ARCHITECTURE.md and BUILD_PLAN.md was reviewed by three outside models: **ChatGPT** (8 findings, `1.16_ChatGPT_review.md`, 2026-08-03), **DeepSeek** (27 findings, `1.16_DeepSeek_review.md`, 2026-08-03) and **Kimi** (12 findings, `1.16_Kimi_review.md`, 2026-08-04). All 47 were checked against the document text and triaged into `TODO.md`, which records what happened to each one; the reviews became prompts 01–12 and the versions 1.17 onward. **This changed no document's authority.** Every one of them still said "DRAFT pending founder review" throughout, which is the state that made external review a *CHANGELOG event* rather than a status in the first place. Two calibration notes kept because they cost nothing and are easy to forget: ChatGPT and DeepSeek both certified that no internal contradictions existed, and Kimi then found three, all verified — a reviewer's summary judgment is not evidence; and of the three reviews, only Kimi's had no factually wrong finding in it.
 
 ### SPEC.md
 

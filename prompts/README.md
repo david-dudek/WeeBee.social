@@ -19,18 +19,27 @@ should go, and what each one landed in.
 
 ## Two kinds of session
 
-The project runs two kinds of AI session, and they have opposite rules about the law
-files (SPEC.md, ARCHITECTURE.md, BUILD_PLAN.md, `constants.py`):
+**This now lives in BUILD_PLAN §0.7** (v1.23), which is where a build session will actually
+read it. There are five law files — SPEC.md, ARCHITECTURE.md, BUILD_PLAN.md, CHANGELOG.md
+and `constants.py` — locked during build sessions and directed by the founder during design
+sessions, which is what these prompts are.
 
-- **Build sessions** — driven by a BUILD_PLAN step. The law files are locked, by tool deny
-  rules, a pre-commit hook and a tripwire test (BUILD_PLAN §2.4). An AI that wants to
-  change one must stop and say so.
-- **Design sessions** — these prompts. The founder directs changes to the law files, so the
-  lock does not apply. Each prompt file states this at the top, because a session that has
-  read BUILD_PLAN §0.2 rule 5 will otherwise refuse to edit anything.
+One practical consequence for this folder: a prompt file **no longer has to declare its own
+exemption** from BUILD_PLAN §0.2 rule 5 in its opening paragraph. Naming the files it may
+edit is still worth doing, because it scopes the session; arguing for permission is not.
 
-Prompt 07 exists to write this distinction into BUILD_PLAN itself, since at present it
-lives only here.
+## Where stop notes go (v1.23)
+
+The queue has a second inlet. When a build session hits a wall it prints a **stop note** —
+five fields, BUILD_PLAN §0.7 — and stops without writing any file. It does **not** land
+here. It goes into `../TODO.md`'s stopped-steps table, and it is already self-contained
+enough to open a design session with: it names the step, quotes the sentence in the way,
+says what could not be done, and proposes the smallest fix.
+
+**Write a prompt file only when the question turns out to be bigger than the note** — when
+it touches several sections, reopens a settled decision, or needs the finding-and-evidence
+treatment below. That is the exception. Most stops should be answered from the note itself,
+and a folder that grew a file for every stopped step would be its own kind of failure.
 
 ## Writing a new one
 
