@@ -4,7 +4,7 @@ Tracker for the design conversations still to be held. Each numbered item has a
 self-contained prompt file in `prompts/`, written to be pasted into a **fresh**
 session (BUILD_PLAN §0.2 rule 4: long chats degrade; prompts carry their own context).
 
-**This file was written at project version 1.16; the project is now at 1.20.** Under the
+**This file was written at project version 1.16; the project is now at 1.21.** Under the
 scheme prompt 01 introduced, the version number belongs to the whole project, not to
 individual files.
 
@@ -31,7 +31,7 @@ Status values: `not run` · `in progress` · `done` · `deferred` · `dropped`
 | 02 | [Small corrections & open items](prompts/02-small-corrections.md) | SPEC, ARCHITECTURE, BUILD_PLAN, README | 01 | done | 1.18 |
 | 03 | [Visibility engine performance](prompts/03-visibility-engine-performance.md) | ARCHITECTURE §5, §9 | 01 | done | 1.19 |
 | 04 | [Availability & DDoS posture](prompts/04-availability-and-ddos.md) | ARCHITECTURE §4, §6, §7, §8, §10, §11, §13, §14, §15; BUILD_PLAN §5, §15, §16, §17 | 01 | done | 1.20 |
-| 05 | [Hashtag vocabulary operations](prompts/05-hashtag-vocabulary-operations.md) | SPEC §11.2, §13.5, §13.2, §7.9 | 01 | not run | |
+| 05 | [Hashtag vocabulary operations](prompts/05-hashtag-vocabulary-operations.md) | SPEC §11.2, §13.5, §13.2, §7.9, §14, §17; ARCHITECTURE §4; BUILD_PLAN §10, §13.1, §17.3 | 01 | done | 1.21 |
 | 06 | [Accessibility: regression & the admin](prompts/06-accessibility-regression.md) | SPEC §16, ARCHITECTURE §9, BUILD_PLAN §16 | 01 | not run | |
 | 07 | [How documents change during the build](prompts/07-design-review-mode.md) | BUILD_PLAN §0.2 + §2.4, all four headers, CHANGELOG | 01 | not run | |
 | 08 | [Document boundaries: SPEC vs ARCHITECTURE](prompts/08-document-boundaries.md) | SPEC, ARCHITECTURE | 01 | not run | |
@@ -77,6 +77,13 @@ the same shape of standing item. **09 should not relocate it into a phase.** Eve
 need in the application — `/healthz`, `job_runs`, `check_health` — is already built at Step
 5.7, so the future work is a signup and two monitors, not code.
 
+**New for prompt 09 (from 1.21) — one small sync gap, noticed in passing.** SPEC §13.2 has
+required a **short free-text note to the operator** on profile reports since v1.16, and v1.21
+extends the same form to posts and comments. ARCHITECTURE §4's `reports` row lists *reporter,
+target, category, frozen copy, status, purge-by date* — **no note column**. The `category`
+column was already there (which is why v1.21 needed no schema change for report reasons); the
+note appears to have been missed when §13.2 was written a version later. Check it and add it.
+
 **Do not start Phase 2 of BUILD_PLAN until 09 is done.** `BIO_CHANGE_COOLDOWN_HOURS` and
 `BIO_EDIT_GRACE_MINUTES`, which SPEC §14 marks **retired v1.16**, are still live
 instructions in **five** places: ARCHITECTURE §4 (`profiles`, where they are *columns*),
@@ -112,7 +119,7 @@ one, so no finding is silently dropped and none needs re-litigating.
 | Shared helpers are single points of correctness | ChatGPT 6 | 02 |
 | Visibility engine may issue N×M queries; needs request-scoped caching | ChatGPT 3 | 03 |
 | Cloudflare proxy ban leaves no DDoS mitigation | DeepSeek 9 | 04 — **done in 1.20**; the finding itself was wrong (§13.3 already answered it) but checking it exposed that §7 said nothing about availability at all |
-| Hashtag vocabulary makes the operator a single point of failure | DeepSeek 3 | 05 |
+| Hashtag vocabulary makes the operator a single point of failure | DeepSeek 3 | 05 — **done in 1.21**; the finding was right and **both** proposed fixes were wrong, and both are now recorded as rejected in SPEC §11.2.1 so they do not return as new. The real answers were a good starter list and **search aliases**, which turn a declined synonym into a permanent fix |
 | Accessibility is audited once, never regression-tested | DeepSeek 22 | 06 |
 | Django admin WCAG exception is a hedge, not a decision | DeepSeek 12 | 06 |
 | AI cannot even *propose* a document correction | ChatGPT 2 | 07 |
@@ -173,9 +180,24 @@ where noted. Recorded here so they are not raised again as new.
 
 ### Open questions parked for later
 
-- **`HASHTAG_VOCAB` seed content.** Whatever prompt 05 decides about the approval
-  workflow, the initial vocabulary still has to be written. That is content work, not
-  design work — do it during Phase 10.
+- **`HASHTAG_VOCAB` seed content — still parked, now with a brief (1.21).** Prompt 05
+  settled the workflow; the vocabulary itself still has to be written, and it remains
+  content work rather than design work. It is now a numbered build step, **BUILD_PLAN
+  §10.1a [FOUNDER]**, with the founder's decisions attached: **~300 tags, hand-written
+  (not imported from a public taxonomy), across roughly twenty areas of life, every entry
+  weighted toward things people do with other people offline**, and **each tag's search
+  aliases written at the same desk sitting** — a rejected synonym becomes an alias rather
+  than being lost. SPEC deliberately states no size target (§11.2.1); this is the only
+  place the number lives. Do it during Phase 10.
+- **Can an LLM help draft the vocabulary? (new, parked 2026-08-17.)** The founder's
+  question on adopting aliases. Worth trying: drafting ~300 tags and their synonym sets
+  by hand is the single largest piece of content work in the project. It is **not blocked
+  by SPEC §1.3's "the platform never infers"** — that rule governs what the running
+  platform does with user data, and this is an operator writing a static word list at a
+  desk, with no user, no user data and no inference about anybody. The conditions, so the
+  trial stays honest: **the founder approves every entry**, nothing is loaded unread, and
+  §10.1a's "done when" is the acceptance bar (search ten interests the way five different
+  people would phrase them; land on a tag every time). Recorded in BUILD_PLAN §10.1a.
 - **Constant values as a whole.** README §1 invites review of every cap. No reviewer
   engaged with the numbers. Still open.
 - **README §3's pager question is answered as of 1.20** — *"what does a person who has

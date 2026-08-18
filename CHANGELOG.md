@@ -19,6 +19,64 @@ translation between the old per-file version numbers and these project versions.
 
 ---
 
+## 1.21 — 2026-08-17
+
+| File | Status |
+|---|---|
+| README.md | unchanged — version header only |
+| SPEC.md | changed — §11.2 (new §11.2.1), §7.9, §13.2, §13.5, §14, §17 |
+| ARCHITECTURE.md | changed — §4 only (two table rows: `hashtag_vocab`, `reports`) |
+| BUILD_PLAN.md | changed — Phase 10 header, §10.1, new §10.1a, Phase 10 milestone, §13.1, §17.3 (routine line + new runbook section 12) |
+| CHANGELOG.md | changed — this entry |
+| TODO.md | changed — prompt 05 marked done and its Touches column corrected; the parked vocabulary task rewritten with its decisions; one new parked question; the DeepSeek 3 triage row annotated with its outcome; one new sync item for prompt 09 |
+
+One finding, from prompt 05, and the reviewer was right about the problem and wrong about both cures. DeepSeek's review of 1.16: hashtags are never free-typed, so **the operator is the single point of failure for all hashtag creation** — away for three weeks, nothing gets added; fifty suggestions in a week, fifty manual decisions. *"The exact kind of operational burden that kills solo projects."*
+
+**Why it was worth a version even though curation was never in doubt.** §11.2 said users "may submit new-tag suggestions for operator review (§13.5)" and stopped there. Nothing said how long a suggestion waits, what the submitter is told, what happens to one that is never processed, or what the vocabulary looks like on day one. That silence is expensive **because hashtags are not decoration here**: §11.3 makes a profile hashtag one of three conditions for friend-of-friend visibility and §11.4 makes it the ranking signal on discover, so the vocabulary is the substrate of §1.1's second purpose. A user whose real interest has no tag is not inconvenienced — **they are invisible to precisely the people the platform exists to introduce them to, and nothing tells them that is why.** The load is also front-loaded in the worst way: suggestions peak in the first weeks, when the vocabulary is thinnest and the founder is busiest.
+
+**The answer is content, not machinery, and the section says so in those words.** Most of this problem is solved by a starter vocabulary broad enough that suggesting a tag is the exception rather than the workflow. SPEC deliberately states **no size target** — it is not a cap, nothing enforces it, and a content number in a specification of behaviour would be the only one of its kind; the target lives in BUILD_PLAN Phase 10 where the writing happens. Four founder decisions, all taken in session on 2026-08-17:
+
+1. **Starter vocabulary: ~300 tags, hand-written, across roughly twenty areas of life, every entry weighted toward things people do *with other people, offline*** (§1.1's measure of success). Importing and pruning a public taxonomy was considered and not chosen: taxonomies are built to classify, so they yield abstractions ("Transport", "Philosophy") that make poor interest tags, and pruning one is most of the hand-writing anyway. **The vocabulary is not written in this version** — it is Phase 10 content work, now with a target and a method.
+2. **Search aliases — the change that does the most work.** Every vocabulary entry carries operator-curated synonyms: `#hiking` carries *hikes, rambling, trekking, trail walking*. Searching any of them finds the tag. **Aliases are never displayed, never selectable, and are not tags.** What this buys is not really search quality, it is the **decline path**: the commonest suggestion is a synonym for a tag that already exists, and without aliases declining it teaches nobody anything and the next user types the same word into the same empty result. With them, **the decline is the fix** — a declined suggestion normally becomes a permanent improvement to the picker. That is what stops the queue repeating itself, and it is the largest reduction in operator load in the section.
+3. **A batching rhythm in the runbook, and no interval anywhere near a user.** The vocabulary is read **weekly, in the sitting that already exists** — §17.3's routine is already "read the digest, work the moderation/request queue," and a habit that needs no new habit is the only kind a solo operator keeps. Users are told the *rhythm* and never a time: submissions are read in batches, no reply is sent, an accepted tag simply appears in the picker. **Stating a cadence in the runbook costs an unread queue when it slips; stating one in the product breaks a promise.**
+4. **Tag abuse is reported with a reason on the existing report action**, not through a new channel — see below.
+
+**The two proposed cures are recorded in-document as rejected, per README's house rule** (§11.2.1, in the style of §4.5's rejected-uniqueness entry), so they do not arrive again as new. *"Auto-approve after three users suggest the same tag"* creates synonym fragmentation **automatically** — three people suggesting #hiking, #hikes and #trail walking are one interest arriving three times — removes the abuse screen at a bar of three coordinated accounts on a network where everyone holds invites, and would need its count kept off every user-facing surface (§17). Aliases are the version of that idea that works: repeated synonym suggestions are exactly the signal an alias is missing, and the operator acts on it without a new tag existing. *"Allow free-typed tags that only match if they are in the vocabulary"* is a text field that accepts input and silently does nothing — worse than a refusal, because the user believes they have tagged their post — and it reintroduces free text on a surface that carries none (§13.1).
+
+**What is named as an accepted cost rather than solved (§7.8's model).** The operator remains a single point of failure and stays one; no mechanism removes that without giving up curation. It is survivable because of the *shape* of the load, not optimism: **a frozen vocabulary delays a new interest, it never breaks an existing one.** Every tag already on a profile keeps working, every §11.3 gate keeps evaluating live, discovery is unchanged for everyone already tagged. Three weeks away costs some new users some matches, later than they would have had them. Stated plainly, in both SPEC and the runbook.
+
+**The one genuinely new requirement — reporting a tag that does not belong — turned out to need no new pipeline.** Founder-directed, following v1.18's settling of §11.3 on *any* shared tag: a post carrying ten tags reaches more friends-of-friends than one carrying one, which the founder accepts as correct and asked be reportable when abused. Three things made it small. **The vocabulary already bounds the abuse** — tags are never free-typed, so nobody invents `#freemoney`; the abuse available is **irrelevance**, over-tagging with real interests. **The reporter is a specific person on a specific surface** — the FoF who got the post *because* of the match, told so by §7.9's stated-visibility line — so the affordance belongs beside that line, and §7.9 says so without changing the line by one word. And **the report record already had somewhere to put it**: ARCHITECTURE §4's `reports` table has carried a `category` column all along.
+
+Which exposed a drafting accident worth naming: **§13.2 gave *profile* reports a target category and a note in v1.16, while post and comment reports still carried only reporter, target and frozen copy** — so the operator opened a queue item with no idea what they were being asked to look at. That asymmetry was order-of-writing, not a decision. **v1.21 makes it one form, always carrying a reason**, with *the tags don't match this post* as one value among the ordinary ones. A §13.5 form category was the smaller-looking alternative and is **recorded as rejected**: it needs no build at all, but it makes the reporter leave the post and describe it from memory, it captures **no frozen copy** — and tags are editable (§7.8), uniquely able to change who can see a post, so evidence without a freeze can be edited away before the operator looks — and it would put one complaint into one queue in two shapes depending on how the user arrived. Two things are forbidden by name rather than left unbuilt: **no per-tag report count anywhere**, users' side or operator's ("a tag is not a thing that can be in trouble; a post is, and a person is"), and **no automated detection of irrelevant tagging**, on §13.2's own cost/benefit reasoning — relevance has no threshold, and a detector would misfire on the eclectic post, which on a platform for friends is most of the good ones.
+
+**§17 gains a clause rather than an exception.** The picker searches a list, so the "no global search" rule had to be shown intact rather than assumed: querying `HASHTAG_VOCAB` returns **no person and no post**, and the same result goes to every user including one with no friends at all. Recorded the way §17 already handles the friend-list filter — which is admitted on a *different* ground, since it does search real people, but only the viewer's own 300.
+
+### SPEC.md
+
+(a) **§11.2 keeps its bullets unchanged and gains §11.2.1**, "The vocabulary as an operational commitment" — the starter-vocabulary argument and why no size is stated here, aliases and what they do to the decline path, the honest empty result and its §17 check, what the submitter is told, and the accepted cost of an absent operator.
+
+(b) **§7.9** gains "Reporting a tag that does not belong," placed after the No-Reach paragraph: why irrelevance is the only abuse the vocabulary leaves available, why the affordance belongs beside the visibility line, and three bullets on what it does not become (the line unchanged, no per-tag count, no automated detection).
+
+(c) **§13.2** gains "Every report carries a reason," ahead of the v1.16 profile-report paragraph it corrects the asymmetry with, including the frozen-copy argument and the rejected §13.5 alternative. **§13.5** gains "What the submitter is told," and its hashtag-suggestion bullet now names the alias outcome as the commonest one.
+
+(d) **§14's `HASHTAG_VOCAB` row** records the aliases and states that no size target lives in SPEC. **§17's** no-global-search clause names the vocabulary search as not being one, with the reason.
+
+### ARCHITECTURE.md
+
+Two rows in §4, and nothing else — this version is a product decision, not an architectural one. **`hashtag_vocab`** gains search aliases, with the storage call recorded (on the row, not a table of their own: they have no identity apart from their tag and nothing queries them but that one search) and the three prohibitions restated where a builder will meet them (never rendered, never selectable, never joined to `profile_hashtags` or `post_hashtags`). **`reports`** records what its existing `category` column now carries, that v1.21 changed only which reports populate it, and that **no index or aggregate counts reports per hashtag**.
+
+### BUILD_PLAN.md
+
+**§10.1** specifies alias search and makes the empty result a built state rather than a leftover — honest text plus the suggestion link, never a text field that accepts a tag and fails to create one. **New §10.1a [FOUNDER]** is the starter vocabulary itself, with the ~300 target, the twenty areas, the offline-weighting rule, the write-aliases-as-you-go instruction, and a "done when" that tests the thing that matters: search each of ten interests the way five different people would phrase them and land on a tag every time. Phase 10's header becomes "[AI, with one FOUNDER content step]" and its milestone gains the picker checks. **§13.1** takes the report reasons and the placement rule, and says in terms that the column already exists so this is a form and a list of values, not a migration. **§17.3** adds **runbook section 12**, the weekly vocabulary pass — read as a batch because the batch is what makes synonym clusters visible, three outcomes in order of frequency, no reply ever sent, and the reminder that being away is survivable. The weekly routine line now names the suggestions.
+
+**One question parked rather than answered**, recorded in §10.1a and TODO.md: **whether an LLM can draft candidate tags and alias sets for the founder to approve.** Worth trying, and it is **not** blocked by §1.3's "the platform never infers" — that rule governs what the running platform does with user data, and this is an operator writing a static word list at a desk, with no user and no user data anywhere in it. The conditions are written down so the trial stays honest: the founder approves every entry, nothing is loaded unread, and §10.1a's offline-weighting test is the acceptance bar.
+
+### README.md
+
+Unchanged apart from the project-version header. Nothing here changes what is or is not open to review.
+
+---
+
 ## 1.20 — 2026-08-17
 
 | File | Status |
