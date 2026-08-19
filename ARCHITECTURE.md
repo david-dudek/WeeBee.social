@@ -1,6 +1,6 @@
 # Architecture & Technology Stack — WeeBee
 
-**Project version:** 1.26 · 2026-08-18 · DRAFT — not yet founder-approved
+**Project version:** 1.27 · 2026-08-18 · DRAFT — not yet founder-approved
 **This file last changed in:** 1.26 (Decision 4 and §5 gain `can_see_comment` — a block makes the comment audience a strict subset of the post audience, so comment lists and reaction lines are engine-owned; §4's `comments` and `reactions` entries note it; §9 gains the test case; §15 gains item 9)
 **History:** see [CHANGELOG.md](CHANGELOG.md)
 **Companion to:** SPEC.md v1.15 (deliverable b per SPEC §18)

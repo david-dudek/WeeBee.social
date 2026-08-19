@@ -43,7 +43,7 @@ Status values: `not run` · `in progress` · `done` · `deferred` · `dropped`
 | 08 | [Document boundaries: SPEC vs ARCHITECTURE](prompts/08-document-boundaries.md) | SPEC, ARCHITECTURE, BUILD_PLAN | 01 | done | 1.24 |
 | 10 | [Reactions: look, lifecycle, expiry](prompts/10-reactions.md) | SPEC §8.2, §7.6, §9.7, §14; ARCHITECTURE §4, §6 | 01 | done | 1.25 |
 | 11 | [Three internal contradictions in SPEC](prompts/11-spec-contradictions.md) | SPEC §9.1/§5.2, §7.9, §8.1, §8.2, §12.3, §7.5.1, §4.8; ARCHITECTURE Decision 4, §5, §9, §15 | 01 | done | 1.26 |
-| 12 | [What a ban actually does](prompts/12-moderation-outcomes.md) | SPEC §13.2, §4.7, §12 | 01 | not run | |
+| 12 | [What a ban actually does](prompts/12-moderation-outcomes.md) | SPEC §13.2 (new §13.2.1), §4.7, §4.8, §9.3, §12.1, §13.4 | 01 | done | 1.27 |
 | 09 | [The sync: ARCHITECTURE + BUILD_PLAN to current SPEC](prompts/09-sync-arch-and-buildplan.md) | ARCHITECTURE, BUILD_PLAN | **02–08, 10–12** | not run | |
 
 **Run 09 last.** Prompts 02–08 and 10–12 may each amend SPEC and ARCHITECTURE; syncing
@@ -118,6 +118,34 @@ instructions in **five** places: ARCHITECTURE §4 (`profiles`, where they are *c
 ARCHITECTURE §4 (`rate_counters`), ARCHITECTURE **§7.1** (inside a security argument — §7 was subdivided in 1.20, and the retired constants are in the first subsection),
 BUILD_PLAN §8.1, and BUILD_PLAN §13.4. A build session following those files today would
 write the wrong mechanism. This file previously named only two of the five.
+
+**New for prompt 09 (from 1.27) — one new prompt section, and the answer to the question
+prompt 12 was told to settle.** Prompt 12 defined the three moderation outcomes in a new
+SPEC §13.2.1 and **wrote nothing to ARCHITECTURE or BUILD_PLAN**, on the 1.19/1.25/1.26
+precedent. Everything it hands over is written out as **§Q of
+`prompts/09-sync-arch-and-buildplan.md`**.
+
+- **Yes, ARCHITECTURE needs an account-state column** — this was the open question the prompt
+  asked to have settled here. ARCHITECTURE §4's `users` row lists *"deactivation/deletion-grace
+  state"* and nothing else; it needs a **banned flag with the date of each ban and each
+  reversal**. The constraint that matters is not the column but where it is read: **a banned
+  account is invisible by the same route a deactivated one is**, so this is one more input to
+  the visibility engine (§5), never a second hiding path. A builder who writes a parallel
+  "hide banned users" filter has defeated Decision 4 in exactly the way 1.26's missing
+  `can_see_comment` did.
+- **A `warnings` table does not exist and SPEC §13.4 now requires one** — date, account,
+  operator text, originating report. This is the **second** thing 09 must add to a moderation
+  table; the missing `note` column on `reports` (from 1.21, above) is the other, and they
+  should land together.
+- **Four BUILD_PLAN places, one of which has no step at all.** Step 13.3 (the console's
+  ban/warn actions, per-account and never a bulk list action), Step 14.2 (`inactivity_sweep`
+  gains two branches for a banned account), Step 14.4 (export stays reachable from a banned
+  session — the reason the login is not refused), and **the banned-session middleware, which
+  no step anywhere describes.** That last one is the likely miss: everything else on the list
+  is a column or a form.
+- **One rule that is not about banning.** SPEC §4.7 now states that an outstanding invitation
+  cannot be redeemed while the sending account is invisible. That has always been true of
+  deactivation and was never written down; invite redemption and Step 14.1 both need it.
 
 **New for prompt 09 (from 1.26) — three items, all itemized in the prompt file.** Prompt 11
 resolved three SPEC contradictions and amended ARCHITECTURE §5 where one of them required it;
@@ -372,7 +400,7 @@ reviewer's summary judgment is not evidence.
 | 5 | §4.7 "full erasure" ignores the 30-day backup window | duplicate of DeepSeek 10 | 02 item 12 — sharpens the target to §4.7 |
 | 6 | `friend_requests` lacks snapshot columns | new to the reviews | already covered by 09 §G |
 | 7 | `images` lacks a gallery-order column | new | 09 §K |
-| 8 | "Ban" (and "warn") never defined, §13.2 | new | 12 |
+| 8 | "Ban" (and "warn") never defined, §13.2 | new | 12 — **done in 1.27**, and the reviewer named only half of it: *warn* was undefined in the same sentence and had no delivery channel in §12 either. New SPEC **§13.2.1**: a ban is **§4.7's deactivation done to a person**, content **hidden and never deleted** (§7.6's principle read in the mirror — a judgment about one person may not destroy the other half of somebody else's conversation), **reversible but lossily** (hidden content keeps expiring), with the **session made inert rather than the login refused**, because export and erasure are data rights a moderation outcome does not cancel. A warning is an **email plus a record**; an in-feed notification type was **rejected, not deferred**. Invite tree still attaches nothing (confirmed, not re-derived). ARCHITECTURE and BUILD_PLAN side is 09 §Q |
 | 9 | The founder cannot interpret a screen reader | extends DeepSeek 17, 22 | 06 item 5 — **done in 1.22**. SPEC §16.5.1 defines *qualified* (a daily screen-reader user, paid, before a professional auditor) and BUILD_PLAN §15.3 books the person from Phase 13 — the decision's real cost was scheduling, not wording |
 | 10 | Tripwire paradox; guards are tool-specific | extends DeepSeek 16 | 07 item 8 — **done in 1.23**. Both halves were right. §2.4 now defines the legitimate cap-raising sequence (SPEC §14 → `constants.py` → tripwire → checksums, one founder commit, `--no-verify`) and makes a constants failure at any other time a real alarm; and it says plainly that guard 1 does not survive a change of tool, guard 2 does not survive `--no-verify` or a fresh clone, and **layer 4 is what is actually being relied on** |
 | 11 | Reactions on pinned posts never expire | new | 10 — **done in 1.25**; the finding was right on every factual point. A reaction now expires 90 days after it was last set, on a clock of its own (SPEC §8.2.1), and SPEC §9.7 names reactions on the expiring side. Checking it settled the five things §8.2 had never said: where a reaction renders, what the picker is, that a reaction on a comment is invisible to the post's author, that changing one never re-notifies, and that a retired `REACTION_SET` phrase needs no migration **because** reactions expire |

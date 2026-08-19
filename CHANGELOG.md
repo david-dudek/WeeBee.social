@@ -105,6 +105,68 @@ no other trace.
 
 ---
 
+## 1.27 — 2026-08-18
+
+| File | Status |
+|---|---|
+| README.md | changed — version header only; no content change |
+| SPEC.md | changed — new §13.2.1 defines the three moderation outcomes; §4.7 gains the invisible-account invite rule; §4.8 gains the banned-account sweep adjustments; §9.3's enumeration, §12.1's "everything else" list and §13.4 follow |
+| ARCHITECTURE.md | **unchanged** — version header only. §4's `users` row needs a moderation-state column and there is no `warnings` table; both are prompt 09's, itemized below |
+| BUILD_PLAN.md | **unchanged** — version header only. No new phase; Steps 13.3, 14.2 and 14.4 need work and one middleware has no step at all, all of it prompt 09's, itemized below |
+| CHANGELOG.md | changed — this entry |
+
+From prompt 12, on a third external reviewer's finding against v1.16 §13.2. Verified before anything was written: §13.2's whole workflow clause is *"the operator reviews and acts manually (delete content, warn, or ban an account)"*, and of those three only the first is defined anywhere in the document. The reviewer named the ban; **the warning was undefined in the same sentence and in the same way**, with no delivery channel and no entry in §12's notification types. Both are defined here.
+
+The reviewer's own statement of the cost is the reason this was worth a session: *"you have a button in the admin panel labeled 'Ban,' but no document tells the builder what that button is supposed to do. Different AI models will guess differently."*
+
+### What a ban is, in one sentence
+
+**§4.7's deactivation, done to a person rather than chosen by them, with the session made inert and no clock running.**
+
+That is the whole of the mechanism, and it is deliberately not a new one. The platform already had four adjacent account states — deactivation, deletion, dormancy, blocking — and the question was never what to build but **which existing thing a ban reuses.** Deactivation already hides an account and all of its content everywhere, reversibly; §9.3 already answers a barred viewer with one indistinguishable response; §12.2 already renders from current state, so notifications naming a hidden person drop out on their own. A ban needed none of that written twice.
+
+### The three decisions that were not obvious
+
+**1. Hidden, not deleted — and the reason is §7.6's principle read in the mirror.** §7.6 says an author *"may preserve their own words indefinitely, and may never preserve anyone else's."* The ban case is its reflection: **nor may a judgment about one person destroy the other half of somebody else's conversation.** Deleting a banned account's comments would take half of every exchange they had, on the posts of up to 300 people, none of whom were judged. Hiding delivers everything a ban actually needs — the words are gone from view, no more can be added — and costs nothing, because the mechanism exists. The operator who needs one specific item *gone* still has the delete-content outcome, and the two compose. §13.2.1 also states, for the first time, that delete-content **does** destroy other people's words (a deleted post takes its comments, §7.5) and that the bounded collateral is exactly what makes it a scalpel rather than the general tool.
+
+**2. The session is inert; the login is not refused.** This is the one place the prompt's suggested answer was argued with rather than adopted. "Blocked outright is the obvious answer" — but blocking the login is the same screen with the data rights taken out of it: a correct password already reaches a page saying the account is suspended, whether or not the platform calls that a login. The real question is whether that page also carries **export (§4.9) and account deletion (§4.7)**, and §15.1 answers it: those are data rights, and a moderation outcome does not cancel them. Refusing the login would move every future data request from a banned person to an off-platform identity check the operator is worse at than the login form is. So: authentication succeeds, authorization is empty, exactly two paths work, and the check runs per request so an open session goes inert on its next page load. The notice states the fact plainly and **names no reason** — a reason line would promise a consistency the deferred policy cannot keep.
+
+**3. Warnings are email, and the in-feed notification type was rejected rather than deferred.** The prompt gave permission to split this out if it needed a new notification channel. It does not need one, and saying why was cheaper than deferring it. **A warning is an account notice**, in the family of §4.8's inactivity warnings and §4.6.1's security events — all system-to-user, all email, none of them in the feed. An in-feed type would make the feed a surface the operator speaks on, would need its own coalescing, read-state and wording rules, and would reach only a user who logs in, which is the wrong set. The honest residual is stated rather than engineered around: **email is not proof of reading, and v1 requires none** — a warning that must be acknowledged is a workflow, and workflows are what §13.2 defers. §12.1's list names the warning email; nothing else in §12 changes.
+
+Three smaller things a warning needed: it **never identifies the reporter** (a warning naming who complained makes reporting dangerous, and reporting is the whole of §13.1's third layer); it **is recorded against the account** — date, text sent, originating report, because *"we warned them twice"* is the ordinary basis for a later ban and nothing stored it before; and it **is not subject to §12's optional-email setting**, which governs social notifications, on the position §4.8's and §4.6.1's mails already occupy. A warning a user can switch off is not a warning.
+
+### The questions that had no interesting answer, answered anyway
+
+- **Reversible, and reversal is lossy.** Lifting a ban restores everything still there; **hidden content keeps expiring on its ordinary 90-day clock**, because the expiry job does not consult visibility. A ban lifted after four months restores an account with no posts in it, and pending friend requests (90 days) and unredeemed invites (14) are gone the same way. **The operator is told this at the moment of banning**, in the confirmation, rather than discovering it at the reversal. The record survives the reversal, so a second ban reads as a second event.
+- **Never a bulk list action.** Django's admin gives a select-rows-and-choose-action dropdown for free, and select-all-then-ban is the mistake one tired operator makes once. Banning lives on the account's own page, behind a confirmation that names the account and states what a reversal cannot restore.
+- **Friendships, groups and the contact card are untouched** — dissolving them would make "reversible" false. One consequence written down rather than left to be discovered: a hidden friendship still occupies a slot against `FRIEND_CAP`, so a user can meet the cap while seeing fewer than 300 names. Not new (a deactivated friend has always done this), leaks nothing about who, and nobody is near the cap at this scale — but a builder needs the answer.
+- **The invite tree still attaches nothing, confirmed rather than re-derived.** §4.3 records ancestry for forensics and defers accountability; §17 keeps it parked. A ban is the event that recording was for, so this was the moment to confirm: **the tree exists so a human can look, not so the system can act.** No inviter's budget moves in either direction — reducing it punishes one person for another's conduct; refunding it attaches a consequence in the generous direction, which §4.3 rules out just as firmly.
+- **A ban never becomes a deletion on a clock of its own.** Content expires at 90 days, the account goes at §4.8's 730-day sweep, and that is the end. Said explicitly because a builder will otherwise wonder whether to purge sooner.
+- **Nothing about a ban is visible to anyone else.** No marker, no tombstone, no explained absence — §7.6's reasoning about expired comments on a pinned post, unchanged. §9.3's enumeration now names the banned case so the identity of those five responses is a requirement rather than an inference.
+
+### One consequence noticed here that is not about banning at all
+
+**An outstanding invitation cannot be redeemed while the account that sent it is invisible.** §4.1 auto-friends inviter and invitee, so an invite completing under a hidden account produces a brand-new member whose only friend is invisible: no friend-of-friend path to anyone, nobody who can see them, no way to be found. That is a property of **invisibility**, not of banning — **deactivation (§4.7) has always had it and never said so.** The rule is therefore stated once in §4.7, on §4.1's existing expiry-and-return-to-budget path, and §13.2.1 inherits it. This is the session's one edit outside the moderation sections, and it is recorded as a gap that was found rather than a decision that was made.
+
+### Constraints held
+
+**Policies and appeals stay deferred**, and §13.2.1 says so in its first paragraph: it defines what the outcomes *do*, never what selects one. **Nothing here is a workflow, a state machine or a queue** — the ban is one reversible flag reusing an existing hiding mechanism, and the warning is an email plus a row. **The data rights survive and the export path is reachable**, which is decision 2 above and the reason the login was not refused. **No public signal**: §9.3 and §7.6 already forbade it and are cited rather than restated.
+
+**No new constant.** §14 is untouched, and deliberately: every duration a ban depends on — 90 days of content, 14 of an invite, 30 of a deletion grace, 730 of the sweep — is one the document already had.
+
+### What is left for prompt 09
+
+Nothing was written to ARCHITECTURE or BUILD_PLAN here. Three items, now itemized in `prompts/09-sync-arch-and-buildplan.md`:
+
+- **ARCHITECTURE §4, the `users` row.** It lists *"deactivation/deletion-grace state"* and has no moderation state. A **banned flag plus the dates of each ban and each reversal** is needed, and it must be a state the visibility engine reads — a banned account is invisible by the same route a deactivated one is, so this is one more input to §5, not a second hiding mechanism. **Do not let a builder invent a second one.**
+- **ARCHITECTURE §4, a `warnings` table.** Date, account, operator text, originating report. It does not exist and §13.4 now requires it. Note that this is the *second* thing 09 has to add to a moderation table — the missing `note` column on `reports` (from 1.21) is already in its list.
+- **BUILD_PLAN, four named places.** **Step 13.3** already says the console has *"act-on actions (delete content / warn / ban)"* and now has to say what they do, carrying two constraints that belong in the step rather than in prose: **ban is a per-account action and never a bulk list action** (SPEC §13.2.1 point 10), and its confirmation states what a reversal cannot restore. **Step 14.2** builds `inactivity_sweep`, which now has two branches for a banned account — last-login not refreshed by a banned sign-in, and two of the four warning emails suppressed. **Step 14.4** builds the export, which must stay reachable from a banned session. And the **banned-session check itself is one middleware with no step anywhere** — 09 decides whether it belongs to the authentication phase or to Phase 14, and it is the piece most likely to be missed, because every other item on this list is a column or a form.
+
+### Working files (outside the record)
+
+`TODO.md`: prompt 12 marked done at 1.27, and the three prompt-09 handovers above recorded in the queue notes — including the answer to the question the prompt asked to be settled here, which is **yes, ARCHITECTURE needs an account-state column.** `prompts/09-sync-arch-and-buildplan.md`: a new **§Q** carrying the three items.
+
+---
 ## 1.26 — 2026-08-18
 
 | File | Status |

@@ -318,9 +318,9 @@ SPEC §8.2–§8.2.3 and ARCHITECTURE §15 item 8 first; this list is the map, n
 ### M. Everything prompts 02–08, 10, 11 and 12 decided
 
 Fold in whatever those sessions added — the availability and monitoring work from prompt
-04 is likely the largest, and prompt 12's ban definition needs an account state, an
-admin action and a decision about existing content. Read CHANGELOG.md rather than trusting
-this list. (Prompts 03 and 10 are already itemized in §N and §O above.)
+04 is likely the largest. Read CHANGELOG.md rather than trusting this list. (Prompts 03,
+10, 11 and 12 are already itemized in §N, §O, §P and §Q; prompt 12's ban definition landed
+in 1.27 and its handover is §Q, so it no longer needs reconstructing from here.)
 
 ### P. Email carries no *relative* age — the rule was narrowed (from prompt 11, landed in 1.26)
 
@@ -337,6 +337,62 @@ Rewrite the clause to say **no relative age**, and name the two things that do c
 absolute time. Check while there that no other step repeats the old wording; a grep for
 "no timestamp" over BUILD_PLAN and ARCHITECTURE is the check (ARCHITECTURE was clean at
 1.26, and its §4 time-helper paragraph already states the two exceptions correctly).
+
+
+### Q. What a ban and a warning are (from prompt 12, landed in 1.27)
+
+SPEC gained **§13.2.1**, which defines the three moderation outcomes §13.2 had only named.
+Read it before writing any of this; the summary below is a checklist, not the rule.
+
+**The one-sentence version:** a ban is **SPEC §4.7's deactivation, done to a person rather
+than chosen by them, with the session made inert and no clock running.** Content is
+**hidden, never deleted**. It is **reversible**, and reversal does not restore anything that
+expired while hidden.
+
+**ARCHITECTURE §4, the `users` row.** It currently lists *"deactivation/deletion-grace
+state"* and carries no moderation state. Add a **banned flag with the date of each ban and
+each reversal**. The load-bearing constraint: **this is one more input to the visibility
+engine (§5), not a second hiding mechanism.** A banned account is invisible by the same
+route a deactivated one is, and a builder who writes a parallel "hide banned users" path
+has created two places where visibility is decided, which is Decision 4 defeated exactly as
+1.26's missing `can_see_comment` defeated it. No new engine function is needed — the
+account-state input the engine already consults simply has one more value.
+
+**ARCHITECTURE §4, a `warnings` table.** Date, account, the operator's text, and the report
+it arose from where there was one. SPEC §13.4 now requires the record; nothing holds it
+today. Note this is the **second** addition to a moderation table on this prompt's list —
+the missing `note` column on `reports` (from 1.21, in the TODO notes) is the other, and both
+should land in one pass.
+
+**BUILD_PLAN, four places.**
+
+1. **Step 13.3** already says the console has *"act-on actions (delete content / warn /
+   ban)"*. It now has to say what they do. Two constraints belong **in the step**: ban is a
+   **per-account action and never a bulk list action** (SPEC §13.2.1 point 10 — Django's
+   admin hands you a select-rows dropdown for free and that is precisely the fat-finger),
+   and the confirmation must **state what a reversal cannot restore**.
+2. **Step 14.2** (`inactivity_sweep`) gains two branches for a banned account: a banned
+   sign-in **does not refresh the last-login date**, and **two of the four warning emails
+   are suppressed** — the 180/365 dormancy notes go, the 670/700 deletion warnings stay
+   (SPEC §4.8, §13.2.1 point 8).
+3. **Step 14.4** (data export) must stay **reachable from a banned session**. This is not a
+   nicety: it is the reason SPEC §13.2.1 does not refuse the login at all (SPEC §4.9,
+   §15.1).
+4. **The banned-session check has no step anywhere, and it is one middleware.** Authentication
+   succeeds; authorization is empty except for export, account deletion and the notice page;
+   the check runs **per request**, so an already-open session goes inert on its next page
+   load and nothing has to reach into the session table at ban time. Decide whether this
+   belongs to the authentication phase or to Phase 14 and give it a step. **This is the item
+   most likely to be missed**, because every other thing on this list is a column or a form.
+
+**One rule that is not about banning at all.** SPEC §4.7 now states that **an outstanding
+invitation cannot be redeemed while the account that sent it is invisible** — voided on the
+existing expiry-and-return-to-budget path of SPEC §4.1. This has always been true of
+deactivation and was never written down. Whichever step builds invite redemption has to
+check the sender's state, and the deactivation step (14.1) has to void.
+
+**Nothing here needs a constant.** SPEC §14 was deliberately untouched in 1.27; every
+duration a ban depends on already existed.
 
 ---
 
