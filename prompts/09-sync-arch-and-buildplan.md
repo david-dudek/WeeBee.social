@@ -153,6 +153,16 @@ ARCHITECTURE §4 needs the snapshot fields (including a stored copy of the image
 pointer to the live one), and ARCHITECTURE §6 plus BUILD_PLAN §14 need the expiry job.
 This is a new cron job and a new data-retention path — treat it as such.
 
+**Constrained by prompt 11 (1.26) — read SPEC §9.1's field table before writing the
+columns.** The snapshot is **the profile photo and the short bio, and nothing else.** The
+display name, the shared hashtags, the mutual friends and the report action all render
+**live**, and snapshotting any of them would break SPEC §4.5.1 (names are never stored on
+content) or leave a mutual-friends line SPEC §5.4 cannot empty. SPEC §9.1 now states that
+list explicitly and calls it a security boundary; the same section also settles what
+"render from one component" means — **one template and one field set, fed from either live
+rows or the snapshot** — so the card component and the profile's basic tier stay one piece
+of code without the card losing its freeze.
+
 ### H. Pinned posts (SPEC §7.6, §9.1 (d))
 
 A pinned post displays its age, stays open for new comments, and those comments expire on
@@ -204,12 +214,32 @@ engine, because it removes an enumerable disclosure.
 
 Prompt 11 settles a SPEC contradiction with a direct consequence here: a block makes the
 comment audience a **strict subset** of the post audience (§5.4), so comment visibility is
-not the same question as post visibility. ARCHITECTURE §5 lists `can_see_post`,
-`can_see_profile_tier` and `can_act` — there is no `can_see_comment`, which means every
-template rendering a comment is either doing the block check itself or not doing it at all.
-That is exactly the "one visibility engine" rule being quietly broken. Implement whatever
-prompt 11 decided, and add the case to Phase 4.2's test suite; read CHANGELOG.md for the
-wording it settled on rather than assuming.
+not the same question as post visibility. When this prompt was written, ARCHITECTURE §5 listed `can_see_post`,
+`can_see_profile_tier` and `can_act` and **no** `can_see_comment`, which meant every
+template rendering a comment was either doing the block check itself or not doing it at all.
+That is exactly the "one visibility engine" rule being quietly broken.
+
+**Settled in 1.26; ARCHITECTURE is already done, so this item is BUILD_PLAN only.** SPEC
+§8.1 now reads *"visible to the people who can see the post, minus anyone blocked in either
+direction with the comment's author — never more."* ARCHITECTURE Decision 4 has gained
+`can_see_comment(viewer, comment)`, §5.1 explains why comments and reactions are narrower
+questions than the post's, §5.4's list of engine-owned querysets now includes the comment
+list and the reaction line, and §9 carries the test case. Three things follow in
+BUILD_PLAN:
+
+- **Step 4.1** lists "the five functions of ARCHITECTURE Decision 4" by name. There are
+  now **six**; add `can_see_comment` to the list.
+- **Step 4.2** gains the case that fails: **a comment a block hides on a post both parties
+  can see.** Every post-level test passes while that comment leaks, which is why it is
+  named rather than left to "blocks" in general.
+- **Step 7.1** (comments) should say that the comment list's queryset comes **from the
+  engine**, exactly as §N.3 says it for the feed — a template looping `post.comments.all()`
+  is the defect, and it renders correctly for everyone who is not blocked.
+
+**No `can_see_reaction`, deliberately.** A block must remove a reaction already given from
+its recipient's view, but a reaction's audience is one person, so the block empties the
+line rather than narrowing it. ARCHITECTURE §15 item 9 records this so it is not "fixed"
+later as an oversight.
 
 ### N. The visibility engine's performance rules (handed over from prompt 03, landed in 1.19)
 
@@ -291,6 +321,22 @@ Fold in whatever those sessions added — the availability and monitoring work f
 04 is likely the largest, and prompt 12's ban definition needs an account state, an
 admin action and a decision about existing content. Read CHANGELOG.md rather than trusting
 this list. (Prompts 03 and 10 are already itemized in §N and §O above.)
+
+### P. Email carries no *relative* age — the rule was narrowed (from prompt 11, landed in 1.26)
+
+**BUILD_PLAN Step 12.5 is now wrong, and wrong in the way that matters.** It says
+*"**Emails carry no timestamp at all** (SPEC §12.3) — a relative age computed at send time
+is false by the time the mail is read, and the mail client already stamps it."* SPEC §12.3
+was narrowed in 1.26: what email may not carry is a **relative age**. An absolute timestamp
+does not decay, and SPEC §7.5.1's two exceptions hold in email exactly as they hold on a
+page. A builder following Step 12.5 as written strips the absolute time out of a
+security-event mail (SPEC §4.6.1) and the deletion date out of an inactivity warning
+(SPEC §4.8), which makes the warning useless — the collision that forced the fix.
+
+Rewrite the clause to say **no relative age**, and name the two things that do carry an
+absolute time. Check while there that no other step repeats the old wording; a grep for
+"no timestamp" over BUILD_PLAN and ARCHITECTURE is the check (ARCHITECTURE was clean at
+1.26, and its §4 time-helper paragraph already states the two exceptions correctly).
 
 ---
 

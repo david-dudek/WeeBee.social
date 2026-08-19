@@ -4,7 +4,7 @@ Tracker for the design conversations still to be held. Each numbered item has a
 self-contained prompt file in `prompts/`, written to be pasted into a **fresh**
 session (BUILD_PLAN §0.2 rule 4: long chats degrade; prompts carry their own context).
 
-**This file was written at project version 1.16; the project is now at 1.24.** Under the
+**This file was written at project version 1.16; the project is now at 1.26.** Under the
 scheme prompt 01 introduced, the version number belongs to the whole project, not to
 individual files.
 
@@ -42,7 +42,7 @@ Status values: `not run` · `in progress` · `done` · `deferred` · `dropped`
 | 07 | [How documents change during the build](prompts/07-design-review-mode.md) | BUILD_PLAN §0.2 + §2.4, all four headers, CHANGELOG | 01 | done | 1.23 |
 | 08 | [Document boundaries: SPEC vs ARCHITECTURE](prompts/08-document-boundaries.md) | SPEC, ARCHITECTURE, BUILD_PLAN | 01 | done | 1.24 |
 | 10 | [Reactions: look, lifecycle, expiry](prompts/10-reactions.md) | SPEC §8.2, §7.6, §9.7, §14; ARCHITECTURE §4, §6 | 01 | done | 1.25 |
-| 11 | [Three internal contradictions in SPEC](prompts/11-spec-contradictions.md) | SPEC §9.1/§5.2, §8.1/§5.4, §4.6.1/§12.3; ARCHITECTURE §5 | 01 | not run | |
+| 11 | [Three internal contradictions in SPEC](prompts/11-spec-contradictions.md) | SPEC §9.1/§5.2, §7.9, §8.1, §8.2, §12.3, §7.5.1, §4.8; ARCHITECTURE Decision 4, §5, §9, §15 | 01 | done | 1.26 |
 | 12 | [What a ban actually does](prompts/12-moderation-outcomes.md) | SPEC §13.2, §4.7, §12 | 01 | not run | |
 | 09 | [The sync: ARCHITECTURE + BUILD_PLAN to current SPEC](prompts/09-sync-arch-and-buildplan.md) | ARCHITECTURE, BUILD_PLAN | **02–08, 10–12** | not run | |
 
@@ -118,6 +118,25 @@ instructions in **five** places: ARCHITECTURE §4 (`profiles`, where they are *c
 ARCHITECTURE §4 (`rate_counters`), ARCHITECTURE **§7.1** (inside a security argument — §7 was subdivided in 1.20, and the retired constants are in the first subsection),
 BUILD_PLAN §8.1, and BUILD_PLAN §13.4. A build session following those files today would
 write the wrong mechanism. This file previously named only two of the five.
+
+**New for prompt 09 (from 1.26) — three items, all itemized in the prompt file.** Prompt 11
+resolved three SPEC contradictions and amended ARCHITECTURE §5 where one of them required it;
+**BUILD_PLAN was deliberately left alone**, on the 1.19 and 1.25 precedent. Two of the three
+are **errors rather than gaps**, in the sense §A uses — a build session following BUILD_PLAN
+today writes the wrong thing:
+
+- **Step 12.5** repeats *"Emails carry no timestamp at all"*. SPEC §12.3 was narrowed to
+  **relative** ages, because the old wording collided with SPEC §4.6.1 and would have stripped
+  the deletion date out of an inactivity warning. Written out as a new **§P** in the prompt file.
+- **Step 4.1** names *"the five functions of ARCHITECTURE Decision 4"* and lists them. There
+  are now **six** — `can_see_comment` joined them, because a block makes the comment audience a
+  strict subset of the post audience. **§L** of the prompt file, which was written expecting
+  exactly this handover, now carries the decision instead of the question. Step 4.2 gains the
+  test case and Step 7.1 gains the engine-owned comment queryset.
+- **§G is narrowed rather than changed.** The `friend_requests` snapshot columns are for the
+  **photo and the short bio only** — SPEC §9.1 now carries the frozen/live field table and
+  calls it a security boundary, and snapshotting the name or the mutual friends would break
+  SPEC §4.5.1 and §5.4.
 
 **New for prompt 09 (from 1.25) — six items, all itemized in the prompt file.** Prompt 10
 amended SPEC §8.2–§8.2.3 and ARCHITECTURE §4 and §6 and **deliberately left BUILD_PLAN
@@ -347,9 +366,9 @@ reviewer's summary judgment is not evidence.
 | # | Finding | Verdict | Routed to |
 |---|---|---|---|
 | 1 | BUILD_PLAN/ARCHITECTURE behind SPEC 1.16 | extends DeepSeek 24, 25 | 09 §A — the retired constants are in **five** places, not the two this file used to name |
-| 2 | Request card: "one component" (§9.1) vs snapshot (§5.2) | new | 11 |
-| 3 | §8.1 "exactly" vs §5.4 blocks; no `can_see_comment` | new | 11, then 09 §L |
-| 4 | Security emails: §4.6.1 timestamps vs §12.3 "no timestamp" | new | 11 |
+| 2 | Request card: "one component" (§9.1) vs snapshot (§5.2) | new | 11 — **done in 1.26**. The invariant is over the **field set and its rendering**, never the data source: one component and one template, fed from live rows or from the snapshot. SPEC §9.1 now lists which of the card's fields freeze (photo, short bio) and which render live (name, hashtags, mutual friends, report action), and calls that list a security boundary — it is exactly the pair SPEC §13.6's send hold covers. 09 §G is constrained by it |
+| 3 | §8.1 "exactly" vs §5.4 blocks; no `can_see_comment` | new | 11 — **done in 1.26**, ARCHITECTURE side included; BUILD_PLAN side is 09 §L. The failing word was **"exactly"**, not "never more": the comment audience is a strict subset of the post audience. The real finding was the consequence — a rule the spec called redundant produced no function and no test, so every comment template was either doing the block check or not doing it. `can_see_comment` added; comment lists and reaction lines are engine-owned querysets. **Reactions were checked and need no function of their own**: a block empties a one-person audience rather than narrowing it |
+| 4 | Security emails: §4.6.1 timestamps vs §12.3 "no timestamp" | new | 11 — **done in 1.26**. §12.3 stated a broader rule than it argued for: every word of its justification is about a **relative** age decaying between send and open, and an absolute timestamp does not decay. Narrowed to relative ages; §4.6.1 untouched. **§4.8 was the live casualty** — the inactivity warnings are email-only and now state the absolute deletion date, since a warning that cannot say *when* is not a warning. BUILD_PLAN Step 12.5 still carries the old wording → 09 §P |
 | 5 | §4.7 "full erasure" ignores the 30-day backup window | duplicate of DeepSeek 10 | 02 item 12 — sharpens the target to §4.7 |
 | 6 | `friend_requests` lacks snapshot columns | new to the reviews | already covered by 09 §G |
 | 7 | `images` lacks a gallery-order column | new | 09 §K |

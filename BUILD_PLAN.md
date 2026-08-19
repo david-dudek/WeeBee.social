@@ -1,6 +1,6 @@
 # Build Plan — WeeBee
 
-**Project version:** 1.25 · 2026-08-18 · DRAFT — not yet founder-approved
+**Project version:** 1.26 · 2026-08-18 · DRAFT — not yet founder-approved
 **This file last changed in:** 1.24 (a citations line in the header, and an Appendix lead-in stating that this document defines no rule of its own)
 **History:** see [CHANGELOG.md](CHANGELOG.md)
 **Companion to:** SPEC.md v1.15 (§7.5.1, §7.8, §9.4, §12) and ARCHITECTURE.md v1.7 (§3.8, §4, §7). This is deliverable (c) per SPEC §18. The actual AI-coding prompts are deliverable (d); every `[AI]` step below will have a matching numbered prompt there.

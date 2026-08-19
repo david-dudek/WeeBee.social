@@ -105,6 +105,69 @@ no other trace.
 
 ---
 
+## 1.26 — 2026-08-18
+
+| File | Status |
+|---|---|
+| README.md | changed — version header only; no content change |
+| SPEC.md | changed — §9.1's basic-tier invariant rewritten and given a frozen/live field table, with §5.2's snapshot bullet pointing at it; §8.1's comment audience corrected, with §7.9 and §8.2 following; §12.3's email rule narrowed to *relative* ages, with §7.5.1 and §4.8 following |
+| ARCHITECTURE.md | changed — Decision 4 gains `can_see_comment`; §5.1 states why comments and reactions are narrower than their post and how lists carry the rule; §5.3's memo row and §5.4's list of engine-owned querysets follow; §4's `comments` and `reactions` entries note it; §9 gains the test case; §15 gains item 9 |
+| BUILD_PLAN.md | changed — version header only; no content change. Two references are now stale and are prompt 09's, itemized below |
+| CHANGELOG.md | changed — this entry |
+
+From prompt 11, on the three internal contradictions Kimi found in v1.16. All three were verified against the document text before this session and all three are real. **The calibration note is worth keeping next to the fixes:** two capable reviewers of the same version each stated explicitly that they found none — *"I didn't find an outright contradiction among the current versions"* (ChatGPT), *"The documents are internally consistent"* (DeepSeek). None of the three is obvious, and none is a philosophy question: each is a place where two true intentions were written in a form that cannot both hold.
+
+Two of the three were a sentence. The third was a sentence and a missing function.
+
+### 1. The friend-request card had to be both frozen and live (§9.1, §5.2)
+
+**The collision.** §9.1 required the friend-request card, the profile header plus About tab, and §9.2's basic tier to be *"exactly"* the same thing, rendered *"from one component"* — a requirement, it said, because if the three surfaces drift the screening arguments of §5.2 and §13.1 stop being true. §5.2 requires the card's **photo and short bio to be frozen at send time**, without which the send hold is defeated by the obvious move: send twenty clean requests, then change the photo. One rule reads current rows and the other reads a stored copy. **A builder following §9.1 to the letter rebuilds the exact attack §5.2 exists to stop.**
+
+**The resolution, and it is the small one.** The invariant is over the **field set and its rendering**, never the data source: one component, one template, one list of fields, fed either from live rows or from the snapshot. That is what makes both arguments hold — a field added to the basic tier still appears on all three surfaces automatically, which is the drift the invariant guards against, while a delivered card stays frozen. The spec already half-knew this and said so in one place: §5.2 carves out the display name, which renders live because §4.5.1 forbids storing names on content. §9.1's "one component" predates that carve-out.
+
+**What is new is the list, and it is new because it is a security boundary.** §9.1 now states which of the card's fields freeze and which render live: **frozen** — profile photo (a stored copy, not a pointer) and short bio; **live** — display name, shared profile hashtags, mutual friends, and the report action. **The frozen pair is exactly the pair §13.6's send hold covers**, and for the same reason: those two are the only author-controlled content the platform pushes at a non-friend. Freezing more would break §4.5.1 for the name and leave a stale mutual-friends line that §5.4 could not empty. Recorded alongside: **§9.5's preview-as mode 4 is the same component fed from live rows**, and is the standing proof that the component takes either source.
+
+### 2. Comment visibility is smaller than post visibility, and one word denied it (§8.1, ARCHITECTURE §5)
+
+**The collision, diagnosed one word more precisely than the review did.** §8.1 said a comment is visible to *"exactly"* the people who can see the post — *"never more."* §5.4 says neither party to a block sees the other's comments anywhere, including on a shared friend's post. So if Bob can see Charlie's post and Alice has blocked Bob, Bob sees the post and not Alice's comment on it. **"Never more" was always true. "Exactly", which asserts equality, never was.** The comment audience is a **strict subset** of the post audience.
+
+**The finding is not the word; it is what the word prevented from being built.** ARCHITECTURE §5 exposed `can_see_post`, `can_see_profile_tier` and `can_act`, and no `can_see_comment` — because SPEC had asserted there was no separate question to ask. The consequence is that every surface rendering a comment either applied the block rule itself or did not apply it at all, **and both of those break the rule that one module makes every visibility decision.** This is Decision 4 defeated by a *gap* rather than by an inlined query, which is the harder form to catch in review: a rule the specification calls redundant produces no code and no test, and from inside either document looks exactly like a rule that is handled. ARCHITECTURE §15 item 9 records that as the shape lesson.
+
+**The fix.** SPEC §8.1 now reads *"visible to the people who can see the post, minus anyone blocked in either direction with the comment's author — never more."* §7.9's quotation of the invariant follows it, and the parked per-post-comments switch stays parked with its argument intact and slightly sharpened: the one subtraction is platform-wide and is not the author's to configure. ARCHITECTURE gains **`can_see_comment(viewer, comment)`** in Decision 4 and §5.1, in §5.3's memo row, and — the part that actually matters for lists — **the comment list under a post joins §5.4's set of engine-owned querysets**, since a queryset filter is a visibility decision. §9 gains the case that fails: a comment a block hides on a post both parties can see, which every post-level test passes while the comment leaks.
+
+**Reactions were checked, as the prompt asked, and the answer is "yes, but one tenth the size."** §5.4 covers "comments **or** reactions", and the case is not trivially satisfied: a block standing *after* a reaction was given must remove it from the recipient's view, and nothing said so. But a reaction's audience is exactly one person, so a block does not narrow it — it **empties** it, and the engine renders the line or renders nothing. **No `can_see_reaction` is added**, and that is recorded in ARCHITECTURE §15 so nobody adds one later believing it was overlooked. SPEC §8.2 carries the one-clause rule, on the live-rendering path §12.2 already uses for a reaction its giver removed.
+
+**§8.1's consciously accepted consequence is untouched**, as is §11.3's grant of comment rights to hashtag-matched FoFs and §7.9's disclosure of it. This corrects a description of who sees a comment, nothing else.
+
+### 3. Security emails had to carry a timestamp and no timestamp (§12.3, §4.6.1)
+
+**The collision.** §4.6.1: security events *"carry absolute timestamps wherever they appear"*, because *"was that login me?"* is not a question anyone answers with "several hours ago". §12.3, restated at §7.5.1: *"Email carries no timestamp at all."* Security events are delivered by email.
+
+**The diagnosis is inside §12.3's own reasoning.** Every word of its justification is about a **relative** age decaying between send and open — computed at send, read three days later, false by then. An absolute timestamp has no such problem: *2026-08-04 21:14 UTC* is as true on Friday as it was on Monday. §12.3 was written to ban relative times in email and **stated a broader rule than it argued for**; the over-reach is the entire collision.
+
+**The fix is to narrow §12.3 to relative ages and leave §4.6.1 untouched.** That lands where §7.5.1's own principle already points — *deliberately vague about how old something is, exactly precise about when something will be destroyed* — with security events on the precise side by the same logic as the expiry countdown. §7.5.1's exception sentence now says *account and security* notices rather than *security* notices, since §4.7's deactivation banner was already relying on it.
+
+**The consequence for §4.8 was real and is fixed in the same breath.** The inactivity warnings are email-only and are useless without a date; under the old wording they arguably could not carry one. §4.8 now states that **the two deletion warnings carry the absolute deletion date**, as an account event under §7.5.1's exception and on §4.7's precedent. A deletion warning that cannot say *when* is not a warning.
+
+### What was left for prompt 09, and why
+
+Two of the three have a downstream consequence, and 09 is written expecting the handover. **Nothing below was done here**, and each is now itemized in `prompts/09-sync-arch-and-buildplan.md` rather than left to be reconstructed from this entry:
+
+- **§G (ARCHITECTURE §4, the `friend_requests` snapshot columns).** Unchanged in scope, but now constrained: SPEC §9.1's table says the stored snapshot is **the photo and the short bio and nothing else**. A builder who also snapshots the name, the hashtags or the mutual friends breaks §4.5.1 and §5.4. The stored image is a **copy**, not a pointer to the live one, and it is destroyed with the request at 90 days.
+- **§L (BUILD_PLAN Step 4.1 and Step 4.2).** Step 4.1 names *"the five functions of ARCHITECTURE Decision 4"* and lists them; there are now six. Step 4.2's suite needs the block-hides-a-comment case, and the comment list's queryset should be named as engine-owned alongside the feed's.
+- **BUILD_PLAN Step 12.5** repeats *"Emails carry no timestamp at all (SPEC §12.3)"* verbatim. That instruction is now wrong in exactly the way that matters — a builder following it strips the absolute time from a security-event mail and the deletion date from an inactivity warning. This was **not** in 09's inventory before and has been added to it.
+- **Not touched, and still 09's:** ARCHITECTURE's header still reads *"Companion to: SPEC.md v1.15"*, which the sync owns.
+
+### Scope held
+
+No new constant, no new table, no new job, no new dependency. The no-counts rule, the snapshot mechanism, the block semantics, the relative-time ladder and the anti-scorekeeping posture were all settled before this session and none was reopened. Every change here makes a document say what it already meant.
+
+### Working files (outside the record)
+
+`TODO.md`: prompt 11 marked done at 1.26, and Appendix B's routing rows for findings 2, 3 and 4 annotated with what was settled. `prompts/09-sync-arch-and-buildplan.md`: §G constrained to the two frozen fields, §L given the decision it was waiting on, and a new §P added for the BUILD_PLAN Step 12.5 email-timestamp line.
+
+---
+
 ## 1.25 — 2026-08-18
 
 | File | Status |
