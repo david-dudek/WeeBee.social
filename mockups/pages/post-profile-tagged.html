@@ -1,0 +1,90 @@
+{{var title=A tagged profile post — WeeBee mockup}}
+<h1>A tagged profile post</h1>
+<p>The same single-post view, for a hashtag-gated profile post (SPEC §11.3). This page renders
+as seen by <strong>Priya</strong>, a friend-of-friend of David's who matched on #hiking through
+their mutual friend Alice — not as David's own view, which every other mockup in this track
+renders. The departure is necessary: reactions are visible only to the author of the thing
+reacted to, and the name-link rule for comments depends on who the viewer actually is (see
+<code>mockups/NOTES.md</code>).</p>
+
+<article class="post" aria-label="Post by David, several days ago">
+<p class="post-meta">
+<span class="post-author">David</span>
+<span class="post-age">Several days ago</span>
+</p>
+<div class="post-body">
+<p>Back from three days on the Cornwall coast path — legs are done, but I'd do the whole thing again tomorrow. Already thinking about where next.</p>
+</div>
+<div class="visibility-row">
+<p class="post-visibility">Visible to: all of David's friends, and friends-of-friends with
+<strong>any of</strong> #hiking, #jazz.</p>
+<a class="report-action" href="report.html">Report — the tags don't match this post</a>
+</div>
+</article>
+
+<details class="react-control" open>
+<summary>React<span class="visually-hidden"> to David's post</span></summary>
+<div class="reaction-phrases">
+<button type="button">Agreed!<span class="visually-hidden"> — react to David's post</span></button>
+<button type="button">Love it!<span class="visually-hidden"> — react to David's post</span></button>
+<button type="button">So proud!<span class="visually-hidden"> — react to David's post</span></button>
+<button type="button">Thinking of you<span class="visually-hidden"> — react to David's post</span></button>
+<button type="button">Congrats!<span class="visually-hidden"> — react to David's post</span></button>
+<button type="button">Ha!<span class="visually-hidden"> — react to David's post</span></button>
+</div>
+</details>
+<p class="session-note">This control renders because Priya, this page's viewer, is not the
+post's author — SPEC §8.2's "no react control on your own post" rule does not apply to her.
+David's own reaction line for this post is not shown here either, for the same reason in
+reverse: it is visible only to David (SPEC §8.2.2).</p>
+
+<h2>Comments</h2>
+<ol class="comment-list">
+
+<li class="comment" aria-label="Comment by Alice, a few days ago">
+<p class="comment-meta">
+<span class="comment-author"><a href="profile.html">Alice</a></span>
+<span class="comment-age">A few days ago</span>
+</p>
+<div class="comment-body">
+<p>Cornwall content, finally! Send the photos when you're back at real wifi.</p>
+</div>
+</li>
+
+<li class="comment" aria-label="Comment by Tom, a few days ago">
+<p class="comment-meta">
+<span class="comment-author plain-name">Tom</span>
+<span class="comment-age">A few days ago</span>
+</p>
+<div class="comment-body">
+<p>That coast path destroyed my knees the one time I tried it. Respect.</p>
+</div>
+</li>
+
+<li class="comment" aria-label="Comment by Priya, a couple of days ago">
+<p class="comment-meta">
+<span class="comment-author">Priya</span>
+<span class="comment-age">A couple of days ago</span>
+</p>
+<div class="comment-body">
+<p>#hiking is exactly why this showed up for me — I did the Cornwall path two summers ago and still think about it. Worth every blister.</p>
+</div>
+<ul class="reaction-list" aria-label="Reactions to your comment">
+<li><span class="plain-name">Mom</span>: Congrats!</li>
+</ul>
+</li>
+
+</ol>
+<p class="session-note">Two names render differently here on purpose (SPEC §8.1): Alice's
+links, because Priya knows Alice directly. Tom's renders as plain text, because Priya and Tom
+are strangers to each other — possible only on a hashtag-gated post, where two viewers may
+share the author as their only connection. Mom's reaction to Priya's own comment renders as
+plain text for the same reason: Priya has no connection to Mom at all (SPEC §8.2.2).</p>
+
+<h2>Add a comment</h2>
+<div class="field">
+<label for="comment-text">Comment</label>
+<textarea id="comment-text" name="comment-text" rows="3"></textarea>
+</div>
+<p class="comment-visibility">Your comment will be visible to the same people.</p>
+<button type="submit" class="button">Comment</button>

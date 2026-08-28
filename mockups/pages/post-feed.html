@@ -1,0 +1,99 @@
+{{var title=A feed post — WeeBee mockup}}
+<h1>A feed post</h1>
+<p>Single-post view of a feed post David sent to a few friends. This is the only surface
+reactions ever render on (SPEC §8.2, v1.16): never on the Blog tab, the Pinned tab, or the
+feed itself.</p>
+
+<article class="post" aria-label="Post by David, a few days ago">
+<p class="post-meta">
+<span class="post-author">David</span>
+<span class="post-age">A few days ago</span>
+</p>
+<div class="post-body">
+<p>Small dinner this Friday if anyone's free — nothing fancy, just good company and too much pasta. Let me know and I'll set a place for you.</p>
+</div>
+<p class="post-visibility">Visible to: the friends David sent this to.</p>
+</article>
+
+<ul class="reaction-list" aria-label="Reactions to your post">
+<li>Alice: Love it!</li>
+<li>Mom: So proud!</li>
+</ul>
+<!-- No react control here: this is David's own post, and SPEC §8.2 says nobody reacts to
+     their own content. SPEC §8.2.2's own worked example for this control's accessible name is
+     "React to David's post" — see post-profile-tagged.html, where the viewer is not the
+     post's author, for a page where that control legitimately renders. -->
+
+<h2>Comments</h2>
+<p>Flat, one linear list, no nested replies (SPEC §8.1).</p>
+<ol class="comment-list">
+
+<li class="comment" aria-label="Comment by Alice, a couple of days ago">
+<p class="comment-meta">
+<span class="comment-author"><a href="profile.html">Alice</a></span>
+<span class="comment-age">A couple of days ago</span>
+</p>
+<div class="comment-body">
+<p>I'm in! Should have known you'd pick the one week I'm swamped at work, but I'm not missing this — I'll rearrange whatever I have to. Want me to bring anything, or is it a "just show up" kind of night? Either way I'll bring a bottle of something in case. Text me the time once you've</p>
+</div>
+<button class="read-more" type="button" aria-expanded="false">Read more<span class="visually-hidden"> of Alice's comment</span></button>
+<details class="react-control" open>
+<summary>React<span class="visually-hidden"> to Alice's comment</span></summary>
+<div class="reaction-phrases">
+<button type="button">Agreed!<span class="visually-hidden"> — react to Alice's comment</span></button>
+<button type="button">Love it!<span class="visually-hidden"> — react to Alice's comment</span></button>
+<button type="button">So proud!<span class="visually-hidden"> — react to Alice's comment</span></button>
+<button type="button">Thinking of you<span class="visually-hidden"> — react to Alice's comment</span></button>
+<button type="button">Congrats!<span class="visually-hidden"> — react to Alice's comment</span></button>
+<button type="button">Ha!<span class="visually-hidden"> — react to Alice's comment</span></button>
+</div>
+</details>
+</li>
+
+<li class="comment" aria-label="Comment by Tom, about a day ago">
+<p class="comment-meta">
+<span class="comment-author"><a href="profile.html">Tom</a></span>
+<span class="comment-age">About a day ago</span>
+</p>
+<div class="comment-body">
+<p>Count me in, bringing dessert.</p>
+</div>
+<details class="react-control" open>
+<summary>Reacted: Agreed!<span class="visually-hidden"> to Tom's comment</span></summary>
+<div class="reaction-phrases">
+<button type="button" aria-current="true">Agreed! (current)<span class="visually-hidden"> — react to Tom's comment</span></button>
+<button type="button">Love it!<span class="visually-hidden"> — react to Tom's comment</span></button>
+<button type="button">So proud!<span class="visually-hidden"> — react to Tom's comment</span></button>
+<button type="button">Thinking of you<span class="visually-hidden"> — react to Tom's comment</span></button>
+<button type="button">Congrats!<span class="visually-hidden"> — react to Tom's comment</span></button>
+<button type="button">Ha!<span class="visually-hidden"> — react to Tom's comment</span></button>
+<button type="button">Remove reaction<span class="visually-hidden"> from Tom's comment</span></button>
+</div>
+</details>
+</li>
+
+<li class="comment" aria-label="Comment by David, a few hours ago">
+<p class="comment-meta">
+<span class="comment-author">David</span>
+<span class="comment-age">A few hours ago</span>
+</p>
+<div class="comment-body">
+<p>Perfect — see everyone Friday around 7.</p>
+</div>
+<ul class="reaction-list" aria-label="Reactions to your comment">
+<li>Mom: Thinking of you</li>
+</ul>
+<!-- No react control here either: this is David's own comment. Its reaction line renders
+     because David, its author, is also this page's viewer — SPEC §8.2.2 shows a reaction
+     line only to the author of the thing reacted to. -->
+</li>
+
+</ol>
+
+<h2>Add a comment</h2>
+<div class="field">
+<label for="comment-text">Comment</label>
+<textarea id="comment-text" name="comment-text" rows="3"></textarea>
+</div>
+<p class="comment-visibility">Your comment will be visible to the same people.</p>
+<button type="submit" class="button">Comment</button>

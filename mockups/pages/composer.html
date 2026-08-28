@@ -1,0 +1,231 @@
+{{var title=Post — WeeBee mockup}}
+<h1>Post</h1>
+<p>SPEC §7.1: <em>"There is a single composer, reached from the main navigation."</em> One
+composer serves both post types; the sections below show every state it can be in, one state
+at a time, rather than a single form pretending to be live.</p>
+
+<div class="composer-section">
+<h2>1. Choose a destination</h2>
+<p>Destination is a required choice with <strong>no default</strong> — neither option below
+starts selected (SPEC §7.1, §16.4).</p>
+<fieldset>
+<legend>Where should this go?</legend>
+<div class="option-list">
+<div class="option-row">
+<input type="radio" id="destination-feed" name="destination">
+<label for="destination-feed">Send to a few friends — appears in their feed</label>
+</div>
+<div class="option-row">
+<input type="radio" id="destination-blog" name="destination">
+<label for="destination-blog">Post to my blog — all your friends can find it.</label>
+</div>
+</div>
+</fieldset>
+</div>
+
+<div class="composer-section">
+<h2>2. Publishing with no destination chosen</h2>
+<p>Per §16.3's error rule, a missing choice produces an honest text error naming the fix —
+never a silently disabled Publish button.</p>
+<div class="error-summary" role="alert" tabindex="-1">
+<h3>1 problem with this post</h3>
+<ul>
+<li><a href="#destination-fieldset-invalid">Choose where this post should go before you can publish it.</a></li>
+</ul>
+</div>
+<fieldset id="destination-fieldset-invalid" aria-describedby="destination-error">
+<legend>Where should this go?</legend>
+<div class="option-list">
+<div class="option-row">
+<input type="radio" id="destination-feed-invalid" name="destination-invalid" aria-invalid="true">
+<label for="destination-feed-invalid">Send to a few friends — appears in their feed</label>
+</div>
+<div class="option-row">
+<input type="radio" id="destination-blog-invalid" name="destination-invalid" aria-invalid="true">
+<label for="destination-blog-invalid">Post to my blog — all your friends can find it.</label>
+</div>
+</div>
+<p id="destination-error" class="field-error">Choose where this post should go before you can publish it.</p>
+</fieldset>
+</div>
+
+<div class="composer-section">
+<h2>3. Feed branch: the audience picker</h2>
+<p>Choosing "Send to a few friends" opens the audience picker (SPEC §7.3). The count is a
+polite live region; ARCHITECTURE §3.8 requires the same count to also be rendered
+server-side, so it is never JS-only.</p>
+<fieldset>
+<legend>Who should get this?</legend>
+<div class="option-list">
+<div class="option-row">
+<input type="checkbox" id="audience-alice" checked>
+<label for="audience-alice">Alice</label>
+</div>
+<div class="option-row">
+<input type="checkbox" id="audience-tom" checked>
+<label for="audience-tom">Tom</label>
+</div>
+<div class="option-row">
+<input type="checkbox" id="audience-mom" checked>
+<label for="audience-mom">Mom</label>
+</div>
+<div class="option-row">
+<input type="checkbox" id="audience-priya">
+<label for="audience-priya">Priya</label>
+</div>
+<div class="option-row">
+<input type="checkbox" id="audience-group-hiking">
+<label for="audience-group-hiking">Hiking crew (group)</label>
+</div>
+</div>
+</fieldset>
+<p class="status-message" role="status" aria-live="polite">3 of 30 friends selected.</p>
+<div class="option-row">
+<input type="checkbox" id="save-as-group">
+<label for="save-as-group">Save this selection as a group?</label>
+</div>
+<p class="field-hint-inline">Memory of the friends you just picked, offered — never created or
+changed automatically (SPEC §6).</p>
+<p class="post-visibility" role="status" aria-live="polite">Visible to: the friends David sent this to.</p>
+</div>
+
+<div class="composer-section">
+<h2>4. Feed branch: audience over the limit</h2>
+<p>Exceeding <code>POST_AUDIENCE_MAX</code> = 30 produces a clear warning and requires
+narrowing. Recipients are never silently dropped (SPEC §7.3).</p>
+<p class="field-error" role="status" aria-live="polite">32 of 30 friends selected — that's 2 too
+many. Remove some names before you can publish; nobody is removed for you.</p>
+</div>
+
+<div class="composer-section">
+<h2>5. Blog branch: the hashtag picker</h2>
+<p>Choosing "Post to my blog" opens the hashtag picker over the curated
+<code>HASHTAG_VOCAB</code> (SPEC §11.2). Hashtags are never free-typed.</p>
+<div class="field">
+<label for="hashtag-search">Search interests</label>
+<input type="search" id="hashtag-search" name="hashtag-search" value="hi">
+</div>
+<fieldset>
+<legend>Matching interests</legend>
+<div class="option-list">
+<div class="option-row">
+<input type="checkbox" id="tag-hiking" checked>
+<label for="tag-hiking">#hiking</label>
+</div>
+<div class="option-row">
+<input type="checkbox" id="tag-jazz" checked>
+<label for="tag-jazz">#jazz</label>
+</div>
+<div class="option-row">
+<input type="checkbox" id="tag-cornwall">
+<label for="tag-cornwall">#cornwall</label>
+</div>
+</div>
+</fieldset>
+<p class="post-visibility" role="status" aria-live="polite">Visible to: all of David's friends,
+and friends-of-friends with any of #hiking, #jazz.</p>
+<p class="session-note">With no tags chosen, the same live region instead reads: "Visible to:
+all of David's friends." The line is derived from the post's own type and tags, never from the
+viewer, and never states a number of matching friends-of-friends (SPEC §7.9).</p>
+</div>
+
+<div class="composer-section">
+<h2>6. The preformatted toggle</h2>
+<div class="option-row">
+<input type="checkbox" id="preformatted-toggle">
+<label for="preformatted-toggle">Preformatted (monospace, exact spacing)</label>
+</div>
+<p class="field-hint-inline"><a href="#preformatted-explainer">What does preformatted mean?</a></p>
+</div>
+
+<div class="composer-section">
+<h2>7. Adding an image</h2>
+<p>§16.3 requires a deliberate choice every time an image is attached: write a description, or
+mark the image decorative. Never silently skipped, never auto-filled.</p>
+
+<h3>State: description written</h3>
+<div class="field">
+<label for="image-file-1">Image (optional)</label>
+<input type="file" id="image-file-1" name="image-file-1" accept="image/*">
+</div>
+<fieldset>
+<legend>Alternative text for this image</legend>
+<div class="option-row">
+<input type="radio" id="image-describe-1" name="image-alt-choice-1" checked>
+<label for="image-describe-1">Describe this image</label>
+</div>
+<div class="field">
+<label for="image-alt-text-1">Description (up to 1,000 characters)</label>
+<textarea id="image-alt-text-1" name="image-alt-text-1" rows="2">A hiking trail along a rocky ridge, low clouds settling into the valley below.</textarea>
+</div>
+<div class="option-row">
+<input type="radio" id="image-decorative-1" name="image-alt-choice-1">
+<label for="image-decorative-1">This image is decorative</label>
+</div>
+</fieldset>
+
+<h3>State: marked decorative</h3>
+<div class="field">
+<label for="image-file-2">Image (optional)</label>
+<input type="file" id="image-file-2" name="image-file-2" accept="image/*">
+</div>
+<fieldset>
+<legend>Alternative text for this image</legend>
+<div class="option-row">
+<input type="radio" id="image-describe-2" name="image-alt-choice-2">
+<label for="image-describe-2">Describe this image</label>
+</div>
+<div class="option-row">
+<input type="radio" id="image-decorative-2" name="image-alt-choice-2" checked>
+<label for="image-decorative-2">This image is decorative</label>
+</div>
+</fieldset>
+<p class="field-hint-inline">Ticking "decorative" stores an explicitly empty alt text. Nothing
+is inferred and nothing is guessed on the uploader's behalf.</p>
+</div>
+
+<div class="composer-section">
+<h2>8. Character count on cap overrun</h2>
+<p><code>POST_LENGTH_MAX</code> = 10,000 characters. Text is never silently truncated — the
+composer reports the overrun honestly.</p>
+<div class="field">
+<label for="post-body-overlimit">Post text</label>
+<textarea id="post-body-overlimit" name="post-body-overlimit" rows="4" aria-describedby="post-body-overlimit-count" aria-invalid="true">If anyone still has my orange Tupperware from the potluck in June, no rush, but I would like it back eventually before the entire cabinet forgets it exists. (The rest of this post continues past the cap in the real composer; this mockup shows the counter state rather than 10,000 characters of filler.)</textarea>
+</div>
+<p id="post-body-overlimit-count" class="char-count over-limit">10,140 / 10,000 characters — 140
+over the limit. Shorten the text before you can publish.</p>
+</div>
+
+<div class="composer-section">
+<h2>9. A rejected link</h2>
+<p>URLs are permitted only from the operator-curated allowlist (SPEC §7.2.3).</p>
+<div class="field">
+<label for="post-link">Post text</label>
+<input type="url" id="post-link" name="post-link" value="https://bit.ly/3xyz9" aria-describedby="post-link-error" aria-invalid="true">
+</div>
+<p id="post-link-error" class="field-error">That link isn't allowed in a WeeBee post. The
+allowlist only carries links that help people meet up in person, host video or audio WeeBee
+doesn't, or hand a conversation off to a messenger — and a shortened link can't be checked
+against it at all. Anything else can be shared through your contact card.</p>
+</div>
+
+<div class="composer-section">
+<h2>10. Switching destination</h2>
+<p>A draft may switch type freely. Both notices are text, not modal interruptions (SPEC §7.1).</p>
+<p class="notice">Switching to a blog post clears the audience you picked — a blog post has no
+recipient list, only its hashtags.</p>
+<p class="notice">Switching to a feed post: hashtags stop gating who can see this post. They
+become decorative until you switch back.</p>
+</div>
+
+<div class="composer-section">
+<h2 id="preformatted-explainer">About preformatted posts</h2>
+<p>Linked directly from the preformatted toggle (§6 above). A preformatted post renders in a
+monospace font and keeps runs of spaces exactly as typed — useful for text tables, diagrams,
+and ASCII art. The trade-offs: exact spacing means the composer will not tidy up your
+whitespace for you; long lines never wrap, so a wide table stays wide; and on a narrow screen
+the post scrolls horizontally instead of reflowing, which is the platform's one documented
+exception to the reflow requirement (SPEC §7.2.1, §16.3). See
+<a href="post-preformatted.html">a preformatted post in place</a> for what the horizontal
+scrolling looks like on a single-post view.</p>
+</div>

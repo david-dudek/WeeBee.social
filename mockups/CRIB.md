@@ -31,6 +31,8 @@ All citations are to SPEC.md at project version 1.27 unless marked ARCHITECTURE.
 | `COMMENT_LENGTH_MAX` | 2,000 characters | §7.2.1, §8.1 |
 | `NAME_CHANGE_COOLDOWN_DAYS` | 90 (must stay ≥ `NAME_TRANSITION_DAYS`) | §4.5.1 |
 | `NAME_TRANSITION_DAYS` | 90 (dual "formerly" display) | §4.5.1 |
+| `ALT_TEXT_MAX` | 1,000 characters (image alternative text) | §16.3 |
+| `GROUP_SIZE_MAX` | 30 (matches `POST_AUDIENCE_MAX`, so any group is a valid post audience) | §6 |
 
 Full table: SPEC §14 (lines ~898–953 at v1.27). Pull in more rows here as later sessions need
 them rather than re-reading §14 whole.
@@ -93,6 +95,27 @@ in yourself."*
 ### §12.3 — Coalesced notification
 
 *"David posted twice to his blog"* — links to the blog tab, not to either individual post.
+
+### §6 — Groups, the audience-save suggestion
+
+*"Save this selection as a group?"* — offered by the composer, never automatic (M2,
+composer.html).
+
+### §8.2.2 — Reaction line and react-control accessible names (M2)
+
+- The reaction list's own accessible name: *"Reactions to your post"*, *"Reactions to your
+  comment"*.
+- The react control's own text: *"React"* (not yet reacted) or *"Reacted: Love it!"* (reacted,
+  phrase named), and a **distinct accessible name** per control via visually hidden text —
+  SPEC's own worked examples are *"React to David's post"*, *"React to Alice's comment"*.
+- Per-phrase button accessible name — SPEC's own worked example: *"Love it! — react to Alice's
+  comment"*.
+- The button that clears a set reaction: *"Remove reaction"*.
+- **Where each literally renders in this track:** "React to David's post" needs a control on a
+  post David authored, viewed by someone who is *not* David — impossible on David's own
+  single-post view (SPEC §8.2 forbids a react control on your own content). M2 places it on
+  `post-profile-tagged.html`, whose viewer is Priya, not David. See NOTES.md for why that page
+  breaks from "every mockup renders David's view."
 
 ### §7.5 — Expiry countdown (absolute days, the one exception to relative time)
 
@@ -187,3 +210,9 @@ real timestamp, anywhere these phrases appear (§7.5.1, ARCHITECTURE §3.8).
 `friends.html`, `discover.html`, `settings.html` (none of the latter five built yet — see
 NOTES.md). Later sessions that build those surfaces should use these filenames so the M1 nav's
 links resolve rather than introducing a second set of names.
+
+**M2 adds one more assumed filename:** `post-profile-tagged.html`'s report action links to
+`report.html`, not yet built — expected to land in M6 ("report and operator forms"). M2 also
+built `post-feed.html`, `post-profile-tagged.html`, and `post-preformatted.html` themselves,
+so composer.html's own links to `post-preformatted.html` and any future page linking to a
+single-post view can now resolve.

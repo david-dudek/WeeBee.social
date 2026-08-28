@@ -361,6 +361,244 @@ button:hover,
   border-left: 4px solid var(--color-border);
 }
 
-/* Reflow: nothing here forces horizontal scroll at 320px. The one
-   documented exception (preformatted posts, SPEC §7.2.1) will carry its
-   own scoped overflow-x rule when that surface is built. */
+/* Fieldsets: destination choice, audience picker, hashtag picker (M2) */
+fieldset {
+  border: 1px solid var(--color-border-light);
+  border-radius: 0.25rem;
+  padding: var(--space-3);
+  margin: 0 0 var(--space-3);
+  min-width: 0;
+}
+
+legend {
+  font-weight: 700;
+  padding: 0 var(--space-1);
+}
+
+.option-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.option-row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  min-height: var(--touch-min);
+  padding: var(--space-1) 0;
+}
+
+.option-row input[type="radio"],
+.option-row input[type="checkbox"] {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex-shrink: 0;
+  margin-top: 0.2rem;
+}
+
+.option-row label {
+  padding: var(--space-1) 0;
+}
+
+.field-hint-inline {
+  margin: 0 0 var(--space-2);
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+}
+
+/* Textareas and text inputs beyond _field.html's plain text input */
+.field textarea,
+.field input[type="url"],
+.field input[type="search"] {
+  font: inherit;
+  width: 100%;
+  max-width: 100%;
+  padding: var(--space-2);
+  border: 1px solid var(--color-border);
+  border-radius: 0.25rem;
+  resize: vertical;
+}
+
+.field input[type="file"] {
+  display: block;
+  margin-top: var(--space-1);
+}
+
+/* Character count on cap overrun (M2, SPEC §7.2.1) */
+.char-count {
+  margin: var(--space-1) 0 0;
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+}
+
+.char-count.over-limit {
+  color: var(--color-text);
+  font-weight: 700;
+}
+
+/* Composer: numbered sections, one state per section */
+.composer-section {
+  margin-bottom: var(--space-5);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.composer-section:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.composer-section h2 {
+  margin-bottom: var(--space-1);
+}
+
+.session-note {
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+}
+
+/* Type-switch and similar text notices — never a modal (SPEC §7.1) */
+.notice {
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-bg-alt);
+  border-left: 4px solid var(--color-border);
+  margin: var(--space-2) 0;
+}
+
+/* Reactions (SPEC §8.2.2) */
+.reaction-list {
+  list-style: none;
+  margin: var(--space-2) 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-4);
+}
+
+/* A name rendered as plain text rather than a link (SPEC §8.1, §8.2.2) —
+   distinguished from a linked name by the absence of an underline, not by
+   colour alone, since both share the same neutral text colour. */
+.plain-name {
+  color: var(--color-text);
+}
+
+/* The react control — native <details>/<summary>, SPEC §8.2.2 */
+.react-control {
+  margin: var(--space-2) 0;
+}
+
+.react-control summary {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--touch-min);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: 0.25rem;
+  cursor: pointer;
+  list-style: none;
+  font-weight: 700;
+}
+
+.react-control summary::-webkit-details-marker {
+  display: none;
+}
+
+.react-control[open] summary {
+  margin-bottom: var(--space-2);
+}
+
+.reaction-phrases {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  padding: var(--space-2) 0 0;
+  margin: 0;
+}
+
+.reaction-phrases button[aria-current="true"] {
+  border-width: 2px;
+  font-weight: 700;
+}
+
+/* Comments (SPEC §8.1) */
+.comment-list {
+  list-style: none;
+  margin: var(--space-3) 0 0;
+  padding: var(--space-3) 0 0;
+  border-top: 1px solid var(--color-border-light);
+}
+
+.comment {
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.comment:last-child {
+  border-bottom: none;
+}
+
+.comment-meta {
+  margin: 0 0 var(--space-1);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--space-2);
+  align-items: baseline;
+}
+
+.comment-author {
+  font-weight: 700;
+}
+
+.comment-age {
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+}
+
+.comment-body p {
+  margin: 0 0 var(--space-1);
+  white-space: pre-line;
+}
+
+.comment-visibility {
+  margin: var(--space-2) 0 0;
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+}
+
+/* Visibility line + report action sharing a row (SPEC §7.9, v1.21) */
+.visibility-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-1) var(--space-3);
+  margin: var(--space-2) 0 0;
+}
+
+.visibility-row .post-visibility {
+  margin: 0;
+}
+
+.report-action {
+  font-size: 0.9rem;
+}
+
+/* Preformatted post: the one reflow exemption (SPEC §7.2.1, §16.3) */
+.post-preformatted-scroll {
+  overflow-x: auto;
+  max-width: 100%;
+  border: 1px solid var(--color-border-light);
+  border-radius: 0.25rem;
+  margin: var(--space-2) 0;
+}
+
+.post-preformatted-scroll pre {
+  font-family: var(--font-mono);
+  white-space: pre;
+  margin: 0;
+  padding: var(--space-3);
+}
+
+/* Reflow: nothing here forces horizontal scroll at 320px except the
+   preformatted post's own scroll container immediately above, which
+   SPEC §7.2.1 / §16.3 require to scroll instead of wrapping. */

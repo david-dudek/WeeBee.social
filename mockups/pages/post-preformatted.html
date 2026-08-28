@@ -1,0 +1,43 @@
+{{var title=A preformatted post — WeeBee mockup}}
+<h1>A preformatted post</h1>
+<p>Single-post view of a preformatted post (SPEC §7.2.1) — the platform's one documented
+exception to the reflow requirement, permitted under WCAG 1.4.10's two-dimensional-layout
+exemption. Monospace here is structural, not theming (SPEC §9.1.1): it survives every theme,
+including the viewer override. Only the monospace-ness is exempt from reflow — nothing else on
+this page is.</p>
+
+<article class="post" aria-label="Post by Tom, about a week ago">
+<p class="post-meta">
+<span class="post-author">Tom</span>
+<span class="post-age">About a week ago</span>
+</p>
+<div class="post-body">
+<p>Gear list for the weekend, finally weighed everything instead of guessing:</p>
+</div>
+<div class="post-preformatted-scroll" tabindex="0" role="group" aria-label="Preformatted post content, scrolls horizontally">
+<pre>Item                 Weight (g)   Category         Notes
+-------------------- ------------ ---------------- --------------------------
+Tent (2-person)      1800         Shelter          Stakes and guylines included
+Sleeping bag         950          Shelter          Rated to -5C
+Sleeping pad         410          Shelter          Inflatable, patch kit in the stuff sack
+Stove + fuel canister 420         Cooking          One full canister, one spare
+Cook pot + spork     180          Cooking          Nonstick, 900ml
+Water filter         180          Water            Backwash before we leave
+Water bottles (x2)   240          Water            1L each, empty weight
+First aid kit        310          Safety           Restocked after the last trip
+Headlamp + batteries 90           Lighting         Spare batteries in a ziplock</pre>
+</div>
+<p class="post-visibility">Visible to: the friends Tom sent this to.</p>
+</article>
+
+<p>Runs of spaces are preserved exactly — the columns above line up because nothing collapsed
+them. Long lines never soft-wrap; on a screen narrower than the content, the box above scrolls
+horizontally instead of the text reflowing. The obligations that come with the exemption
+(ARCHITECTURE §3.8):</p>
+<ul>
+<li>The scrolling region carries <code>tabindex="0"</code>, an accessible name ("Preformatted
+post content, scrolls horizontally"), and a visible focus ring on keyboard focus — a
+horizontally scrollable region that only a mouse can pan fails WCAG 2.1.1.</li>
+<li>The horizontal scroll is confined to the post's own container. Resize this page to 320 px:
+the page itself never scrolls sideways, only the box above does.</li>
+</ul>

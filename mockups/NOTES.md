@@ -134,3 +134,88 @@ profile lands. M3 builds "the four profile tabs as a friend sees them" (i.e., vi
 Whether "my own profile" and "a friend's profile" end up as one filename with different
 states, or two distinct filenames, is left for M3 to decide — `profile.html` here is a
 placeholder link target, not a naming decision.
+
+---
+
+## 9. §8.2.3's "Ha!" retirement is recommended but not adopted here
+
+**Session:** M2. **Surface:** `pages/post-feed.html`.
+
+SPEC §8.2.3 states plainly that *"Ha!" fails criteria 1 and 3* (warmth on the worst post it
+could land on; no irony carrier) and is **recommended for removal**, with *"Thank you!"*
+recommended in its place. That recommendation has not been adopted anywhere else in the
+document — `REACTION_SET`'s worked examples throughout SPEC still list "Ha!" as a current
+member, and no CHANGELOG entry retires it.
+
+**Drawn:** `post-feed.html` uses the six-phrase set exactly as SPEC's own examples give it —
+"Agreed!", "Love it!", "So proud!", "Thinking of you", "Congrats!", "Ha!" — per the standing
+instruction to build what the documents currently say, not what one section of them recommends
+changing. Recorded here so "Ha!" appearing in a 2026 mockup does not read as an oversight.
+
+---
+
+## 10. Reconciling §8.2.2's worked accessible-name examples with "no react control on your own content"
+
+**Session:** M2. **Surface:** `pages/post-feed.html`, `pages/post-profile-tagged.html`.
+
+SPEC §8.2.2 gives two worked examples for the react control's distinct-accessible-name rule:
+*"React to David's post"* and *"React to Alice's comment."* Both use SPEC's own illustrative
+cast (the same pattern NOTES.md's entry 5 already flagged for §12.2's notification wordings).
+But §8.2 also says plainly: *"Nobody reacts to their own content. The react control is absent
+on your own post and your own comment."* Read together as a literal instruction to reproduce
+both worked examples on one single-post view, they conflict — a post authored by David, viewed
+by David (the only view every other mockup in this track renders), can never carry a react
+control naming itself "React to David's post," because that control must not exist there at
+all.
+
+**Drawn:** the two examples are split across the two pages where each is actually true.
+`post-feed.html` renders David's own feed post from David's own point of view, so per §8.2 no
+react control appears on the post itself — the omission is documented in an HTML comment
+rather than silently dropped, and "React to Alice's comment" is used verbatim on the one
+control that page does carry legitimately. `post-profile-tagged.html` renders the same kind of
+post from a viewpoint that is *not* the author's (see entry 12, immediately below), so "React
+to David's post" renders there, correctly and literally, on a control that is legitimately
+present. Flagged as an interpretive resolution across two pages rather than a literal per-page
+rendering of both quotes, which SPEC's own rules make impossible on a single page.
+
+---
+
+## 11. Single-post-view pages show the post author's name; the Blog/Pinned-tab omission rule is not applied here
+
+**Session:** M2. **Surface:** `pages/post-feed.html`, `pages/post-profile-tagged.html`,
+`pages/post-preformatted.html`.
+
+§9.1 omits the post author's name on the Blog and Pinned tabs specifically, *"since every post
+there belongs to the profile's owner, whose name is in the header above it."* None of these
+three pages is a tab in that sense — each is a standalone single-post view, of the kind reached
+from a notification link or a comment permalink, and `profile.html` (which would supply that
+header context) is not built until M3.
+
+**Drawn:** all three pages render the author's name in the ordinary `.post-meta` position, as
+`_post.html` already does for feed posts. This is the plainest reading available before a
+profile page exists to make the tab-context question concrete; M3 may want to confirm that a
+real single-post-view template also shows the name once `profile.html`'s header exists to
+compare it against.
+
+---
+
+## 12. `post-profile-tagged.html` renders as seen by a friend-of-friend, not David
+
+**Session:** M2. **Surface:** `pages/post-profile-tagged.html`.
+
+Every other mockup in this track renders David's own view (CRIB.md §3). This page cannot: a
+reaction is visible only to the author of the thing reacted to (§8.2.2), and a commenter's name
+links or renders as plain text depending on *the viewer's* connection to them (§8.1) — neither
+rule can be demonstrated from David's own point of view on a post David himself authored, since
+David is trivially connected to anyone who can reach his own tagged post. The M2 prompt's own
+requirements for this page (a plain-text commenter name, a plain-text reaction) are only
+satisfiable from a friend-of-friend's point of view.
+
+**Drawn:** the page states its viewpoint explicitly in an intro paragraph — Priya, a
+friend-of-friend of David's who matched via #hiking through their mutual friend Alice — and
+every name-link and reaction-visibility decision on the page is worked out from Priya's
+connections, not David's. Alice's name links (Priya knows her); Tom's renders as plain text
+(Priya doesn't); Priya's own comment carries a reaction line visible to her as its author, with
+a reactor (Mom) she has no connection to, rendered plain text. Recorded because it is a
+deliberate, spec-required exception to this track's own established convention, not an
+inconsistency to fix later.
