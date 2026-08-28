@@ -1,0 +1,35 @@
+<!--
+  _field.html — reference structure for one labelled form field.
+  ARCHITECTURE §3.8: "a form field with its label association" is the
+  accessibility unit; SPEC §16.3: every input has a programmatically
+  associated VISIBLE label, and a placeholder is never a label.
+
+  Not a literal {{include}} — build.py has no per-call parameters, and
+  every field needs its own id/name/label text. Pages copy this shape
+  by hand, replacing the bracketed tokens.
+
+  Plain field:
+    <div class="field">
+      <label for="[field-id]">[Visible label text]</label>
+      <input type="text" id="[field-id]" name="[field-name]">
+    </div>
+
+  Field with a hint:
+    <div class="field">
+      <label for="[field-id]">[Visible label text]</label>
+      <p id="[field-id]-hint" class="field-hint">[Hint text]</p>
+      <input type="text" id="[field-id]" name="[field-name]" aria-describedby="[field-id]-hint">
+    </div>
+
+  Field in an error state — the message repeats next to the input
+  (see _errors.html for the matching error-summary entry):
+    <div class="field">
+      <label for="[field-id]">[Visible label text]</label>
+      <input type="text" id="[field-id]" name="[field-name]" aria-describedby="[field-id]-error" aria-invalid="true">
+      <p id="[field-id]-error" class="field-error">[Honest message stating the fix]</p>
+    </div>
+-->
+<div class="field">
+  <label for="[field-id]">[Visible label text]</label>
+  <input type="text" id="[field-id]" name="[field-name]">
+</div>

@@ -1,0 +1,14 @@
+<!--
+  _status.html — reference structure for a polite live-region status
+  message. SPEC §16.3 (WCAG 4.1.3): status messages are announced
+  without moving focus — the audience picker's live count, "post
+  published", "code sent", rate-limit "slow down" notices, lockout
+  messages.
+
+  Not a literal {{include}} — the message text differs per event.
+  Pages copy this shape, replacing the bracketed token. Because these
+  mockups are static pages with no scripts, a page shows the region
+  already populated with the message that state produces, rather than
+  demonstrating the live update itself.
+-->
+<p class="status-message" role="status" aria-live="polite">[Status message text]</p>

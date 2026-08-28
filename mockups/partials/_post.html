@@ -1,0 +1,42 @@
+<!--
+  _post.html — reference structure for a post, not a literal {{include}}.
+
+  build.py's {{include}} has no per-call parameters, and a post's text,
+  author, age, image and fold state differ every time it appears — so a
+  parameter-free include cannot stand in for real content. This file is
+  the canonical markup pattern every post on every page copies by hand:
+  the class names below are the ones styles.css targets, so a page that
+  follows this shape gets the same look with no extra CSS.
+
+  Required parts, per SPEC §7.5, §7.5.1, §7.6, §7.8, §7.9:
+    - the author's name (omitted on Blog/Pinned tabs, SPEC §9.1)
+    - the relative age, as a literal ladder phrase (§7.5.1) — never a
+      title attribute, never a datetime attribute
+    - the stated-visibility line, verbatim from §7.9's table
+    - the post body, folded past its surface's *_FOLD_CHARS threshold
+      with a real <button aria-expanded> carrying a distinct accessible
+      name (visually-hidden text), or shown in full
+    - EITHER an expiry countdown ("Deletes in N days", §7.5, unpinned
+      posts inside EXPIRY_COUNTDOWN_DAYS only) OR a "Pinned" marker for
+      a pinned post — never both, and the age above is unaffected either
+      way
+    - an "edited" marker with the relative time of the edit, if edited
+      (§7.8) — real text beside the age, no version history
+-->
+<article class="post" aria-label="Post by [Author], [relative age]">
+  <p class="post-meta">
+    <span class="post-author">[Author name]</span>
+    <span class="post-age">[relative age phrase]</span>
+    <!-- <span class="post-edited">edited [relative age of edit]</span> -->
+  </p>
+  <div class="post-body">
+    <p>[Post text — folded at the surface's fold threshold, cut at a
+       whitespace boundary, when longer than that threshold.]</p>
+  </div>
+  <!-- <button class="read-more" type="button" aria-expanded="false">
+         Read more<span class="visually-hidden"> of [Author]'s post from [relative age]</span>
+       </button> -->
+  <p class="post-visibility">[Visible to: … — verbatim from SPEC §7.9]</p>
+  <!-- <p class="post-expiry">Deletes in [N] days</p> -->
+  <!-- <p class="post-pinned">Pinned</p> -->
+</article>

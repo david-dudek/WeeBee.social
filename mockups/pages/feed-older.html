@@ -1,0 +1,42 @@
+{{var title=Feed — older posts — WeeBee mockup}}
+<h1>Feed — older posts</h1>
+<p>Second page of the feed, kept minimal — it exists only to show the
+"← Newer posts" side of SPEC §7.7.1's pairing, which the first page
+cannot show on its own since nothing is newer than it.</p>
+
+<nav class="feed-pagination" aria-label="Feed pages">
+<a href="feed.html">← Newer posts</a>
+</nav>
+
+<ol class="feed-list">
+<li>
+<article class="post" aria-label="Post by Mom, about a month ago">
+<p class="post-meta">
+<span class="post-author">Mom</span>
+<span class="post-age">About a month ago</span>
+</p>
+<div class="post-body">
+<p>Found the box of your old school photos while cleaning out the hall closet. Bringing them next time I visit so you can be embarrassed by them in person instead of over the phone.</p>
+</div>
+<p class="post-visibility">Visible to: the friends Mom sent this to.</p>
+</article>
+</li>
+
+<li>
+<article class="post" aria-label="Post by Tom, over a month ago">
+<p class="post-meta">
+<span class="post-author">Tom</span>
+<span class="post-age">Over a month ago</span>
+</p>
+<div class="post-body">
+<p>Car passed inspection on the first try for once. Small victories.</p>
+</div>
+<p class="post-visibility">Visible to: the friends Tom sent this to.</p>
+</article>
+</li>
+</ol>
+
+<!-- No "Older posts →" link on this page in this mockup: it is the last
+     page built for this demonstration, not a claim that the feed ends
+     here. A real feed page always carries "Older posts →" while more
+     exist (SPEC §7.7.1). -->

@@ -3,3 +3,7 @@
 
 # Local, machine-specific AI-tool permissions (not project configuration)
 .claude/settings.local.json
+
+# Generated output of the mockups build (prompts/mockups/README.md) —
+# rebuild with `python3 mockups/build.py`
+mockups/site/
