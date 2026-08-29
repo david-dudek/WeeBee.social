@@ -337,3 +337,45 @@ and `unfriend-confirm.html` (item 6's unfriend and block, one combined file, per
 filename). No new forward-referenced filenames are introduced; every link this session adds
 either resolves to one of these seven, to an already-built page, or to the still-unbuilt
 `profile.html`/`report.html`/`settings.html` placeholders carried since M1/M2.
+
+---
+
+## 6. Commentary/copy separation — the `.commentary` class and the toggle
+
+Added by the cross-cutting retrofit run after M5 (`prompts/mockups/content-commentary-separation.md`),
+which audited every page M1–M5 had built. The standing rule (now also in
+`prompts/mockups/README.md` and every `M1.md`–`M8.md`'s own "Standing constraints" section): every
+sentence on every page is either simulated content (what WeeBee would actually say to a user who
+has never read a design document — plain, warm, non-technical) or commentary (a build note for the
+founder — SPEC/ARCHITECTURE citations, invented-vs-established calls, cross-references to another
+mockup file, NOTES.md or CRIB.md). Never mixed in one sentence or paragraph.
+
+- **The class is `.commentary`**, not the earlier `.session-note` (renamed track-wide; every page
+  that used the old name was updated). Styled in `styles.css` as italic monospace
+  (`var(--font-mono)`, `font-style: italic`) in the existing muted secondary color and size — a
+  bigger visual break than grey-and-small alone, so it reads unmistakably as a build note even
+  when skimming.
+- **The toggle** is one real `<input type="checkbox" id="commentary-toggle" checked>` with a
+  visible `<label>` ("Show build commentary and SPEC citations"), added once in the shared
+  `partials/_base.html` header — not hand-rolled per page. A CSS `body:has(#commentary-toggle
+  :not(:checked)) .commentary { display: none; }` rule in `styles.css` hides every `.commentary`
+  block on the page when unchecked; no scripts involved. Default is checked (visible), matching
+  the track's prior behavior — hiding commentary is the deliberate action.
+- **Constants in code form** (`FRIEND_CAP`, `CONTACT_ITEMS_MAX`, etc.) always belong inside
+  `.commentary`; the human-readable fact they encode ("up to 12 items," "a 300-friend limit") may
+  stay in real copy on its own, without the shouty name attached.
+- **A genuine SPEC-mandated verbatim string stays real copy**, never commentary, even though it is
+  quoted directly from SPEC — e.g. the unfriend confirmation's blockquote (§5.3) and the block
+  framing ("A user who wants the stronger outcome wants a block," §5.3). Only the citation
+  identifying *which* section mandates the wording, and any surrounding explanation, moves to
+  commentary.
+- **`pages/index.html` is exempt.** It is the founder's review index by design (M1's own
+  instructions: "this doubles as the founder's review index, so the citation matters as much as
+  the link") — it never pretends to be simulated product copy in the first place, so the grandma
+  test does not apply to it and it carries no `.commentary` wrapping.
+- **No-persistence limitation**: see `NOTES.md`. The toggle is pure CSS with no script and no
+  cookie, so it cannot remember its state across a page load — every page opens with commentary
+  visible, regardless of what a previous page was set to.
+
+M6–M8 build compliant pages from the start using this convention; they do not need a follow-up
+retrofit.

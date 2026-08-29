@@ -1,20 +1,22 @@
 {{var title=Your contact card}}
 <h1>Your contact card</h1>
-<p>SPEC §10.1: WeeBee has no free-text direct messaging. This card is the handoff to the
-channels friends already trust — phone, email, a messenger — not a rebuilt inbox. Your login
-email (§4.6) is never on this card unless you deliberately add it as its own item below; it's a
-credential, not a card entry.</p>
+<p>This card is how friends reach you elsewhere — phone, email, a messenger — not a rebuilt
+inbox. Your login email is never included unless you deliberately add it as its own item below;
+it's a credential, not a card entry.</p>
+<p class="commentary">SPEC §10.1: WeeBee has no free-text direct messaging, which is why this
+handoff card exists. The login email is governed separately, at §4.6.</p>
 
 <h2>The card starts empty</h2>
-<p>Until you add something, there is nothing here to share. A friend who requests an empty card
-gets exactly that back — see <a href="contact-card-received.html">the empty case, as a
-requester receives it</a> — not an error.</p>
+<p>Until you add something, there's nothing here to share. A friend who requests an empty card
+gets exactly that back, not an error.</p>
+<p class="commentary">See <a href="contact-card-received.html">the empty case, as a requester
+receives it</a>.</p>
 
 <h2>Add an item</h2>
-<p>Up to <code>CONTACT_ITEMS_MAX</code> = 12 items total, drawn from phone numbers, email
-addresses, and messenger links. A messenger link is only accepted from the allowlisted official
-domain of a recognized messenger — WhatsApp, Signal, Telegram and the like — never a bare URL
-(§10.2).</p>
+<p>Up to 12 items total, drawn from phone numbers, email addresses, and messenger links. A
+messenger link is only accepted from the official domain of a recognized messenger — WhatsApp,
+Signal, Telegram and the like — never a bare URL.</p>
+<p class="commentary"><code>CONTACT_ITEMS_MAX</code> = 12 (§10.2).</p>
 <fieldset>
 <legend>What kind of item?</legend>
 <div class="option-list">
@@ -35,8 +37,9 @@ domain of a recognized messenger — WhatsApp, Signal, Telegram and the like —
 friends, then any group override, then an individual override, which always wins in either
 direction. Where a friend belongs to two groups with conflicting settings for the same item, the
 more restrictive one wins — deny beats allow. <strong>Accidental under-sharing is recoverable
-(see request flags, below on <a href="contact-card-received.html">the received card</a>);
-accidental over-sharing is not.</strong> (§10.3)</p>
+(see request flags); accidental over-sharing is not.</strong></p>
+<p class="commentary">§10.3's own reasoning, quoted verbatim above. The request flags it
+mentions are demonstrated on <a href="contact-card-received.html">the received card</a>.</p>
 
 <div class="contact-item-editor">
 <h3>Phone</h3>
@@ -114,11 +117,12 @@ that touches only her card.</p>
 <input type="checkbox" id="whatsapp-override-bookclub">
 <label for="whatsapp-override-bookclub">On for the "Book club" group</label>
 </div>
-<p class="field-hint-inline">Off by default, on for everyone in Hiking crew (which Alice belongs
-to — see <a href="composer.html">the composer's group-save suggestion</a>, §6), and off for Book
+<p class="field-hint-inline">Off by default, on for everyone in Hiking crew, and off for Book
 club. Tom belongs to both groups: Hiking crew's "on" and Book club's "off" conflict for him
-specifically, and per §10.3 the more restrictive setting wins — WhatsApp stays hidden from Tom,
-even though his Hiking crew membership alone would otherwise show it.</p>
+specifically — the more restrictive setting wins, so WhatsApp stays hidden from Tom even though
+his Hiking crew membership alone would otherwise show it.</p>
+<p class="commentary">Alice belongs to Hiking crew via <a href="composer.html">the composer's
+group-save suggestion</a> (§6); deny-beats-allow is §10.3's rule.</p>
 <fieldset>
 <legend>Add a group override</legend>
 <div class="field">
@@ -153,12 +157,13 @@ even though his Hiking crew membership alone would otherwise show it.</p>
 <label for="signal-override-alice">On for Alice</label>
 </div>
 <p class="field-hint-inline">On by default for friends generally, but unchecked specifically for
-Alice — an individual override turning it off for her alone, which "always wins, in either
-direction" (§10.3). It does not appear on her card at all: not greyed out, not listed as
-withheld, simply absent, the same absence rule §9.2 uses for hidden posts.</p>
+Alice — an individual override turning it off for her alone. It does not appear on her card at
+all: not greyed out, not listed as withheld, simply absent.</p>
+<p class="commentary">An individual override always wins, in either direction (§10.3) — the
+same absence rule §9.2 uses for hidden posts.</p>
 </div>
 
-<p class="session-note">These are the same four items and the same cascade settings
+<p class="commentary">These are the same four items and the same cascade settings
 <a href="preview-as-friend.html">M4's preview-as-friend.html</a> already established for Alice's
 view of David's card — this page is the owner's side of that same data, plus the "Book club"
 group, added this session purely to demonstrate the deny-beats-allow conflict rule for Tom, who

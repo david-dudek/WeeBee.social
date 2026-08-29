@@ -32,7 +32,7 @@ fresh session in this repository.
 
 M7 and M8 may be merged into one session if the pattern is well established by M6.
 
-## The two rules that hold across all eight
+## The three rules that hold across all eight
 
 1. **Build only what the documents describe.** No invented features, no fixes for problems
    noticed along the way. Where a surface needs something neither document specifies, render
@@ -40,6 +40,16 @@ M7 and M8 may be merged into one session if the pattern is well established by M
    `mockups/NOTES.md`** — do not resolve the gap and do not edit the design documents.
 2. **Never edit `SPEC.md`, `ARCHITECTURE.md`, `BUILD_PLAN.md`, `CHANGELOG.md`, `TODO.md`, or
    anything in `prompts/`.** This track writes inside `mockups/` and nowhere else.
+3. **Separate simulated content from build commentary.** Every sentence on a page is either
+   something WeeBee would actually say to a user who has never read a design document
+   (simulated content — plain, warm, non-technical language) or a note to the founder about how
+   the page was built (commentary — SPEC/ARCHITECTURE citations, invented-vs-established calls,
+   cross-references to another mockup file, NOTES.md or CRIB.md). Never mix the two in one
+   sentence or paragraph. Wrap every commentary block in `.commentary` (a distinct
+   italic-monospace style in `styles.css`) so the shared header's build-commentary checkbox in
+   `_base.html` can hide it. See
+   [content-commentary-separation.md](content-commentary-separation.md) for the full rule,
+   worked examples, and the toggle mechanism.
 
 ## Where the gaps go
 

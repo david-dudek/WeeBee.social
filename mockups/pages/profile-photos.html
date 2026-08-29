@@ -1,6 +1,7 @@
 {{var title=David Dudek — Photos}}
-<p>David's profile, as seen by his friend Alice (see <a href="profile-blog.html">the Blog
-tab</a> for the fuller note on this session's viewpoint).</p>
+<p class="commentary">David's profile, as seen by his friend Alice (see
+<a href="profile-blog.html">the Blog tab</a> for the fuller note on this session's
+viewpoint).</p>
 
 <header class="profile-header">
 <img class="profile-photo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNDAgMjQwIj48cmVjdCB3aWR0aD0iMjQwIiBoZWlnaHQ9IjI0MCIgZmlsbD0iI2U1ZTVlNSIvPjxjaXJjbGUgY3g9IjEyMCIgY3k9Ijk1IiByPSI0NSIgZmlsbD0iIzljOWM5YyIvPjxwYXRoIGQ9Ik00MCwyMzUgQzQwLDE3NSA3NSwxNTAgMTIwLDE1MCBDMTY1LDE1MCAyMDAsMTc1IDIwMCwyMzUgWiIgZmlsbD0iIzljOWM5YyIvPjwvc3ZnPg==" alt="David, smiling on a hiking trail in mid-afternoon light, slightly out of breath." width="120" height="120">
@@ -18,11 +19,12 @@ tab</a> for the fuller note on this session's viewpoint).</p>
 </nav>
 
 <h2>Photos</h2>
-<p>David's gallery: up to <code>GALLERY_MAX</code> = 8 images, friends only (§9.2, §9.4). No
-caption field — the alternative text below each thumbnail is the caption, shown visibly in the
-expand overlay. The gallery is a <code>&lt;ul&gt;</code> of real <code>&lt;button&gt;</code>s
-in plain tab order, not a roving-tabindex grid (§16.3). Order is author-arranged; the "Move up"
-/ "Move down" reorder controls belong to session M6 and are not built here.</p>
+<p>David's gallery. Up to 8 photos, visible to friends only.</p>
+<p class="commentary"><code>GALLERY_MAX</code> = 8 images (§9.2, §9.4). No caption field — the
+alternative text below each thumbnail is the caption, shown visibly in the expand overlay. The
+gallery is a <code>&lt;ul&gt;</code> of real <code>&lt;button&gt;</code>s in plain tab order,
+not a roving-tabindex grid (§16.3). Order is author-arranged; the "Move up" / "Move down"
+reorder controls belong to session M6 and are not built here.</p>
 
 <ul class="gallery-grid">
 
@@ -76,7 +78,7 @@ in plain tab order, not a roving-tabindex grid (§16.3). Order is author-arrange
 
 </ul>
 
-<p class="session-note">Each button opens the click-to-expand overlay of §7.2.2 — a modal
+<p class="commentary">Each button opens the click-to-expand overlay of §7.2.2 — a modal
 dialog, not a raw file URL. This static mockup cannot demonstrate the click itself; see
 <a href="overlay-gallery.html">the gallery overlay, open</a>, reached here from the second
 photo above, for that state, including its next/previous controls.</p>

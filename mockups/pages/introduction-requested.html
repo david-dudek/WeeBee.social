@@ -1,13 +1,13 @@
 {{var title=Alice asks you to introduce her to Henry}}
 <h1>Alice asks you to introduce her to Henry</h1>
-<p>SPEC §5.5(b): Alice, David's friend, wants an introduction to Henry, David's friend — someone
-Alice doesn't yet know but can already see. She named him with a picker, not a text field: no
-message, no note, nothing written to David or to Henry.</p>
+<p class="commentary">SPEC §5.5(b): Alice, David's friend, wants an introduction to Henry,
+David's friend — someone Alice doesn't yet know but can already see. She named him with a
+picker, not a text field: no message, no note, nothing written to David or to Henry.</p>
 
-<p>Alice could only point at someone she can already see: a friend-of-friend who shares a mutual
-friend and, in practice, a hashtag with her (§11.3), or someone who happens to be a mutual friend
-between her and David. She can't name a stranger three hops away — that ceiling is permanent
-(§11.1) — and the picker itself never offers anyone outside it.</p>
+<p class="commentary">Alice could only point at someone she can already see: a friend-of-friend
+who shares a mutual friend and, in practice, a hashtag with her (§11.3), or someone who happens
+to be a mutual friend between her and David. She can't name a stranger three hops away — that
+ceiling is permanent (§11.1) — and the picker itself never offers anyone outside it.</p>
 
 <h2>Respond</h2>
 <p>Agreeing sends Henry the standard introduction. Declining sends nothing, to either of them.</p>
@@ -15,15 +15,16 @@ between her and David. She can't name a stranger three hops away — that ceilin
 <button type="submit" class="button">Agree — ask Henry</button>
 <button type="submit" class="button">Decline</button>
 </div>
-<p class="session-note">§5.5(b): "M's decline is silent." If you decline, Alice is never told you
+<p class="commentary">§5.5(b): "M's decline is silent." If you decline, Alice is never told you
 were asked, or that you said no — the same rule that governs every decline on this platform.</p>
 
 <h2>If you agree</h2>
-<p>Flow (a) then runs with Alice's side already accepted; only Henry decides. Henry receives the
-same introduction card <a href="introduction-broker.html">the broker flow</a> already renders for
-Ben's view of Grace — "David wants to introduce you to Alice," Alice's basic-tier profile, and
-the auto-generated context — with Accept and Decline. It is not rebuilt a second time here, since
-it is the identical component fed from Alice's data instead of Grace's.</p>
-<p class="session-note">Nothing in §5.5 says whether you, having agreed, are later told how it
+<p class="commentary">Flow (a) then runs with Alice's side already accepted; only Henry
+decides. Henry receives the same introduction card <a href="introduction-broker.html">the
+broker flow</a> already renders for Ben's view of Grace — "David wants to introduce you to
+Alice," Alice's basic-tier profile, and the auto-generated context — with Accept and Decline. It
+is not rebuilt a second time here, since it is the identical component fed from Alice's data
+instead of Grace's.</p>
+<p class="commentary">Nothing in §5.5 says whether you, having agreed, are later told how it
 went. This page states only what SPEC gives — that your decline is silent, and that agreeing
 hands the decision entirely to Henry — and does not invent an outcome notification beyond that.</p>

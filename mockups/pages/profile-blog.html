@@ -1,9 +1,10 @@
 {{var title=David Dudek — Posts}}
-<p>David's profile, as seen by his friend <strong>Alice</strong> — the first mockup in this
-track to render someone's view of <em>another</em> person's page rather than David's own
-(SPEC §9.1). The header above is <strong>the same on all four tabs</strong>: David's profile
-photo, his display name — rendered here mid-transition, "David Dudek (formerly Dave Dudek)"
-per §4.5.1 — and the report action. Nothing else lives in it, and it scrolls with the page.</p>
+<p class="commentary">David's profile, as seen by his friend <strong>Alice</strong> — the first
+mockup in this track to render someone's view of <em>another</em> person's page rather than
+David's own (SPEC §9.1). The header above is <strong>the same on all four tabs</strong>:
+David's profile photo, his display name — rendered here mid-transition, "David Dudek (formerly
+Dave Dudek)" per §4.5.1 — and the report action. Nothing else lives in it, and it scrolls with
+the page.</p>
 
 <header class="profile-header">
 <img class="profile-photo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNDAgMjQwIj48cmVjdCB3aWR0aD0iMjQwIiBoZWlnaHQ9IjI0MCIgZmlsbD0iI2U1ZTVlNSIvPjxjaXJjbGUgY3g9IjEyMCIgY3k9Ijk1IiByPSI0NSIgZmlsbD0iIzljOWM5YyIvPjxwYXRoIGQ9Ik00MCwyMzUgQzQwLDE3NSA3NSwxNTAgMTIwLDE1MCBDMTY1LDE1MCAyMDAsMTc1IDIwMCwyMzUgWiIgZmlsbD0iIzljOWM5YyIvPjwvc3ZnPg==" alt="David, smiling on a hiking trail in mid-afternoon light, slightly out of breath." width="120" height="120">
@@ -21,11 +22,11 @@ per §4.5.1 — and the report action. Nothing else lives in it, and it scrolls 
 </nav>
 
 <h2>Blog</h2>
-<p>Every post by David that Alice may see, newest first: his profile posts, his pinned posts in
-their chronological place, and his feed posts Alice was in the audience of (SPEC §9.1). Folded
-at <code>BLOG_FOLD_CHARS</code> = 2,000 — the wider threshold, because Alice deliberately
-visited David's own space (§7.7). None of these posts repeat David's name: everything here is
-his, and the header above already says whose page this is.</p>
+<p class="commentary">Every post by David that Alice may see, newest first: his profile posts,
+his pinned posts in their chronological place, and his feed posts Alice was in the audience of
+(SPEC §9.1). Folded at <code>BLOG_FOLD_CHARS</code> = 2,000 — the wider threshold, because
+Alice deliberately visited David's own space (§7.7). None of these posts repeat David's name:
+everything here is his, and the header above already says whose page this is.</p>
 
 <ol class="feed-list">
 
@@ -52,7 +53,7 @@ his, and the header above already says whose page this is.</p>
 </div>
 <p class="post-visibility">Visible to: the friends David sent this to.</p>
 </article>
-<p class="session-note">A feed post, shown here as well as in its recipients' feeds (§9.1,
+<p class="commentary">A feed post, shown here as well as in its recipients' feeds (§9.1,
 v1.16) — the posting-time snapshot and current friendship still govern, so this is visible to
 Alice only because she was one of the friends David actually sent it to, not because visiting
 his Blog tab widens anyone's audience. See
@@ -87,7 +88,7 @@ his Blog tab widens anyone's audience. See
 <p class="post-visibility">Visible to: all of David's friends.</p>
 <p class="post-pinned">Pinned</p>
 </article>
-<p class="session-note">This pinned post also appears, folded, on the Pinned tab — the two
+<p class="commentary">This pinned post also appears, folded, on the Pinned tab — the two
 tabs are never on screen together, so nothing is duplicated in view (§7.6). Here on the Blog
 tab it needs no fold: at 746 characters it is under <code>BLOG_FOLD_CHARS</code> = 2,000, even
 though it exceeds <code>FEED_FOLD_CHARS</code> = 500, which is exactly why the Pinned tab's

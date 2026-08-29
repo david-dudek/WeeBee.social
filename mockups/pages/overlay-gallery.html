@@ -1,16 +1,16 @@
 {{var title=Gallery image overlay — WeeBee mockup}}
 <h1>Gallery image overlay, open</h1>
-<p>The click-to-expand overlay of §7.2.2, reached here from the second thumbnail on
-<a href="profile-photos.html">David's Photos tab</a>. It is a proper modal dialog per §16.3:
-keyboard-openable, focus-trapped, Escape-dismissable, focus restored on close — and an in-app
-view, never a raw file URL. Because these are static pages with no scripts, this page shows the
-resulting state already open rather than the click itself; the two sections below stand for the
-two layers a real click would produce.</p>
+<p class="commentary">The click-to-expand overlay of §7.2.2, reached here from the second
+thumbnail on <a href="profile-photos.html">David's Photos tab</a>. It is a proper modal dialog
+per §16.3: keyboard-openable, focus-trapped, Escape-dismissable, focus restored on close — and
+an in-app view, never a raw file URL. Because these are static pages with no scripts, this page
+shows the resulting state already open rather than the click itself; the two sections below
+stand for the two layers a real click would produce.</p>
 
 <div class="overlay-demo-section">
 <h2>The page behind the dialog</h2>
-<p>Dimmed and inert while the dialog is open — a real focus trap keeps keyboard focus from
-reaching it at all, not merely a visual fade.</p>
+<p class="commentary">Dimmed and inert while the dialog is open — a real focus trap keeps
+keyboard focus from reaching it at all, not merely a visual fade.</p>
 <div class="modal-backdrop-content" aria-hidden="true">
 <header class="profile-header">
 <img class="profile-photo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNDAgMjQwIj48cmVjdCB3aWR0aD0iMjQwIiBoZWlnaHQ9IjI0MCIgZmlsbD0iI2U1ZTVlNSIvPjxjaXJjbGUgY3g9IjEyMCIgY3k9Ijk1IiByPSI0NSIgZmlsbD0iIzljOWM5YyIvPjxwYXRoIGQ9Ik00MCwyMzUgQzQwLDE3NSA3NSwxNTAgMTIwLDE1MCBDMTY1LDE1MCAyMDAsMTc1IDIwMCwyMzUgWiIgZmlsbD0iIzljOWM5YyIvPjwvc3ZnPg==" alt="" width="80" height="80">
@@ -39,7 +39,7 @@ reaching it at all, not merely a visual fade.</p>
 </div>
 </div>
 
-<p class="session-note">What a real click would do, that a static page cannot: move focus onto
+<p class="commentary">What a real click would do, that a static page cannot: move focus onto
 this dialog when it opens; trap focus inside it while open, so Tab cycles among Previous, Next,
 Close and the image without ever reaching the dimmed page behind; close on Escape; and return
 focus to the second gallery thumbnail afterward. Previous and Next are real buttons, so a

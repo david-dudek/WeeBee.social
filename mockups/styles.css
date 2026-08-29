@@ -461,9 +461,43 @@ legend {
   margin-bottom: var(--space-1);
 }
 
-.session-note {
+/* Build commentary — notes to the founder about how a page was built (SPEC
+   citations, invented-vs-established calls), never simulated product copy.
+   Italic monospace makes it unmistakable even when skimming; hidden
+   entirely when the header's commentary toggle is unchecked (see
+   .commentary-toggle and the body:has() rule below). */
+.commentary {
+  font-family: var(--font-mono);
+  font-style: italic;
   color: var(--color-text-secondary);
   font-size: 0.9rem;
+}
+
+.commentary-toggle {
+  margin: 0 0 var(--space-3);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--touch-min);
+  font-size: 0.9rem;
+}
+
+.commentary-toggle input[type="checkbox"] {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex-shrink: 0;
+}
+
+.commentary-toggle label {
+  cursor: pointer;
+}
+
+/* The toggle itself: a checkbox-hack, no scripts. Unchecking it hides every
+   .commentary block on the page. Uses :has(), well-supported in current
+   browsers; this track's no-invented-styling rule concerns the simulated
+   product, not this review-only control (see mockups/NOTES.md). */
+body:has(#commentary-toggle:not(:checked)) .commentary {
+  display: none;
 }
 
 /* Type-switch and similar text notices — never a modal (SPEC §7.1) */

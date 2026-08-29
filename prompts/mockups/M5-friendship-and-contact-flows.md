@@ -30,6 +30,15 @@ never asked) is what several of the controls exist to answer.
 - **Neutral, layout-true fidelity**; the existing `styles.css`; no invented brand palette.
 - **Static pages, no scripts**; **nothing fetched from anywhere**; compose the M1 partials —
   ARCHITECTURE §3.8 is explicit that no page hand-rolls a form control or a status message.
+- **Separate simulated content from build commentary.** Every sentence on a page is either
+  something WeeBee would actually say to a user who has never read a design document
+  (simulated content — plain, warm, non-technical language) or a note to the founder about how
+  the page was built (commentary — SPEC/ARCHITECTURE citations, invented-vs-established calls,
+  cross-references to another mockup file, NOTES.md or CRIB.md). Never mix the two in one
+  sentence or paragraph. Wrap every commentary block in `.commentary` (a distinct
+  italic-monospace style in `styles.css`) so the shared header's build-commentary checkbox in
+  `_base.html` can hide it. See `prompts/mockups/content-commentary-separation.md` for the full
+  rule, worked examples, and the toggle mechanism.
 
 ## What to read
 

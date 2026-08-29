@@ -1,11 +1,11 @@
 {{var title=A tagged profile post — WeeBee mockup}}
 <h1>A tagged profile post</h1>
-<p>The same single-post view, for a hashtag-gated profile post (SPEC §11.3). This page renders
-as seen by <strong>Priya</strong>, a friend-of-friend of David's who matched on #hiking through
-their mutual friend Alice — not as David's own view, which every other mockup in this track
-renders. The departure is necessary: reactions are visible only to the author of the thing
-reacted to, and the name-link rule for comments depends on who the viewer actually is (see
-<code>mockups/NOTES.md</code>).</p>
+<p class="commentary">The same single-post view, for a hashtag-gated profile post (SPEC §11.3).
+This page renders as seen by <strong>Priya</strong>, a friend-of-friend of David's who matched
+on #hiking through their mutual friend Alice — not as David's own view, which every other
+mockup in this track renders. The departure is necessary: reactions are visible only to the
+author of the thing reacted to, and the name-link rule for comments depends on who the viewer
+actually is (see <code>mockups/NOTES.md</code>).</p>
 
 <article class="post" aria-label="Post by David, several days ago">
 <p class="post-meta">
@@ -33,7 +33,7 @@ reacted to, and the name-link rule for comments depends on who the viewer actual
 <button type="button">Ha!<span class="visually-hidden"> — react to David's post</span></button>
 </div>
 </details>
-<p class="session-note">This control renders because Priya, this page's viewer, is not the
+<p class="commentary">This control renders because Priya, this page's viewer, is not the
 post's author — SPEC §8.2's "no react control on your own post" rule does not apply to her.
 David's own reaction line for this post is not shown here either, for the same reason in
 reverse: it is visible only to David (SPEC §8.2.2).</p>
@@ -75,7 +75,7 @@ reverse: it is visible only to David (SPEC §8.2.2).</p>
 </li>
 
 </ol>
-<p class="session-note">Two names render differently here on purpose (SPEC §8.1): Alice's
+<p class="commentary">Two names render differently here on purpose (SPEC §8.1): Alice's
 links, because Priya knows Alice directly. Tom's renders as plain text, because Priya and Tom
 are strangers to each other — possible only on a hashtag-gated post, where two viewers may
 share the author as their only connection. Mom's reaction to Priya's own comment renders as

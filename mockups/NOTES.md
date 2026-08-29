@@ -496,3 +496,64 @@ group or friend, plus one checkbox for the value) is how a new row gets created.
 default" is therefore the absence of a row, never a third checkbox state. Recorded because this
 is a real design decision the documents leave open, not a literal rendering of anything either
 one specifies.
+
+---
+
+## 26. Track-wide convention change: separating simulated content from build commentary
+
+**Session:** a cross-cutting retrofit run after M5, not one of the numbered M1–M8 sessions
+(`prompts/mockups/content-commentary-separation.md`). **Surface:** every page M1–M5 had built
+(~28 files in `pages/`), plus `partials/_base.html`, `styles.css`, `prompts/mockups/README.md`,
+and each `M1.md`–`M8.md`'s own "Standing constraints" section.
+
+**What triggered it:** every page built so far mixed two audiences in one stream of text — copy a
+real WeeBee user would see, and commentary explaining a build decision to the founder (SPEC
+citations, "this is invented," cross-references to other pages). The `.session-note` class
+(added in M1) was meant to mark the second kind, but it was applied inconsistently: a lot of
+commentary sat in plain, unclassed paragraphs, including raw SPEC section numbers and phrases
+like "§5.3, verbatim:" inside what was meant to read as product copy.
+
+**What changed:**
+
+1. **The rule.** A new third standing rule, "separate simulated content from build commentary,"
+   added to `prompts/mockups/README.md` alongside the two existing ones, and to the same bullet
+   list in every `M1.md`–`M8.md`. The test: would WeeBee actually say this to a user who has never
+   read a design document? If not, it is commentary — full stop. This covers any SPEC/ARCHITECTURE
+   section reference, any named constant in its shouty code form, anything explaining *why* a page
+   was built a certain way or referencing another mockup file, and anything using words like
+   "verbatim," "this session," "this track," "worked example," or "placeholder." The one exception:
+   a genuine SPEC-mandated verbatim interface string (e.g. the unfriend confirmation's blockquote)
+   stays real copy — SPEC just happens to mandate its exact wording.
+2. **The style.** `.session-note` renamed to `.commentary` everywhere it appeared (every page that
+   used it, plus `styles.css`), and restyled as italic monospace in the existing muted color and
+   size — a bigger visual break than grey-and-small alone, unmistakable as a build note even when
+   skimming.
+3. **The toggle.** One real, visibly labelled `<input type="checkbox" id="commentary-toggle"
+   checked>` ("Show build commentary and SPEC citations") added once to the shared header in
+   `partials/_base.html`, plus a single CSS rule in `styles.css`
+   (`body:has(#commentary-toggle:not(:checked)) .commentary { display: none; }`) that hides every
+   commentary block on the page when unchecked. No scripts. Default checked (visible), matching
+   the track's behavior up to now.
+4. Every page M1–M5 built was re-audited sentence by sentence: existing `.session-note` blocks
+   were renamed in place; plain paragraphs that were actually commentary (most of the intro
+   paragraph under each page's `<h1>`, and most of the explanatory text under each section's `<h2>`
+   describing what a tab or state shows) were reclassified; a handful of paragraphs that mixed a
+   real fact with a trailing citation or a shouty constant were split, keeping the human-readable
+   fact in real copy and moving the citation/constant to an adjacent commentary note; and two
+   verbatim SPEC quotes (`unfriend-confirm.html`'s §5.3 blockquote and its block-framing quote)
+   that had been embellished with mockup-only asides (e.g. "below on the received card" inserted
+   into what CRIB.md registers as a verbatim quote) were restored to SPEC's actual wording, with
+   the aside moved to an adjacent commentary note instead.
+
+**Left alone, deliberately:** `pages/index.html`. It is the founder's own review index by design —
+M1's instructions call it out explicitly as doubling for that purpose, so it was never simulated
+product copy in the first place and the grandma test does not apply. It keeps its SPEC citations
+in plain text, unwrapped.
+
+**No-persistence limitation, accepted rather than chased:** the toggle is pure CSS with no script
+and no cookie, so it cannot remember its state across a page load. Every page opens with
+commentary visible (the default), regardless of what state a previous page was left in. A founder
+clicking through several pages with the toggle off will find it re-checked on each new page. This
+is inherent to a static, script-free mockup track and is not a bug to fix within it.
+
+See `CRIB.md` §6 for the registered convention M6–M8 should follow from the start.
