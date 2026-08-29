@@ -1,0 +1,121 @@
+<!-- Standalone file, not wrapped in partials/_base.html: a real WeeBee email
+     is never delivered inside the web app's own header, navigation or
+     stylesheet. SPEC §16.3 places email "outside WCAG's scope for pages,
+     inside the spirit of this section" -- no skip-link, landmark regions or
+     shared nav apply here. Built via the same kind of narrow, one-purpose
+     build.py exception maintenance.html already uses -- see
+     mockups/NOTES.md. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Security notice emails — WeeBee mockup</title>
+<style>
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    padding: 2.5rem 1rem;
+    background: #ffffff;
+    color: #1a1a1a;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+  main { max-width: 34rem; margin: 0 auto; }
+  h1, h2 { line-height: 1.25; }
+  p { margin: 0 0 1rem; }
+  .promise {
+    padding: 0.75rem 1rem;
+    border-left: 4px solid #6b6b6b;
+    background: #f2f2f2;
+  }
+  dl.envelope {
+    margin: 0 0 1.5rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid #c7c7c7;
+    border-radius: 0.25rem;
+  }
+  dl.envelope div { display: flex; gap: 0.5rem; flex-wrap: wrap; margin: 0.2rem 0; }
+  dl.envelope dt { font-weight: 700; margin: 0; min-width: 4.5rem; }
+  dl.envelope dd { margin: 0; }
+  .commentary {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-style: italic;
+    color: #4d4d4d;
+    font-size: 0.9rem;
+  }
+  .message-block {
+    margin-bottom: 2.5rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid #c7c7c7;
+  }
+  .message-block:last-of-type { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  code { overflow-wrap: break-word; word-break: break-word; }
+</style>
+</head>
+<body>
+<main>
+
+<h1>Security notices</h1>
+<p class="commentary">Two worked examples in one file, the same pattern
+<a href="../reset-code.html">reset-code.html</a> already uses for more than one state: SPEC
+§4.6.1 names three event types that "generate account/security notifications" and "carry absolute
+timestamps wherever they appear" — new-device login, password change, and email change. The third,
+email change, has its own dedicated pair of templates
+(<a href="email-change-code.html">email-change-code.html</a> and
+<a href="email-change-notice.html">email-change-notice.html</a>) per this session's own item 4, so
+the two shown here are the other two.</p>
+
+<div class="message-block">
+<dl class="envelope">
+<div><dt>From:</dt><dd>WeeBee &lt;notifications@weebee.social&gt;</dd></div>
+<div><dt>To:</dt><dd>David Dudek &lt;david@example.com&gt;</dd></div>
+<div><dt>Subject:</dt><dd>New sign-in to your WeeBee account</dd></div>
+</dl>
+
+<h2>New sign-in to your account</h2>
+
+<p>Your WeeBee account was just signed in to from a new device, at 2026-08-04 21:14 UTC.</p>
+
+<p>If this was you, there's nothing else to do.</p>
+
+<p>If it wasn't, open WeeBee yourself and start a password reset right away.</p>
+
+<p class="promise">WeeBee will never email you a link to log in or reset your password — only a
+code you type in yourself.</p>
+</div>
+
+<div class="message-block">
+<dl class="envelope">
+<div><dt>From:</dt><dd>WeeBee &lt;notifications@weebee.social&gt;</dd></div>
+<div><dt>To:</dt><dd>David Dudek &lt;david@example.com&gt;</dd></div>
+<div><dt>Subject:</dt><dd>Your WeeBee password was changed</dd></div>
+</dl>
+
+<h2>Your password was changed</h2>
+
+<p>The password on your WeeBee account was just changed, at 2026-08-04 21:14 UTC.</p>
+
+<p>If this was you, there's nothing else to do.</p>
+
+<p>If it wasn't, open WeeBee yourself and start a password reset right away — you don't need your
+old password to do that.</p>
+
+<p class="promise">WeeBee will never email you a link to log in or reset your password — only a
+code you type in yourself.</p>
+</div>
+
+<p>— WeeBee</p>
+
+<p class="commentary">SPEC §4.6.1: "these events carry absolute timestamps wherever they
+appear... 'was that login me?' is not a question anyone can answer with 'several hours ago.'" The
+example timestamp, <em>2026-08-04 21:14 UTC</em>, is the exact form §12.3 itself gives. The
+checkable promise (§4.6.1, verbatim, per <code>mockups/CRIB.md</code> §2) appears on both, since
+either scenario is exactly the moment a worried recipient is most exposed to a look-alike
+follow-up email.</p>
+
+</main>
+</body>
+</html>

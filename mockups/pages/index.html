@@ -214,5 +214,46 @@ HTML comment, built via a narrow one-file exception in <code>build.py</code> (AR
 
 <div class="session-group">
 <h2>M8 — Emails</h2>
-<p class="not-built">Not yet built.</p>
+<p>Every platform email SPEC §16.1 puts in scope, each as an HTML file plus its required
+plain-text alternative (§16.3) — standalone documents, not wrapped in the shared header and
+navigation every other mockup uses, since a real email is never delivered inside the web app's
+own chrome (see <code>mockups/NOTES.md</code>). Codes, not links, govern every one of these
+except the first; no relative age appears in any of them; absolute timestamps appear only where
+§7.5.1's two exceptions apply.</p>
+<ul>
+<li><a href="emails/invite.html">Invite</a>
+(<a href="emails/invite.txt">plain text</a>) — the one email that carries a link, saying so
+inside itself, with the 14-day expiry and the automatic inviter/invitee friendship (SPEC §4.1,
+§4.6.1).</li>
+<li><a href="emails/verify-code.html">Registration verification code</a>
+(<a href="emails/verify-code.txt">plain text</a>) — the code that finishes the signup
+<a href="invite-redeem.html">invite-redeem.html</a> started, no link (SPEC §4.1, §4.6.1).</li>
+<li><a href="emails/reset-code.html">Password reset code</a>
+(<a href="emails/reset-code.txt">plain text</a>) — the checkable anti-phishing promise, verbatim,
+alongside the code (SPEC §4.6.1).</li>
+<li><a href="emails/email-change-code.html">Email change — code to the new address</a>
+(<a href="emails/email-change-code.txt">plain text</a>) and
+<a href="emails/email-change-notice.html">email change — notice to the old address</a>
+(<a href="emails/email-change-notice.txt">plain text</a>) — two templates for one flow, the
+second carrying an absolute timestamp as one of §4.6.1's named security-event types (SPEC §4.6,
+§4.6.1).</li>
+<li><a href="emails/security-event.html">Security notices</a>
+(<a href="emails/security-event.txt">plain text</a>) — new-device login and password change,
+both with the absolute-timestamp exception to §7.5.1's relative-time rule (SPEC §4.6.1,
+§7.5.1).</li>
+<li><a href="emails/inactivity-dormant.html">Inactivity — dormant notices</a>
+(<a href="emails/inactivity-dormant.txt">plain text</a>) — the gentle 180- and 365-day nudges,
+with no time reference of any kind (SPEC §4.8).</li>
+<li><a href="emails/inactivity-deletion.html">Inactivity — deletion warnings</a>
+(<a href="emails/inactivity-deletion.txt">plain text</a>) — the 670- and 700-day warnings,
+stating the absolute deletion date rather than "in a couple of months" (SPEC §4.8, §7.5.1).</li>
+<li><a href="emails/operator-warning.html">Operator warning</a>
+(<a href="emails/operator-warning.txt">plain text</a>) — §13.2.1's Warn outcome: no link, no
+reporter identified, not gated by §12's optional-email setting, no in-feed equivalent (SPEC
+§13.2.1).</li>
+<li><a href="emails/social-notification.html">Social notification, emailed</a>
+(<a href="emails/social-notification.txt">plain text</a>) — the optional email echo of an
+in-feed notification: names rather than counts, no excerpt, and — unlike its in-feed twin on
+<a href="feed.html">feed.html</a> — no link and no age at all (SPEC §12, §12.2, §12.3).</li>
+</ul>
 </div>

@@ -1,0 +1,101 @@
+<!-- Standalone file, not wrapped in partials/_base.html: a real WeeBee email
+     is never delivered inside the web app's own header, navigation or
+     stylesheet. SPEC §16.3 places email "outside WCAG's scope for pages,
+     inside the spirit of this section" -- no skip-link, landmark regions or
+     shared nav apply here. Built via the same kind of narrow, one-purpose
+     build.py exception maintenance.html already uses -- see
+     mockups/NOTES.md. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Password reset code email — WeeBee mockup</title>
+<style>
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    padding: 2.5rem 1rem;
+    background: #ffffff;
+    color: #1a1a1a;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+  main { max-width: 34rem; margin: 0 auto; }
+  h1, h2 { line-height: 1.25; }
+  p { margin: 0 0 1rem; }
+  .code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    padding: 0.75rem 1rem;
+    border: 1px solid #c7c7c7;
+    border-radius: 0.25rem;
+    display: inline-block;
+  }
+  .promise {
+    padding: 0.75rem 1rem;
+    border-left: 4px solid #6b6b6b;
+    background: #f2f2f2;
+  }
+  dl.envelope {
+    margin: 0 0 1.5rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid #c7c7c7;
+    border-radius: 0.25rem;
+  }
+  dl.envelope div { display: flex; gap: 0.5rem; flex-wrap: wrap; margin: 0.2rem 0; }
+  dl.envelope dt { font-weight: 700; margin: 0; min-width: 4.5rem; }
+  dl.envelope dd { margin: 0; }
+  .commentary {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-style: italic;
+    color: #4d4d4d;
+    font-size: 0.9rem;
+  }
+  code { overflow-wrap: break-word; word-break: break-word; }
+</style>
+</head>
+<body>
+<main>
+
+<dl class="envelope">
+<div><dt>From:</dt><dd>WeeBee &lt;notifications@weebee.social&gt;</dd></div>
+<div><dt>To:</dt><dd>David Dudek &lt;david@example.com&gt;</dd></div>
+<div><dt>Subject:</dt><dd>Your WeeBee password reset code</dd></div>
+</dl>
+
+<h1>Reset your password</h1>
+
+<p>We got a request to reset the password on your WeeBee account. Here's your code:</p>
+
+<p class="code">719045</p>
+
+<p>Open the WeeBee login page yourself, choose "Forgot your password?", and enter this code
+there. It stops working 15 minutes after we sent it — that page will always let you ask for a
+new one if it expires first.</p>
+
+<p class="promise">WeeBee will never email you a link to log in or reset your password — only a
+code you type in yourself.</p>
+
+<p>If you didn't ask for this, you don't need to do anything — your password hasn't changed, and
+you can ignore this email.</p>
+
+<p>— WeeBee</p>
+
+<p class="commentary">SPEC §4.6.1: password reset is completed with "a short, single-use,
+time-limited numeric code... that the user types into a page they reached by navigating to the
+site themselves — never by clicking a link in the email." <code>RESET_CODE_LENGTH</code> = 6
+digits, <code>RESET_CODE_TTL_MINUTES</code> = 15. The checkable promise above is quoted verbatim
+from §4.6.1, per <code>mockups/CRIB.md</code> §2. This is the email that
+<code>mockups/pages/reset-request.html</code> triggers and
+<code>mockups/pages/reset-code.html</code> (the app page, not this email) receives the code back
+on — same filename, different directory, deliberately: this file represents what actually lands
+in an inbox, not the form the code gets typed into.</p>
+
+</main>
+</body>
+</html>

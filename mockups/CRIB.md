@@ -54,6 +54,13 @@ them rather than re-reading §14 whole.
 | `BACKUP_RETENTION_DAYS` | 30 days after live erasure | §7.5, §4.7 |
 | `POST_MIN_INTERVAL_MINUTES` | ≈ 10 (suggested default) | §7.3, §13.6 |
 
+**M8 adds:**
+
+| Constant | Value | Ref |
+|---|---|---|
+| `INACTIVITY_DELETE_DAYS` | 730 (two years since last login) | §4.8 |
+| `INACTIVITY_WARN_DAYS` | 180, 365, 670, 700 days since last login | §4.8 |
+
 ---
 
 ## 2. Verbatim interface strings
@@ -185,6 +192,21 @@ into one deadline — §4.7 and §7.5 both explicitly refuse a combined "gone by
 *"Slow down, you can post again in N minutes."* Rendered on `errors.html` as *"Slow down — you
 can post again in 8 minutes."*
 
+### §4.8 — The absolute deletion-date example (M8)
+
+*"your account will be deleted on 12 March"* — SPEC's own worked example, missing only a year
+(this mockup track adds one, 2027, for concreteness — see `mockups/NOTES.md`). Rendered on
+`emails/inactivity-deletion.html`, and never as a relative phrase like "in a couple of months,"
+which §4.8 explicitly rules out.
+
+### §4.6.1 and §12.2, reused across the email set (M8)
+
+The checkable promise (registered above) is repeated verbatim on `emails/reset-code.html`,
+`emails/email-change-notice.html` and both scenarios of `emails/security-event.html` — every
+touchpoint where a recipient might reasonably worry "was that me?" *"Alice and Tom commented on
+your post"* (registered above under §12.2) is reused verbatim on `emails/social-notification.html`
+as the one worked example of the optional emailed copy of an in-feed notification.
+
 ### §9.3 and §4.5 — two messages with no SPEC-given wording (M7)
 
 Neither the single response a viewer gets when they may not see a profile (§9.3) nor the honest
@@ -315,6 +337,16 @@ show. David stands in as **the inviter** instead — a role any other establishe
 equally have played — which is also what lets the page state §4.1's automatic
 inviter/invitee friendship concretely ("you and David automatically become friends") rather than
 abstractly.
+
+**M8 adds a seventh name, Jamie**, a new, minimal, backstory-free placeholder used only as the
+envelope recipient on `emails/invite.html` and `emails/verify-code.html` — the invitee mid
+registration, continuing M7's own precedent that nobody has an account yet at this point in the
+story, so there is no established cast member to name. **M8 also gives David two invented example
+email addresses**, `david@example.com` (his ordinary login address, used as the recipient on
+every other email in this session) and `d.dudek@example.com` (the new address in the
+email-change pair) — both on the reserved documentation domain `example.com`, chosen so neither
+collides with any real address. The sending address, `notifications@weebee.social`, is likewise
+invented: ARCHITECTURE §3.6 requires a transactional email provider but names no specific address.
 
 ---
 
@@ -448,6 +480,15 @@ Per the precedent M3, M4 and M6 already set for a link in a file outside the cur
 touched set (see entries 8, 16, 20, 21, 27 in `mockups/NOTES.md`), `settings.html` is left as
 found; see `mockups/NOTES.md` for the full entry.
 
+**M8 builds ten templates in a new directory, `pages/emails/`**, each as an `.html` + `.txt`
+pair: `invite`, `verify-code`, `reset-code`, `email-change-code`, `email-change-notice`,
+`security-event`, `inactivity-dormant`, `inactivity-deletion`, `operator-warning`,
+`social-notification`. This is ten files where the session's own prompt says "nine templates" —
+see `mockups/NOTES.md` for the count mismatch, not resolved, built as ten regardless since item 4
+of the prompt's own list unambiguously asks for two separate files
+(`email-change-code`/`email-change-notice`). Unlike every other page in this track, none of the
+ten is wrapped in `partials/_base.html` — see §6 immediately below for why and how.
+
 ---
 
 ## 6. Commentary/copy separation — the `.commentary` class and the toggle
@@ -526,3 +567,21 @@ bordered, plain-weight box (not italic monospace), distinct from both `.commenta
 `.notice`. A page carrying this label is still expected to separate its own simulated copy from
 its own commentary blocks everywhere else on the page — the exemption covers only the one
 top-of-page label, not the whole page the way `pages/index.html` is wholly exempt.
+
+**M8 extends `build.py` a second time, generalizing the one-file exception M7 made for
+`maintenance.html` into a whole-directory rule.** Every file directly inside `pages/emails/`
+(both the `.html` and its `.txt` twin) is copied straight through to `site/emails/`, unwrapped —
+no `_base.html`, no `{{include}}`, no shared header, nav or footer, and critically, no
+`<link rel="stylesheet" href="styles.css">`. This is not only a build-harness workaround the way
+`banned.html`'s carried-over nav was (`mockups/NOTES.md` entry 35): SPEC §16.3 itself places
+email "outside WCAG's scope for pages," and this session's own instructions single out §16.3's
+email requirement as "a requirement rather than a preference" — legible without images or CSS,
+with no layout that depends on a stylesheet. Wrapping an email template in the shared
+`_base.html` would inject the mockup site's own stylesheet into markup whose entire point is
+demonstrating it doesn't need one, which would be a straightforward fidelity failure, not a
+convenience skipped. Each of the ten templates therefore carries its own minimal inline `<style>`
+(no external stylesheet reference at all), following the precedent `maintenance.html` already set
+for a standalone document, including a locally-scoped `.commentary` class matching
+`styles.css`'s own — but with **no commentary toggle**, since the checkbox-hack toggle lives in
+`_base.html`'s shared header, which these pages don't include. See `mockups/NOTES.md` for this
+limitation stated plainly rather than worked around.

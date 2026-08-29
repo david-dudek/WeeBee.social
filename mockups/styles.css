@@ -1,8 +1,10 @@
 /*
   WeeBee mockups — one hand-written stylesheet, mobile-first.
-  Neutral greys only: no invented brand palette (see mockups/NOTES.md).
-  Contrast targets (SPEC §16.3): body text >= 4.5:1, UI boundaries and
-  focus rings >= 3:1, verified against --color-bg below.
+  Neutral greys only for surfaces and body text: no invented brand palette
+  (see mockups/NOTES.md). Link color is the one deliberate exception --
+  the conventional web blue below, for legibility, not a brand choice; see
+  --color-link. Contrast targets (SPEC §16.3): body text >= 4.5:1, UI
+  boundaries and focus rings >= 3:1, verified against --color-bg below.
   Touch targets: 44x44 CSS px minimum on every interactive element.
   Reflows with no horizontal page scroll at 320px viewport width.
 */
@@ -16,7 +18,7 @@
   --color-border: #6b6b6b;
   --color-border-light: #c7c7c7;
   --color-focus: #1a1a1a;
-  --color-link: #1a1a1a;
+  --color-link: #0000ee; /* traditional web blue, ~8.6:1 against --color-bg */
 
   --space-1: 0.25rem;
   --space-2: 0.5rem;

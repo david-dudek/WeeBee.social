@@ -1,0 +1,33 @@
+== First deletion warning (sent 670 days since last login, 60 days before deletion) ==
+
+From: WeeBee <notifications@weebee.social>
+To: David Dudek <david@example.com>
+Subject: Your WeeBee account will be deleted on 12 March 2027
+
+You haven't logged in to WeeBee in a long time. If that doesn't change, your account — everything
+in it — will be deleted on 12 March 2027.
+
+Logging in is all it takes to cancel this. Once you're in, there's nothing else you need to do.
+
+If you'd rather your account be deleted, you don't need to do anything at all — it will happen on
+its own, on that date.
+
+— WeeBee
+
+
+== Second and final deletion warning (sent 700 days since last login, 30 days before the same
+   deletion date) ==
+
+From: WeeBee <notifications@weebee.social>
+To: David Dudek <david@example.com>
+Subject: Your WeeBee account will be deleted on 12 March 2027
+
+This is the last notice before it happens: your WeeBee account, and everything in it, will be
+deleted on 12 March 2027, unless you log in before then.
+
+Logging in is all it takes to cancel this. Once you're in, there's nothing else you need to do.
+
+If you'd rather your account be deleted, you don't need to do anything at all — it will happen on
+its own, on that date.
+
+— WeeBee

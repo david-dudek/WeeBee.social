@@ -1,0 +1,21 @@
+From: WeeBee <notifications@weebee.social>
+To: Jamie <jamie@example.com>
+Subject: David has invited you to join WeeBee
+
+David has invited you to join WeeBee, a small, private social network for people who already know
+each other.
+
+Redeeming this invite creates your account — and the moment you finish, you and David
+automatically become friends.
+
+This is the only email WeeBee ever sends with a link inside it. Every other email we send —
+including the ones you'll get once you're a member — uses a short code you type in yourself,
+never a link to click.
+
+Redeem your invite:
+https://weebee.social/invite/9f3ac2d1
+
+This link works once, and only for the next 14 days. If it's not used by then, it simply expires,
+and David is free to send another whenever he's ready.
+
+— WeeBee

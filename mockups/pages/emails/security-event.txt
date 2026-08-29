@@ -1,0 +1,35 @@
+== New sign-in to your account ==
+
+From: WeeBee <notifications@weebee.social>
+To: David Dudek <david@example.com>
+Subject: New sign-in to your WeeBee account
+
+Your WeeBee account was just signed in to from a new device, at 2026-08-04 21:14 UTC.
+
+If this was you, there's nothing else to do.
+
+If it wasn't, open WeeBee yourself and start a password reset right away.
+
+WeeBee will never email you a link to log in or reset your password — only a code you type in
+yourself.
+
+— WeeBee
+
+
+== Your password was changed ==
+
+From: WeeBee <notifications@weebee.social>
+To: David Dudek <david@example.com>
+Subject: Your WeeBee password was changed
+
+The password on your WeeBee account was just changed, at 2026-08-04 21:14 UTC.
+
+If this was you, there's nothing else to do.
+
+If it wasn't, open WeeBee yourself and start a password reset right away — you don't need your
+old password to do that.
+
+WeeBee will never email you a link to log in or reset your password — only a code you type in
+yourself.
+
+— WeeBee

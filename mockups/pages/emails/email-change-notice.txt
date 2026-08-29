@@ -1,0 +1,16 @@
+From: WeeBee <notifications@weebee.social>
+To: David Dudek <david@example.com>
+Subject: Your WeeBee login email was changed
+
+The login email on your WeeBee account was just changed from this address to a new one, at
+2026-08-04 21:14 UTC.
+
+If that was you, there's nothing else to do.
+
+If it wasn't, someone else may have access to your account. Open WeeBee yourself and start a
+password reset right away.
+
+WeeBee will never email you a link to log in or reset your password — only a code you type in
+yourself.
+
+— WeeBee

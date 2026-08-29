@@ -1,0 +1,12 @@
+From: WeeBee <notifications@weebee.social>
+To: David Dudek <david@example.com>
+Subject: Alice and Tom commented on your post
+
+Alice and Tom commented on your post.
+
+Open WeeBee to read what they said.
+
+You're getting this because you turned on email notifications in your WeeBee settings —
+everything here already showed up in your feed first.
+
+— WeeBee

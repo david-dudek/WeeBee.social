@@ -1,0 +1,13 @@
+From: WeeBee <notifications@weebee.social>
+To: David Dudek <david@example.com>
+Subject: An account notice from WeeBee
+
+A comment you posted was reported. After reviewing it, the person who runs WeeBee has removed
+it — it crossed into personal harassment, not just a disagreement.
+
+This is a warning. If this keeps happening, your account may be suspended.
+
+You're getting this by email regardless of your notification settings — it's an account matter,
+not a social notification. You don't need to reply, and there's nothing else to do here.
+
+— WeeBee

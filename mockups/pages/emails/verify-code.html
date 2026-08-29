@@ -1,0 +1,93 @@
+<!-- Standalone file, not wrapped in partials/_base.html: a real WeeBee email
+     is never delivered inside the web app's own header, navigation or
+     stylesheet. SPEC §16.3 places email "outside WCAG's scope for pages,
+     inside the spirit of this section" -- no skip-link, landmark regions or
+     shared nav apply here. Built via the same kind of narrow, one-purpose
+     build.py exception maintenance.html already uses -- see
+     mockups/NOTES.md. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Verification code email — WeeBee mockup</title>
+<style>
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    padding: 2.5rem 1rem;
+    background: #ffffff;
+    color: #1a1a1a;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+  main { max-width: 34rem; margin: 0 auto; }
+  h1, h2 { line-height: 1.25; }
+  p { margin: 0 0 1rem; }
+  .code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    padding: 0.75rem 1rem;
+    border: 1px solid #c7c7c7;
+    border-radius: 0.25rem;
+    display: inline-block;
+  }
+  dl.envelope {
+    margin: 0 0 1.5rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid #c7c7c7;
+    border-radius: 0.25rem;
+  }
+  dl.envelope div { display: flex; gap: 0.5rem; flex-wrap: wrap; margin: 0.2rem 0; }
+  dl.envelope dt { font-weight: 700; margin: 0; min-width: 4.5rem; }
+  dl.envelope dd { margin: 0; }
+  .commentary {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-style: italic;
+    color: #4d4d4d;
+    font-size: 0.9rem;
+  }
+  code { overflow-wrap: break-word; word-break: break-word; }
+</style>
+</head>
+<body>
+<main>
+
+<dl class="envelope">
+<div><dt>From:</dt><dd>WeeBee &lt;notifications@weebee.social&gt;</dd></div>
+<div><dt>To:</dt><dd>Jamie &lt;jamie@example.com&gt;</dd></div>
+<div><dt>Subject:</dt><dd>Your WeeBee verification code</dd></div>
+</dl>
+
+<h1>Verify your email address</h1>
+
+<p>Here's the code to finish creating your WeeBee account:</p>
+
+<p class="code">384219</p>
+
+<p>Go back to the page where you started signing up, and enter this code there. It stops working
+15 minutes after we sent it — if it's expired by the time you're ready, that page will let you
+ask for a new one.</p>
+
+<p>If you didn't try to create a WeeBee account, you don't need to do anything — nobody can use
+this address without also entering the code above.</p>
+
+<p>— WeeBee</p>
+
+<p class="commentary">SPEC §4.1: redeeming an invite requires "a working email address (verified
+by a numeric code, §4.6.1)." §4.6.1: "email verification at registration works the same way" as
+password reset and email change — the same shared code mechanics,
+<code>RESET_CODE_LENGTH</code> = 6 digits, <code>RESET_CODE_TTL_MINUTES</code> = 15, entered on a
+page the user reached themselves rather than by clicking a link. This is the email
+<a href="../invite-redeem.html">invite-redeem.html</a>'s own section 1 already shows being sent
+("We've sent a code to that address") — same recipient placeholder, Jamie, continuing the
+registration this session's <code>invite.html</code> started. No link appears anywhere on this
+page, per this session's own rule 1.</p>
+
+</main>
+</body>
+</html>

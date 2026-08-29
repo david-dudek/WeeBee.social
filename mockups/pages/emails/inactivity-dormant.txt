@@ -1,0 +1,26 @@
+== First dormancy notice (sent 180 days since last login) ==
+
+From: WeeBee <notifications@weebee.social>
+To: David Dudek <david@example.com>
+Subject: It's been a while since you've checked WeeBee
+
+It's been a little while since you last opened WeeBee. Nothing's wrong — we just wanted to let
+you know your friends' posts are still there whenever you're ready to take a look.
+
+There's nothing you need to do.
+
+— WeeBee
+
+
+== Second dormancy notice (sent 365 days since last login) ==
+
+From: WeeBee <notifications@weebee.social>
+To: David Dudek <david@example.com>
+Subject: It's been a while since you've checked WeeBee
+
+It's been a little while since you last opened WeeBee. Nothing's wrong — we just wanted to let
+you know your friends' posts are still there whenever you're ready to take a look.
+
+There's nothing you need to do.
+
+— WeeBee

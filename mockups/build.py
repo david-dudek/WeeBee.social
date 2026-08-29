@@ -62,6 +62,26 @@ def build() -> None:
         shutil.rmtree(SITE_DIR)
     SITE_DIR.mkdir()
 
+    # Session M8: mockups/pages/emails/ holds platform email templates, each an
+    # .html + .txt pair. Emails are copied through unwrapped, the same
+    # treatment maintenance.html already gets below and for the same reason:
+    # a real WeeBee email is never delivered inside the web app's own header,
+    # navigation or stylesheet, and SPEC §16.3 itself places email "outside
+    # WCAG's scope for pages" -- wrapping one in _base.html would link
+    # styles.css into markup that has to demonstrate it is legible WITHOUT a
+    # stylesheet, which is the opposite of what this session's build
+    # instructions ask for. This is the one other place in the M1-M8 track
+    # (besides maintenance.html) where build.py itself is extended rather
+    # than only pages/ -- see mockups/NOTES.md.
+    emails_dir = PAGES_DIR / "emails"
+    if emails_dir.is_dir():
+        site_emails_dir = SITE_DIR / "emails"
+        site_emails_dir.mkdir(exist_ok=True)
+        for email_path in sorted(emails_dir.iterdir()):
+            if email_path.is_file():
+                shutil.copy(email_path, site_emails_dir / email_path.name)
+                print(f"copied emails/{email_path.name} (standalone, not wrapped in _base.html)")
+
     base_template = expand_includes((PARTIALS_DIR / "_base.html").read_text(encoding="utf-8"))
 
     for page_path in sorted(PAGES_DIR.glob("*.html")):

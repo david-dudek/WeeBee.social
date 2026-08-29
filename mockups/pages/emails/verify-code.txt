@@ -1,0 +1,16 @@
+From: WeeBee <notifications@weebee.social>
+To: Jamie <jamie@example.com>
+Subject: Your WeeBee verification code
+
+Here's the code to finish creating your WeeBee account:
+
+384219
+
+Go back to the page where you started signing up, and enter this code there. It stops working
+15 minutes after we sent it — if it's expired by the time you're ready, that page will let you
+ask for a new one.
+
+If you didn't try to create a WeeBee account, you don't need to do anything — nobody can use this
+address without also entering the code above.
+
+— WeeBee

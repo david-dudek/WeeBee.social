@@ -1,0 +1,84 @@
+<!-- Standalone file, not wrapped in partials/_base.html: a real WeeBee email
+     is never delivered inside the web app's own header, navigation or
+     stylesheet. SPEC §16.3 places email "outside WCAG's scope for pages,
+     inside the spirit of this section" -- no skip-link, landmark regions or
+     shared nav apply here. Built via the same kind of narrow, one-purpose
+     build.py exception maintenance.html already uses -- see
+     mockups/NOTES.md. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Operator warning email — WeeBee mockup</title>
+<style>
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    padding: 2.5rem 1rem;
+    background: #ffffff;
+    color: #1a1a1a;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+  main { max-width: 34rem; margin: 0 auto; }
+  h1, h2 { line-height: 1.25; }
+  p { margin: 0 0 1rem; }
+  dl.envelope {
+    margin: 0 0 1.5rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid #c7c7c7;
+    border-radius: 0.25rem;
+  }
+  dl.envelope div { display: flex; gap: 0.5rem; flex-wrap: wrap; margin: 0.2rem 0; }
+  dl.envelope dt { font-weight: 700; margin: 0; min-width: 4.5rem; }
+  dl.envelope dd { margin: 0; }
+  .commentary {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-style: italic;
+    color: #4d4d4d;
+    font-size: 0.9rem;
+  }
+  code { overflow-wrap: break-word; word-break: break-word; }
+</style>
+</head>
+<body>
+<main>
+
+<dl class="envelope">
+<div><dt>From:</dt><dd>WeeBee &lt;notifications@weebee.social&gt;</dd></div>
+<div><dt>To:</dt><dd>David Dudek &lt;david@example.com&gt;</dd></div>
+<div><dt>Subject:</dt><dd>An account notice from WeeBee</dd></div>
+</dl>
+
+<h1>A message about your account</h1>
+
+<p>A comment you posted was reported. After reviewing it, the person who runs WeeBee has removed
+it — it crossed into personal harassment, not just a disagreement.</p>
+
+<p>This is a warning. If this keeps happening, your account may be suspended.</p>
+
+<p>You're getting this by email regardless of your notification settings — it's an account
+matter, not a social notification. You don't need to reply, and there's nothing else to do
+here.</p>
+
+<p>— WeeBee</p>
+
+<p class="commentary">SPEC §13.2.1, the <strong>Warn</strong> outcome: "the channel is email...
+it carries no link and asks for nothing back"; "it never identifies the reporter... a warning
+naming who complained makes reporting dangerous"; "it is not subject to §12's optional-email
+setting"; "an in-feed notification type was considered and rejected" — nothing above implies this
+also appears anywhere in the app. The body text above is this session's own plausible, neutral
+example of "the operator's text," explicitly marked as an example here rather than inside the
+message itself, since a real warning would never call itself one. No reason-count or history of
+prior warnings is stated to the recipient, even though §13.2.1 notes the operator's console
+records "the date, the text... and the report it arose from" internally. The sender is
+deliberately unnamed ("the person who runs WeeBee," not a persona) to avoid confusing this
+solo-operator platform's one human with David, this track's usual cast member playing the
+account-holder role.</p>
+
+</main>
+</body>
+</html>

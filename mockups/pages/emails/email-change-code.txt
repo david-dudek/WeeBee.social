@@ -1,0 +1,15 @@
+From: WeeBee <notifications@weebee.social>
+To: d.dudek@example.com
+Subject: Confirm your new WeeBee email address
+
+You're changing the login email on your WeeBee account to this address. Here's your code:
+
+552810
+
+Go back to the WeeBee settings page you already have open, and enter this code there to finish
+the change. It stops working 15 minutes after we sent it.
+
+If you didn't ask to change your email address, you don't need to do anything — this address
+won't be added to any account unless the code above is entered.
+
+— WeeBee

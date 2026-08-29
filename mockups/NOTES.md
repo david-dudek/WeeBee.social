@@ -4,6 +4,34 @@ Notes for the founder's review, not a to-do list. Nothing here gets fixed by thi
 entry records where a document was silent (or, twice below, where two passages disagree) and
 what got drawn anyway so the mockup could exist. One entry per gap, in the order found.
 
+## Closing summary (M8, the last session of the track)
+
+Eight sessions (M1–M8) built **56 user-facing surfaces**: 46 application pages plus the 10 email
+templates M8 adds (each of the latter also carrying the plain-text alternative §16.3 requires, so
+20 files), on top of the review index itself (`pages/index.html`) and six shared partials
+(`_base.html`, `_nav.html`, `_post.html`, `_field.html`, `_errors.html`, `_status.html`). Every
+one renders the platform exactly as `SPEC.md` and `ARCHITECTURE.md` describe it, or, where the
+documents were silent, the plainest thing consistent with everything around the gap — recorded
+below, entry by entry, 49 in total, including two added after the eight sessions themselves,
+during a founder's own click-through: a previously-uncaught broken link (entry 48) and a
+founder-directed styling change (entry 49).
+
+**Assembled or inferred rather than specified**, in the sense that no section of either document
+actually describes the surface as a whole (as opposed to a page that SPEC does describe, but
+where one detail on it was invented): `partials/_nav.html` (entry 1 — the main navigation's six
+items), `pages/settings.html` (entry 29 — a single settings screen assembled from mechanics
+scattered across several sections), `pages/groups.html` (entry 31 — the groups feature has no
+described screen at all), and `pages/invites.html` (entry 34 — the invite-budget screen SPEC's
+own mechanics imply but never depicts). These four are the ones visibly marked with the
+`.page-provenance` label mid-page; nothing else in the other 52 surfaces carries that label,
+because everywhere else, a described page exists and the gaps found within it are narrower —
+one field, one control, one piece of wording — logged individually below rather than requiring
+the whole-page caveat.
+
+The full log below is unedited from when each entry was written, in the order found, oldest
+first. It is not a to-do list: nothing in it is fixed by this track, and every entry is a record
+of a judgment call or a document silence for the founder's own review.
+
 ---
 
 ## 1. The main navigation's contents are not specified
@@ -853,3 +881,203 @@ different one"* — deliberately generic in the second case, since the message c
 blocklist itself back at the user without exposing it. Flagged here, and in `mockups/CRIB.md`,
 because both read easily as SPEC-verbatim quotes the way most of this track's other quoted
 strings are, and are not.
+
+---
+
+## 41. M8's own prompt miscounts its own list: "nine templates," but ten files
+
+**Session:** M8. **Surface:** `mockups/pages/emails/`.
+
+The M8 prompt's "What to build" section opens with "nine templates, each `.html` + `.txt`," then
+lists nine numbered items — but item 4 explicitly reads "Two templates in one section," naming
+`email-change-code` and `email-change-notice` as two separate files. Nine numbered items
+containing one two-file item is ten actual templates, not nine. This is a small, self-contained
+contradiction inside the session's own instructions rather than one between SPEC and
+ARCHITECTURE, but the standing rule applies just the same.
+
+**Drawn:** all ten, since item 4's own text is unambiguous about wanting two distinct files and
+nothing elsewhere in the prompt suggests folding them into one. The mismatched headline count is
+left uncorrected here rather than silently adjusted.
+
+---
+
+## 42. `email-change-notice.html`'s absolute timestamp: SPEC vs. this session's own checklist
+
+**Session:** M8. **Surface:** `pages/emails/email-change-notice.html`.
+
+SPEC §4.6.1 names three security-event types that "carry absolute timestamps wherever they
+appear": new-device login, password change, and **email change**. But this session's own
+"before you finish" checklist says absolute times appear "only in `security-event` and
+`inactivity-deletion`" — naming the two *files* that carry the pattern, not the three *event
+types* §4.6.1 itself lists, and email change's own dedicated notice (`email-change-notice.html`,
+required separately by item 4) isn't one of the two named files.
+
+**Drawn:** the absolute timestamp is included on `email-change-notice.html` anyway, following
+SPEC directly — this track's standing rule where the two disagree. §4.6.1's own words don't carve
+out an exception for the notice that goes to the old address; that notice is precisely one of the
+three appearances the rule is talking about, and the checklist's narrower filename-scoped phrasing
+reads as incomplete shorthand for the broader rule rather than a deliberate narrowing of it.
+
+---
+
+## 43. `social-notification.html` carries no link, even though §12.2 says a notification has one
+
+**Session:** M8. **Surface:** `pages/emails/social-notification.html`.
+
+SPEC §12.2 states plainly that an in-feed notification "carries... a link," and this session's
+own item 9 repeats that requirement for the emailed copy specifically: "Actor's name (rendered
+live), the event type in specific plain text, **and a link**." But this session's rule 1 is
+unqualified — *"Invitations remain links (§4.1), and only invitations"* — and the
+"before you finish" checklist repeats it just as flatly: *"no link in any email except
+`invite`."* `emails/invite.html`'s own body goes further, telling its reader it is "the only
+email WeeBee ever sends with a link inside it" — a claim a link on `social-notification.html`
+would make false.
+
+**Drawn:** no link. The more specific, more emphatic, session-wide anti-phishing rule for the
+**email channel** — repeated three separate times across this session's own instructions — is
+treated as governing over §12.2's more general description of a notification, which reads as
+written primarily with the in-feed rendering in mind (where phishing isn't the concern a link
+raises, since the reader is already an authenticated session on the real domain). The emailed
+copy therefore tells the reader in plain text to open WeeBee themselves; the in-feed version of
+the identical notification, already built on `feed.html` (M1), is untouched and keeps its link.
+This is the second-most load-bearing call this session makes, after the codes-not-links rule
+itself, and a founder decision could reasonably go the other way.
+
+---
+
+## 44. `build.py` extended a second time, for a whole directory rather than one file
+
+**Session:** M8. **Surface:** `mockups/pages/emails/`, `mockups/build.py`.
+
+M7 already established one narrow exception to "every page goes through `partials/_base.html`":
+`maintenance.html`, copied straight through because the real page it represents is served by
+Caddy, entirely outside the Django app, and must fetch nothing (`mockups/NOTES.md` entry 36).
+This session needed the same treatment for all ten email templates, generalized from one filename
+to a whole directory (`pages/emails/*`), copied unwrapped into `site/emails/`.
+
+Unlike `maintenance.html`, this isn't only a technical workaround for something the harness
+can't express — it's the *fidelity-correct* choice. SPEC §16.3 places email "outside WCAG's scope
+for pages, inside the spirit of this section," and this session's own build instructions single
+out §16.3's email requirement as binding rather than aspirational: legible without images or CSS,
+no layout depending on a stylesheet. Wrapping an email template in `_base.html` would link the
+mockup site's own `styles.css` into markup whose entire point is demonstrating it doesn't need
+one — actively wrong, not merely inconsistent with the rest of the track.
+
+**Drawn:** each of the ten templates is a complete, standalone HTML document with its own inline
+`<style>` (no `<link rel="stylesheet">` anywhere in `pages/emails/`), following the structure
+`maintenance.html` already established. See `mockups/CRIB.md` §6 for the registered convention.
+
+---
+
+## 45. Standalone email pages have no commentary toggle
+
+**Session:** M8. **Surface:** every file in `pages/emails/`.
+
+The track's commentary-hiding checkbox (`#commentary-toggle`, registered in `mockups/CRIB.md`
+§6) lives once, in `partials/_base.html`'s shared header, alongside the CSS rule that hides
+`.commentary` blocks when it's unchecked. None of the ten email templates includes
+`_base.html` at all (entry 44, immediately above), so none of them has that checkbox, and no
+per-page equivalent was built for this session's own ten files.
+
+**Drawn:** nothing added. Each template still visually distinguishes commentary from simulated
+content, using a locally-scoped `.commentary` style matching `styles.css`'s own definition, but
+it is **always visible** on these ten pages — there is no way to hide it the way every other page
+in this track allows. Building a second, duplicated toggle mechanism into ten standalone files,
+each already carrying its own inline stylesheet, was judged to be more machinery than this
+session's own touched-files scope (`mockups/pages/emails/`, `CRIB.md`, `NOTES.md`,
+`pages/index.html`) warranted. A founder or later pass could add one; this is an accepted
+limitation, not a bug, in the same spirit as the toggle's own no-persistence limitation already
+recorded in the cross-cutting retrofit above.
+
+---
+
+## 46. `social-notification.html` is left with no age reference of any kind
+
+**Session:** M8. **Surface:** `pages/emails/social-notification.html`.
+
+Recorded per this session's own explicit instruction to note it. §12.3 (rule 2) bans a relative
+age in any email outright, and this template isn't one of the two narrow exceptions
+(security-event mail, the two deletion warnings) that get an absolute timestamp instead — so
+after both rules are applied, nothing is left to say about *when* the comments happened. This
+isn't an oversight: §12.3 gives the reasoning directly — *"the mail client's own received-time is
+more accurate than anything the body could assert."* The email simply trusts the inbox to carry
+that information instead of asserting a version of it that would decay the moment it went stale.
+
+---
+
+## 47. Small invented values this session added, so they aren't mistaken for SPEC's own
+
+**Session:** M8. **Surface:** every file in `pages/emails/`.
+
+Three placeholder values needed inventing to make ten envelopes concrete, none specified by
+either document: the platform's outbound sending address, `notifications@weebee.social`
+(ARCHITECTURE §3.6 requires a transactional email provider but names no specific address); a
+seventh cast name, **Jamie**, a new, minimal, backstory-free placeholder standing in for the
+invitee mid-registration on `invite.html` and `verify-code.html`, in the same spirit as M4's
+Ben/Grace/Henry/Nadia/Sofia (`mockups/CRIB.md` §3); and two example addresses for David himself,
+`david@example.com` and `d.dudek@example.com` (the email-change pair's old and new addresses),
+both on the reserved documentation domain so neither collides with anything real. None of these
+should be read as a naming or domain decision — see `mockups/CRIB.md` §3 for where each is
+registered.
+
+---
+
+## 48. `feed.html`'s two notification links point at `post-detail.html`, never built
+
+**Session:** none of M1–M8 — found afterward, during a founder's own click-through, and logged
+here rather than silently fixed, per this track's own standing rule. **Surface:**
+`pages/feed.html` (M1).
+
+A site-wide link audit run after the track's eight sessions were done turned up one broken
+target none of the 47 entries above had caught: both of `feed.html`'s notification rows —
+*"Alice and Tom commented on your post"* and *"David posted to his blog"* — link to
+`post-detail.html`. M1 wrote that filename as its own forward reference before any single-post
+view existed. M2 then built three of them, under different names entirely
+(`post-feed.html`, `post-profile-tagged.html`, `post-preformatted.html`), and nothing in M2's own
+scope or any later session touched `feed.html` to retarget its two links at whichever of those
+three each notification should actually resolve to. `post-detail.html` itself was never built
+under any session.
+
+**Drawn:** nothing corrected here, following this track's own established precedent (entries 8,
+16, 20, 21, 27, 37) for a link sitting inside a file outside the correcting pass's own touched
+files — `feed.html` is M1's, and this finding wasn't made during any of M1–M8's own runs. Unlike
+the other four broken-link entries above, retargeting this one isn't a simple one-for-one
+rename: "Alice and Tom commented on your post" most plausibly belongs on `post-feed.html` (the
+one single-post view this track actually built comments and reactions on), while "David posted
+to his blog" has no obvious single target at all, since M3's profile tabs render a friend's
+(Alice's) view of David's blog, never a single post from it in isolation the way a notification
+link would need. A founder decision is needed on where each should point before either link can
+be fixed for real.
+
+---
+
+## 49. Link color changed from neutral grey to traditional web blue — a founder-directed change, not a gap fill
+
+**Session:** none of M1–M8 — a direct founder request during the same click-through that
+surfaced entries 41–48. **Surface:** `styles.css`'s `--color-link` variable, so every `<a>` on
+every page in the set.
+
+Unlike every other entry in this log, this one isn't a document silence this track had to draw
+around — it's a real styling decision the founder asked for directly, after finding the mockups'
+links (previously colored identically to body text, distinguished only by underline) too hard to
+spot while clicking through. Recorded anyway because it reverses something `styles.css`'s own
+header comment stated as a rule: *"Neutral greys only: no invented brand palette."*
+
+**Drawn:** `--color-link` changed from `#1a1a1a` (plain text color) to `#0000ee` (the
+conventional, pre-CSS-era web link blue), applied globally rather than page-by-page, since every
+ordinary `<a>` on every page already inherited from this one variable and no other rule needed
+touching. Contrast against white is ≈8.6:1, comfortably past the 4.5:1 SPEC §16.3 already
+targets. Two things were deliberately left alone, because they already set their own `color`
+independent of this variable and would have looked wrong as inline-text blue: `.button`-styled
+anchors (e.g. `banned.html`'s "Delete your account"), which stay the neutral dark button color
+they always had; and `.plain-name` (SPEC §8.1/§8.2.2's rule that some names render as
+non-clickable plain text depending on the viewer's connection to them), which stays the same
+dark text color it always had — meaning the blue change actually *strengthens* that platform
+rule's own visual distinction (linked name vs. plain name) rather than blurring it. The
+stylesheet's header comment was updated to note link color as the one named exception to
+"neutral greys only," rather than leaving that claim stale. This is a real product-styling
+decision now, not a review-tool-only affordance — `pages/index.html` was the first place it was
+tried, then extended everywhere on request, and a founder reviewing this later should know it
+was never derived from any SPEC requirement (`THEME_SET` still names no members anywhere, per
+entry 29) — it is simply the founder's own pick for a legible link color, standing in until a
+real theme is chosen.

@@ -1,0 +1,101 @@
+<!-- Standalone file, not wrapped in partials/_base.html: a real WeeBee email
+     is never delivered inside the web app's own header, navigation or
+     stylesheet. SPEC §16.3 places email "outside WCAG's scope for pages,
+     inside the spirit of this section" -- no skip-link, landmark regions or
+     shared nav apply here. Built via the same kind of narrow, one-purpose
+     build.py exception maintenance.html already uses -- see
+     mockups/NOTES.md. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Invite email — WeeBee mockup</title>
+<style>
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    padding: 2.5rem 1rem;
+    background: #ffffff;
+    color: #1a1a1a;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+  main { max-width: 34rem; margin: 0 auto; }
+  h1, h2 { line-height: 1.25; }
+  p { margin: 0 0 1rem; }
+  dl.envelope {
+    margin: 0 0 1.5rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid #c7c7c7;
+    border-radius: 0.25rem;
+  }
+  dl.envelope div { display: flex; gap: 0.5rem; flex-wrap: wrap; margin: 0.2rem 0; }
+  dl.envelope dt { font-weight: 700; margin: 0; min-width: 4.5rem; }
+  dl.envelope dd { margin: 0; }
+  .commentary {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-style: italic;
+    color: #4d4d4d;
+    font-size: 0.9rem;
+  }
+  code { overflow-wrap: break-word; word-break: break-word; }
+</style>
+</head>
+<body>
+<main>
+
+<dl class="envelope">
+<div><dt>From:</dt><dd>WeeBee &lt;notifications@weebee.social&gt;</dd></div>
+<div><dt>To:</dt><dd>Jamie &lt;jamie@example.com&gt;</dd></div>
+<div><dt>Subject:</dt><dd>David has invited you to join WeeBee</dd></div>
+</dl>
+
+<h1>Your WeeBee invite</h1>
+
+<p>David has invited you to join WeeBee, a small, private social network for people who already
+know each other.</p>
+
+<p>Redeeming this invite creates your account — and the moment you finish, you and David
+automatically become friends.</p>
+<p class="commentary">SPEC §4.1: "the only way to create an account is by redeeming a personal
+invitation from an existing user"; "when an invite is accepted, inviter and invitee automatically
+become friends." <code>mockups/CRIB.md</code> §3: David stands in as the inviter here, the same
+role he plays on the already-built <a href="../invite-redeem.html">invite-redeem.html</a>, which
+is the page this email's link leads to.</p>
+
+<p>This is the only email WeeBee ever sends with a link inside it. Every other email we send —
+including the ones you'll get once you're a member — uses a short code you type in yourself,
+never a link to click.</p>
+<p class="commentary">SPEC §4.6.1: "Invitations remain links (§4.1), and only invitations — a
+brand-new user has no session and no page open, so a link is unavoidable there. Every other
+action email either carries no link or uses a code." This is the one sentence this whole session
+turns on — see the rest of <code>mockups/pages/emails/</code> for the nine other templates that
+keep that promise. It's rendered here as something WeeBee would actually tell a first-time
+recipient, not as a build note, since it's a true, checkable claim about the platform, in the same
+spirit as the login-page promise registered in <code>mockups/CRIB.md</code> §2.</p>
+
+<p>Redeem your invite:<br>
+<a href="https://weebee.social/invite/9f3ac2d1">https://weebee.social/invite/9f3ac2d1</a></p>
+
+<p>This link works once, and only for the next 14 days. If it's not used by then, it simply
+expires, and David is free to send another whenever he's ready.</p>
+<p class="commentary">SPEC §4.1: <code>INVITE_EXPIRY_DAYS</code> = 14; "expired invites return to
+the sender's budget." The already-expired case is rendered on
+<a href="../invite-redeem.html">invite-redeem.html</a>'s section 4, and the budget it returns to
+is shown on <a href="../invites.html">invites.html</a>.</p>
+
+<p>— WeeBee</p>
+
+<p class="commentary">The recipient "Jamie" is a new, minimal, backstory-free placeholder invented
+for this envelope only — nobody has an account yet at this point in the story, so there is no
+established cast member to name, the same reasoning <code>invite-redeem.html</code> already
+recorded for rendering this moment without "David's own view." The sending address
+<code>notifications@weebee.social</code> is likewise invented: ARCHITECTURE §3.6 requires a
+transactional email provider but names no specific address. See <code>mockups/NOTES.md</code>.</p>
+
+</main>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!-- Standalone file, not wrapped in partials/_base.html: a real WeeBee email
+     is never delivered inside the web app's own header, navigation or
+     stylesheet. SPEC §16.3 places email "outside WCAG's scope for pages,
+     inside the spirit of this section" -- no skip-link, landmark regions or
+     shared nav apply here. Built via the same kind of narrow, one-purpose
+     build.py exception maintenance.html already uses -- see
+     mockups/NOTES.md. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Inactivity deletion warning emails — WeeBee mockup</title>
+<style>
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    padding: 2.5rem 1rem;
+    background: #ffffff;
+    color: #1a1a1a;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+  main { max-width: 34rem; margin: 0 auto; }
+  h1, h2 { line-height: 1.25; }
+  p { margin: 0 0 1rem; }
+  dl.envelope {
+    margin: 0 0 1.5rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid #c7c7c7;
+    border-radius: 0.25rem;
+  }
+  dl.envelope div { display: flex; gap: 0.5rem; flex-wrap: wrap; margin: 0.2rem 0; }
+  dl.envelope dt { font-weight: 700; margin: 0; min-width: 4.5rem; }
+  dl.envelope dd { margin: 0; }
+  .commentary {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-style: italic;
+    color: #4d4d4d;
+    font-size: 0.9rem;
+  }
+  .message-block {
+    margin-bottom: 2.5rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid #c7c7c7;
+  }
+  .message-block:last-of-type { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  code { overflow-wrap: break-word; word-break: break-word; }
+</style>
+</head>
+<body>
+<main>
+
+<h1>Your account will be deleted</h1>
+<p class="commentary">SPEC §4.8: the last two of the four inactivity warnings, at 670 and 700
+days since last login — "60 and 30 days before deletion" — "state the absolute deletion date...
+never 'in a couple of months'... a deletion warning that cannot say when is not a warning."
+Both examples below point at the <strong>same</strong> eventual deletion date, since they are two
+successive warnings about one account's one deletion, 30 days apart; only the wording of what's
+still ahead of it differs.</p>
+
+<div class="message-block">
+<p class="commentary">First deletion warning — sent 670 days since last login, 60 days before
+deletion.</p>
+<dl class="envelope">
+<div><dt>From:</dt><dd>WeeBee &lt;notifications@weebee.social&gt;</dd></div>
+<div><dt>To:</dt><dd>David Dudek &lt;david@example.com&gt;</dd></div>
+<div><dt>Subject:</dt><dd>Your WeeBee account will be deleted on 12 March 2027</dd></div>
+</dl>
+
+<p>You haven't logged in to WeeBee in a long time. If that doesn't change, your account —
+everything in it — will be deleted on 12 March 2027.</p>
+
+<p>Logging in is all it takes to cancel this. Once you're in, there's nothing else you need to
+do.</p>
+
+<p>If you'd rather your account be deleted, you don't need to do anything at all — it will happen
+on its own, on that date.</p>
+</div>
+
+<div class="message-block">
+<p class="commentary">Second and final deletion warning — sent 700 days since last login, 30
+days before the same deletion date.</p>
+<dl class="envelope">
+<div><dt>From:</dt><dd>WeeBee &lt;notifications@weebee.social&gt;</dd></div>
+<div><dt>To:</dt><dd>David Dudek &lt;david@example.com&gt;</dd></div>
+<div><dt>Subject:</dt><dd>Your WeeBee account will be deleted on 12 March 2027</dd></div>
+</dl>
+
+<p>This is the last notice before it happens: your WeeBee account, and everything in it, will be
+deleted on 12 March 2027, unless you log in before then.</p>
+
+<p>Logging in is all it takes to cancel this. Once you're in, there's nothing else you need to
+do.</p>
+
+<p>If you'd rather your account be deleted, you don't need to do anything at all — it will happen
+on its own, on that date.</p>
+</div>
+
+<p>— WeeBee</p>
+
+<p class="commentary">SPEC §4.8's own worked example gives the date without a year — "your
+account will be deleted on 12 March" — this mockup adds a plausible year, 2027, for concreteness,
+since a real email needs one. <code>INACTIVITY_DELETE_DAYS</code> = 730,
+<code>INACTIVITY_WARN_DAYS</code> = 180 / 365 / 670 / 700. No link and no code appear on either
+message: neither is asking the recipient to complete anything with a code, so per this session's
+rule 1 the honest option is no link at all — logging in is an ordinary, self-initiated visit to
+the site, the same posture SPEC's own checkable promise encourages everywhere else.</p>
+
+</main>
+</body>
+</html>

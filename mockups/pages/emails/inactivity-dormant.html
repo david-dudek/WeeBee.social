@@ -1,0 +1,97 @@
+<!-- Standalone file, not wrapped in partials/_base.html: a real WeeBee email
+     is never delivered inside the web app's own header, navigation or
+     stylesheet. SPEC §16.3 places email "outside WCAG's scope for pages,
+     inside the spirit of this section" -- no skip-link, landmark regions or
+     shared nav apply here. Built via the same kind of narrow, one-purpose
+     build.py exception maintenance.html already uses -- see
+     mockups/NOTES.md. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Inactivity notice emails — WeeBee mockup</title>
+<style>
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    padding: 2.5rem 1rem;
+    background: #ffffff;
+    color: #1a1a1a;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+  main { max-width: 34rem; margin: 0 auto; }
+  h1, h2 { line-height: 1.25; }
+  p { margin: 0 0 1rem; }
+  dl.envelope {
+    margin: 0 0 1.5rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid #c7c7c7;
+    border-radius: 0.25rem;
+  }
+  dl.envelope div { display: flex; gap: 0.5rem; flex-wrap: wrap; margin: 0.2rem 0; }
+  dl.envelope dt { font-weight: 700; margin: 0; min-width: 4.5rem; }
+  dl.envelope dd { margin: 0; }
+  .commentary {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-style: italic;
+    color: #4d4d4d;
+    font-size: 0.9rem;
+  }
+  .message-block {
+    margin-bottom: 2.5rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid #c7c7c7;
+  }
+  .message-block:last-of-type { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  code { overflow-wrap: break-word; word-break: break-word; }
+</style>
+</head>
+<body>
+<main>
+
+<h1>It's been a while</h1>
+<p class="commentary">SPEC §4.8: warning emails at 180, 365, 670 and 700 days since last login —
+"the first two are gentle 'your account is dormant' notes." The two shown below are those first
+two. Neither states how long it's been: this session's rule 2 bans a relative age in any email,
+full stop, and SPEC gives these two notices no absolute date to state either (that's reserved for
+the two deletion warnings on <a href="inactivity-deletion.html">inactivity-deletion.html</a>), so
+there is deliberately no time reference of any kind here — the wording is identical both times,
+since nothing in either document distinguishes their content, only their timing.</p>
+
+<div class="message-block">
+<p class="commentary">First dormancy notice — sent 180 days since last login.</p>
+<dl class="envelope">
+<div><dt>From:</dt><dd>WeeBee &lt;notifications@weebee.social&gt;</dd></div>
+<div><dt>To:</dt><dd>David Dudek &lt;david@example.com&gt;</dd></div>
+<div><dt>Subject:</dt><dd>It's been a while since you've checked WeeBee</dd></div>
+</dl>
+
+<p>It's been a little while since you last opened WeeBee. Nothing's wrong — we just wanted to let
+you know your friends' posts are still there whenever you're ready to take a look.</p>
+
+<p>There's nothing you need to do.</p>
+</div>
+
+<div class="message-block">
+<p class="commentary">Second dormancy notice — sent 365 days since last login.</p>
+<dl class="envelope">
+<div><dt>From:</dt><dd>WeeBee &lt;notifications@weebee.social&gt;</dd></div>
+<div><dt>To:</dt><dd>David Dudek &lt;david@example.com&gt;</dd></div>
+<div><dt>Subject:</dt><dd>It's been a while since you've checked WeeBee</dd></div>
+</dl>
+
+<p>It's been a little while since you last opened WeeBee. Nothing's wrong — we just wanted to let
+you know your friends' posts are still there whenever you're ready to take a look.</p>
+
+<p>There's nothing you need to do.</p>
+</div>
+
+<p>— WeeBee</p>
+
+</main>
+</body>
+</html>

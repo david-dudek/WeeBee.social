@@ -1,0 +1,19 @@
+From: WeeBee <notifications@weebee.social>
+To: David Dudek <david@example.com>
+Subject: Your WeeBee password reset code
+
+We got a request to reset the password on your WeeBee account. Here's your code:
+
+719045
+
+Open the WeeBee login page yourself, choose "Forgot your password?", and enter this code there.
+It stops working 15 minutes after we sent it — that page will always let you ask for a new one
+if it expires first.
+
+WeeBee will never email you a link to log in or reset your password — only a code you type in
+yourself.
+
+If you didn't ask for this, you don't need to do anything — your password hasn't changed, and you
+can ignore this email.
+
+— WeeBee
