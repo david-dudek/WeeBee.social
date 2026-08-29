@@ -1,0 +1,46 @@
+{{var title=Post image overlay — WeeBee mockup}}
+<h1>Post image overlay, open</h1>
+<p>The same click-to-expand overlay of §7.2.2, reached this time from an image inside a post
+rather than the gallery — <a href="profile-blog.html">David's tomato photo on the Blog
+tab</a>. The two variants differ in one way only: from a post, there are no next/previous
+controls, since a post carries at most one image and there is nothing to step between.</p>
+
+<div class="overlay-demo-section">
+<h2>The page behind the dialog</h2>
+<p>Dimmed and inert while the dialog is open.</p>
+<div class="modal-backdrop-content" aria-hidden="true">
+<header class="profile-header">
+<img class="profile-photo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNDAgMjQwIj48cmVjdCB3aWR0aD0iMjQwIiBoZWlnaHQ9IjI0MCIgZmlsbD0iI2U1ZTVlNSIvPjxjaXJjbGUgY3g9IjEyMCIgY3k9Ijk1IiByPSI0NSIgZmlsbD0iIzljOWM5YyIvPjxwYXRoIGQ9Ik00MCwyMzUgQzQwLDE3NSA3NSwxNTAgMTIwLDE1MCBDMTY1LDE1MCAyMDAsMTc1IDIwMCwyMzUgWiIgZmlsbD0iIzljOWM5YyIvPjwvc3ZnPg==" alt="" width="80" height="80">
+<h3>David Dudek (formerly Dave Dudek)</h3>
+</header>
+<article class="post" aria-label="Post by David, about a day ago">
+<p class="post-meta">
+<span class="post-age">About a day ago</span>
+</p>
+<div class="post-body">
+<p>Tomatoes finally came in after what felt like the longest June on record. Sending this to the usual suspects before Mom asks for the fifth time whether they're &quot;actually ripe yet or just red.&quot;</p>
+<img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgNDAwIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgZmlsbD0iI2U3ZTdlNyIvPjxlbGxpcHNlIGN4PSIyMDAiIGN5PSIyNjAiIHJ4PSIxNTAiIHJ5PSI2MCIgZmlsbD0iIzllOWU5ZSIvPjxlbGxpcHNlIGN4PSIyOTAiIGN5PSIyMzAiIHJ4PSI0MCIgcnk9IjMwIiBmaWxsPSIjN2Y3ZjdmIi8+PC9zdmc+" alt="A handful of ripe tomatoes on the vine, morning dew still on a couple of the leaves." width="200" height="200">
+</div>
+<p class="post-visibility">Visible to: the friends David sent this to.</p>
+</article>
+</div>
+</div>
+
+<div class="overlay-demo-section">
+<h2>The dialog, open</h2>
+<div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="post-overlay-caption">
+<div class="modal-controls">
+<button type="button">Close<span class="visually-hidden"> image viewer</span></button>
+</div>
+<figure>
+<img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MDAgNjAwIj48cmVjdCB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgZmlsbD0iI2U3ZTdlNyIvPjxlbGxpcHNlIGN4PSI0MDAiIGN5PSIzOTAiIHJ4PSIyODAiIHJ5PSI5MCIgZmlsbD0iIzllOWU5ZSIvPjxlbGxpcHNlIGN4PSI1NzAiIGN5PSIzNDAiIHJ4PSI3MCIgcnk9IjUwIiBmaWxsPSIjN2Y3ZjdmIi8+PC9zdmc+" alt="" width="800" height="600">
+<figcaption id="post-overlay-caption">A handful of ripe tomatoes on the vine, morning dew still on a couple of the leaves.</figcaption>
+</figure>
+</div>
+</div>
+
+<p class="session-note">Same obligations as the gallery variant (§16.3, §7.2.2): focus moves
+onto the dialog on open, is trapped inside it while open, Escape closes it, and focus returns
+afterward — here, to the image inside the tomato post. No Previous/Next controls exist on this
+variant, since a single post's one image has nothing to step between. The alternative text
+renders as a visible caption, with the image's own <code>alt</code> left empty (§9.4).</p>

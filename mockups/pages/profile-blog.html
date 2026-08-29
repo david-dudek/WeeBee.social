@@ -1,0 +1,105 @@
+{{var title=David Dudek — Posts}}
+<p>David's profile, as seen by his friend <strong>Alice</strong> — the first mockup in this
+track to render someone's view of <em>another</em> person's page rather than David's own
+(SPEC §9.1). The header above is <strong>the same on all four tabs</strong>: David's profile
+photo, his display name — rendered here mid-transition, "David Dudek (formerly Dave Dudek)"
+per §4.5.1 — and the report action. Nothing else lives in it, and it scrolls with the page.</p>
+
+<header class="profile-header">
+<img class="profile-photo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNDAgMjQwIj48cmVjdCB3aWR0aD0iMjQwIiBoZWlnaHQ9IjI0MCIgZmlsbD0iI2U1ZTVlNSIvPjxjaXJjbGUgY3g9IjEyMCIgY3k9Ijk1IiByPSI0NSIgZmlsbD0iIzljOWM5YyIvPjxwYXRoIGQ9Ik00MCwyMzUgQzQwLDE3NSA3NSwxNTAgMTIwLDE1MCBDMTY1LDE1MCAyMDAsMTc1IDIwMCwyMzUgWiIgZmlsbD0iIzljOWM5YyIvPjwvc3ZnPg==" alt="David, smiling on a hiking trail in mid-afternoon light, slightly out of breath." width="120" height="120">
+<h1>David Dudek (formerly Dave Dudek)</h1>
+<button type="button" class="button profile-report">Report this profile</button>
+</header>
+
+<nav class="profile-tabs" aria-label="Profile tabs">
+<ul>
+<li><a href="profile-blog.html" aria-current="page">Blog</a></li>
+<li><a href="profile-pinned.html">Pinned</a></li>
+<li><a href="profile-photos.html">Photos</a></li>
+<li><a href="profile-about.html">About</a></li>
+</ul>
+</nav>
+
+<h2>Blog</h2>
+<p>Every post by David that Alice may see, newest first: his profile posts, his pinned posts in
+their chronological place, and his feed posts Alice was in the audience of (SPEC §9.1). Folded
+at <code>BLOG_FOLD_CHARS</code> = 2,000 — the wider threshold, because Alice deliberately
+visited David's own space (§7.7). None of these posts repeat David's name: everything here is
+his, and the header above already says whose page this is.</p>
+
+<ol class="feed-list">
+
+<li>
+<article class="post" aria-label="Post by David, a few hours ago">
+<p class="post-meta">
+<span class="post-age">A few hours ago</span>
+</p>
+<div class="post-body">
+<p>Finally fixed the fence gate that's been sticking since spring. Small win, but I'll take it.</p>
+</div>
+<p class="post-visibility">Visible to: all of David's friends.</p>
+</article>
+</li>
+
+<li>
+<article class="post" aria-label="Post by David, about a day ago">
+<p class="post-meta">
+<span class="post-age">About a day ago</span>
+</p>
+<div class="post-body">
+<p>Tomatoes finally came in after what felt like the longest June on record. Sending this to the usual suspects before Mom asks for the fifth time whether they're &quot;actually ripe yet or just red.&quot;</p>
+<img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgNDAwIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgZmlsbD0iI2U3ZTdlNyIvPjxlbGxpcHNlIGN4PSIyMDAiIGN5PSIyNjAiIHJ4PSIxNTAiIHJ5PSI2MCIgZmlsbD0iIzllOWU5ZSIvPjxlbGxpcHNlIGN4PSIyOTAiIGN5PSIyMzAiIHJ4PSI0MCIgcnk9IjMwIiBmaWxsPSIjN2Y3ZjdmIi8+PC9zdmc+" alt="A handful of ripe tomatoes on the vine, morning dew still on a couple of the leaves." width="400" height="400">
+</div>
+<p class="post-visibility">Visible to: the friends David sent this to.</p>
+</article>
+<p class="session-note">A feed post, shown here as well as in its recipients' feeds (§9.1,
+v1.16) — the posting-time snapshot and current friendship still govern, so this is visible to
+Alice only because she was one of the friends David actually sent it to, not because visiting
+his Blog tab widens anyone's audience. See
+<a href="overlay-post.html">this image's overlay, open</a> for the click-to-expand state.</p>
+</li>
+
+<li>
+<article class="post" aria-label="Post by David, a couple of days ago">
+<p class="post-meta">
+<span class="post-age">A couple of days ago</span>
+</p>
+<div class="post-body">
+<p>Six months into this sourdough project and I think I've finally stopped lying to myself about what &quot;ready&quot; looks like. The starter is called Gerald, which was a joke that Tom made once and has now been load-bearing for so long that I genuinely can't remember what I called it before that. Gerald has outlived two apartments' worth of windowsills, survived a two-week vacation on nothing but a stranger's fridge and a promise, and has opinions about ambient temperature that I have learned to respect rather than argue with.</p>
+<p>The first twenty loaves were, charitably, doorstops. Dense enough to use as a paperweight, sour in the wrong way, crust like a roof tile. I kept every failure photo because Mom insisted the collection would be funny later, and she was right, though &quot;later&quot; turned out to mean about four months in, right around the time the crumb finally opened up and I stopped needing the kitchen scale to double-check every single gram like it owed me money.</p>
+<p>What changed, as far as I can tell: patience with the bulk ferment, actually reading the dough instead of the clock, and giving up on the idea that a recipe was going to save me from paying attention. Nobody warns you that the hardest ingredient in bread is time you're not allowed to rush, and that the second hardest is trusting a lump of flour and water enough to leave it alone.</p>
+<p>Yesterday's loaf came out of the oven with an ear on the score I actually meant to make, a crumb with real irregular holes instead of the gummy uniform kind, and a crust that crackled audibly cooling on the rack — the sound I'd read about in forums for months and privately assumed was people exaggerating for internet points. It was not an exaggeration. Tom got the first slice, still too hot to cut cleanly, and declared it &quot;finally not a punishment,&quot; which from him is basically a five-star review.</p>
+<p>Next project is trying a higher hydration dough without the whole thing turning into soup on the counter, and after that I want to work</p>
+</div>
+<button class="read-more" type="button" aria-expanded="false">Read more<span class="visually-hidden"> of David's post from a couple of days ago</span></button>
+<p class="post-visibility">Visible to: all of David's friends.</p>
+</article>
+</li>
+
+<li>
+<article class="post" aria-label="Post by David, about a year ago">
+<p class="post-meta">
+<span class="post-age">About a year ago</span>
+</p>
+<div class="post-body">
+<p>We're moving to Lisbon next month. After two years of talking about it over kitchen-table wine and a spreadsheet neither of us ever quite finished, we finally pulled the trigger: the flat is signed, the moving company is booked, and somehow the cat has strong opinions about the crate we bought her. I keep waiting to feel more nervous about it and mostly just feel relieved — relieved that the deciding is over, that we stopped weighing pros and cons long enough to actually choose one. Pinning this here so it stays put: for anyone who visits months from now wondering what happened to the guy who used to post about the garden every other week, this is what happened. Come visit once we're unpacked — first round of pastéis de nata is on us.</p>
+</div>
+<p class="post-visibility">Visible to: all of David's friends.</p>
+<p class="post-pinned">Pinned</p>
+</article>
+<p class="session-note">This pinned post also appears, folded, on the Pinned tab — the two
+tabs are never on screen together, so nothing is duplicated in view (§7.6). Here on the Blog
+tab it needs no fold: at 746 characters it is under <code>BLOG_FOLD_CHARS</code> = 2,000, even
+though it exceeds <code>FEED_FOLD_CHARS</code> = 500, which is exactly why the Pinned tab's
+narrower threshold folds the same text this page shows in full. Nothing else from around this
+date survives to sit near it in the timeline — ordinary posts expire at 90 days (§7.5); this
+one is exempt only because it is pinned (§7.6), which is why the list jumps straight from "a
+couple of days ago" to "about a year ago" with nothing in between.</p>
+</li>
+
+</ol>
+
+<!-- Paging (§7.7.1): this page shows the normal-profile case — everything
+     above fits on one page, so no pagination nav is rendered at all. See
+     feed.html / feed-older.html (M1) for the "Older posts →" / "← Newer
+     posts" pairing a heavy poster's Blog tab would carry instead. -->

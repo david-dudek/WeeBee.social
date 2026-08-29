@@ -219,3 +219,103 @@ connections, not David's. Alice's name links (Priya knows her); Tom's renders as
 a reactor (Mom) she has no connection to, rendered plain text. Recorded because it is a
 deliberate, spec-required exception to this track's own established convention, not an
 inconsistency to fix later.
+
+---
+
+## 13. ARCHITECTURE §3.8 names a shared modal-dialog partial that M1 never built
+
+**Session:** M3. **Surface:** `pages/overlay-gallery.html`, `pages/overlay-post.html`.
+
+ARCHITECTURE §3.8 lists the shared accessibility-unit partials as "`_field.html`,
+`_errors.html`, `_modal.html`, `_expandable.html`, `_status.html`" — but M1 built only
+`_field.html`, `_errors.html`, `_status.html` (plus `_post.html` and `_nav.html`, which
+ARCHITECTURE doesn't name). `_modal.html` was never built, because M1 and M2 had no dialog
+surface to demonstrate. Every session's standing constraints repeat "no page hand-rolls a form
+control, dialog, or status message" — M3 is the first session that actually needs a dialog, and
+there is no partial to compose.
+
+**Drawn:** the two overlay pages hand-build the dialog markup directly (`role="dialog"`,
+`aria-modal="true"`, `aria-labelledby` pointing at the figcaption), following the same
+non-literal-include treatment M1 already gives `_post.html` and `_field.html` — a documented
+pattern, copied by hand, because `build.py`'s `{{include}}` takes no per-call parameters and a
+dialog's image, caption and control set differ every time. M3's own "Touches" list scopes this
+session to `mockups/pages/` and does not include `partials/`, so no `_modal.html` was added
+here; a later session (or a founder decision) may want to add one to `partials/` as a written
+reference structure, matching `_post.html`'s treatment, so this gap does not recur in M6's
+forms or wherever else a dialog appears next.
+
+---
+
+## 14. David's own dual-name state is not reconciled with his plain name on already-built pages
+
+**Session:** M3. **Surface:** the persistent header on all four profile-tab pages.
+
+The M3 prompt requires showing §4.5.1's "NewName (formerly OldName)" dual display in the
+profile header, so M3 gives David his own name-change pair: "David Dudek (formerly Dave
+Dudek)." But M1 and M2 already rendered plain "David" dozens of times — `feed.html`'s
+notifications, `post-feed.html`'s byline, `post-profile-tagged.html`'s byline — with no
+"(formerly …)" tag. Per §4.5.1, a name change during its 90-day transition window would render
+the dual form "everywhere it appears," which strictly would mean retrofitting every earlier
+mockup too.
+
+**Drawn:** no retrofit. This mirrors the precedent already recorded in entries 5 and 7 for
+Priya's dual-name state, which likewise appears on exactly one page rather than everywhere
+Priya is named across the track. Each mockup illustrates the pattern of the idiom it was built
+to show, not one fully self-consistent fictional timeline across all eight sessions. Flagged
+here for the same reason those entries were: so it reads as a deliberate, repeated fidelity
+choice, not an oversight specific to M3.
+
+---
+
+## 15. The Blog/"Posts" title contradiction (entry 4) — how M3 built around it, not into it
+
+**Session:** M3. **Surface:** `pages/profile-blog.html`'s `<title>` versus its tab label.
+
+Entry 4 recorded that §9.1 names the landing tab "Blog" while §16.3's own worked example gives
+that tab's page title as "David Dudek — Posts" — two SPEC passages disagreeing with each other,
+left as a founder call rather than resolved by this track.
+
+**Drawn:** M3 uses both literal strings, for two different UI elements that don't have to
+match: the tab strip's visible label reads "Blog" (§9.1's name for the tab), while the
+browser-facing `<title>` reads "David Dudek — Posts" (§16.3's own literal worked example),
+extended to the other three tabs by the same pattern ("David Dudek — Pinned", "— Photos", "—
+About"). This is a way of building on both texts without declaring either one wrong — it is not
+a resolution of the underlying contradiction, which entry 4 leaves for the founder.
+
+---
+
+## 16. `profile.html` remains unbuilt: M3's four pages are a friend's view, never the owner's own
+
+**Session:** M3. **Surface:** `partials/_nav.html`'s "Profile" link; closes the open question
+in entry 8, but only partially.
+
+Entry 8 asked whether "my own profile" and "a friend viewing someone else's profile" would end
+up sharing one filename or land as two. M3 answers half of that: it builds
+`profile-blog.html`, `profile-pinned.html`, `profile-photos.html` and `profile-about.html`
+strictly as **a friend's (Alice's) view of David's profile** — the case the M3 prompt scopes
+this session to. M3 never renders "David viewing his own profile," which is a materially
+different case (no report action would show to an owner viewing their own page, per §13.2:
+"not to its owner"; the composer/editing affordances of later sessions would appear instead).
+
+**Left open:** `profile.html`, the filename the main nav's "Profile" link and several M1/M2
+pages already point at, is presumably meant for that self-view case — it remains completely
+unbuilt, and none of M3's four new filenames are a substitute for it. A future session (or the
+founder) still needs to decide whether the self-view gets its own `profile.html`-style filename
+or reuses `profile-*.html` with a viewer-is-owner state — entry 8's question, still open.
+
+---
+
+## 17. The profile report button's visible text is not given verbatim anywhere
+
+**Session:** M3. **Surface:** the persistent header's report action on all four profile-tab
+pages.
+
+§13.2 requires the profile-level report action to be "a real `<button>` with visible text,
+never an unlabelled icon," and §9.1 says it belongs in the persistent header. Neither section,
+nor any other, gives the button's actual label text verbatim the way CRIB.md's §2 registry does
+for most other interface strings on the platform.
+
+**Drawn:** "Report this profile," chosen as the simplest text that states what the button does,
+per this track's standing rule for filling a gap the documents leave silent. Recorded because
+it is easy to mistake for a verbatim SPEC string when it is not — unlike, say, the friends
+page's "Filter your friends" (§11.6), which is quoted directly.

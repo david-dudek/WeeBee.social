@@ -1,0 +1,60 @@
+{{var title=David Dudek — About}}
+<p>David's profile, as seen by his friend Alice (see <a href="profile-blog.html">the Blog
+tab</a> for the fuller note on this session's viewpoint).</p>
+
+<header class="profile-header">
+<img class="profile-photo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNDAgMjQwIj48cmVjdCB3aWR0aD0iMjQwIiBoZWlnaHQ9IjI0MCIgZmlsbD0iI2U1ZTVlNSIvPjxjaXJjbGUgY3g9IjEyMCIgY3k9Ijk1IiByPSI0NSIgZmlsbD0iIzljOWM5YyIvPjxwYXRoIGQ9Ik00MCwyMzUgQzQwLDE3NSA3NSwxNTAgMTIwLDE1MCBDMTY1LDE1MCAyMDAsMTc1IDIwMCwyMzUgWiIgZmlsbD0iIzljOWM5YyIvPjwvc3ZnPg==" alt="David, smiling on a hiking trail in mid-afternoon light, slightly out of breath." width="120" height="120">
+<h1>David Dudek (formerly Dave Dudek)</h1>
+<button type="button" class="button profile-report">Report this profile</button>
+</header>
+
+<nav class="profile-tabs" aria-label="Profile tabs">
+<ul>
+<li><a href="profile-blog.html">Blog</a></li>
+<li><a href="profile-pinned.html">Pinned</a></li>
+<li><a href="profile-photos.html">Photos</a></li>
+<li><a href="profile-about.html" aria-current="page">About</a></li>
+</ul>
+</nav>
+
+<h2>About</h2>
+<p>Short bio, extended bio, interest hashtags, and the friends David and Alice have in common
+(§9.1). The photo is not repeated here — the header above already carries it.</p>
+
+<h3>Short bio</h3>
+<p>Dad, hiker, mediocre baker who peaked at loaf six. Up for coffee or a walk most weekends.
+Find the rest of the story at weebee dash social dot com.</p>
+<p class="session-note">Visible at the basic tier, to friends-of-friends as well as friends
+(§9.2). It never renders a clickable link, not even an allowlisted one — the address above
+stays plain, unobfuscated text with nothing to click (§9.4).</p>
+
+<h3>Extended bio</h3>
+<p>Spent most of this year rediscovering things I used to be impatient about: bread that needs
+a day to prove, a garden that ignores my schedule entirely, a trail up the ridge that hasn't
+gotten any shorter since I was twenty. None of it is efficient and I've stopped apologizing for
+that.</p>
+<p>We keep saying we'll finally walk the whole coast path together instead of just the one
+weekend a year we manage — <a href="https://www.openstreetmap.org/">here's the stretch</a> I'm
+angling for next spring, no excuses this time. Always happy to talk baking disasters, terrible
+garden puns, or where to find decent coffee near the ridge trailhead.</p>
+<p class="session-note">Friends only (§9.2) — visible here because Alice, this page's viewer,
+is David's friend. Unlike the short bio, allowlisted links are permitted (§7.2.3), and neither
+bio above carries an "edited" marker or history: a bio is a current description, not a
+statement made at a moment (§9.4, §9.7).</p>
+
+<h3>Interests</h3>
+<ul class="hashtag-list">
+<li><a href="discover.html">#hiking</a></li>
+<li><a href="discover.html">#jazz</a></li>
+<li><a href="discover.html">#cornwall</a></li>
+<li><a href="discover.html">#baking</a></li>
+</ul>
+<p class="session-note">Up to <code>PROFILE_HASHTAG_MAX</code> = 10; David uses 4 here.
+Clicking one opens the discover page filtered to that tag (§11.2) — discover.html is not yet
+built (session M4), so these links resolve once it lands.</p>
+
+<h3>People you both know</h3>
+<p>Knows Tom, Mom and others.</p>
+<p class="session-note">Only the friends Alice and David have in common — rendered as names,
+never as a count (§11.5). David and Alice actually share three mutual friends here (Tom, Mom
+and Priya); the idiom names two and folds the rest into "and others," never "and 1 other."</p>

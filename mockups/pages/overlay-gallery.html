@@ -1,0 +1,50 @@
+{{var title=Gallery image overlay — WeeBee mockup}}
+<h1>Gallery image overlay, open</h1>
+<p>The click-to-expand overlay of §7.2.2, reached here from the second thumbnail on
+<a href="profile-photos.html">David's Photos tab</a>. It is a proper modal dialog per §16.3:
+keyboard-openable, focus-trapped, Escape-dismissable, focus restored on close — and an in-app
+view, never a raw file URL. Because these are static pages with no scripts, this page shows the
+resulting state already open rather than the click itself; the two sections below stand for the
+two layers a real click would produce.</p>
+
+<div class="overlay-demo-section">
+<h2>The page behind the dialog</h2>
+<p>Dimmed and inert while the dialog is open — a real focus trap keeps keyboard focus from
+reaching it at all, not merely a visual fade.</p>
+<div class="modal-backdrop-content" aria-hidden="true">
+<header class="profile-header">
+<img class="profile-photo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNDAgMjQwIj48cmVjdCB3aWR0aD0iMjQwIiBoZWlnaHQ9IjI0MCIgZmlsbD0iI2U1ZTVlNSIvPjxjaXJjbGUgY3g9IjEyMCIgY3k9Ijk1IiByPSI0NSIgZmlsbD0iIzljOWM5YyIvPjxwYXRoIGQ9Ik00MCwyMzUgQzQwLDE3NSA3NSwxNTAgMTIwLDE1MCBDMTY1LDE1MCAyMDAsMTc1IDIwMCwyMzUgWiIgZmlsbD0iIzljOWM5YyIvPjwvc3ZnPg==" alt="" width="80" height="80">
+<h3>David Dudek (formerly Dave Dudek)</h3>
+</header>
+<ul class="gallery-grid">
+<li><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgNDAwIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgZmlsbD0iI2VlZWVlZSIvPjxjaXJjbGUgY3g9IjE0MCIgY3k9IjIzMCIgcj0iNzAiIGZpbGw9IiNhM2EzYTMiLz48Y2lyY2xlIGN4PSIyNTAiIGN5PSIyMjAiIHI9IjgwIiBmaWxsPSIjOGE4YThhIi8+PGNpcmNsZSBjeD0iMjAwIiBjeT0iMTUwIiByPSI0MCIgZmlsbD0iI2M5YzljOSIvPjwvc3ZnPg==" alt="" width="90" height="90"></li>
+<li><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgNDAwIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgZmlsbD0iI2U5ZTllOSIvPjxwb2x5Z29uIHBvaW50cz0iMCw0MDAgMCwyNjAgOTAsMTgwIDIwMCwyODAgMjgwLDE0MCA0MDAsMjQwIDQwMCw0MDAiIGZpbGw9IiNiM2IzYjMiLz48cG9seWdvbiBwb2ludHM9IjAsNDAwIDAsMzQwIDEzMCwyNTAgMjMwLDM2MCAzMjAsMjcwIDQwMCwzMjAgNDAwLDQwMCIgZmlsbD0iIzhmOGY4ZiIvPjxjaXJjbGUgY3g9IjMzMCIgY3k9IjcwIiByPSIzMCIgZmlsbD0iI2Q2ZDZkNiIvPjwvc3ZnPg==" alt="" width="90" height="90"></li>
+<li><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgNDAwIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgZmlsbD0iI2VjZWNlYyIvPjxyZWN0IHg9IjQwIiB5PSIyMjAiIHdpZHRoPSIxNTAiIGhlaWdodD0iMTQwIiBmaWxsPSIjYThhOGE4Ii8+PHJlY3QgeD0iMjEwIiB5PSIxNjAiIHdpZHRoPSIxNTAiIGhlaWdodD0iMjAwIiBmaWxsPSIjOTA5MDkwIi8+PGNpcmNsZSBjeD0iMTIwIiBjeT0iMTQwIiByPSI1MCIgZmlsbD0iI2M0YzRjNCIvPjwvc3ZnPg==" alt="" width="90" height="90"></li>
+</ul>
+</div>
+</div>
+
+<div class="overlay-demo-section">
+<h2>The dialog, open</h2>
+<div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="gallery-overlay-caption">
+<div class="modal-controls">
+<button type="button">Previous image</button>
+<button type="button">Next image</button>
+<button type="button">Close<span class="visually-hidden"> image viewer</span></button>
+</div>
+<figure>
+<img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MDAgNjAwIj48cmVjdCB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgZmlsbD0iI2U5ZTllOSIvPjxwb2x5Z29uIHBvaW50cz0iMCw2MDAgMCw0MDAgMTgwLDI2MCA0MDAsNDIwIDU2MCwyMDAgODAwLDM2MCA4MDAsNjAwIiBmaWxsPSIjYjNiM2IzIi8+PHBvbHlnb24gcG9pbnRzPSIwLDYwMCAwLDUyMCAyNjAsMzcwIDQ2MCw1NDAgNjQwLDQwMCA4MDAsNDgwIDgwMCw2MDAiIGZpbGw9IiM4ZjhmOGYiLz48Y2lyY2xlIGN4PSI2NjAiIGN5PSIxMDAiIHI9IjQ1IiBmaWxsPSIjZDZkNmQ2Ii8+PC9zdmc+" alt="" width="800" height="600">
+<figcaption id="gallery-overlay-caption">The view from the ridge on last month's hike, low clouds settling into the valley.</figcaption>
+</figure>
+</div>
+</div>
+
+<p class="session-note">What a real click would do, that a static page cannot: move focus onto
+this dialog when it opens; trap focus inside it while open, so Tab cycles among Previous, Next,
+Close and the image without ever reaching the dimmed page behind; close on Escape; and return
+focus to the second gallery thumbnail afterward. Previous and Next are real buttons, so a
+keyboard user can step through all 8 images without closing and reopening the dialog each time
+(§16.3). The image's alternative text is shown as a visible caption in a
+<code>&lt;figure&gt;</code>/<code>&lt;figcaption&gt;</code>, with the image's own
+<code>alt</code> left empty so nothing is announced twice (§9.4). Zoom and pan, where the image
+is larger than the screen, are operable by keyboard as well as by pointer.</p>

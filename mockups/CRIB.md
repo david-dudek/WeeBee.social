@@ -159,6 +159,20 @@ Base cast, taken directly from SPEC's own examples (see table above for citation
 a name-change pair, so this one is invented for exactly this purpose and for no other. Later
 sessions may reuse Priya or add a sixth name where a page needs one; note it here if you do.
 
+**M3 gives David his own name-change pair, "David Dudek (formerly Dave Dudek)"**, shown in the
+persistent header on all four profile-tab pages — the first time the dual-name display renders
+for the account whose view this track otherwise always shows. This is not reconciled against
+David's plain "David" byline on M1/M2's already-built pages (feed.html, post-feed.html,
+post-profile-tagged.html); per the standing fidelity choice already recorded for Priya's case
+(NOTES.md entries 5 and 7), each mockup illustrates the pattern it was built to show, not one
+fully self-consistent fictional timeline.
+
+**M3 chooses Alice as the friend whose view of David's profile the four tabs render** (SPEC
+§9.1 requires a friend's view; every earlier mockup rendered David's own). David and Alice's
+mutual friends for the About tab's §11.5 line are Tom, Mom and Priya (three, so the idiom's
+"and others" form applies). Later sessions building another friend's view of a profile should
+either reuse Alice or record their own choice here.
+
 ---
 
 ## 4. Relative-age ladder (SPEC §7.5.1) — phrases in use
@@ -199,6 +213,12 @@ days ago · A few days ago · Several days ago · About a week ago · Over a cou
 (the countdown post — a deliberately old unpinned post, elapsed ≈ 84 days, inside the 14-day
 countdown window) · About a month ago · Over a month ago.
 
+**Phrases used on the M3 profile tabs:** A few hours ago · About a day ago · A couple of days
+ago · A few days ago · **About a year ago** — the first use in this track of a ladder rung past
+"a couple of months ago," on the Pinned tab's genuinely-old post and its chronological
+reappearance on the Blog tab (§7.6: "the long tail of the ladder exists for this case and for
+no other").
+
 **Never in markup:** no `title` attribute, no `<time datetime>`, no data attribute carrying the
 real timestamp, anywhere these phrases appear (§7.5.1, ARCHITECTURE §3.8).
 
@@ -216,3 +236,13 @@ links resolve rather than introducing a second set of names.
 built `post-feed.html`, `post-profile-tagged.html`, and `post-preformatted.html` themselves,
 so composer.html's own links to `post-preformatted.html` and any future page linking to a
 single-post view can now resolve.
+
+**M3 builds six more pages**, per the M3 prompt's own explicit filenames: `profile-blog.html`
+(the Blog tab, landing), `profile-pinned.html`, `profile-photos.html`, `profile-about.html`,
+`overlay-gallery.html`, and `overlay-post.html`. These are distinct from the placeholder
+`profile.html` the main nav and M1/M2 pages already link to (NOTES.md entry 8) — that link
+target is left unresolved, as entry 8 anticipated; M3 did not rename or retarget it, since
+`partials/_nav.html` and the already-built M1/M2 pages are outside this session's touched
+files. `profile-about.html`'s hashtag links point at the plain `discover.html` target already
+assumed by M1's nav (no filter query-string convention is established by any session yet — left
+for M4, which builds discover.html itself).

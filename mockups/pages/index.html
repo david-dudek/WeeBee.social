@@ -46,7 +46,30 @@ confined to the post's own box (SPEC §7.2.1, §16.3; ARCHITECTURE §3.8).</li>
 
 <div class="session-group">
 <h2>M3 — The profile, as a friend sees it</h2>
-<p class="not-built">Not yet built.</p>
+<ul>
+<li><a href="profile-blog.html">Profile — Blog tab</a> — the persistent header (photo, display
+name mid name-change transition, report action) shared by all four tabs; the landing tab's
+post list, newest first, folded at <code>BLOG_FOLD_CHARS</code>; a feed post shown here as well
+as in its recipients' feeds; a pinned post in its chronological place; the normal-profile case
+of no pagination (SPEC §9.1, §4.5.1, §7.6, §7.7, §7.7.1, §7.9, §16.3).</li>
+<li><a href="profile-pinned.html">Profile — Pinned tab</a> — the author's curated shelf,
+folded at the tighter <code>FEED_FOLD_CHARS</code>; a pinned post's age shown under the
+ordinary relative-time rule with the "Pinned" marker standing in for the expiry countdown; a
+genuinely old pinned post reaching the long tail of the relative-age ladder; no trace of its
+expired older comments (SPEC §7.5, §7.5.1, §7.6).</li>
+<li><a href="profile-photos.html">Profile — Photos tab</a> — the <code>GALLERY_MAX</code> = 8
+image gallery as a <code>&lt;ul&gt;</code> of real, plain-tab-order <code>&lt;button&gt;</code>s
+with no caption field, the alternative text doing that job instead (SPEC §9.2, §9.4, §16.3).</li>
+<li><a href="profile-about.html">Profile — About tab</a> — the short bio (no clickable links,
+ever) and extended bio (friends only, allowlisted links permitted), profile hashtags linking to
+the not-yet-built discover page, and "the people you both know" rendered as names via the
+idiom's own "and others" form, never a count (SPEC §9.1, §9.4, §11.5).</li>
+<li><a href="overlay-gallery.html">Image overlay, from the gallery</a> and
+<a href="overlay-post.html">image overlay, from a post</a> — the click-to-expand modal dialog
+of §7.2.2 rendered open, with the dimmed page behind it and the obligations a real click would
+add (focus in, trapped, Escape out, focus restored) stated in page text; the gallery variant
+alone carries Previous/Next controls (SPEC §7.2.2, §9.4, §16.3).</li>
+</ul>
 </div>
 
 <div class="session-group">
