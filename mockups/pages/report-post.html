@@ -1,0 +1,109 @@
+{{var title=Report a post or comment — WeeBee mockup}}
+<h1>Report a post or comment</h1>
+<p>If something you can see on WeeBee crosses a line, you can report it to the person who runs
+the platform. Reporting doesn't take anything down by itself — it puts a copy in front of them
+so they can look and decide what to do. Whatever you reported stays visible while they're
+looking at it.</p>
+<p class="commentary">SPEC §13.2, §13.3: the report button is a real, visibly labelled
+<code>&lt;button&gt;</code>, never an unlabelled icon, and it is available to anyone who can see
+the target — never to the post's or comment's own author. §13.3: reported content stays live
+while a report is open, which is why nothing on this page should read as though anything has
+already been removed.</p>
+
+<h2>Reporting a post</h2>
+<p class="commentary">This is David's own Cornwall coast-path post, rendered here as
+<strong>Priya</strong> would see it — a friend-of-friend who matched on #hiking through Alice,
+the same viewpoint <a href="post-profile-tagged.html">post-profile-tagged.html</a> already
+established. Priya can report this post; David, its author, could not — the button would not
+appear on his own view of it at all.</p>
+
+<article class="post" aria-label="Post by David, several days ago">
+<p class="post-meta">
+<span class="post-author">David</span>
+<span class="post-age">Several days ago</span>
+</p>
+<div class="post-body">
+<p>Back from three days on the Cornwall coast path — legs are done, but I'd do the whole thing again tomorrow. Already thinking about where next.</p>
+</div>
+<p class="post-visibility">Visible to: all of David's friends, and friends-of-friends with any of
+#hiking, #jazz.</p>
+</article>
+
+<h3>What's wrong with this post?</h3>
+<fieldset>
+<legend>Reason</legend>
+<div class="option-list">
+<div class="option-row"><input type="radio" id="report-post-harassment" name="report-post-reason"><label for="report-post-harassment">Harassment or abuse</label></div>
+<div class="option-row"><input type="radio" id="report-post-commercial" name="report-post-reason"><label for="report-post-commercial">Unwanted or commercial content</label></div>
+<div class="option-row"><input type="radio" id="report-post-private" name="report-post-reason"><label for="report-post-private">Someone else's private information</label></div>
+<div class="option-row"><input type="radio" id="report-post-tags" name="report-post-reason" checked><label for="report-post-tags">The tags don't match this post</label></div>
+<div class="option-row"><input type="radio" id="report-post-other" name="report-post-reason"><label for="report-post-other">Something else</label></div>
+</div>
+</fieldset>
+<div class="field">
+<label for="report-post-note">Anything else you'd like the operator to know (optional)</label>
+<textarea id="report-post-note" name="report-post-note" rows="3">Doesn't seem to have anything to do with #jazz, which is why it showed up for me.</textarea>
+</div>
+<button type="submit" class="button">Send report</button>
+<p class="commentary">Reasons are verbatim from SPEC §13.2: harassment or abuse · unwanted or
+commercial content · someone else's private information · the tags don't match this post
+(profile posts only) · something else. "The tags don't match this post" only ever applies to a
+profile post like this one — see the comment report below, where it's absent. §13.2, v1.21:
+tag-mismatch reports exist because tagging is an audience control (§7.9), and this is the one
+report reason the affected friend-of-friend — the person the mismatch actually reached — is
+best placed to raise.</p>
+
+<h2>Reporting a comment</h2>
+<p class="commentary">Back to David's own point of view for this one — the same dinner post and
+comment already shown on <a href="post-feed.html">post-feed.html</a>. David didn't write Alice's
+comment, so he can report it even though he's the post's author; he could not report his own
+comment the same way.</p>
+
+<article class="post" aria-label="Post by David, a few days ago">
+<p class="post-meta">
+<span class="post-author">David</span>
+<span class="post-age">A few days ago</span>
+</p>
+<div class="post-body">
+<p>Small dinner this Friday if anyone's free — nothing fancy, just good company and too much pasta. Let me know and I'll set a place for you.</p>
+</div>
+<p class="post-visibility">Visible to: the friends David sent this to.</p>
+</article>
+
+<ol class="comment-list">
+<li class="comment" aria-label="Comment by Alice, a couple of days ago">
+<p class="comment-meta">
+<span class="comment-author">Alice</span>
+<span class="comment-age">A couple of days ago</span>
+</p>
+<div class="comment-body"><p>I'm in! Should have known you'd pick the one week I'm swamped at work, but I'm not missing this — I'll rearrange whatever I have to.</p></div>
+</li>
+</ol>
+
+<h3>What's wrong with this comment?</h3>
+<fieldset>
+<legend>Reason</legend>
+<div class="option-list">
+<div class="option-row"><input type="radio" id="report-comment-harassment" name="report-comment-reason"><label for="report-comment-harassment">Harassment or abuse</label></div>
+<div class="option-row"><input type="radio" id="report-comment-commercial" name="report-comment-reason" checked><label for="report-comment-commercial">Unwanted or commercial content</label></div>
+<div class="option-row"><input type="radio" id="report-comment-private" name="report-comment-reason"><label for="report-comment-private">Someone else's private information</label></div>
+<div class="option-row"><input type="radio" id="report-comment-other" name="report-comment-reason"><label for="report-comment-other">Something else</label></div>
+</div>
+</fieldset>
+<div class="field">
+<label for="report-comment-note">Anything else you'd like the operator to know (optional)</label>
+<textarea id="report-comment-note" name="report-comment-note" rows="3"></textarea>
+</div>
+<button type="submit" class="button">Send report</button>
+<p class="commentary">Same reason list as the post above, minus "the tags don't match this
+post" — a comment carries no hashtags of its own, so that reason has nothing to attach to here.
+The frozen copy this report captures is what lets the operator judge it even after the comment
+is later edited or deleted (§13.2, §13.3).</p>
+
+<p class="commentary">A note on an ambiguity in SPEC §13.2, flagged rather than resolved here:
+its own sentence — "there is one report form, and it always carries a reason category, plus the
+optional short note to the operator this section already gives profile reports" — reads most
+plainly as extending the free-text note above to post and comment reports too, which is what both
+forms on this page render. But the sentence is not fully explicit that the note belongs on every
+report type rather than profile reports alone, and this session renders the plainest reading
+without resolving that ambiguity. Recorded in <code>mockups/NOTES.md</code>.</p>

@@ -1,0 +1,228 @@
+{{var title=Manage your photos — WeeBee mockup}}
+<h1>Manage your photos</h1>
+<p>This is your own view of your Photos tab — the one place you can add, replace, reorder and
+remove pictures, and change your profile photo. Friends see the result on
+<a href="profile-photos.html">the Photos tab</a>; only you see the controls below.</p>
+<p class="commentary">SPEC §9.4, the Photos tab in its owner-facing state. The eight gallery
+images and their alternative text below are the same ones already shown on
+<a href="profile-photos.html">profile-photos.html</a> (Alice's friend view) — this page adds the
+management controls that view deliberately left out.</p>
+
+<h2>Your profile photo</h2>
+<p>Every WeeBee account always has a profile photo — there's no "no photo" state to leave it in.
+Yours right now is the one you chose after joining.</p>
+<img class="profile-photo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNDAgMjQwIj48cmVjdCB3aWR0aD0iMjQwIiBoZWlnaHQ9IjI0MCIgZmlsbD0iI2U1ZTVlNSIvPjxjaXJjbGUgY3g9IjEyMCIgY3k9Ijk1IiByPSI0NSIgZmlsbD0iIzljOWM5YyIvPjxwYXRoIGQ9Ik00MCwyMzUgQzQwLDE3NSA3NSwxNTAgMTIwLDE1MCBDMTY1LDE1MCAyMDAsMTc1IDIwMCwyMzUgWiIgZmlsbD0iIzljOWM5YyIvPjwvc3ZnPg==" alt="David, smiling on a hiking trail in mid-afternoon light, slightly out of breath." width="120" height="120">
+
+<h3>Upload a new photo</h3>
+<p>Uploading tells your friends, once, that you changed it, and it briefly holds new friend
+requests you send afterward — enough time that your photo can't be used as a rotating
+billboard aimed at people who haven't friended you yet.</p>
+<div class="field">
+<label for="profile-photo-upload">Upload a photo</label>
+<input type="file" id="profile-photo-upload" name="profile-photo-upload" accept="image/*">
+</div>
+<fieldset>
+<legend>Alternative text for this photo</legend>
+<div class="option-row">
+<input type="radio" id="profile-photo-describe" name="profile-photo-alt-choice" checked>
+<label for="profile-photo-describe">Describe this image</label>
+</div>
+<div class="field">
+<label for="profile-photo-alt-text">Description (up to 1,000 characters)</label>
+<textarea id="profile-photo-alt-text" name="profile-photo-alt-text" rows="2"></textarea>
+</div>
+<div class="option-row">
+<input type="radio" id="profile-photo-decorative" name="profile-photo-alt-choice">
+<label for="profile-photo-decorative">This image is decorative</label>
+</div>
+</fieldset>
+<button type="submit" class="button">Save new photo</button>
+
+<h3>Or choose one of our default pictures</h3>
+<p>Switching to one of these is free and immediate — nobody is told, and it doesn't affect when
+you can next send a friend request.</p>
+<fieldset>
+<legend>Default pictures</legend>
+<div class="option-list">
+<div class="option-row avatar-option-row">
+<input type="radio" id="avatar-leaf" name="avatar-choice">
+<img class="avatar-thumb" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNDAgMjQwIj48cmVjdCB3aWR0aD0iMjQwIiBoZWlnaHQ9IjI0MCIgZmlsbD0iI2U1ZTVlNSIvPjxwYXRoIGQ9Ik0xMjAsNDAgQzE3MCw2MCAxOTAsMTIwIDEyMCwyMDAgQzUwLDEyMCA3MCw2MCAxMjAsNDAgWiIgZmlsbD0iIzljOWM5YyIvPjxsaW5lIHgxPSIxMjAiIHkxPSI2MCIgeDI9IjEyMCIgeTI9IjE5MCIgc3Ryb2tlPSIjZTVlNWU1IiBzdHJva2Utd2lkdGg9IjQiLz48L3N2Zz4K" alt="A simple line drawing of a leaf on a plain background — one of WeeBee's default pictures." width="48" height="48">
+<label for="avatar-leaf">Leaf (the picture new accounts start with)</label>
+</div>
+<div class="option-row avatar-option-row">
+<input type="radio" id="avatar-mountain" name="avatar-choice">
+<img class="avatar-thumb" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNDAgMjQwIj48cmVjdCB3aWR0aD0iMjQwIiBoZWlnaHQ9IjI0MCIgZmlsbD0iI2U5ZTllOSIvPjxwb2x5Z29uIHBvaW50cz0iNDAsMTkwIDEwMCw5MCAxNDAsMTUwIDE3MCwxMDAgMjAwLDE5MCIgZmlsbD0iIzhmOGY4ZiIvPjxjaXJjbGUgY3g9IjE4MCIgY3k9IjYwIiByPSIyMCIgZmlsbD0iI2M5YzljOSIvPjwvc3ZnPgo=" alt="A simple line drawing of a mountain peak with a small sun — one of WeeBee's default pictures." width="48" height="48">
+<label for="avatar-mountain">Mountain</label>
+</div>
+<div class="option-row avatar-option-row">
+<input type="radio" id="avatar-star" name="avatar-choice">
+<img class="avatar-thumb" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNDAgMjQwIj48cmVjdCB3aWR0aD0iMjQwIiBoZWlnaHQ9IjI0MCIgZmlsbD0iI2VlZWVlZSIvPjxwb2x5Z29uIHBvaW50cz0iMTIwLDUwIDEzOCwxMDAgMTkyLDEwMCAxNDgsMTMyIDE2NCwxODQgMTIwLDE1MiA3NiwxODQgOTIsMTMyIDQ4LDEwMCAxMDIsMTAwIiBmaWxsPSIjYTNhM2EzIi8+PC9zdmc+Cg==" alt="A simple five-pointed star on a plain background — one of WeeBee's default pictures." width="48" height="48">
+<label for="avatar-star">Star</label>
+</div>
+</div>
+</fieldset>
+<button type="button" class="button">Use this picture</button>
+<p class="commentary">SPEC §9.4, §12.1, §13.6: <code>DEFAULT_AVATAR_SET</code> images are
+original artwork, never photographs of a person, and their alternative text is written by the
+operator rather than the uploader — the one deliberate exception to this section's
+uploader-authored rule. Every new account starts on the designated default member (Leaf here);
+selecting any picker image, including switching back to Leaf, triggers no hold and no
+notification, unlike an upload, which does both.</p>
+
+<h2>Your gallery</h2>
+<p>Up to 8 photos, kept separate from your profile photo and visible to friends only. There's no
+separate caption field — the description you write for each photo is the caption, and it's what
+shows underneath the picture when someone opens it.</p>
+<p class="status-message" role="status" aria-live="polite">Your gallery has 8 of 8 photos — the
+most WeeBee allows. Remove or replace one before you can add another.</p>
+<p class="commentary"><code>GALLERY_MAX</code> = 8 (§9.4, §14). This gallery is already at the
+cap, which lets this page demonstrate the honest refusal text §16.3 requires rather than
+inventing a hypothetical over-limit state.</p>
+
+<p>You can reorder photos with the buttons below, or by dragging them — but the buttons always
+work too, even with a keyboard alone and nothing else.</p>
+<p class="commentary">SPEC §9.4: "a reorder only a mouse can perform is a 2.1.1 failure." Since
+these mockups carry no scripts, no actual drag-and-drop is implemented here — this states in
+real text that it would be offered in addition, never instead.</p>
+
+<ol class="gallery-manage-list">
+
+<li class="gallery-manage-item">
+<img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgNDAwIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgZmlsbD0iI2VlZWVlZSIvPjxjaXJjbGUgY3g9IjE0MCIgY3k9IjIzMCIgcj0iNzAiIGZpbGw9IiNhM2EzYTMiLz48Y2lyY2xlIGN4PSIyNTAiIGN5PSIyMjAiIHI9IjgwIiBmaWxsPSIjOGE4YThhIi8+PGNpcmNsZSBjeD0iMjAwIiBjeT0iMTUwIiByPSI0MCIgZmlsbD0iI2M5YzljOSIvPjwvc3ZnPg==" alt="Me on a beach in Cornwall, mid-laugh at a joke Tom made just before the shutter went off." width="120" height="120">
+<p class="contact-card-value">"Me on a beach in Cornwall, mid-laugh at a joke Tom made just before the shutter went off."</p>
+<div class="button-row">
+<button type="button" class="button" disabled>Move 'Me on a beach in Cornwall' up</button>
+<button type="button" class="button">Move 'Me on a beach in Cornwall' down</button>
+<button type="button" class="button">Replace</button>
+<button type="button" class="button">Edit description</button>
+<button type="button" class="button">Remove</button>
+</div>
+<p class="commentary">Already first, so "Move up" is disabled rather than absent — a control
+that vanishes at the ends of the list is harder for a screen-reader user to account for than one
+that stays put and says it can't be used right now.</p>
+</li>
+
+<li class="gallery-manage-item">
+<img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgNDAwIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgZmlsbD0iI2U5ZTllOSIvPjxwb2x5Z29uIHBvaW50cz0iMCw0MDAgMCwyNjAgOTAsMTgwIDIwMCwyODAgMjgwLDE0MCA0MDAsMjQwIDQwMCw0MDAiIGZpbGw9IiNiM2IzYjMiLz48cG9seWdvbiBwb2ludHM9IjAsNDAwIDAsMzQwIDEzMCwyNTAgMjMwLDM2MCAzMjAsMjcwIDQwMCwzMjAgNDAwLDQwMCIgZmlsbD0iIzhmOGY4ZiIvPjxjaXJjbGUgY3g9IjMzMCIgY3k9IjcwIiByPSIzMCIgZmlsbD0iI2Q2ZDZkNiIvPjwvc3ZnPg==" alt="The view from the ridge on last month's hike, low clouds settling into the valley." width="120" height="120">
+<p class="contact-card-value">"The view from the ridge on last month's hike, low clouds settling into the valley."</p>
+<div class="button-row">
+<button type="button" class="button">Move 'The view from the ridge on last month's hike' up</button>
+<button type="button" class="button">Move 'The view from the ridge on last month's hike' down</button>
+<button type="button" class="button">Replace</button>
+<button type="button" class="button">Edit description</button>
+<button type="button" class="button">Remove</button>
+</div>
+</li>
+
+<li class="gallery-manage-item">
+<img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgNDAwIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgZmlsbD0iI2VjZWNlYyIvPjxyZWN0IHg9IjQwIiB5PSIyMjAiIHdpZHRoPSIxNTAiIGhlaWdodD0iMTQwIiBmaWxsPSIjYThhOGE4Ii8+PHJlY3QgeD0iMjEwIiB5PSIxNjAiIHdpZHRoPSIxNTAiIGhlaWdodD0iMjAwIiBmaWxsPSIjOTA5MDkwIi8+PGNpcmNsZSBjeD0iMTIwIiBjeT0iMTQwIiByPSI1MCIgZmlsbD0iI2M0YzRjNCIvPjwvc3ZnPg==" alt="Homemade sourdough loaf, first one that didn't come out dense as a brick." width="120" height="120">
+
+<div class="field">
+<label for="gallery-3-alt-edit">Description (up to 1,000 characters)</label>
+<textarea id="gallery-3-alt-edit" name="gallery-3-alt-edit" rows="2">Homemade sourdough loaf, first one that didn't come out dense as a brick.</textarea>
+</div>
+<div class="button-row">
+<button type="submit" class="button">Save description</button>
+</div>
+<p>Changing only the description doesn't notify anyone or hold anything — the picture itself
+hasn't changed, so nothing else needs to.</p>
+<p class="commentary">SPEC §9.4: "editing an image's alternative text alone changes nothing
+else." Shown open here as the one item mid-edit; the other seven show their normal collapsed
+row of buttons instead.</p>
+</li>
+
+<li class="gallery-manage-item">
+<img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgNDAwIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgZmlsbD0iI2VlZWVlZSIvPjxjaXJjbGUgY3g9IjE0MCIgY3k9IjIzMCIgcj0iNzAiIGZpbGw9IiNhM2EzYTMiLz48Y2lyY2xlIGN4PSIyNTAiIGN5PSIyMjAiIHI9IjgwIiBmaWxsPSIjOGE4YThhIi8+PGNpcmNsZSBjeD0iMjAwIiBjeT0iMTUwIiByPSI0MCIgZmlsbD0iI2M5YzljOSIvPjwvc3ZnPg==" alt="David and Mom shelling peas outside the kitchen door, the one holiday everyone made it home for." width="120" height="120">
+<p class="contact-card-value">"David and Mom shelling peas outside the kitchen door, the one holiday everyone made it home for."</p>
+<div class="button-row">
+<button type="button" class="button">Move 'David and Mom shelling peas outside the kitchen door' up</button>
+<button type="button" class="button">Move 'David and Mom shelling peas outside the kitchen door' down</button>
+<button type="button" class="button">Replace</button>
+<button type="button" class="button">Edit description</button>
+<button type="button" class="button">Remove</button>
+</div>
+</li>
+
+<li class="gallery-manage-item">
+<img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgNDAwIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgZmlsbD0iI2VjZWNlYyIvPjxyZWN0IHg9IjQwIiB5PSIyMjAiIHdpZHRoPSIxNTAiIGhlaWdodD0iMTQwIiBmaWxsPSIjYThhOGE4Ii8+PHJlY3QgeD0iMjEwIiB5PSIxNjAiIHdpZHRoPSIxNTAiIGhlaWdodD0iMjAwIiBmaWxsPSIjOTA5MDkwIi8+PGNpcmNsZSBjeD0iMTIwIiBjeT0iMTQwIiByPSI1MCIgZmlsbD0iI2M0YzRjNCIvPjwvc3ZnPg==" alt="New apartment's front window, four flights up, park just visible across the street." width="120" height="120">
+
+<h4>Replacing this photo</h4>
+<div class="field">
+<label for="gallery-5-replace">Upload a new photo</label>
+<input type="file" id="gallery-5-replace" name="gallery-5-replace" accept="image/*">
+</div>
+<fieldset>
+<legend>Alternative text for the new photo</legend>
+<div class="option-row">
+<input type="radio" id="gallery-5-describe" name="gallery-5-alt-choice" checked>
+<label for="gallery-5-describe">Describe this image</label>
+</div>
+<div class="field">
+<label for="gallery-5-alt-text">Description (up to 1,000 characters)</label>
+<textarea id="gallery-5-alt-text" name="gallery-5-alt-text" rows="2"></textarea>
+</div>
+<div class="option-row">
+<input type="radio" id="gallery-5-decorative" name="gallery-5-alt-choice">
+<label for="gallery-5-decorative">This image is decorative</label>
+</div>
+</fieldset>
+<button type="submit" class="button">Save replacement</button>
+<p class="commentary">SPEC §7.8, §9.4, §16.3: replacing a gallery photo re-prompts for
+alternative text exactly as replacing a post's image does — the old description is never carried
+over.</p>
+</li>
+
+<li class="gallery-manage-item">
+<img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgNDAwIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgZmlsbD0iI2U3ZTdlNyIvPjxlbGxpcHNlIGN4PSIyMDAiIGN5PSIyNjAiIHJ4PSIxNTAiIHJ5PSI2MCIgZmlsbD0iIzllOWU5ZSIvPjxlbGxpcHNlIGN4PSIyOTAiIGN5PSIyMzAiIHJ4PSI0MCIgcnk9IjMwIiBmaWxsPSIjN2Y3ZjdmIi8+PC9zdmc+" alt="The dog, mid-sprint, chasing something invisible to everyone but him." width="120" height="120">
+<p class="contact-card-value">"The dog, mid-sprint, chasing something invisible to everyone but him."</p>
+<div class="button-row">
+<button type="button" class="button">Move 'The dog, mid-sprint' up</button>
+<button type="button" class="button">Move 'The dog, mid-sprint' down</button>
+<button type="button" class="button">Replace</button>
+<button type="button" class="button">Edit description</button>
+<button type="button" class="button">Remove</button>
+</div>
+</li>
+
+<li class="gallery-manage-item">
+<img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgNDAwIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgZmlsbD0iI2VjZWNlYyIvPjxyZWN0IHg9IjQwIiB5PSIyMjAiIHdpZHRoPSIxNTAiIGhlaWdodD0iMTQwIiBmaWxsPSIjYThhOGE4Ii8+PHJlY3QgeD0iMjEwIiB5PSIxNjAiIHdpZHRoPSIxNTAiIGhlaWdodD0iMjAwIiBmaWxsPSIjOTA5MDkwIi8+PGNpcmNsZSBjeD0iMTIwIiBjeT0iMTQwIiByPSI1MCIgZmlsbD0iI2M0YzRjNCIvPjwvc3ZnPg==" alt="Half-finished deck rebuild, Tom's truck still parked full of leftover lumber." width="120" height="120">
+<p class="contact-card-value">"Half-finished deck rebuild, Tom's truck still parked full of leftover lumber."</p>
+<div class="button-row">
+<button type="button" class="button">Move 'Half-finished deck rebuild' up</button>
+<button type="button" class="button">Move 'Half-finished deck rebuild' down</button>
+<button type="button" class="button">Replace</button>
+<button type="button" class="button">Edit description</button>
+<button type="button" class="button">Remove</button>
+</div>
+</li>
+
+<li class="gallery-manage-item">
+<img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgNDAwIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgZmlsbD0iI2VlZWVlZSIvPjxjaXJjbGUgY3g9IjE0MCIgY3k9IjIzMCIgcj0iNzAiIGZpbGw9IiNhM2EzYTMiLz48Y2lyY2xlIGN4PSIyNTAiIGN5PSIyMjAiIHI9IjgwIiBmaWxsPSIjOGE4YThhIi8+PGNpcmNsZSBjeD0iMjAwIiBjeT0iMTUwIiByPSI0MCIgZmlsbD0iI2M5YzljOSIvPjwvc3ZnPg==" alt="Late-night board game with Alice and Tom, nobody remembers who actually won." width="120" height="120">
+<p class="contact-card-value">"Late-night board game with Alice and Tom, nobody remembers who actually won."</p>
+<div class="button-row">
+<button type="button" class="button">Move 'Late-night board game with Alice and Tom' up</button>
+<button type="button" class="button" disabled>Move 'Late-night board game with Alice and Tom' down</button>
+<button type="button" class="button">Replace</button>
+<button type="button" class="button">Edit description</button>
+<button type="button" class="button">Remove</button>
+</div>
+<p class="commentary">Already last, so "Move down" is disabled rather than absent, matching the
+first item's treatment at the other end of the list.</p>
+</li>
+
+</ol>
+
+<p class="status-message" role="status" aria-live="polite">'The view from the ridge on last month's hike' moved up. It's now second.</p>
+<p class="commentary">SPEC §9.4, §16.3 (WCAG 4.1.3): the result of a reorder is announced in a
+polite live region, following the shared <code>_status.html</code> reference pattern. Because
+this mockup carries no scripts, the region is shown already populated with the message that
+state would produce, rather than demonstrating the click itself.</p>
+
+<h3>Add a new photo</h3>
+<p>New photos always go to the front of your gallery — you placed them there by uploading them,
+we don't rearrange anything for you afterward.</p>
+<p class="field-error">Your gallery already has 8 photos, the most WeeBee allows. Remove or
+replace one before adding another.</p>
+<p class="commentary">Consistent with the "8 of 8" state noted at the top of this page — the
+upload control is shown disabled-by-message rather than silently hidden, per the platform's
+honest-error convention (SPEC §16.3, WCAG 3.3.1, 3.3.3).</p>

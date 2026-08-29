@@ -975,6 +975,69 @@ body:has(#commentary-toggle:not(:checked)) .commentary {
   margin-top: var(--space-2);
 }
 
+/* Gallery management (M6, SPEC §9.4): the owner-facing Photos tab, one
+   bordered block per photo carrying its move/replace/edit/remove controls. */
+.gallery-manage-list {
+  list-style: none;
+  margin: 0 0 var(--space-3);
+  padding: 0;
+}
+
+.gallery-manage-item {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.gallery-manage-item:last-child {
+  border-bottom: none;
+}
+
+.gallery-manage-item > img {
+  width: 7rem;
+  height: 7rem;
+  object-fit: cover;
+  border: 1px solid var(--color-border-light);
+  border-radius: 0.25rem;
+  flex-shrink: 0;
+}
+
+.gallery-manage-item > .field,
+.gallery-manage-item > fieldset,
+.gallery-manage-item > .contact-card-value,
+.gallery-manage-item > .button-row,
+.gallery-manage-item > p,
+.gallery-manage-item > h4 {
+  flex: 1 1 16rem;
+  min-width: 0;
+}
+
+/* The default-avatar picker: a small thumbnail beside each radio option */
+.avatar-option-row img.avatar-thumb {
+  width: 2.75rem;
+  height: 2.75rem;
+  object-fit: cover;
+  border: 1px solid var(--color-border-light);
+  border-radius: 0.25rem;
+  flex-shrink: 0;
+}
+
+/* A page's own visible provenance label (M6, settings.html / groups.html):
+   distinct from .commentary on purpose — it must stay visible with the
+   commentary toggle off, so the founder can tell an assembled or inferred
+   page apart at a glance regardless of that setting. Plain weight, not
+   italic monospace, and never hidden by body:has(#commentary-toggle...). */
+.page-provenance {
+  padding: var(--space-3);
+  margin-bottom: var(--space-3);
+  border: 2px solid var(--color-border);
+  border-radius: 0.25rem;
+  background: var(--color-bg-alt);
+}
+
 /* Unfriend-confirm's verbatim §5.3 quote */
 blockquote {
   margin: var(--space-2) 0;

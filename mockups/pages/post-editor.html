@@ -1,0 +1,213 @@
+{{var title=Edit post — WeeBee mockup}}
+<h1>Edit post</h1>
+<p>You can change a post's words, its picture, whether it's shown in the exact-spacing mode, and
+its hashtags. A comment can only have its words changed, and only by whoever wrote it.</p>
+<p class="commentary">SPEC §7.8 draws that line precisely: a post's text, image, preformatted
+toggle and hashtags are editable; nothing else on a post is. A comment's text is editable by its
+own author only. The five sections below each show one editing state from David's own point of
+view, since editing is always something an author does to their own words.</p>
+
+<div class="composer-section">
+<h2>1. Editing a feed post's words</h2>
+<p>Here's David fixing a typo in a feed post he already sent.</p>
+<div class="field">
+<label for="edit-post-1-text">Post text</label>
+<textarea id="edit-post-1-text" name="edit-post-1-text" rows="3">Small dinner this Friday if anyone's free — nothing fancy, just good company and too much pasta. Let me know and I'll set a place for you.</textarea>
+</div>
+<div class="option-row">
+<input type="checkbox" id="edit-post-1-preformatted">
+<label for="edit-post-1-preformatted">Preformatted (monospace, exact spacing)</label>
+</div>
+<p class="post-meta">
+<span class="post-age">A few days ago</span>
+<span class="post-edited">edited a few minutes ago</span>
+</p>
+<p>Once you save, this post will always show "edited" next to its age, along with roughly when
+that last happened. There's nothing to compare it against and no history to scroll back
+through — just the fact that it changed, and about when.</p>
+<button type="submit" class="button">Save changes</button>
+<p class="commentary">SPEC §7.8: the "edited" marker is permanent, real text, with no version
+history and no diff — "this is not an archive." Saving here re-runs every content check a new
+post would (length caps, the URL allowlist, whitespace rules) but does not re-notify anyone,
+reset the 90-day expiry clock, or move the post in the feed's order (§7.8's five invariants).
+This post carries no hashtags of its own; see sections 3 and 4 below for what editing hashtags
+does on a post where they matter — a profile post. On a feed post like this one, any hashtags
+are decorative ranking signals only (SPEC §11.2) and editing them here would not move the
+audience at all.</p>
+</div>
+
+<div class="composer-section">
+<h2>2. Replacing a post's image</h2>
+<p>David is swapping the picture on an older post for a better one. Replacing a picture always
+asks for a fresh description of it — we never carry the old description over or guess a new
+one.</p>
+<div class="field">
+<label for="edit-post-2-image">Replace image</label>
+<input type="file" id="edit-post-2-image" name="edit-post-2-image" accept="image/*">
+</div>
+<fieldset>
+<legend>Alternative text for the new image</legend>
+<div class="option-row">
+<input type="radio" id="edit-post-2-describe" name="edit-post-2-alt-choice" checked>
+<label for="edit-post-2-describe">Describe this image</label>
+</div>
+<div class="field">
+<label for="edit-post-2-alt-text">Description (up to 1,000 characters)</label>
+<textarea id="edit-post-2-alt-text" name="edit-post-2-alt-text" rows="2"></textarea>
+</div>
+<div class="option-row">
+<input type="radio" id="edit-post-2-decorative" name="edit-post-2-alt-choice">
+<label for="edit-post-2-decorative">This image is decorative</label>
+</div>
+</fieldset>
+<button type="submit" class="button">Save changes</button>
+<p class="commentary">SPEC §7.8, §16.3, §9.4: replacing a post's image re-prompts for
+alternative text every time, exactly as the composer and the gallery do — a deliberate choice,
+never carried over from the image being replaced and never auto-filled.</p>
+</div>
+
+<div class="composer-section">
+<h2>3. Editing hashtags on a blog post — widening the audience</h2>
+<p>This is David's own blog post about the Cornwall coast path. It already carries two
+hashtags, and three friends have already commented on it.</p>
+<div class="field">
+<label for="edit-post-3-text">Post text</label>
+<textarea id="edit-post-3-text" name="edit-post-3-text" rows="2">Back from three days on the Cornwall coast path — legs are done, but I'd do the whole thing again tomorrow. Already thinking about where next.</textarea>
+</div>
+<fieldset>
+<legend>Hashtags</legend>
+<div class="option-list">
+<div class="option-row">
+<input type="checkbox" id="edit-post-3-tag-hiking" checked>
+<label for="edit-post-3-tag-hiking">#hiking</label>
+</div>
+<div class="option-row">
+<input type="checkbox" id="edit-post-3-tag-jazz" checked>
+<label for="edit-post-3-tag-jazz">#jazz</label>
+</div>
+<div class="option-row">
+<input type="checkbox" id="edit-post-3-tag-cornwall" checked>
+<label for="edit-post-3-tag-cornwall">#cornwall</label>
+</div>
+</div>
+</fieldset>
+<p class="post-visibility" role="status" aria-live="polite">Visible to: all of David's friends,
+and friends-of-friends with any of #hiking, #jazz, #cornwall.</p>
+<p class="notice">This post has comments. Widening who can see it also shows those comments to
+the people it reaches.</p>
+
+<h3>Its comments, so far</h3>
+<ol class="comment-list">
+<li class="comment" aria-label="Comment by Alice, a few days ago">
+<p class="comment-meta">
+<span class="comment-author">Alice</span>
+<span class="comment-age">A few days ago</span>
+</p>
+<div class="comment-body"><p>Cornwall content, finally! Send the photos when you're back at real wifi.</p></div>
+</li>
+<li class="comment" aria-label="Comment by Tom, a few days ago">
+<p class="comment-meta">
+<span class="comment-author">Tom</span>
+<span class="comment-age">A few days ago</span>
+</p>
+<div class="comment-body"><p>That coast path destroyed my knees the one time I tried it. Respect.</p></div>
+</li>
+<li class="comment" aria-label="Comment by Priya, a couple of days ago">
+<p class="comment-meta">
+<span class="comment-author">Priya</span>
+<span class="comment-age">A couple of days ago</span>
+</p>
+<div class="comment-body"><p>#hiking is exactly why this showed up for me — I did the Cornwall path two summers ago and still think about it. Worth every blister.</p></div>
+</li>
+</ol>
+<button type="submit" class="button">Save changes</button>
+<p class="commentary">SPEC §7.8, §7.9, §11.3, v1.16: ticking #cornwall on top of the two tags
+this post already carried is the widening action — the same live audience line the composer
+uses, updating as tags change, present unconditionally rather than only on "dangerous" choices.
+Because the post already has comments (reused verbatim from
+<a href="post-profile-tagged.html">post-profile-tagged.html</a>, the same post as seen by
+Priya), widening the tags re-exposes those comments to whichever new friends-of-friends #cornwall
+reaches, and every existing commenter — Alice, Tom and Priya — is notified: "David added a
+hashtag to a post you commented on. More people can see it now." That notification is not shown
+as its own state here; it belongs on the recipients' own feeds, which this session does not
+rebuild.</p>
+</div>
+
+<div class="composer-section">
+<h2>4. Editing hashtags on the same post — narrowing the audience</h2>
+<p>Now David removes #jazz instead, since the post never really was about jazz.</p>
+<fieldset>
+<legend>Hashtags</legend>
+<div class="option-list">
+<div class="option-row">
+<input type="checkbox" id="edit-post-4-tag-hiking" checked>
+<label for="edit-post-4-tag-hiking">#hiking</label>
+</div>
+<div class="option-row">
+<input type="checkbox" id="edit-post-4-tag-jazz">
+<label for="edit-post-4-tag-jazz">#jazz</label>
+</div>
+</div>
+</fieldset>
+<p class="post-visibility" role="status" aria-live="polite">Visible to: all of David's friends,
+and friends-of-friends with any of #hiking.</p>
+<button type="submit" class="button">Save changes</button>
+<p class="commentary">SPEC §7.8, v1.16: removing a tag narrows the audience, and narrowing needs
+no consent from anyone — no notice appears here, and nobody who loses access is told. Contrast
+with section 3 above: the same live line renders either way, but only widening triggers the
+comments notice and the commenter notification.</p>
+</div>
+
+<div class="composer-section">
+<h2>5. Editing and deleting comments</h2>
+<p>You can always edit your own comments. On a post you wrote yourself, you can also delete
+anyone's comment — but you can't rewrite someone else's words. Deleting is yours to do here;
+rewriting isn't.</p>
+<p class="commentary">SPEC §7.8, §8.1: "deleting someone's words is a host's prerogative,
+rewriting them is ventriloquism." These three comments are the same ones already shown on
+<a href="post-feed.html">the dinner post's single-post view</a>.</p>
+
+<ol class="comment-list">
+<li class="comment" aria-label="Comment by Alice, a couple of days ago">
+<p class="comment-meta">
+<span class="comment-author">Alice</span>
+<span class="comment-age">A couple of days ago</span>
+</p>
+<div class="comment-body"><p>I'm in! Should have known you'd pick the one week I'm swamped at work, but I'm not missing this — I'll rearrange whatever I have to.</p></div>
+<div class="button-row">
+<button type="button" class="button">Delete</button>
+</div>
+<p class="commentary">No "Edit" control here — Alice wrote this comment, so only Alice can
+change its words. David, as the post's author, can remove it but never rewrite it.</p>
+</li>
+
+<li class="comment" aria-label="Comment by Tom, about a day ago">
+<p class="comment-meta">
+<span class="comment-author">Tom</span>
+<span class="comment-age">About a day ago</span>
+</p>
+<div class="comment-body"><p>Count me in, bringing dessert.</p></div>
+<div class="button-row">
+<button type="button" class="button">Delete</button>
+</div>
+</li>
+
+<li class="comment" aria-label="Comment by David, a few hours ago">
+<p class="comment-meta">
+<span class="comment-author">David</span>
+<span class="comment-age">A few hours ago</span>
+</p>
+<div class="field">
+<label for="edit-comment-david-text">Your comment</label>
+<textarea id="edit-comment-david-text" name="edit-comment-david-text" rows="2">Perfect — see everyone Friday around 7.</textarea>
+</div>
+<div class="button-row">
+<button type="submit" class="button">Save changes</button>
+<button type="button" class="button">Delete</button>
+</div>
+<p class="commentary">Both controls appear here: this is David's own comment, so he may edit
+it as well as delete it. Saving would add the same permanent "edited" marker §7.8 gives posts,
+with no history behind it.</p>
+</li>
+</ol>
+</div>

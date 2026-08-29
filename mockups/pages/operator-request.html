@@ -1,0 +1,39 @@
+{{var title=Contact the operator — WeeBee mockup}}
+<h1>Contact the operator</h1>
+<p>Beyond reporting something, there are ordinary things you might want to ask for: a new
+interest tag, a link allowed in posts, a bug fixed, an accessibility problem looked at, or just
+general feedback. One simple form covers all of them.</p>
+<p class="commentary">SPEC §13.5: "one simple submission form with a category dropdown,"
+feeding the same operator queue as reports, separately categorized.</p>
+
+<h2>1. Filling out the form</h2>
+<div class="field">
+<label for="operator-request-category">What's this about?</label>
+<select id="operator-request-category" name="operator-request-category">
+<option>Hashtag suggestion</option>
+<option>External service request</option>
+<option>Bug report</option>
+<option selected>Accessibility problem</option>
+<option>General feedback / feature request</option>
+</select>
+</div>
+<p class="field-hint-inline">Accessibility problems are looked at before feature requests.</p>
+<div class="field">
+<label for="operator-request-details">Tell us more</label>
+<textarea id="operator-request-details" name="operator-request-details" rows="4">The "read more" button on a long post doesn't seem to announce that it expanded when I use my screen reader — it just says "Read more" again on the next pass.</textarea>
+</div>
+<button type="submit" class="button">Send to the operator</button>
+<p class="commentary">Categories verbatim from SPEC §13.5: Hashtag suggestion · External service
+request · Bug report · Accessibility problem · General feedback / feature request. Submissions
+are private (you to the operator only) and rate-limited, with no notification machinery
+attached.</p>
+
+<h2>2. After you send it</h2>
+<p class="status-message" role="status" aria-live="polite">Thanks — this has gone into a queue
+the operator reads in batches. There's no reply, and there's nothing to check on here: if it
+leads to a change, you'll simply see it appear where it belongs — a new option in a picker, a
+new link allowed in posts. There's no set schedule for when that happens.</p>
+<p class="commentary">SPEC §13.5, v1.21: "submissions are read in batches, no reply is sent, and
+an accepted change simply appears where it belongs." No interval is ever stated to users, and
+this mockup deliberately invents no status page, no "pending" state, and no per-submission
+outcome — all of which §13.5 rules out on purpose.</p>

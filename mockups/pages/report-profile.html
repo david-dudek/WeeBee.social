@@ -1,0 +1,47 @@
+{{var title=Report this profile — WeeBee mockup}}
+<h1>Report this profile</h1>
+<p>If something about a person's profile is a problem — the photo, what they've written, the
+pictures in their gallery, or how they've behaved — you can report it. The profile stays exactly
+as it is while the operator looks into it; reporting doesn't hide or change anything by
+itself.</p>
+<p class="commentary">SPEC §13.2, §13.3. Rendered as <strong>Alice</strong>'s view of David's
+profile, the same friend viewpoint <a href="profile-blog.html">M3's profile tabs</a> already
+established — the report action lives in the profile's persistent header, reachable from every
+tab, and is never shown to the profile's own owner.</p>
+
+<header class="profile-header">
+<img class="profile-photo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNDAgMjQwIj48cmVjdCB3aWR0aD0iMjQwIiBoZWlnaHQ9IjI0MCIgZmlsbD0iI2U1ZTVlNSIvPjxjaXJjbGUgY3g9IjEyMCIgY3k9Ijk1IiByPSI0NSIgZmlsbD0iIzljOWM5YyIvPjxwYXRoIGQ9Ik00MCwyMzUgQzQwLDE3NSA3NSwxNTAgMTIwLDE1MCBDMTY1LDE1MCAyMDAsMTc1IDIwMCwyMzUgWiIgZmlsbD0iIzljOWM5YyIvPjwvc3ZnPg==" alt="David, smiling on a hiking trail in mid-afternoon light, slightly out of breath." width="120" height="120">
+<p class="profile-preview-name">David Dudek</p>
+</header>
+
+<h2>What's wrong?</h2>
+<fieldset>
+<legend>What does this report concern?</legend>
+<div class="option-list">
+<div class="option-row"><input type="radio" id="report-profile-photo" name="report-profile-target"><label for="report-profile-photo">The photo</label></div>
+<div class="option-row"><input type="radio" id="report-profile-name" name="report-profile-target"><label for="report-profile-name">The name</label></div>
+<div class="option-row"><input type="radio" id="report-profile-short-bio" name="report-profile-target"><label for="report-profile-short-bio">The short bio</label></div>
+<div class="option-row"><input type="radio" id="report-profile-about" name="report-profile-target" checked><label for="report-profile-about">The about section</label></div>
+<div class="option-row"><input type="radio" id="report-profile-gallery" name="report-profile-target"><label for="report-profile-gallery">The gallery</label></div>
+<div class="option-row"><input type="radio" id="report-profile-behaviour" name="report-profile-target"><label for="report-profile-behaviour">This person's behaviour</label></div>
+</div>
+</fieldset>
+<div class="field">
+<label for="report-profile-note">Anything else you'd like the operator to know (optional)</label>
+<textarea id="report-profile-note" name="report-profile-note" rows="3"></textarea>
+</div>
+<button type="submit" class="button">Send report</button>
+<p class="commentary">Categories verbatim from SPEC §13.2: the photo · the name · the short bio ·
+the about section · the gallery · this person's behaviour. The free-text note is not an
+exception to the platform's usual no-free-text rule between users — "a report reaches the
+operator alone." What this report actually captures is a frozen render of the profile as Alice
+sees it right now (display name, short bio, extended bio since she's a friend, the photo file,
+the gallery files, and hashtags) — not the blog, which is reported post by post instead
+(§13.2).</p>
+
+<p class="commentary">The button above reuses the exact label already established at
+<a href="profile-blog.html">M3's profile header</a> and on
+<a href="friend-request-received.html">the friend-request card</a> — SPEC never gives this
+button's text verbatim, so "Report this profile" was chosen there as the plainest available
+wording (see <code>mockups/NOTES.md</code>, entry 17) and is reused here rather than restated
+differently.</p>

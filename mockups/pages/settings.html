@@ -1,0 +1,127 @@
+{{var title=Settings — WeeBee mockup}}
+<h1>Settings</h1>
+<p class="page-provenance"><strong>Assembled, not specified.</strong> No part of SPEC.md lays
+out a Settings page as one screen — this mockup gathers the individual settings scattered across
+several sections into a single page so the founder can see them together. Each section below
+names the SPEC section it was drawn from. Treat this page as closer to a proposal than a
+mockup of something already designed.</p>
+
+<h2>How many posts per page</h2>
+<p>Choose how many posts you'd like to see at a time in your feed and on any profile you visit.
+Nothing changes until you press Apply — picking a different number here doesn't do anything by
+itself.</p>
+<div class="field">
+<label for="settings-page-size">Posts per page</label>
+<select id="settings-page-size" name="settings-page-size">
+<option selected>20</option>
+<option>40</option>
+<option>60</option>
+</select>
+</div>
+<button type="submit" class="button">Apply</button>
+<p class="commentary">SPEC §7.7.1: <code>POSTS_PER_PAGE_DEFAULT</code> = 20, from
+<code>POSTS_PER_PAGE_OPTIONS</code> = 20 / 40 / 60. This is a hard requirement, not a detail —
+"it takes effect on an explicit Apply, never on the change of a dropdown... a control that
+reloads the page the instant it is touched is a 3.2.2 failure." One setting, applying to the
+feed and every profile visited.</p>
+
+<h2>Theme and font</h2>
+<p>Choose how WeeBee looks for you — a font and a colour scheme.</p>
+<div class="field">
+<label for="settings-theme">Colour scheme</label>
+<select id="settings-theme" name="settings-theme">
+<option selected>[Theme option A]</option>
+<option>[Theme option B]</option>
+<option>[Theme option C]</option>
+</select>
+</div>
+<div class="field">
+<label for="settings-font">Font</label>
+<select id="settings-font" name="settings-font">
+<option selected>[Font option A]</option>
+<option>[Font option B]</option>
+</select>
+</div>
+<p class="field-hint-inline">We haven't decided what these will actually be called yet — the
+choices above are placeholders standing in for whatever list is eventually offered.</p>
+<div class="option-row">
+<input type="checkbox" id="settings-own-theme">
+<label for="settings-own-theme">Always use my own theme, even on other people's profiles</label>
+</div>
+<p class="field-hint-inline">Turn this on and every page you visit — including a friend's
+profile — uses your own choices above instead of theirs, from the moment the page loads. A
+profile you visit can't turn this back off for you.</p>
+<button type="submit" class="button">Save</button>
+<p class="commentary">SPEC §9.1.1, §16.3: <code>THEME_SET</code> has no members named anywhere
+in either document — this page says so rather than inventing theme names, and the bracketed
+placeholder options above follow the same convention <a
+href="contact-card-editor.html">contact-card-editor.html</a> already uses for an unspecified
+value. The "always use my own theme" viewer override is applied server-side at render, never as
+a client-side toggle a page could defeat — an implementation constraint stated here as plain
+copy, since it's a real promise about how the setting behaves, not a build note.</p>
+
+<h2>Following</h2>
+<div class="option-row">
+<input type="checkbox" id="settings-follow-default" checked>
+<label for="settings-follow-default">Follow posts I comment on, by default</label>
+</div>
+<p class="field-hint-inline">You can always turn following off for one particular post, right
+there on the post — this only sets what happens the moment you comment.</p>
+<button type="submit" class="button">Save</button>
+<p class="commentary">SPEC §12.3: commenting turns following on by default; a visible per-post
+toggle turns it off, and this is the global default that decision falls back to.</p>
+
+<h2>Email notifications</h2>
+<div class="option-row">
+<input type="checkbox" id="settings-email-notify">
+<label for="settings-email-notify">Also send some notifications to my email</label>
+</div>
+<p class="field-hint-inline">Everything still shows up in your feed either way — this just adds
+a copy to your inbox for the same events.</p>
+<button type="submit" class="button">Save</button>
+<p class="commentary">SPEC §12 opening: delivery is in-feed, "plus optional email."</p>
+
+<h2>Change your login email</h2>
+<p>WeeBee will never email you a link to log in or reset your password — only a code you type in
+yourself.</p>
+<div class="field">
+<label for="settings-new-email">New email address</label>
+<input type="email" id="settings-new-email" name="settings-new-email">
+</div>
+<button type="submit" class="button">Send code</button>
+<p>We've sent a code to that new address. Enter it below, right here on this page, to finish the
+change.</p>
+<div class="field">
+<label for="settings-email-code">Code</label>
+<input type="text" id="settings-email-code" name="settings-email-code" inputmode="numeric">
+</div>
+<button type="submit" class="button">Confirm change</button>
+<p class="commentary">SPEC §4.6, §4.6.1: the code goes to the new address, is typed back into
+this already-open settings page, never a link — and a notice is sent to the old address once
+the change completes. The checkable promise above is quoted verbatim from §4.6.1 and is shown
+"at the relevant touchpoints (login, reset, help)"; this page is one of them.</p>
+
+<h2>Export your data</h2>
+<p>Download a complete copy of everything you've put into WeeBee — your profile, your posts,
+comments you've written, your friend list, your groups, your contact card, and your photos — as
+plain files you can open anywhere.</p>
+<button type="submit" class="button">Request my data export</button>
+<p class="commentary">SPEC §4.9: a complete copy in JSON plus image files. Serves GDPR
+compliance, a credible exit, and any future migration.</p>
+
+<h2>Delete your account</h2>
+<p>If you'd rather leave altogether, you can start that here. Your account deactivates right
+away — nobody else can see you anymore — and you get 30 days to change your mind by logging back
+in before everything is permanently erased.</p>
+<a class="button" href="account-deletion.html">Delete your account</a>
+<p class="commentary">SPEC §4.7: <code>DELETE_GRACE_DAYS</code> = 30. The deletion flow itself —
+the confirmation, the grace-period banner, cancelling it — is session M7's to build; this link is
+a forward reference to <code>account-deletion.html</code>, not yet built, in the same spirit as
+this track's other forward-referenced filenames since M1 (see <code>mockups/CRIB.md</code> §5).</p>
+
+<h2>Manage your groups</h2>
+<p>Groups are a private way to organize your own friends for quickly picking an audience. See
+<a href="groups.html">groups.html</a>.</p>
+<p class="commentary">Added here purely as a discoverability link this session introduces — no
+document places a "groups" entry inside settings, and the shared main navigation isn't touched
+by this session (see <code>mockups/NOTES.md</code>).</p>

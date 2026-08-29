@@ -1,0 +1,56 @@
+{{var title=Suggest a hashtag — WeeBee mockup}}
+<h1>Suggest a hashtag</h1>
+<p>Every interest tag on WeeBee — on a profile or in a post — comes from one shared list, picked
+through search rather than typed freely. This page shows what happens when your search doesn't
+find anything on that list, and the form it offers you instead.</p>
+<p class="commentary">SPEC §11.2: hashtags are never free-typed; every tag comes from the
+operator-curated <code>HASHTAG_VOCAB</code>. §11.2.1 is this page's own section: "when a search
+matches no tag and no alias, the picker says so plainly and offers the suggestion form — it
+never presents a text field that would accept a tag and then silently fail to create one."</p>
+
+<h2>Searching for an interest</h2>
+<div class="field">
+<label for="hashtag-suggest-search">Search interests</label>
+<input type="search" id="hashtag-suggest-search" name="hashtag-suggest-search" value="pottery">
+</div>
+<p class="status-message" role="status" aria-live="polite">No interest matches "pottery."</p>
+<p>Some interests on our list go by more than one name behind the scenes, so searching a
+different word for the same idea should still find it — but "pottery" doesn't match anything
+we've got, under any of the words we check for it either.</p>
+<p class="commentary">SPEC §11.2.1: every vocabulary entry carries operator-curated search
+aliases (e.g. <code>#hiking</code> also matches "hikes," "rambling," "trekking," "trail
+walking") that are never displayed, never selectable, and are not tags themselves — they exist
+only so a search under a different word for the same interest still finds the right entry. This
+empty result means "pottery" matched none of the vocabulary's tags <em>or</em> their aliases.</p>
+
+<h2>Suggest it instead</h2>
+<p>If you think "pottery" should be an interest people can tag themselves and their posts with,
+you can suggest it here. Suggestions are read in batches by the person who runs WeeBee — there's
+no reply, and no way to check back on this one. The most common outcome isn't a brand new tag at
+all: usually it turns out an existing interest already covers it, and your word just gets added
+as another way to find it, which fixes the search for everyone from then on.</p>
+<div class="field">
+<label for="hashtag-suggest-category">What's this about?</label>
+<select id="hashtag-suggest-category" name="hashtag-suggest-category">
+<option selected>Hashtag suggestion</option>
+<option>External service request</option>
+<option>Bug report</option>
+<option>Accessibility problem</option>
+<option>General feedback / feature request</option>
+</select>
+</div>
+<div class="field">
+<label for="hashtag-suggest-word">The word or interest you searched for</label>
+<input type="text" id="hashtag-suggest-word" name="hashtag-suggest-word" value="pottery">
+</div>
+<div class="field">
+<label for="hashtag-suggest-details">Anything else you'd like to add (optional)</label>
+<textarea id="hashtag-suggest-details" name="hashtag-suggest-details" rows="3"></textarea>
+</div>
+<button type="submit" class="button">Send suggestion</button>
+<p class="commentary">SPEC §13.5, §11.2.1, v1.21: the confirmation copy does the whole job here,
+since no reply is ever sent — "submissions are read in batches, no reply is sent, and an
+accepted change simply appears where it belongs." This page reuses <a
+href="operator-request.html">the same category dropdown</a> as the general operator-request
+form, since a hashtag suggestion feeds the identical queue, just pre-selected and pre-filled with
+the search that came up empty.</p>

@@ -557,3 +557,137 @@ clicking through several pages with the toggle off will find it re-checked on ea
 is inherent to a static, script-free mockup track and is not a bug to fix within it.
 
 See `CRIB.md` §6 for the registered convention M6–M8 should follow from the start.
+
+---
+
+## 27. `report.html` vs. `report-post.html` / `report-profile.html` — a filename mismatch left uncorrected
+
+**Session:** M6. **Surface:** `pages/post-profile-tagged.html` (M2)'s report action, versus
+`pages/report-post.html` and `pages/report-profile.html` (M6).
+
+M2 built `post-profile-tagged.html`'s tag-mismatch report action as a link to `report.html`, a
+single unsplit filename, and CRIB.md recorded it as a forward reference expected to land in this
+session. This session's own prompt, however, specifies two separate filenames instead —
+`report-post.html` and `report-profile.html` — reflecting that post/comment reports and profile
+reports carry different reason categories. `report.html` itself is therefore never built, and
+`post-profile-tagged.html`'s link now points at a filename this track will not produce.
+
+**Drawn:** nothing corrected. M3 and M4 each established the precedent of leaving a link inside a
+file outside their own session's touched set exactly as they found it, rather than reaching back
+to retarget it (see entries 8, 16, 20, 21). This session follows the same precedent:
+`post-profile-tagged.html` is untouched, and the mismatch is recorded here instead. A founder
+decision or a later pass can retarget that one link to `report-post.html`, which renders the
+identical scenario (Priya reporting David's Cornwall post for a tag mismatch) as its first worked
+example.
+
+---
+
+## 28. §13.2's free-text note on a post/comment report — an ambiguity rendered, not resolved
+
+**Session:** M6. **Surface:** `pages/report-post.html`.
+
+§13.2 was written in two passes: the original stub gave every report a reason category only, and
+a later addition (v1.16) gave *profile* reports specifically a target category **and** a short
+free-text note to the operator. Read together, the section's own summary sentence — "there is
+one report form, and it always carries a reason category, plus the optional short note to the
+operator this section already gives profile reports" — reads most plainly as extending that note
+to post and comment reports too, since it treats all report types as one form. But nothing in
+§13.2 says so in so many words for the post/comment case specifically, and the M6 prompt itself
+calls this out as ambiguous rather than settled.
+
+**Drawn:** the plainest reading. `report-post.html` gives its post-report and comment-report
+forms the same optional free-text note the profile-report form already carried, on the reasoning
+that one report form ought to behave one way. This is flagged here exactly as the session's own
+instructions ask, and is not resolved — a founder call on whether post/comment reports were ever
+meant to carry a note is still open.
+
+---
+
+## 29. `THEME_SET` has no members named anywhere — placeholder theme names on `settings.html`
+
+**Session:** M6. **Surface:** `pages/settings.html`.
+
+SPEC §9.1.1 and §16.3 both require `THEME_SET` — the operator-curated fonts and colour schemes a
+user can choose between — to exist and to meet WCAG contrast in every combination, but neither
+document nor §14's constants table names a single actual theme or font. A settings page has to
+render *some* control for this choice to be legible at all.
+
+**Drawn:** bracketed placeholder option text — "[Theme option A]," "[Font option A]," and so
+on — following the same convention `contact-card-editor.html` (M5) already established for an
+unspecified value ("[David's WhatsApp link]"). A visible hint states plainly that these names
+are placeholders, and the page's own commentary repeats that `THEME_SET` names no members in
+either document. No actual theme or font names are invented.
+
+---
+
+## 30. Why `settings.html` and `groups.html`'s provenance label is not wrapped in `.commentary`
+
+**Session:** M6. **Surface:** `pages/settings.html`, `pages/groups.html`; the new
+`.page-provenance` class in `styles.css`.
+
+Both pages are required to carry a visible label stating that the documents don't specify them,
+so the founder can tell at a glance. But every other piece of build commentary on every page in
+this track is wrapped in `.commentary`, which the header's toggle can hide — and hiding *this*
+particular label would defeat its own purpose: a founder who has switched commentary off should
+still be able to tell an assembled or inferred page apart from an ordinary mockup without having
+to switch it back on first.
+
+**Drawn:** a new, separate class, `.page-provenance`, deliberately left outside the
+`body:has(#commentary-toggle:not(:checked))` rule that hides `.commentary`. It is styled
+distinctly from both `.commentary` (plain weight, not italic monospace) and `.notice` (a heavier
+border), so it reads as its own category of note. Everything else on both pages — ordinary
+section-by-section SPEC citations — still uses `.commentary` as normal; only the one top-of-page
+label is exempted, the same narrow scope `pages/index.html`'s whole-page exemption does not
+extend to. See `CRIB.md` §6 for the registered convention.
+
+---
+
+## 31. Groups.html asserts only the one group membership fact this track has already established
+
+**Session:** M6. **Surface:** `pages/groups.html`.
+
+`contact-card-editor.html` (M5) established that Tom belongs to both "Hiking crew" and "Book
+club," used there to demonstrate the deny-beats-allow override conflict. It never stated who
+else, if anyone, belongs to either group.
+
+**Drawn:** `groups.html` renders both groups' membership as a checkbox list over David's full
+established friend list (Alice, Ben, Grace, Henry, Mom, Nadia, Sofia, Tom), with only Tom's box
+checked in each — the one fact this track actually established — rather than inventing plausible
+company for him. The over-the-cap warning state is demonstrated on a separate, explicitly
+hypothetical "New group" instead of on Hiking crew or Book club, so as not to assert either real
+group is anywhere near 30 members.
+
+---
+
+## 32. `post-editor.html` and `gallery-manage.html` have no real entry point yet
+
+**Session:** M6. **Surface:** `pages/post-editor.html`, `pages/gallery-manage.html`.
+
+Both pages render David editing his own content — his own posts, comments, gallery, and profile
+photo. The natural link to either would sit on "David viewing his own profile" or "David viewing
+his own single-post view," neither of which exists: entry 16 already recorded that
+`profile.html`, the filename the main nav and several M1/M2 pages point at, remains unbuilt, and
+every profile page actually built so far (M3's four tabs, M4's non-friend tiers) renders someone
+*else's* view of David, never his own.
+
+**Drawn:** nothing added to bridge this. Both pages are reachable only from `pages/index.html`
+for now. A future session or founder decision that finally builds the owner's-own-profile case
+should link to `post-editor.html` and `gallery-manage.html` from it.
+
+---
+
+## 33. `post-editor.html` reuses established posts and comments rather than inventing new ones
+
+**Session:** M6. **Surface:** `pages/post-editor.html`.
+
+Every scenario on this page reuses content already on record elsewhere in this track: the "Small
+dinner this Friday" feed post and its Alice/Tom/David comments (M2's `post-feed.html`), and the
+Cornwall coast-path blog post and its Alice/Tom/Priya comments (M2's `post-profile-tagged.html`).
+This keeps the editor's states — the edited marker, the widening notice, the narrowing case, and
+who may edit versus only delete a comment — attached to posts the founder has already seen,
+rather than introducing new text purely to demonstrate an editing control. One consequence
+follows the widening scenario in section 3: SPEC requires every existing commenter to be
+notified when a tag they were not covered by is added ("David added a hashtag to a post you
+commented on. More people can see it now."), but that notification would render on Alice's,
+Tom's and Priya's own feeds, none of which this track builds — the page states the rule in
+commentary rather than rendering a feed row nobody asked for.

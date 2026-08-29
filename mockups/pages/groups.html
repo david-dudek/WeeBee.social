@@ -1,0 +1,107 @@
+{{var title=Groups — WeeBee mockup}}
+<h1>Groups</h1>
+<p class="page-provenance"><strong>Inferred, not specified.</strong> SPEC §6 gives the rules
+groups must follow but never describes a screen for managing them — this mockup builds the
+minimum screen those rules imply. Treat this page as closer to a proposal than a mockup of
+something already designed.</p>
+
+<p>Groups are a private way to organize your own friends, so you can pick them quickly when
+you're choosing who sees a post or setting up your contact card. Nobody in a group knows they've
+been put in one — a group is just for you.</p>
+<p class="commentary">SPEC §6: "Groups are private to their owner; members never know they are
+in one." A friend can be in zero, one, or several of a user's own groups.</p>
+
+<h2>Your groups</h2>
+<ul class="friends-list">
+<li><a href="#group-hiking-crew">Hiking crew</a></li>
+<li><a href="#group-book-club">Book club</a></li>
+</ul>
+
+<h2 id="group-hiking-crew">Hiking crew</h2>
+<fieldset>
+<legend>Who's in Hiking crew?</legend>
+<div class="option-list">
+<div class="option-row"><input type="checkbox" id="hiking-crew-alice"><label for="hiking-crew-alice">Alice</label></div>
+<div class="option-row"><input type="checkbox" id="hiking-crew-ben"><label for="hiking-crew-ben">Ben</label></div>
+<div class="option-row"><input type="checkbox" id="hiking-crew-grace"><label for="hiking-crew-grace">Grace</label></div>
+<div class="option-row"><input type="checkbox" id="hiking-crew-henry"><label for="hiking-crew-henry">Henry</label></div>
+<div class="option-row"><input type="checkbox" id="hiking-crew-mom"><label for="hiking-crew-mom">Mom</label></div>
+<div class="option-row"><input type="checkbox" id="hiking-crew-nadia"><label for="hiking-crew-nadia">Nadia</label></div>
+<div class="option-row"><input type="checkbox" id="hiking-crew-sofia"><label for="hiking-crew-sofia">Sofia</label></div>
+<div class="option-row"><input type="checkbox" id="hiking-crew-tom" checked><label for="hiking-crew-tom">Tom</label></div>
+</div>
+</fieldset>
+<p class="field-hint-inline">1 of 30 friends checked for this group.</p>
+<button type="submit" class="button">Save Hiking crew</button>
+<p class="commentary">Tom's membership in Hiking crew is the one fact this track has already
+established for this group (<a href="contact-card-editor.html">contact-card-editor.html</a>'s
+deny-beats-allow example); the other seven friends are shown unchecked rather than asserting
+memberships nothing in this track has established.</p>
+
+<h2 id="group-book-club">Book club</h2>
+<fieldset>
+<legend>Who's in Book club?</legend>
+<div class="option-list">
+<div class="option-row"><input type="checkbox" id="book-club-alice"><label for="book-club-alice">Alice</label></div>
+<div class="option-row"><input type="checkbox" id="book-club-ben"><label for="book-club-ben">Ben</label></div>
+<div class="option-row"><input type="checkbox" id="book-club-grace"><label for="book-club-grace">Grace</label></div>
+<div class="option-row"><input type="checkbox" id="book-club-henry"><label for="book-club-henry">Henry</label></div>
+<div class="option-row"><input type="checkbox" id="book-club-mom"><label for="book-club-mom">Mom</label></div>
+<div class="option-row"><input type="checkbox" id="book-club-nadia"><label for="book-club-nadia">Nadia</label></div>
+<div class="option-row"><input type="checkbox" id="book-club-sofia"><label for="book-club-sofia">Sofia</label></div>
+<div class="option-row"><input type="checkbox" id="book-club-tom" checked><label for="book-club-tom">Tom</label></div>
+</div>
+</fieldset>
+<p class="field-hint-inline">1 of 30 friends checked for this group.</p>
+<button type="submit" class="button">Save Book club</button>
+
+<h2>A group over the limit</h2>
+<p>Here's what it looks like if an edit would put too many people in one group.</p>
+<fieldset>
+<legend>Who's in New group?</legend>
+<div class="option-list">
+<div class="option-row"><input type="checkbox" id="new-group-alice" checked><label for="new-group-alice">Alice</label></div>
+<div class="option-row"><input type="checkbox" id="new-group-ben" checked><label for="new-group-ben">Ben</label></div>
+<div class="option-row"><input type="checkbox" id="new-group-grace" checked><label for="new-group-grace">Grace</label></div>
+</div>
+</fieldset>
+<p class="field-error" role="status" aria-live="polite">31 of 30 friends checked for New group —
+that's 1 too many. Remove at least one before you can save; nobody is removed for you.</p>
+<p class="commentary">SPEC §6: <code>GROUP_SIZE_MAX</code> = 30, matching
+<code>POST_AUDIENCE_MAX</code> so any group is always a valid post audience. "The UI warns when
+an edit would exceed the cap and refuses it" — this is a separate, hypothetical group rather
+than an over-filled Hiking crew or Book club, so as not to contradict the one real fact this
+track has established about either group's membership. Only three of the 31 checked friends are
+actually listed here, following <a href="composer.html">composer.html</a>'s own precedent for
+its over-limit audience state, which shows the message rather than every row.</p>
+
+<h2>Create a group</h2>
+<div class="field">
+<label for="new-group-name">Group name</label>
+<input type="text" id="new-group-name" name="new-group-name">
+</div>
+<fieldset>
+<legend>Who's in this group?</legend>
+<div class="option-list">
+<div class="option-row"><input type="checkbox" id="create-group-alice"><label for="create-group-alice">Alice</label></div>
+<div class="option-row"><input type="checkbox" id="create-group-ben"><label for="create-group-ben">Ben</label></div>
+<div class="option-row"><input type="checkbox" id="create-group-grace"><label for="create-group-grace">Grace</label></div>
+<div class="option-row"><input type="checkbox" id="create-group-henry"><label for="create-group-henry">Henry</label></div>
+<div class="option-row"><input type="checkbox" id="create-group-mom"><label for="create-group-mom">Mom</label></div>
+<div class="option-row"><input type="checkbox" id="create-group-nadia"><label for="create-group-nadia">Nadia</label></div>
+<div class="option-row"><input type="checkbox" id="create-group-sofia"><label for="create-group-sofia">Sofia</label></div>
+<div class="option-row"><input type="checkbox" id="create-group-tom"><label for="create-group-tom">Tom</label></div>
+</div>
+</fieldset>
+<button type="submit" class="button">Create group</button>
+
+<p>WeeBee never creates, fills in, or changes a group on its own — every friend in every group
+above got there because you put them there. The one exception isn't really an exception: after
+you've hand-picked the same people for a post a few times, the composer may offer to save that
+exact selection as a group for you to name, which is only a memory of choices you already made,
+never a guess about how close you are to anyone.</p>
+<p class="commentary">SPEC §6: "the platform must not auto-create, auto-populate, or
+auto-modify groups." The one permitted suggestion is the composer's "Save this selection as a
+group?", already shown in <a href="composer.html">composer.html</a> (section 3) and quoted
+verbatim in <code>mockups/CRIB.md</code> — "memory of the user's explicit choices, never
+behavioral inference about relationship strength."</p>

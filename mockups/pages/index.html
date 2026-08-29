@@ -134,7 +134,43 @@ full alongside it (SPEC §5.3, §5.4).</li>
 
 <div class="session-group">
 <h2>M6 — Authoring and forms</h2>
-<p class="not-built">Not yet built.</p>
+<ul>
+<li><a href="post-editor.html">Edit post</a> — everything §7.8 permits editing on a post (text,
+image, preformatted toggle, hashtags) and on a comment (text only): the permanent "edited"
+marker with no version history, the image-replace alt-text re-prompt, the live audience line on
+a hashtag-gated blog post as tags are added or removed, the "this post has comments" widening
+notice, silent narrowing, and which of a post's comments carry an Edit control versus only
+Delete (SPEC §7.8, §7.9, §8.1, §11.3, §16.3).</li>
+<li><a href="gallery-manage.html">Manage your photos</a> — the Photos tab in its owner-facing
+state: the profile photo's upload-vs-picker choice and which path holds friend requests and
+notifies friends and which doesn't, the gallery's "Move up" / "Move down" controls named from
+each image's own alternative text with drag-and-drop offered only in addition, the image-replace
+and alt-text-only-edit states, and the gallery already at its cap of 8 refusing a ninth honestly
+(SPEC §9.4, §12.1, §13.6, §16.3).</li>
+<li><a href="report-post.html">Report a post or comment</a> — the one report form for both
+target types, with the post/comment reason list including the tag-mismatch reason that exists
+only on a tagged profile post, the optional free-text note to the operator, and the report
+button available to any viewer but never the content's own author (SPEC §13.2, §13.3).</li>
+<li><a href="report-profile.html">Report this profile</a> — the profile's own target categories
+and free-text note, reachable from the persistent header (SPEC §13.2).</li>
+<li><a href="operator-request.html">Contact the operator</a> — the one submission form with its
+category dropdown, accessibility problems stated as triaged ahead of feature requests, and the
+confirmation copy that does the whole job because no reply is ever sent (SPEC §13.5).</li>
+<li><a href="hashtag-suggest.html">Suggest a hashtag</a> — the picker's honest empty-search
+result paired with the suggestion form it offers instead of a text field that would silently do
+nothing, and a note that aliases are never displayed, never selectable, and are not tags (SPEC
+§11.2.1, §13.5).</li>
+<li><a href="settings.html">Settings</a> — <strong>assembled, not specified:</strong> page size
+with its required explicit Apply, theme and font from a still-unnamed <code>THEME_SET</code>
+plus the server-side "always use my own theme" override, the follow-by-default and optional
+email settings, the login email change completed with a typed-in code, data export, and a link
+to account deletion (SPEC §7.7.1, §9.1.1, §12.3, §12, §4.6, §4.6.1, §4.9, §4.7).</li>
+<li><a href="groups.html">Groups</a> — <strong>inferred, not specified:</strong> named groups
+private to their owner, the 30-member cap shared with the feed-post audience limit and the
+honest refusal when an edit would exceed it, and the composer's "Save this selection as a
+group?" as the one permitted suggestion, with nothing else auto-created or auto-modified (SPEC
+§6).</li>
+</ul>
 </div>
 
 <div class="session-group">

@@ -147,6 +147,35 @@ registered above.
 *"Accidental under-sharing is recoverable (see request flags); accidental over-sharing is not."*
 Used as real page text, not commentary, on M5's `contact-card-editor.html`.
 
+### §7.8 — Editing hashtags: the widening notice (M6)
+
+*"This post has comments. Widening who can see it also shows those comments to the people it
+reaches."* Verbatim, rendered on `post-editor.html` when a tag is added to a profile post that
+already has comments. Removing a tag narrows the audience and shows no notice at all — see the
+same page's section 4.
+
+### §9.4 — The gallery reorder controls' naming pattern (M6)
+
+*"Move '[alternative text]' up"* / *"Move '[alternative text]' down"* — SPEC's own worked
+example is *"Move 'Me on a beach in Cornwall' up."* Rendered literally, per image, on M6's
+`gallery-manage.html`; a control at either end of the list that has nothing to move toward is
+shown disabled rather than omitted, so its presence in the tab order stays predictable.
+
+### §13.2 — Report reasons, verbatim (M6)
+
+Post and comment reports: *harassment or abuse · unwanted or commercial content · someone else's
+private information · **the tags don't match this post** (profile posts only) · something
+else.* The tag-mismatch reason only ever appears on a tagged profile post. Profile reports:
+*the photo · the name · the short bio · the about section · the gallery · this person's
+behaviour.* Both rendered on M6's `report-post.html` and `report-profile.html`.
+
+### §13.5 — Operator request categories, verbatim (M6)
+
+*Hashtag suggestion · External service request · Bug report · Accessibility problem · General
+feedback / feature request.* Rendered on M6's `operator-request.html` and reused, pre-selected to
+"Hashtag suggestion," on `hashtag-suggest.html`. Accessibility problems are stated as triaged
+ahead of feature requests, per §13.5's own note.
+
 ### §7.5 — Expiry countdown (absolute days, the one exception to relative time)
 
 *"deletes in 6 days"* — SPEC's own example. M1 renders this capitalized as a standalone line,
@@ -338,6 +367,20 @@ filename). No new forward-referenced filenames are introduced; every link this s
 either resolves to one of these seven, to an already-built page, or to the still-unbuilt
 `profile.html`/`report.html`/`settings.html` placeholders carried since M1/M2.
 
+**M6 builds eight pages**: `post-editor.html`, `gallery-manage.html`, `report-post.html`,
+`report-profile.html`, `operator-request.html`, `hashtag-suggest.html`, `settings.html` (the
+still-unbuilt filename M1's nav already pointed at — it now resolves), and `groups.html`.
+`settings.html` links onward to one new forward-referenced filename, `account-deletion.html`,
+for M7's account-edges session to build.
+
+**Filename mismatch, not corrected here**: M2's `post-profile-tagged.html` links its
+tag-mismatch report action at `report.html` (singular, unsplit). This session's own prompt
+specifies two separate filenames instead — `report-post.html` and `report-profile.html` — so
+`report.html` is never built and that one link now points at a filename this track will not
+produce. Per the precedent M3 and M4 already set for cross-session links (neither retargeted a
+link in a file outside its own touched set), `post-profile-tagged.html` is left as it is; see
+`mockups/NOTES.md` for the entry recording this.
+
 ---
 
 ## 6. Commentary/copy separation — the `.commentary` class and the toggle
@@ -379,3 +422,14 @@ mockup file, NOTES.md or CRIB.md). Never mixed in one sentence or paragraph.
 
 M6–M8 build compliant pages from the start using this convention; they do not need a follow-up
 retrofit.
+
+**M6 adds one more shared convention: `.page-provenance`**, for a page that is itself assembled
+or inferred rather than specified (`settings.html`, `groups.html`). Unlike `.commentary`, this
+label must stay visible even with the commentary toggle off, since the whole point is that the
+founder can tell such a page apart from an ordinary mockup at a glance, in whatever toggle state
+the page happens to be in — so it is deliberately **not** wrapped in `.commentary` and is
+untouched by the `body:has(#commentary-toggle:not(:checked))` rule. Styled in `styles.css` as a
+bordered, plain-weight box (not italic monospace), distinct from both `.commentary` and
+`.notice`. A page carrying this label is still expected to separate its own simulated copy from
+its own commentary blocks everywhere else on the page — the exemption covers only the one
+top-of-page label, not the whole page the way `pages/index.html` is wholly exempt.
