@@ -1,0 +1,30 @@
+{{var title=Enter your reset code — WeeBee mockup}}
+<h1>Enter your code</h1>
+<p>We've sent a 6-digit code to the email address on your account. Enter it below along with the
+new password you'd like to use.</p>
+<p class="field-hint-inline">This code expires 15 minutes after we send it.</p>
+
+<div class="field">
+<label for="reset-code-value">Code</label>
+<input type="text" id="reset-code-value" name="reset-code-value" inputmode="numeric" autocomplete="one-time-code">
+</div>
+<div class="field">
+<label for="reset-code-password">New password</label>
+<input type="password" id="reset-code-password" name="reset-code-password">
+</div>
+<button type="submit" class="button">Reset password</button>
+<p><a href="reset-request.html">Send a new code</a></p>
+<p class="commentary">SPEC §4.6.1: <code>RESET_CODE_LENGTH</code> = 6 digits,
+<code>RESET_CODE_TTL_MINUTES</code> = 15. §16.3, "Time limits and motion": a security-essential
+time limit like this one falls under WCAG 2.2.1's essential exception, but the user must still be
+told the limit in text and can always request a new code — both true above, in the hint line and
+the "Send a new code" link.</p>
+
+<h2>If your code has expired</h2>
+<div class="field">
+<label for="reset-code-expired">Code</label>
+<input type="text" id="reset-code-expired" name="reset-code-expired" inputmode="numeric" value="482913" aria-describedby="reset-code-expired-error" aria-invalid="true">
+<p id="reset-code-expired-error" class="field-error">That code has expired. Request a new one
+below — you can always ask for another.</p>
+</div>
+<p><a href="reset-request.html">Send a new code</a></p>

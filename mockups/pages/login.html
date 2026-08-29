@@ -1,0 +1,33 @@
+{{var title=Log in — WeeBee mockup}}
+<h1>Log in</h1>
+<p>Enter the email address and password you used when you joined WeeBee.</p>
+
+<div class="notice">
+<p>WeeBee will never email you a link to log in or reset your password — only a code you type in
+yourself.</p>
+</div>
+<p class="commentary">SPEC §4.6.1's checkable anti-phishing promise, quoted verbatim, shown "at
+the relevant touchpoints (login, reset, help)" — this is one of them. It's rendered here as
+prominent real text rather than fine print, because its value depends on being seen: it's what
+makes a look-alike "click here to log in" email self-evidently fake, no matter how convincing the
+sending domain looks.</p>
+
+<div class="field">
+<label for="login-email">Email address</label>
+<input type="email" id="login-email" name="login-email">
+</div>
+<div class="field">
+<label for="login-password">Password</label>
+<input type="password" id="login-password" name="login-password">
+</div>
+<button type="submit" class="button">Log in</button>
+<p><a href="reset-request.html">Forgot your password?</a></p>
+<p class="commentary">SPEC §4.5, §4.6: login is by email address, never by display name — names
+carry no uniqueness requirement (§4.5) and couldn't work as a login identifier. The reset link
+has to live here, on the login screen itself, rather than inside an email, because §4.6.1
+requires the user to reach the reset page "by navigating to the site themselves."</p>
+
+<p class="commentary">No CAPTCHA or other human-challenge control appears anywhere on this page,
+or anywhere else in this mockup set. SPEC §4.6.1 rejects the mainstream options as ineffective
+against phishing and incompatible with the tracking ban; §16.4 repeats the ban; §17 lists "no
+CAPTCHA or third-party human-challenge" among the platform's explicit non-goals.</p>

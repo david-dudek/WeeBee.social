@@ -65,6 +65,16 @@ def build() -> None:
     base_template = expand_includes((PARTIALS_DIR / "_base.html").read_text(encoding="utf-8"))
 
     for page_path in sorted(PAGES_DIR.glob("*.html")):
+        if page_path.name == "maintenance.html":
+            # Lives in Caddy in the real deployment, entirely outside the
+            # Django app's page set (ARCHITECTURE §7.2) -- must not share
+            # _base.html's stylesheet link or nav, so it is copied through
+            # as-is rather than wrapped. Added in session M7 (see
+            # mockups/NOTES.md); every other page still gets the standard
+            # wrapping below.
+            shutil.copy(page_path, SITE_DIR / page_path.name)
+            print(f"copied {page_path.name} (standalone, not wrapped in _base.html)")
+            continue
         variables, body = split_front_matter(page_path.read_text(encoding="utf-8"))
         variables.setdefault("title", "WeeBee mockup")
         variables["content"] = expand_includes(body)

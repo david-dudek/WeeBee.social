@@ -1,0 +1,62 @@
+<!-- Served by Caddy directly, not by the Django app: HTTP 503 with a
+     Retry-After header, never 200 (ARCHITECTURE §7.2). A static mockup file
+     cannot actually send response headers, so this comment records what the
+     real page sends. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WeeBee is temporarily unavailable</title>
+<style>
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    padding: 2.5rem 1rem;
+    background: #ffffff;
+    color: #1a1a1a;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+  main {
+    max-width: 32rem;
+    margin: 0 auto;
+  }
+  h1 { line-height: 1.25; }
+  p { margin: 0 0 1rem; }
+  code {
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+  .build-note {
+    margin-top: 2.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid #c7c7c7;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-style: italic;
+    color: #4d4d4d;
+    font-size: 0.9rem;
+  }
+</style>
+</head>
+<body>
+<main>
+<h1>WeeBee is temporarily unavailable</h1>
+<p>We're doing some work behind the scenes. Please check back in a little while — there's
+nothing you need to do.</p>
+<p class="build-note">This is a standalone file with everything inlined — its own
+&lt;style&gt;, no stylesheet link, no shared header or navigation — because the real version of
+this page is served by Caddy, not by WeeBee's own application, and stays up precisely when the
+application (and everything else in this mockup set) is down. ARCHITECTURE §7.2: served with
+HTTP 503 and a Retry-After header, stated above in an HTML comment since a static mockup can't
+send real response headers. SPEC §16 still applies to it as a user-facing surface:
+<code>lang</code>, a page title, one &lt;h1&gt;, and contrast that doesn't depend on a theme
+loading — all satisfied above without depending on <code>styles.css</code>. Built via a narrow,
+one-file exception in <code>build.py</code> (see <code>mockups/NOTES.md</code>): every other page
+in this set is wrapped in the shared <code>_base.html</code>; this is the one page that can't be,
+and still be honest about what it's showing.</p>
+</main>
+</body>
+</html>

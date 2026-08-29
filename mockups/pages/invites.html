@@ -1,0 +1,26 @@
+{{var title=Invite friends — WeeBee mockup}}
+<h1>Invite friends</h1>
+<p class="page-provenance"><strong>Inferred, not specified.</strong> SPEC §4.2 gives the
+mechanics of the invite budget but no section of either document describes a screen for seeing it
+or sending an invite — this mockup builds the minimum those mechanics imply. Treat this page as
+closer to a proposal than a mockup of something already designed.</p>
+
+<p>The only way to join WeeBee is by invitation, so when you'd like a friend or family member to
+join, you can send them one here — a single-use link they'll use to create their account.</p>
+<p class="commentary">SPEC §4.1: "an invite is a single-use link/code sent by email."</p>
+
+<p>You have 3 invites saved up right now, out of a possible 5. You'll get one more in 12 days.</p>
+<p class="commentary">SPEC §17 bans visible counts generally ("no likes or visible counts...
+none exist"), but an invite budget nobody can see is one nobody can use — arguably the one number
+the platform has to show. It's written here as an ordinary sentence rather than as a progress bar
+or a badge, per this session's own instructions — see <code>mockups/NOTES.md</code>.
+<code>INVITE_BANK_MAX</code> = 5, <code>INVITE_REPLENISH_DAYS</code> = 30,
+new accounts start with <code>INVITE_NEW_ACCOUNT</code> = 2 (§4.2).</p>
+
+<div class="field">
+<label for="invite-send-email">Their email address</label>
+<input type="email" id="invite-send-email" name="invite-send-email">
+</div>
+<button type="submit" class="button">Send invite</button>
+<p class="field-hint-inline">If you don't have any invites saved up, this won't do anything until
+your next one arrives — you get one every 30 days, up to 5 saved at a time.</p>

@@ -175,7 +175,41 @@ group?" as the one permitted suggestion, with nothing else auto-created or auto-
 
 <div class="session-group">
 <h2>M7 — Account edges</h2>
-<p class="not-built">Not yet built.</p>
+<ul>
+<li><a href="login.html">Log in</a> — password login by email address, the §4.6.1 checkable
+anti-phishing promise shown as prominent real text, the link to password reset, and no CAPTCHA
+anywhere (SPEC §4.5, §4.6, §4.6.1, §16.4, §17).</li>
+<li><a href="reset-request.html">Reset your password</a> and
+<a href="reset-code.html">enter your reset code</a> — the two-step, code-not-link reset flow: a
+6-digit, 15-minute code told to the user in text with an always-available "send a new one," an
+expired-code state, and the honest, polite-live-region lockout message after too many login
+attempts (SPEC §4.6.1, §13.6, §16.3).</li>
+<li><a href="invite-redeem.html">Join WeeBee</a> — the only way to create an account: a verified
+email, a screened password, a display name, and the 18-or-older attestation, with nothing else
+collected; the automatic inviter/invitee friendship; and three honest rejection states — a
+breached password, a blocklisted name, and an already-expired invite (SPEC §4.1, §4.4, §4.5,
+§4.6.1).</li>
+<li><a href="invites.html">Invite friends</a> — <strong>inferred, not specified:</strong> the
+invite budget shown as an ordinary sentence rather than a badge or progress bar, and the form to
+send one (SPEC §4.1, §4.2, §17).</li>
+<li><a href="banned.html">Your account (suspended)</a> — the single page a banned person reaches:
+no reason given, no navigation beyond data export and account deletion, and the platform's
+ordinary honest register throughout (SPEC §13.2.1).</li>
+<li><a href="deactivated.html">Your account (deletion pending)</a> — the user's own view during
+the 30-day deletion grace period: the absolute-date banner (the only absolute date in this mockup
+set outside the emails), the honest erasure-plus-backup promise stated without softening, and the
+working cancel button (SPEC §4.7, §7.5, §7.5.1).</li>
+<li><a href="export.html">Export your data</a> — the complete JSON-plus-images copy of a user's
+data, and the note that it's the one place exact timestamps live (SPEC §4.9, §7.5.1).</li>
+<li><a href="errors.html">Errors and empty states</a> — §9.3's single, deliberately
+undifferentiated response for five different unreachable-profile cases; the general rate-limit
+and feed-post-spacing "slow down" messages; and a genuine empty feed, distinguished from §8.2.2's
+ban on an empty state for reactions specifically (SPEC §9.3, §13.6, §8.2.2).</li>
+<li><a href="maintenance.html">Maintenance page</a> — the one page in this set that fetches
+nothing at all, styles.css included: a standalone file, HTTP 503 and Retry-After noted in an
+HTML comment, built via a narrow one-file exception in <code>build.py</code> (ARCHITECTURE
+§7.2; SPEC §16).</li>
+</ul>
 </div>
 
 <div class="session-group">

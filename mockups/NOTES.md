@@ -691,3 +691,165 @@ notified when a tag they were not covered by is added ("David added a hashtag to
 commented on. More people can see it now."), but that notification would render on Alice's,
 Tom's and Priya's own feeds, none of which this track builds — the page states the rule in
 commentary rather than rendering a feed row nobody asked for.
+
+---
+
+## 34. `invites.html` — inferred, not specified, and the one number §17 arguably requires anyway
+
+**Session:** M7. **Surface:** `pages/invites.html`.
+
+Like M6's `settings.html` and `groups.html`, no section of either document describes a screen for
+seeing an invite budget or sending an invite — SPEC §4.2 gives only the mechanics
+(`INVITE_BANK_MAX` = 5, `INVITE_REPLENISH_DAYS` = 30, new accounts start with
+`INVITE_NEW_ACCOUNT` = 2). §17 separately states a platform-wide ban on "likes or visible counts
+(followers, reactions, views, post counts, page numbers — none exist)."
+
+**Drawn:** the minimum screen the mechanics imply, labelled `.page-provenance` exactly as M6's two
+inferred pages are, plus a form to send an invite. The budget itself is genuinely in tension with
+§17: a number the user cannot see is a number they cannot use to decide whether sending an
+invite will do anything. This session's resolution is to state it as an ordinary sentence —
+"You have 3 invites saved up right now, out of a possible 5" — rather than as a progress bar or a
+numeric badge, on the reasoning that §17's ban targets *scorekeeping widgets* (a follower count,
+a like count) rather than every number a page might ever state in prose. Flagged here because it
+is arguably the one visible count this platform cannot avoid showing somebody, and a founder
+reviewing §17's "no visible counts" line against this page should know the exception exists.
+
+---
+
+## 35. `banned.html` cannot literally drop the shared nav within this static harness
+
+**Session:** M7. **Surface:** `pages/banned.html`.
+
+The M7 prompt requires this page to carry no navigation at all, explicitly: "this means the page
+does not use the standard `_nav.html`." But every page this track builds is wrapped, uniformly,
+by `build.py` substituting a page's body into the one shared `partials/_base.html`, whose header
+includes `{{include partials/_nav.html}}` unconditionally — there is no per-page mechanism to
+omit it. Suppressing the nav specifically for this one page would mean editing `partials/` (or
+`build.py`'s templating logic to support a per-page override), and this session's touched files
+are `mockups/pages/`, `CRIB.md`, `NOTES.md` and `pages/index.html` — not `partials/`.
+
+**Drawn:** nothing technical. This mirrors M3's own precedent for the missing `_modal.html`
+partial (entry 13): a real gap between what a page needs and what the harness can express is
+documented rather than papered over by extending shared infrastructure beyond a session's own
+touched-files scope. `banned.html` goes through the normal pipeline — its shared header therefore
+mechanically carries the ordinary Feed/Post/Profile/Friends/Discover/Settings nav, an artifact of
+the review harness that the real, live page must not have — and the page carries a prominent,
+unmissable note saying so at the top of its own content. Nothing inside the page's own body links
+anywhere except data export and account deletion, which is the part this mockup can actually be
+faithful to. Contrast entry 36, immediately below, where this session made the opposite call for
+a harder constraint on `maintenance.html`.
+
+---
+
+## 36. `maintenance.html` needed an actual `build.py` change — the one harness extension this session makes
+
+**Session:** M7. **Surface:** `pages/maintenance.html`, `build.py`.
+
+Unlike `banned.html`'s "no nav" requirement (entry 35), `maintenance.html`'s constraint —
+"nothing fetched from anywhere... it must not link to styles.css either" — is not a matter of
+degree. Every page wrapped in `partials/_base.html` gets a hardcoded
+`<link rel="stylesheet" href="styles.css">` in its `<head>`; a browser loading that page issues a
+real network request for that file regardless of anything the page's own body content does. There
+is no CSS-only or content-only way to prevent that fetch from inside the existing pipeline — the
+requirement is binary, and it was one of the four items this session's own "before you finish"
+checklist calls out by name.
+
+The deeper reason is categorical, not just technical: every other page in `mockups/pages/`
+represents something the Django app would render. `maintenance.html` represents the opposite —
+what Caddy serves *when the Django app is not rendering anything at all* (ARCHITECTURE §7.2).
+Routing it through the app's own shared template, which assumes the app and its static-file
+serving are both up, contradicts the page's entire reason for existing.
+
+**Drawn:** a narrow, clearly-commented special case in `build.py`: when the loop over
+`pages/*.html` reaches `maintenance.html`, the file is copied straight to `site/maintenance.html`
+instead of being substituted into `_base.html`. `pages/maintenance.html` is therefore written as
+a complete, standalone HTML document — its own `<!DOCTYPE html>`, its own inline `<style>`, the
+HTTP 503 / `Retry-After` note in an HTML comment at the top, since a static file can't send real
+response headers. This is the one place across M1–M8 (so far) where a session edits `build.py`
+itself rather than only `pages/`, made deliberately rather than by default: the bar was "the
+requirement is impossible to satisfy any other way and is checklist-verified," which
+`banned.html`'s nav requirement did not clear.
+
+---
+
+## 37. `settings.html`'s `account-deletion.html` forward reference doesn't match this session's `deactivated.html`
+
+**Session:** M7. **Surface:** M6's `pages/settings.html` versus this session's
+`pages/deactivated.html`.
+
+M6's `settings.html` links its "Delete your account" action at `account-deletion.html`, and
+CRIB.md registered that filename as a forward reference expected to land in "M7's account-edges
+session." This session's own prompt, however, specifies `deactivated.html` as the page to build
+for the deletion grace period — a different filename for what is functionally the same surface
+`account-deletion.html` was standing in for. `account-deletion.html` itself is therefore never
+built, and `settings.html`'s link now points at a filename this track will not produce.
+
+**Drawn:** nothing corrected, following the same precedent M3, M4 and M6 already set for a link
+sitting inside a file outside the current session's own touched set (entries 8, 16, 20, 21, and
+most directly 27, which records the analogous `report.html` / `report-post.html` mismatch).
+`settings.html` is left exactly as M6 built it. `banned.html`, built this session, faces the same
+choice for its own "Delete your account" action and resolves it by pointing at
+`account-deletion.html` too — consistent with `settings.html` rather than with
+`deactivated.html`, since `deactivated.html` as built assumes a deletion is already under way (it
+shows the grace-period banner and a cancel button), which is not the state either linking page is
+in. A founder decision or a later pass can retarget both links to whichever page is meant to
+carry the actual deletion *confirmation* step — a step neither M6 nor M7 built, since both
+sessions' own prompts named the pages around it (settings, and the grace-period view) rather than
+that step itself.
+
+---
+
+## 38. Splitting the two required states across `reset-request.html` and `reset-code.html`
+
+**Session:** M7. **Surface:** `pages/reset-request.html`, `pages/reset-code.html`.
+
+The M7 prompt lists two required states under one shared header covering both files — "the time
+limit is told to the user in text, and they can always request a new code" and "the lockout
+state" (login attempts rate-limited per account and per source address, §4.6.1) — without saying
+which file gets which.
+
+**Drawn:** the time-limit text and the "request a new code" link went on `reset-code.html`, since
+that is the page that actually carries the time-limited code (`RESET_CODE_TTL_MINUTES` = 15) and
+an expired-code state alongside it. The lockout message went on `reset-request.html` instead,
+reasoning that a person who has just been locked out of *login* is the person this page's own
+purpose — starting a password reset — exists to help next; the message is rendered as a second,
+clearly separated state on that page rather than invented as a new state on `login.html`, which
+the M7 prompt does not ask for. Recorded because it is a page-organization judgment call filling
+a real gap in the prompt's own structure, in the same spirit as entries 24 and 25's control-shape
+decisions.
+
+---
+
+## 39. `invite-redeem.html` cannot render David's own view, and reuses him as the inviter instead
+
+**Session:** M7. **Surface:** `pages/invite-redeem.html`.
+
+Every mockup in this track renders David's own point of view, with a small number of established
+exceptions (M2's Priya, M4's preview-as pages) where SPEC's own rules make David's view
+impossible to use for the thing being demonstrated (entry 12). Account redemption is a new
+exception in the opposite direction: nobody has an account yet at the point this page renders, so
+there is no "David" to be logged in as at all.
+
+**Drawn:** David stands in as the **inviter** instead of the viewer — a role any other
+established friend could equally have played — which has the added benefit of letting the page
+state §4.1's automatic inviter/invitee friendship concretely ("you and David automatically become
+friends") rather than abstractly. See `mockups/CRIB.md` §3 for the cast note.
+
+---
+
+## 40. Two messages this session had to invent, since SPEC gives no wording for either
+
+**Session:** M7. **Surface:** `pages/errors.html` (§9.3's single response), `pages/invite-redeem.html`
+(§4.5's blocklisted-name rejection).
+
+§9.3 requires "a viewer who may not see a profile gets one response," identical across a block, no
+mutual friend, a deactivated account, a banned account, and a profile that never existed — but
+never states what that one response actually says. §4.5 requires a blocked display name to be
+"rejected at save time with an honest message" — but likewise gives no wording.
+
+**Drawn:** both messages are this session's own invented text — *"This page isn't here, or you
+don't have permission to see it"* and *"That name isn't allowed on WeeBee. Please choose a
+different one"* — deliberately generic in the second case, since the message can't quote the
+blocklist itself back at the user without exposing it. Flagged here, and in `mockups/CRIB.md`,
+because both read easily as SPEC-verbatim quotes the way most of this track's other quoted
+strings are, and are not.

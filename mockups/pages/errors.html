@@ -1,0 +1,53 @@
+{{var title=Errors and empty states — WeeBee mockup}}
+<h1>Errors and empty states</h1>
+<p class="commentary">One page collecting the error and empty states SPEC §16.1 puts in scope,
+rather than one file per case. Each numbered section below is its own state, shown at once
+rather than live.</p>
+
+<div class="composer-section">
+<h2>1. When you can't see something</h2>
+<p>This page isn't here, or you don't have permission to see it.</p>
+<p class="commentary">SPEC gives no verbatim wording for this message; the sentence above is this
+session's own honest phrasing, deliberately identical regardless of cause — see
+<code>mockups/NOTES.md</code>. SPEC §9.3: "a viewer who may not see a profile gets one response,"
+identical across all five cases below, and any difference between them "is an oracle." Listed
+here for the founder's benefit, not shown to a real visitor, who only ever sees the one sentence
+above:</p>
+<ul class="commentary">
+<li>a block (§5.4)</li>
+<li>no mutual friend</li>
+<li>a deactivated account (§4.7)</li>
+<li>a banned account (§13.2.1)</li>
+<li>a profile that never existed</li>
+</ul>
+</div>
+
+<div class="composer-section">
+<h2>2. A rate limit — the general case</h2>
+<p class="status-message" role="status" aria-live="polite">You've reacted to quite a few things
+in a short time. You can react again in 2 minutes.</p>
+<p class="commentary">SPEC §13.6: "all social actions are rate-limited per account per day...
+hitting one produces an honest 'slow down' message." Reactions are used here as one worked
+example among the several kinds of action this limit covers.</p>
+</div>
+
+<div class="composer-section">
+<h2>3. The feed-post spacing message</h2>
+<p class="status-message" role="status" aria-live="polite">Slow down — you can post again in 8
+minutes.</p>
+<p class="commentary">SPEC §13.6, verbatim pattern: "slow down, you can post again in N minutes."
+<code>POST_MIN_INTERVAL_MINUTES</code> ≈ 10; profile (blog) posts are exempt from this particular
+limit.</p>
+</div>
+
+<div class="composer-section">
+<h2>4. An empty feed</h2>
+<p>Nothing here yet. When a friend posts something meant for you, or posts to their own blog,
+it'll show up here.</p>
+<p class="commentary">A genuine empty state — the platform is allowed to say plainly that a feed
+has nothing in it. This is a different rule from §8.2.2's reaction-line requirement, which
+forbids exactly this kind of message for reactions specifically: "no empty state, no 'no
+reactions yet', which is a count of zero written out in words." The feed above is allowed to say
+"nothing here yet" because it isn't counting anything; a reaction line naming zero reactions
+would be.</p>
+</div>

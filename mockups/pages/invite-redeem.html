@@ -1,0 +1,82 @@
+{{var title=Join WeeBee — mockup}}
+<h1>Join WeeBee</h1>
+<p class="commentary">The viewpoint here is necessarily not David's, unlike almost every other
+page in this track (<code>mockups/CRIB.md</code> §3): nobody has an account yet at this point, so
+there is no "David's view" to render. David stands in as the inviter instead — a role any other
+established friend could equally have played. See <code>mockups/NOTES.md</code>.</p>
+
+<div class="composer-section">
+<h2>1. Redeem your invite</h2>
+<p>David has invited you to join WeeBee. Redeeming this invite creates your account — and the
+moment you finish, you and David automatically become friends.</p>
+<p class="commentary">SPEC §4.1: "the only way to create an account," and "when an invite is
+accepted, inviter and invitee automatically become friends."</p>
+
+<div class="field">
+<label for="invite-email">Email address</label>
+<input type="email" id="invite-email" name="invite-email">
+</div>
+<button type="submit" class="button">Send code</button>
+<p class="status-message" role="status" aria-live="polite">We've sent a code to that address.</p>
+<div class="field">
+<label for="invite-email-code">Code</label>
+<input type="text" id="invite-email-code" name="invite-email-code" inputmode="numeric">
+</div>
+<div class="field">
+<label for="invite-password">Password</label>
+<input type="password" id="invite-password" name="invite-password">
+</div>
+<div class="field">
+<label for="invite-display-name">Display name</label>
+<input type="text" id="invite-display-name" name="invite-display-name">
+</div>
+<div class="option-row">
+<input type="checkbox" id="invite-age">
+<label for="invite-age">I am 18 years old or older</label>
+</div>
+<p>That's everything we ask for — no phone number, no legal name, no address.</p>
+<button type="submit" class="button">Create your account</button>
+<p class="commentary">SPEC §4.1: redeeming requires a verified email, a screened password, a
+display name, and an 18-or-older attestation — "registration collects nothing else." Email
+verification follows the same code-not-link pattern as password reset (§4.6.1).</p>
+</div>
+
+<div class="composer-section">
+<h2>2. A password that's already been breached</h2>
+<div class="field">
+<label for="invite-password-breached">Password</label>
+<input type="password" id="invite-password-breached" name="invite-password-breached" aria-describedby="invite-password-breached-error" aria-invalid="true">
+<p id="invite-password-breached-error" class="field-error">That password has shown up in a known
+data breach elsewhere on the internet, so we won't use it. Choose a different one — it doesn't
+need to be complicated, just not one that's already out there.</p>
+</div>
+<p class="commentary">SPEC §4.6.1: passwords are screened against the public corpus of
+known-breached passwords via a k-anonymity range query — only a hash prefix ever leaves the
+server, never the password or the user's identity — and a match is "refused with an honest
+explanation."</p>
+</div>
+
+<div class="composer-section">
+<h2>3. A display name that isn't allowed</h2>
+<div class="field">
+<label for="invite-name-blocked">Display name</label>
+<input type="text" id="invite-name-blocked" name="invite-name-blocked" aria-describedby="invite-name-blocked-error" aria-invalid="true">
+<p id="invite-name-blocked-error" class="field-error">That name isn't allowed on WeeBee. Please
+choose a different one.</p>
+</div>
+<p class="commentary">SPEC §4.5: every name, at signup and at every later change, is checked
+against operator-curated <code>NAME_BLOCKLIST</code> and "rejected at save time with an honest
+message." The message above is deliberately generic rather than quoting the list back, since the
+list itself is never shown to users; SPEC gives no verbatim wording for this message — see
+<code>mockups/NOTES.md</code>.</p>
+</div>
+
+<div class="composer-section">
+<h2>4. An invite that's already expired</h2>
+<p class="notice">This invite has expired. Invites are only good for a couple of weeks, and this
+one has passed that mark — it's already gone back into the sender's invite budget, so they're
+free to send you another one whenever they're ready.</p>
+<p class="commentary">SPEC §4.1: <code>INVITE_EXPIRY_DAYS</code> = 14; "expired invites return to
+the sender's budget." Nothing is rendered below this notice — there's nothing left to redeem, so
+no form fields are shown for this state, unlike the two field-level rejections above.</p>
+</div>

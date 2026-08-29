@@ -1,0 +1,34 @@
+{{var title=Your account — deletion pending — WeeBee mockup}}
+<h1>Your account</h1>
+<p class="notice">Your account will be permanently erased on 28 September. Until then, you can
+change your mind by logging back in and cancelling — right here.</p>
+<p class="commentary">SPEC §4.7: the deactivation banner carries the <strong>absolute</strong>
+erasure date — "an account event, and therefore one of §7.5.1's two narrow exceptions to relative
+time." <code>DELETE_GRACE_DAYS</code> = 30. This is the only absolute date anywhere in this
+mockup set outside the security and inactivity emails, which are M8's scope and not built this
+session — see <code>mockups/NOTES.md</code>.</p>
+
+<p>Nobody else on WeeBee can see you right now — your profile, your posts, your comments, all of
+it is hidden, the same as if you'd already deleted everything. It's reversible until the date
+above.</p>
+<p class="commentary">SPEC §4.7: "the account and all of its content become invisible everywhere,
+reversibly... nobody is notified." A visitor gets §9.3's single response, the same one
+<a href="errors.html">errors.html</a> demonstrates.</p>
+
+<h2>What happens if you don't cancel</h2>
+<p>When the 30 days are up, you'll be erased from WeeBee at once — your posts, comments, photos,
+friend list, everything. A copy may still exist in our encrypted backups for up to 30 days after
+that, until it's gone from there too.</p>
+<p class="commentary">SPEC §4.7's own wording, not softened: "erased from the platform at once,
+and gone from the last encrypted backup within <code>BACKUP_RETENTION_DAYS</code> = 30 days after
+that." §4.7 and §7.5 both explicitly refuse a combined "gone by day 120" phrasing, so this page
+states the two facts separately rather than adding them together.</p>
+
+<h2>Change your mind?</h2>
+<p>If you'd like to stay, you can cancel this right now and pick up exactly where you left off.</p>
+<button type="submit" class="button">Cancel deletion, keep my account</button>
+<p class="commentary">SPEC §4.7: "the user can log in to cancel." Unlike
+<a href="banned.html">banned.html</a>, this page keeps the ordinary shared navigation — SPEC says
+plainly that "the user's own view keeps working so they can cancel," a materially less restricted
+state than a ban's "authorization is empty" (§13.2.1). Everything in the main nav above still
+points at an ordinary, working page.</p>

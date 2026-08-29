@@ -1,0 +1,27 @@
+{{var title=Reset your password — WeeBee mockup}}
+<h1>Reset your password</h1>
+<p>Enter the email address for your WeeBee account and we'll send a 6-digit code you can use to
+set a new password.</p>
+<p class="commentary">SPEC §4.6.1: password reset is completed with a short, single-use,
+time-limited numeric code, entered on a page reached "by navigating to the site themselves" —
+never by clicking a link in an email. This page is that starting point; <a
+href="login.html">login.html</a> links here, rather than any email doing so.</p>
+
+<div class="field">
+<label for="reset-request-email">Email address</label>
+<input type="email" id="reset-request-email" name="reset-request-email">
+</div>
+<button type="submit" class="button">Send code</button>
+<p><a href="login.html">Remembered your password? Log in</a></p>
+
+<h2>If you've been locked out of logging in</h2>
+<p class="status-message" role="status" aria-live="polite">You've made too many attempts to log
+in, so login is temporarily locked for a little while. You can wait about 15 minutes and try
+again, or reset your password right now using the form above.</p>
+<p class="commentary">SPEC §4.6.1, §13.6: login attempts are rate-limited per account and per
+source address, with exponential backoff and temporary lockout
+(<code>LOGIN_ATTEMPT_LIMIT</code> ≈ 5, <code>LOGIN_LOCKOUT_MINUTES</code> ≈ 15). §16.3 requires a
+message like this to use a polite live region and to be honest about the fix, not just refuse
+silently. It's rendered here, on the reset page, rather than on <a href="login.html">login.html</a>
+itself — see <code>mockups/NOTES.md</code> for why this session split this page pair's two
+required states the way it did.</p>

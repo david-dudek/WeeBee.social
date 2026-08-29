@@ -41,6 +41,19 @@ All citations are to SPEC.md at project version 1.27 unless marked ARCHITECTURE.
 Full table: SPEC §14 (lines ~898–953 at v1.27). Pull in more rows here as later sessions need
 them rather than re-reading §14 whole.
 
+**M7 adds:**
+
+| Constant | Value | Ref |
+|---|---|---|
+| `RESET_CODE_LENGTH` | 6 digits | §4.6.1 |
+| `RESET_CODE_TTL_MINUTES` | 15 | §4.6.1 |
+| `LOGIN_ATTEMPT_LIMIT` | ≈ 5 failures before backoff begins, per account and per source address | §4.6.1, §13.6 |
+| `LOGIN_LOCKOUT_MINUTES` | ≈ 15, base lockout, escalating with exponential backoff | §4.6.1, §13.6 |
+| `INVITE_EXPIRY_DAYS` | 14; expired invites return to the sender's budget | §4.1 |
+| `DELETE_GRACE_DAYS` | 30 | §4.7 |
+| `BACKUP_RETENTION_DAYS` | 30 days after live erasure | §7.5, §4.7 |
+| `POST_MIN_INTERVAL_MINUTES` | ≈ 10 (suggested default) | §7.3, §13.6 |
+
 ---
 
 ## 2. Verbatim interface strings
@@ -153,6 +166,33 @@ Used as real page text, not commentary, on M5's `contact-card-editor.html`.
 reaches."* Verbatim, rendered on `post-editor.html` when a tag is added to a profile post that
 already has comments. Removing a tag narrows the audience and shows no notice at all — see the
 same page's section 4.
+
+### §4.6.1 — The checkable promise, reused (M7)
+
+Same string already registered above, rendered as prominent real text (not fine print) on
+`login.html`, and referenced (not repeated) on `reset-request.html` and `settings.html`'s email
+change section.
+
+### §4.7 — The honest erasure-plus-backup promise (M7)
+
+*"Erased from the platform at once, and gone from the last encrypted backup within
+`BACKUP_RETENTION_DAYS` = 30 days after that."* Rendered on `deactivated.html` as two separate
+sentences (immediate live erasure; a separate, later backup window) rather than added together
+into one deadline — §4.7 and §7.5 both explicitly refuse a combined "gone by day 120" phrasing.
+
+### §13.6 — The feed-post spacing message, verbatim pattern (M7)
+
+*"Slow down, you can post again in N minutes."* Rendered on `errors.html` as *"Slow down — you
+can post again in 8 minutes."*
+
+### §9.3 and §4.5 — two messages with no SPEC-given wording (M7)
+
+Neither the single response a viewer gets when they may not see a profile (§9.3) nor the honest
+message a blocked display name is rejected with (§4.5) is given verbatim anywhere in either
+document. Both are this session's own invented wording — *"This page isn't here, or you don't
+have permission to see it"* (`errors.html`) and *"That name isn't allowed on WeeBee. Please choose
+a different one"* (`invite-redeem.html`) — flagged as invented rather than quoted, in
+`mockups/NOTES.md`.
 
 ### §9.4 — The gallery reorder controls' naming pattern (M6)
 
@@ -268,6 +308,14 @@ groups with opposing overrides on the same contact-card item. Jordan (pending se
 Alice and Henry (the requested-introduction pair), and Sofia (unfriend/block) are all reused as
 established, with no new facts added about them.
 
+**M7's `invite-redeem.html` necessarily breaks from "every mockup renders David's view"** in the
+other direction M2's Priya (entry 12) and M4's preview-as pages already established a precedent
+for: nobody has an account yet at the point this page renders, so there is no "David's view" to
+show. David stands in as **the inviter** instead — a role any other established friend could
+equally have played — which is also what lets the page state §4.1's automatic
+inviter/invitee friendship concretely ("you and David automatically become friends") rather than
+abstractly.
+
 ---
 
 ## 4. Relative-age ladder (SPEC §7.5.1) — phrases in use
@@ -381,6 +429,25 @@ produce. Per the precedent M3 and M4 already set for cross-session links (neithe
 link in a file outside its own touched set), `post-profile-tagged.html` is left as it is; see
 `mockups/NOTES.md` for the entry recording this.
 
+**M7 builds nine pages**: `login.html`, `reset-request.html`, `reset-code.html`,
+`invite-redeem.html`, `invites.html` (inferred), `banned.html`, `deactivated.html`,
+`export.html`, `errors.html`, and `maintenance.html` (a standalone file, not wrapped in
+`_base.html` — see §6 below). No new forward-referenced filenames are introduced.
+
+**Filename mismatch, not corrected here**: M6's `settings.html` links its "Delete your account"
+action at `account-deletion.html`, a forward reference CRIB.md itself registered at the time.
+This session's own prompt, however, names the page it builds for the deletion grace period
+`deactivated.html` instead — a different filename for what is functionally the same surface
+`account-deletion.html` was standing in for. `account-deletion.html` is therefore never built,
+and `settings.html`'s link now points at a filename this track will not produce.
+`banned.html`'s own "Delete your account" link reuses the same `account-deletion.html` forward
+reference, for consistency with `settings.html`, rather than pointing at `deactivated.html`
+instead — deliberately, since `deactivated.html` as built assumes deletion is already
+in progress (it shows the grace-period banner), which isn't the state either linking page is in.
+Per the precedent M3, M4 and M6 already set for a link in a file outside the current session's
+touched set (see entries 8, 16, 20, 21, 27 in `mockups/NOTES.md`), `settings.html` is left as
+found; see `mockups/NOTES.md` for the full entry.
+
 ---
 
 ## 6. Commentary/copy separation — the `.commentary` class and the toggle
@@ -422,6 +489,32 @@ mockup file, NOTES.md or CRIB.md). Never mixed in one sentence or paragraph.
 
 M6–M8 build compliant pages from the start using this convention; they do not need a follow-up
 retrofit.
+
+**M7 adds one narrow exception to the shared-harness rule, and one documented harness
+limitation it did not fix:**
+
+- **`maintenance.html` is not wrapped in `_base.html`.** Every other page in this track is built
+  by `build.py` reading `pages/*.html`, substituting its front matter into the shared
+  `partials/_base.html`, and writing the result to `site/`. `maintenance.html` is the one
+  exception: `build.py` now special-cases this filename and copies it through to `site/`
+  unchanged, because the real page it mocks up is served by Caddy, entirely outside the Django
+  app (ARCHITECTURE §7.2), and must fetch nothing at all — including `styles.css`, which
+  `_base.html` links unconditionally with no per-page opt-out. `pages/maintenance.html` is
+  therefore a complete, standalone HTML document (its own `<style>`, own `<!DOCTYPE html>`), not
+  a page body plus front matter. This is the one place in the M1–M8 track where a session edits
+  `build.py` itself, rather than only `pages/`; see `mockups/NOTES.md` for the full reasoning
+  and why `banned.html`'s narrower "no nav" requirement, immediately below, was handled
+  differently.
+- **`banned.html` cannot literally omit the shared nav within this harness.** SPEC §13.2.1
+  requires the banned-account page to carry no navigation at all, "the page does not use the
+  standard `_nav.html`." Unlike `maintenance.html`, this page is an ordinary page within the
+  Django app in the real product, and `_base.html`'s header/nav is baked in uniformly for every
+  page in `pages/`, with no per-page override — suppressing it here would mean editing
+  `partials/`, outside this session's touched files. `banned.html` is left going through the
+  normal pipeline, with a prominent on-page note explaining the gap, following the precedent
+  M3's entry on the missing `_modal.html` partial already set (`mockups/NOTES.md`, entry 13):
+  document a real harness limitation rather than extend `partials/` or `build.py` beyond what a
+  single session's touched-files scope allows.
 
 **M6 adds one more shared convention: `.page-provenance`**, for a page that is itself assembled
 or inferred rather than specified (`settings.html`, `groups.html`). Unlike `.commentary`, this

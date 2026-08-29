@@ -1,0 +1,41 @@
+{{var title=Your account — suspended — WeeBee mockup}}
+<h1>Your account</h1>
+<p>Your account has been suspended by the person who runs WeeBee. While it's suspended, nothing
+you've posted or shared is visible to anyone else here.</p>
+<p class="commentary">SPEC §13.2.1: "states plainly that the account has been suspended by the
+operator and that their content is hidden from other members." No reason is given —
+"reasons are the deferred policy question, and a generated reason line would promise a
+consistency the v1 workflow cannot keep" — so none is written here.</p>
+
+<p class="commentary"><strong>Harness limitation, not a design choice.</strong> SPEC §13.2.1
+requires this page to carry no navigation at all — "everything else... is that page" — and the
+M7 prompt repeats it explicitly: "this means the page does not use the standard
+<code>_nav.html</code>." This mockup set wraps every page in the same shared
+<code>partials/_base.html</code>, header and <code>_nav.html</code> included, with no per-page way
+to omit it; doing that would mean editing <code>partials/</code>, outside this session's touched
+files (<code>mockups/pages/</code>, <code>CRIB.md</code>, <code>NOTES.md</code>,
+<code>pages/index.html</code>). The nav links visible above this page's own content are therefore
+an artifact of the review harness, not something the real, live page would ever show — see
+<code>mockups/NOTES.md</code>. Nothing inside the content below links anywhere except data export
+and account deletion, which is the part this mockup can actually be faithful to.</p>
+
+<h2>What you can still do</h2>
+<p>You can download a complete copy of everything you've put into WeeBee, or delete your account
+for good. Everything else here — your feed, posting, commenting, friend requests, discovering
+people, reporting, and the rest of your settings — doesn't work while your account is
+suspended.</p>
+<div class="button-row">
+<a class="button" href="export.html">Download your data</a>
+<a class="button" href="account-deletion.html">Delete your account</a>
+</div>
+<p class="commentary">SPEC §13.2.1: "from that page exactly two things work: data export (§4.9)
+and account deletion (§4.7)." Both are data rights, not privileges, which is why they still work
+here (§4.9, §15.1) — "the session is the identity check," so the same login that reached this
+page is what lets these two actions run normally. The deletion link is a forward reference to
+<code>account-deletion.html</code>, not built by this session — see <code>mockups/NOTES.md</code>
+for how that filename relates to <a href="deactivated.html">deactivated.html</a>, which this
+session does build.</p>
+
+<p>The wording above is WeeBee's ordinary, honest register — not a punishment, just a plain
+statement of where things stand.</p>
+<p class="commentary">SPEC §13.2.1: "the platform's ordinary honest register."</p>
