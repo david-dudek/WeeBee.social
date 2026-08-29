@@ -1,0 +1,80 @@
+{{var title=Introduce two friends}}
+<h1>Introduce two friends</h1>
+<p>SPEC §5.5(a): David selects two of his own friends who aren't friends with each other, and
+each receives an auto-generated introduction to the other — "both free-text-free, both requiring
+consent, both silent on decline." Nowhere in this flow does David write anything to either of
+them.</p>
+
+<h2>1. Choose two friends who don't know each other</h2>
+<fieldset>
+<legend>First friend</legend>
+<div class="option-list">
+<div class="option-row"><input type="radio" id="intro-first-alice" name="intro-first"><label for="intro-first-alice">Alice</label></div>
+<div class="option-row"><input type="radio" id="intro-first-ben" name="intro-first" checked><label for="intro-first-ben">Ben</label></div>
+<div class="option-row"><input type="radio" id="intro-first-grace" name="intro-first"><label for="intro-first-grace">Grace</label></div>
+<div class="option-row"><input type="radio" id="intro-first-henry" name="intro-first"><label for="intro-first-henry">Henry</label></div>
+<div class="option-row"><input type="radio" id="intro-first-mom" name="intro-first"><label for="intro-first-mom">Mom</label></div>
+<div class="option-row"><input type="radio" id="intro-first-nadia" name="intro-first"><label for="intro-first-nadia">Nadia</label></div>
+<div class="option-row"><input type="radio" id="intro-first-sofia" name="intro-first"><label for="intro-first-sofia">Sofia</label></div>
+<div class="option-row"><input type="radio" id="intro-first-tom" name="intro-first"><label for="intro-first-tom">Tom</label></div>
+</div>
+</fieldset>
+<fieldset>
+<legend>Second friend</legend>
+<div class="option-list">
+<div class="option-row"><input type="radio" id="intro-second-alice" name="intro-second"><label for="intro-second-alice">Alice</label></div>
+<div class="option-row"><input type="radio" id="intro-second-ben" name="intro-second"><label for="intro-second-ben">Ben</label></div>
+<div class="option-row"><input type="radio" id="intro-second-grace" name="intro-second" checked><label for="intro-second-grace">Grace</label></div>
+<div class="option-row"><input type="radio" id="intro-second-henry" name="intro-second"><label for="intro-second-henry">Henry</label></div>
+<div class="option-row"><input type="radio" id="intro-second-mom" name="intro-second"><label for="intro-second-mom">Mom</label></div>
+<div class="option-row"><input type="radio" id="intro-second-nadia" name="intro-second"><label for="intro-second-nadia">Nadia</label></div>
+<div class="option-row"><input type="radio" id="intro-second-sofia" name="intro-second"><label for="intro-second-sofia">Sofia</label></div>
+<div class="option-row"><input type="radio" id="intro-second-tom" name="intro-second"><label for="intro-second-tom">Tom</label></div>
+</div>
+</fieldset>
+<p class="session-note">Both pickers list the same alphabetical friend list as
+<a href="friends.html">the friends page</a> and <a href="preview-as-friend.html">the preview-as
+picker</a> — in the real product each list would exclude anyone already friends with the other
+choice, which this mockup's cast carries no data to compute, so Ben and Grace are simply
+pre-picked as this worked example's pair, per §5.5(a)'s own requirement that neither is already
+friends with the other.</p>
+
+<h2>2. What Ben receives</h2>
+<p>Per §5.5(a)'s own wording: <em>"M wants to introduce you to [other party]"</em> plus the
+other's basic-tier profile and auto-generated context (shared hashtags, mutual friends). Grace's
+side of the same card is not rebuilt separately here — it is the identical component, fed from
+Ben's data instead.</p>
+<p><strong>David wants to introduce you to Grace</strong></p>
+<div class="profile-header">
+<img class="profile-photo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNDAgMjQwIj48cmVjdCB3aWR0aD0iMjQwIiBoZWlnaHQ9IjI0MCIgZmlsbD0iI2U1ZTVlNSIvPjxjaXJjbGUgY3g9IjEyMCIgY3k9Ijk1IiByPSI0NSIgZmlsbD0iIzljOWM5YyIvPjxwYXRoIGQ9Ik00MCwyMzUgQzQwLDE3NSA3NSwxNTAgMTIwLDE1MCBDMTY1LDE1MCAyMDAsMTc1IDIwMCwyMzUgWiIgZmlsbD0iIzljOWM5YyIvPjwvc3ZnPg==" alt="Grace, a generic profile photo — this cast member has no photo established beyond this placeholder." width="120" height="120">
+<p class="profile-preview-name">Grace</p>
+<button type="button" class="button profile-report">Report this profile</button>
+</div>
+<h3>Short bio</h3>
+<p class="placeholder-field">[Grace's short bio would appear here]</p>
+<h3>Shared profile hashtags</h3>
+<p class="placeholder-field">[Any hashtags Ben and Grace have in common would appear here]</p>
+<h3>Mutual friends</h3>
+<p>Knows David.</p>
+<div class="button-row">
+<button type="submit" class="button">Accept</button>
+<button type="submit" class="button">Decline</button>
+</div>
+<p class="session-note">Grace and Ben are two of the five names CRIB.md §3 adds "purely to give
+friends.html's alphabetical list something real to sort" — with "no further backstory." Inventing
+a bio or hashtags for either here would contradict that. The photo, short bio and hashtags fields
+are therefore shown as placeholders rather than invented content; only "knows David," which is
+simply true — both are David's own friends — renders as real text. Compare
+<a href="friend-request-received.html">Priya's request card</a>, where a short bio was invented
+because Priya's own established facts (a hiking hashtag match, one mutual friend) called for one.</p>
+
+<h2>3. If it doesn't complete</h2>
+<p>If either Ben or Grace declines, the introduction does not complete. Per §5.5(a): "the other
+candidate is never told an introduction was attempted or declined" — if Ben declines, Grace is
+never told anything happened at all, not even that someone declined. David sees only this:</p>
+<p class="status-message" role="status" aria-live="polite">Your introduction of Ben and Grace
+didn't complete.</p>
+<p class="session-note">Which one declined is never shown, here or anywhere — rendering it more
+specifically than this would name a private decision Ben or Grace made. If both had accepted
+instead, the introduction would simply complete: Ben and Grace become friends, with no
+confirmation beyond each now finding the other in their own friends list.</p>

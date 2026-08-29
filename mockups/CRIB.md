@@ -33,6 +33,10 @@ All citations are to SPEC.md at project version 1.27 unless marked ARCHITECTURE.
 | `NAME_TRANSITION_DAYS` | 90 (dual "formerly" display) | §4.5.1 |
 | `ALT_TEXT_MAX` | 1,000 characters (image alternative text) | §16.3 |
 | `GROUP_SIZE_MAX` | 30 (matches `POST_AUDIENCE_MAX`, so any group is a valid post audience) | §6 |
+| `REQUEST_HOLD_AFTER_PROFILE_CHANGE_HOURS` | 12 (friend requests held after a photo/short-bio change; picker selections, clearing to empty, screening rejections and the extended bio are exempt) | §5.2, §13.6 |
+| Pending friend-request expiry | 90 days (matches `CONTENT_TTL_DAYS`; destroys the frozen card with it) | §5.2 |
+| Re-request cooldown after a declined friend request | 90 days | §5.2 |
+| Daily rate limits, suggested | 20 friend requests, 10 introductions (per account per day) | §13.6, §14 |
 
 Full table: SPEC §14 (lines ~898–953 at v1.27). Pull in more rows here as later sessions need
 them rather than re-reading §14 whole.
@@ -117,6 +121,32 @@ composer.html).
   `post-profile-tagged.html`, whose viewer is Priya, not David. See NOTES.md for why that page
   breaks from "every mockup renders David's view."
 
+### §5.2 — The friend-request send hold
+
+*"you can send friend requests again in N hours"* — SPEC's own quoted form, stating the reason
+(a photo or short-bio change) alongside the remaining time. Used on M5's
+`friend-requests-sent.html`.
+
+### §5.3 — Block framing
+
+*"A user who wants the stronger outcome wants a block"* — SPEC's own framing for when unfriending
+isn't enough. Used on M5's `unfriend-confirm.html` alongside the §5.3 unfriend quote already
+registered above.
+
+### §5.5 — Introduction wordings (both flows free-text-free)
+
+- Broker-initiated, to each candidate: *"M wants to introduce you to [other party]"* — M5's
+  `introduction-broker.html` renders this literally as *"David wants to introduce you to
+  Grace."*
+- **No verbatim wording exists anywhere in SPEC for flow (b)'s ask** — what M sees when a friend
+  requests an introduction. M5's `introduction-requested.html` invents *"Alice asks you to
+  introduce her to Henry"* for this; flagged in NOTES.md rather than presented as a SPEC quote.
+
+### §10.3 — The contact-card cascade's own reasoning
+
+*"Accidental under-sharing is recoverable (see request flags); accidental over-sharing is not."*
+Used as real page text, not commentary, on M5's `contact-card-editor.html`.
+
 ### §7.5 — Expiry countdown (absolute days, the one exception to relative time)
 
 *"deletes in 6 days"* — SPEC's own example. M1 renders this capitalized as a standalone line,
@@ -195,6 +225,19 @@ filter box something real to sort and filter**: Ben, Grace, Henry, Nadia, Sofia 
 names with no further backstory, listed alongside Alice, Mom and Tom. Priya and Jordan are not
 among them: both are friends-*of*-friends, never friends themselves, so neither belongs on
 David's own friend list.
+
+**M5 gives Priya a short bio and photo alt text for the first time** (`friend-request-received.
+html`), since neither existed anywhere before this session — everything else about her (a
+friend-of-friend connected to David through exactly one mutual friend, Alice, sharing #hiking)
+carries forward unchanged from M2/M4. **M5 does not invent backstory for Ben, Grace, Henry,
+Nadia or Sofia**, consistent with their standing "no further backstory" characterization —
+where `introduction-broker.html` needs Grace's short bio or shared hashtags, it renders a
+`.placeholder-field` instead of writing new content for her. **M5 adds one new group, "Book
+club"** (`contact-card-editor.html`), alongside the established "Hiking crew," containing Tom,
+used only to demonstrate §10.3's deny-beats-allow conflict rule when a friend belongs to two
+groups with opposing overrides on the same contact-card item. Jordan (pending sent request),
+Alice and Henry (the requested-introduction pair), and Sofia (unfriend/block) are all reused as
+established, with no new facts added about them.
 
 ---
 
@@ -286,3 +329,11 @@ itself is a single file standing in for the Blog-tab instance of the tagged frie
 view (see NOTES.md), and the About-tab instance is left as an assumed filename for whichever
 session or founder decision picks it up, the same treatment M1's nav gave `friends.html` and
 `discover.html` themselves before this session existed.
+
+**M5 builds seven pages across the prompt's six numbered items**: `friend-request-received.html`,
+`friend-requests-sent.html`, `introduction-broker.html`, `introduction-requested.html`
+(item 3's two flows, one file each), `contact-card-editor.html`, `contact-card-received.html`,
+and `unfriend-confirm.html` (item 6's unfriend and block, one combined file, per the prompt's own
+filename). No new forward-referenced filenames are introduced; every link this session adds
+either resolves to one of these seven, to an already-built page, or to the still-unbuilt
+`profile.html`/`report.html`/`settings.html` placeholders carried since M1/M2.

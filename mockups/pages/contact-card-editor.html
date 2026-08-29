@@ -1,0 +1,168 @@
+{{var title=Your contact card}}
+<h1>Your contact card</h1>
+<p>SPEC §10.1: WeeBee has no free-text direct messaging. This card is the handoff to the
+channels friends already trust — phone, email, a messenger — not a rebuilt inbox. Your login
+email (§4.6) is never on this card unless you deliberately add it as its own item below; it's a
+credential, not a card entry.</p>
+
+<h2>The card starts empty</h2>
+<p>Until you add something, there is nothing here to share. A friend who requests an empty card
+gets exactly that back — see <a href="contact-card-received.html">the empty case, as a
+requester receives it</a> — not an error.</p>
+
+<h2>Add an item</h2>
+<p>Up to <code>CONTACT_ITEMS_MAX</code> = 12 items total, drawn from phone numbers, email
+addresses, and messenger links. A messenger link is only accepted from the allowlisted official
+domain of a recognized messenger — WhatsApp, Signal, Telegram and the like — never a bare URL
+(§10.2).</p>
+<fieldset>
+<legend>What kind of item?</legend>
+<div class="option-list">
+<div class="option-row"><input type="radio" id="item-type-phone" name="item-type" checked><label for="item-type-phone">Phone number</label></div>
+<div class="option-row"><input type="radio" id="item-type-email" name="item-type"><label for="item-type-email">Email address</label></div>
+<div class="option-row"><input type="radio" id="item-type-messenger" name="item-type"><label for="item-type-messenger">Messenger link</label></div>
+</div>
+</fieldset>
+<div class="field">
+<label for="item-value">Phone number</label>
+<input type="tel" id="item-value" name="item-value">
+</div>
+<p class="field-hint-inline">4 of 12 items used.</p>
+<button type="button" class="button">Add to card</button>
+
+<h2>Your items</h2>
+<p>Each item carries its own visibility, set through a three-level cascade: a default for all
+friends, then any group override, then an individual override, which always wins in either
+direction. Where a friend belongs to two groups with conflicting settings for the same item, the
+more restrictive one wins — deny beats allow. <strong>Accidental under-sharing is recoverable
+(see request flags, below on <a href="contact-card-received.html">the received card</a>);
+accidental over-sharing is not.</strong> (§10.3)</p>
+
+<div class="contact-item-editor">
+<h3>Phone</h3>
+<p class="contact-card-value">07700 900123</p>
+<div class="button-row">
+<button type="button" class="button">Edit</button>
+<button type="button" class="button">Remove</button>
+</div>
+<div class="option-row">
+<input type="checkbox" id="phone-default" checked>
+<label for="phone-default">On for all friends by default</label>
+</div>
+<p class="field-hint-inline">No group or individual override is set for this item — the default
+above is what every friend, including Alice, sees.</p>
+</div>
+
+<div class="contact-item-editor">
+<h3>Personal email</h3>
+<p class="contact-card-value">david@example.invalid</p>
+<div class="button-row">
+<button type="button" class="button">Edit</button>
+<button type="button" class="button">Remove</button>
+</div>
+<div class="option-row">
+<input type="checkbox" id="email-default">
+<label for="email-default">On for all friends by default</label>
+</div>
+<h4>Individual overrides</h4>
+<div class="option-row">
+<input type="checkbox" id="email-override-alice" checked>
+<label for="email-override-alice">On for Alice</label>
+</div>
+<p class="field-hint-inline">Off by default, on specifically for Alice — an individual override
+that touches only her card.</p>
+<fieldset>
+<legend>Add an individual override</legend>
+<div class="field">
+<label for="email-override-add-name">Friend</label>
+<select id="email-override-add-name" name="email-override-add-name">
+<option>Alice</option>
+<option>Ben</option>
+<option>Grace</option>
+<option>Henry</option>
+<option>Mom</option>
+<option>Nadia</option>
+<option>Sofia</option>
+<option>Tom</option>
+</select>
+</div>
+<div class="option-row">
+<input type="checkbox" id="email-override-add-value">
+<label for="email-override-add-value">On for this friend</label>
+</div>
+<button type="button" class="button">Add override</button>
+</fieldset>
+</div>
+
+<div class="contact-item-editor">
+<h3>WhatsApp</h3>
+<p class="contact-card-value">wa dot me slash [David's WhatsApp link]</p>
+<div class="button-row">
+<button type="button" class="button">Edit</button>
+<button type="button" class="button">Remove</button>
+</div>
+<div class="option-row">
+<input type="checkbox" id="whatsapp-default">
+<label for="whatsapp-default">On for all friends by default</label>
+</div>
+<h4>Group overrides</h4>
+<div class="option-row">
+<input type="checkbox" id="whatsapp-override-hiking" checked>
+<label for="whatsapp-override-hiking">On for the "Hiking crew" group</label>
+</div>
+<div class="option-row">
+<input type="checkbox" id="whatsapp-override-bookclub">
+<label for="whatsapp-override-bookclub">On for the "Book club" group</label>
+</div>
+<p class="field-hint-inline">Off by default, on for everyone in Hiking crew (which Alice belongs
+to — see <a href="composer.html">the composer's group-save suggestion</a>, §6), and off for Book
+club. Tom belongs to both groups: Hiking crew's "on" and Book club's "off" conflict for him
+specifically, and per §10.3 the more restrictive setting wins — WhatsApp stays hidden from Tom,
+even though his Hiking crew membership alone would otherwise show it.</p>
+<fieldset>
+<legend>Add a group override</legend>
+<div class="field">
+<label for="whatsapp-override-add-group">Group</label>
+<select id="whatsapp-override-add-group" name="whatsapp-override-add-group">
+<option>Hiking crew</option>
+<option>Book club</option>
+</select>
+</div>
+<div class="option-row">
+<input type="checkbox" id="whatsapp-override-add-value">
+<label for="whatsapp-override-add-value">On for this group</label>
+</div>
+<button type="button" class="button">Add override</button>
+</fieldset>
+</div>
+
+<div class="contact-item-editor">
+<h3>Signal</h3>
+<p class="contact-card-value">signal dot me slash [David's Signal link]</p>
+<div class="button-row">
+<button type="button" class="button">Edit</button>
+<button type="button" class="button">Remove</button>
+</div>
+<div class="option-row">
+<input type="checkbox" id="signal-default" checked>
+<label for="signal-default">On for all friends by default</label>
+</div>
+<h4>Individual overrides</h4>
+<div class="option-row">
+<input type="checkbox" id="signal-override-alice">
+<label for="signal-override-alice">On for Alice</label>
+</div>
+<p class="field-hint-inline">On by default for friends generally, but unchecked specifically for
+Alice — an individual override turning it off for her alone, which "always wins, in either
+direction" (§10.3). It does not appear on her card at all: not greyed out, not listed as
+withheld, simply absent, the same absence rule §9.2 uses for hidden posts.</p>
+</div>
+
+<p class="session-note">These are the same four items and the same cascade settings
+<a href="preview-as-friend.html">M4's preview-as-friend.html</a> already established for Alice's
+view of David's card — this page is the owner's side of that same data, plus the "Book club"
+group, added this session purely to demonstrate the deny-beats-allow conflict rule for Tom, who
+was not previously placed in any group. Real checkboxes throughout, each with a visible label, so
+the whole cascade is keyboard-operable end to end (§16.3 2.1.1; ARCHITECTURE §3.8) — there is no
+tri-state control anywhere: an override either exists as its own listed row with its own on/off
+checkbox, or it does not exist at all, which is what "use the default" means.</p>

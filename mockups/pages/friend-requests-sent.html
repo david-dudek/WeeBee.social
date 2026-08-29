@@ -1,0 +1,49 @@
+{{var title=Friend requests you've sent}}
+<h1>Friend requests you've sent</h1>
+<p>SPEC §5.2: only a friend-of-friend can be sent a request in the first place, and every card
+you send is a snapshot of your own basic-tier profile, frozen the moment you send it — the same
+card <a href="preview-as-request-card.html">David's own preview</a> already shows in full. This
+page is the sender's side: what a pending request looks like, and the two honest limits that can
+stop you from sending another one.</p>
+
+<h2>Pending</h2>
+<ul class="discover-people-list">
+<li>
+<a href="profile.html">Jordan</a>
+<p class="discover-context">Pending — sent a few days ago.</p>
+</li>
+</ul>
+<p class="session-note">No countdown is shown — §7.5's countdown rule governs posts, not
+requests, and the prompt for this session is explicit that none should be invented here. A
+pending request simply expires, silently, 90 days after it was sent if it never resolves, and
+its frozen card — exactly the fields <a href="preview-as-request-card.html">David's own
+preview</a> already renders — is destroyed with it (§5.2). Jordan is a plain friend-of-friend of David's (CRIB.md §3: knows Alice and Tom, no
+shared hashtag), used here only as a concrete name for the pending-request state.</p>
+
+<h2>The send hold, after a profile change</h2>
+<p>§5.2 and §13.6: sending is blocked for <code>REQUEST_HOLD_AFTER_PROFILE_CHANGE_HOURS</code> =
+12 hours after either your profile photo or your short bio changes, so the card already delivered
+to Jordan above can't be rewritten by a later edit, and the surface can't be used as a rotating
+billboard between batches of requests. Changing the photo or bio itself stays free and unlimited
+(§13.6) — the hold sits on the push, not the edit.</p>
+<p class="field-error" role="status" aria-live="polite">You can send friend requests again in 9
+hours. You changed your profile photo 3 hours ago, and WeeBee holds new requests for 12 hours
+after a photo or short bio change.</p>
+<p class="session-note">Verbatim per §5.2: "you can send friend requests again in N hours,"
+stating the reason rather than just the number. Four carve-outs trigger no hold at all (§13.6):
+picking an image from the platform's default avatar set, clearing the short bio to empty, a save
+rejected by screening, and any change to the extended bio — none of them shown here, since this
+page renders the one blocking case the prompt asks for.</p>
+
+<h2>The friend cap</h2>
+<p>§5.1: <code>FRIEND_CAP</code> = 300. Any action that would push either party past it fails
+with a clear, honest error message — never silently. It can be your own cap or theirs:</p>
+<p class="field-error" role="status" aria-live="polite">This can't be sent: it would put you over
+the 300-friend limit. Nothing is sent until you're below the cap — unfriending someone, or
+waiting for an old request to expire, brings you back under it.</p>
+<p class="field-error" role="status" aria-live="polite">This can't be sent: the person you're
+trying to reach already has 300 friends, the most WeeBee allows. Nothing is sent, and they are
+never notified that you tried.</p>
+<p class="session-note">No named recipient is used for either message — unlike Jordan's pending
+request above, the friend cap isn't tied to any specific person in this track's small cast, so
+the wording stays generic rather than inventing a character solely to be "at the cap."</p>

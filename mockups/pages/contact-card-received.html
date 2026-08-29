@@ -1,0 +1,76 @@
+{{var title=Requesting a contact card}}
+<h1>Requesting a contact card</h1>
+<p>SPEC §10.4: a friend requests another friend's contact card via a picker — no text — and the
+system auto-replies with exactly the version of the card that requester is permitted to see,
+resolved through the full visibility cascade of §10.3. This page renders what two different
+requesters get back from David's card, and the request-more-access flags §10.5 adds on top.</p>
+
+<h2>What Alice receives</h2>
+<p>Alice taps "Request contact card" on David's profile — no text field, nothing to type — and
+the system replies immediately with this:</p>
+<ul class="contact-card-preview">
+<li>
+<p class="contact-card-label">Phone</p>
+<p class="contact-card-value">07700 900123</p>
+</li>
+<li>
+<p class="contact-card-label">Personal email</p>
+<p class="contact-card-value">david@example.invalid</p>
+</li>
+<li>
+<p class="contact-card-label">WhatsApp</p>
+<p class="contact-card-value">wa dot me slash [David's WhatsApp link]</p>
+</li>
+</ul>
+<p class="session-note">The same three items, resolved the same way, as
+<a href="preview-as-friend.html">M4's preview-as-friend.html</a> already showed for David
+previewing Alice's view — Signal is absent because David has an individual override turning it
+off for her specifically (see <a href="contact-card-editor.html">the editor</a>). This is that
+same auto-reply, framed here as what Alice's own request actually returns rather than David's
+preview of it.</p>
+
+<h2>The empty case</h2>
+<p>Henry requests David's card the same way. David has individually turned off both Phone and
+Signal for Henry — the only two items that default on for friends generally — so nothing else on
+the card applies to him either. Henry gets this back:</p>
+<p>You haven't shared anything on your contact card with Henry.</p>
+<p class="session-note">Not an error — a real, honest empty state, exactly as the prompt for this
+session asks it to be treated. The specific overrides that produce it are a constructed worked
+example, the same kind of deliberate fact this track has invented before purely to demonstrate a
+mechanism (see NOTES.md on Jordan's characterization) — they say nothing about David and Henry's
+actual relationship.</p>
+
+<div class="notice">
+<h2>Request more access <em>(may ship in v1.1)</em></h2>
+<p>§10.5: if the card that comes back is insufficient, the requester can ask for more, without
+composing any text.</p>
+
+<h3>What Henry can do</h3>
+<fieldset>
+<legend>Ask David for more</legend>
+<div class="option-list">
+<div class="option-row"><input type="checkbox" id="request-more-phone"><label for="request-more-phone">Phone</label></div>
+<div class="option-row"><input type="checkbox" id="request-more-email" checked><label for="request-more-email">Email</label></div>
+<div class="option-row"><input type="checkbox" id="request-more-other"><label for="request-more-other">Other</label></div>
+</div>
+</fieldset>
+<p class="field-hint-inline">Henry can turn any of these off again at any time.</p>
+
+<h3>What David sees</h3>
+<p>A one-time notification when Henry first sets a flag, then a small passive flag next to
+Henry's name wherever David encounters it — his profile, his comments — for as long as he keeps
+it on. No repeat notifications, no nagging.</p>
+<ul class="discover-people-list">
+<li>
+<a href="profile.html">Henry</a>
+<p class="discover-context">Asked for more contact info: email</p>
+<button type="button" class="button">Mute this flag</button>
+</li>
+</ul>
+<p class="field-hint-inline">Muting hides the flag from David's feed and comments; it stays
+visible on Henry's own profile page, to David only, for as long as Henry keeps it on.</p>
+</div>
+
+<p class="session-note">This whole section carries SPEC's own hedge, "may ship in v1.1" (§10.5),
+and is labelled with it here rather than presented as settled v1 — everything above it on this
+page is the v1 card-request flow itself.</p>

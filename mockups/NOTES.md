@@ -433,3 +433,66 @@ keeps every page's heading outline strictly nested (SPEC §16.3, WCAG 1.3.1) wit
 the "exactly one `<h1>`" rule the smoke tests of §16.5 check for. Recorded because it is a
 structural choice specific to this new page type, not a literal instance of anything SPEC
 describes.
+
+---
+
+## 23. §5.5 gives verbatim wording for flow (a)'s ask, none for flow (b)'s
+
+**Session:** M5. **Surface:** `pages/introduction-requested.html`.
+
+§5.5(a) quotes the broker-initiated wording directly: *"M wants to introduce you to [other
+party]."* §5.5(b) describes the requested flow in full — A asks mutual friend M for an
+introduction to M's friend C, M's decline is silent, agreeing runs flow (a) with A's side
+pre-accepted — but never gives the wording for the one new event flow (b) actually introduces:
+what M sees when A's ask arrives. Nothing else in SPEC supplies it either; §12.1's "everything
+else" notification table lists "introduction proposals" as a type that generates a notification
+but gives no wording example for it, the way §12.2 does for blog posts or photo uploads.
+
+**Drawn:** *"Alice asks you to introduce her to Henry,"* built on the same pattern as the actor +
+specific-event-text idiom §12.2 establishes elsewhere, using this track's own established pair
+(Alice, a friend; Henry, a friend Alice can see but doesn't know). Flagged here so it is not
+mistaken for a SPEC quote the way the flow (a) wording on the same page legitimately is — see
+CRIB.md's new §5.5 entry, which registers exactly this distinction.
+
+---
+
+## 24. Neither document specifies the broker-introduction picker's mechanics
+
+**Session:** M5. **Surface:** `pages/introduction-broker.html`.
+
+§5.5(a) states the rule the picker must enforce — M selects two friends "who are not friends with
+each other" — but neither SPEC nor ARCHITECTURE says anything about the control itself: whether
+it is one widget or two, how "not already friends with each other" gets enforced or communicated
+at pick time, or what happens to the second list once the first name is chosen. This track's own
+cast, moreover, carries no friend-to-friend relationship data among David's friends (only each
+friend's tie to David is ever established), so there is no data to filter against even if a
+mechanic were drawn.
+
+**Drawn:** two independent fieldsets, "First friend" and "Second friend," each a plain radio list
+over David's full alphabetical friend list — the same list `friends.html` and
+`preview-as-friend.html`'s picker already use — with Ben and Grace pre-selected as this session's
+worked example, simply asserted (per §5.5(a)'s own requirement) to not be friends with each
+other. No in-picker filtering or cross-list exclusion is drawn, since building one would imply a
+relationship graph this mockup track does not otherwise maintain.
+
+---
+
+## 25. The contact-card override cascade's control shape is an interpretive choice
+
+**Session:** M5. **Surface:** `pages/contact-card-editor.html`.
+
+§10.3 specifies the cascade's *logic* — a default, a group override, an individual override that
+always wins, and deny-beats-allow among conflicting groups — and ARCHITECTURE §3.8 requires "the
+contact-card toggles" to be real `<input type="checkbox">` elements. Neither says what a
+*non-existent* override looks like as a control: a checkbox is natively two-state (on/off), but
+"no override set at this level" is a third state the cascade description implies without ever
+naming a widget for it.
+
+**Drawn:** an override is modelled as a row that either exists or doesn't, rather than a
+three-way control masquerading as a checkbox. Each item lists whatever group or individual
+overrides are actually set, each as its own plain on/off checkbox with a visible label; a
+separate "Add a group override" / "Add an individual override" fieldset (a `<select>` naming the
+group or friend, plus one checkbox for the value) is how a new row gets created. "Use the
+default" is therefore the absence of a row, never a third checkbox state. Recorded because this
+is a real design decision the documents leave open, not a literal rendering of anything either
+one specifies.

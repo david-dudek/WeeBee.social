@@ -106,7 +106,30 @@ field by field (SPEC §9.5, §10.3, §5.2).</li>
 
 <div class="session-group">
 <h2>M5 — Friendship and contact flows</h2>
-<p class="not-built">Not yet built.</p>
+<ul>
+<li><a href="friend-request-received.html">A friend request, received</a> — the request card as
+its recipient sees it, with §9.1's frozen/live field split labelled field by field, the report
+action, and silent accept/decline controls (SPEC §5.2, §9.1, §13.2).</li>
+<li><a href="friend-requests-sent.html">Friend requests you've sent</a> — the sender's side: a
+pending request with no invented countdown, the honest "you can send friend requests again in N
+hours" message after a profile change, and the friend-cap error on either side of a request
+(SPEC §5.1, §5.2, §13.6).</li>
+<li><a href="introduction-broker.html">Introduce two friends</a> and
+<a href="introduction-requested.html">Alice asks you to introduce her to Henry</a> — both
+free-text-free introduction flows: the broker-initiated picker and its per-candidate card, an
+incomplete introduction that never names who declined, the requested flow's silent decline, and
+what happens if you agree (SPEC §5.5, §11.1, §11.3).</li>
+<li><a href="contact-card-editor.html">Your contact card</a> — the owner's own card: the empty
+starting state, adding an item, and the full three-level visibility cascade — default, group
+override, individual override — as real, keyboard-operable checkboxes, including a worked
+deny-beats-allow conflict between two groups (SPEC §10.1, §10.2, §10.3; ARCHITECTURE §3.8).</li>
+<li><a href="contact-card-received.html">Requesting a contact card</a> — the picker-based
+request and its auto-reply, both a populated case and the real empty state, plus §10.5's
+request-more-access flags, clearly labelled "may ship in v1.1" (SPEC §10.4, §10.5).</li>
+<li><a href="unfriend-confirm.html">Unfriend or block Sofia</a> — the unfriend confirmation
+using §5.3's wording verbatim, and the block action's fully mutually invisible effects stated in
+full alongside it (SPEC §5.3, §5.4).</li>
+</ul>
 </div>
 
 <div class="session-group">
