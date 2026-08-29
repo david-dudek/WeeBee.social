@@ -1,0 +1,103 @@
+{{var title=Preview as a friend}}
+<h1>Preview — as a friend</h1>
+<p>SPEC §9.5, mode 1: the owner can preview their own profile and contact card exactly as one
+specific friend would see them. This mode exists because both surfaces are per-friend — the
+contact card follows the per-friend visibility cascade of §10.3, and the mutual-friend block on
+the profile itself depends on who is looking — so only naming a friend makes either concrete.</p>
+
+<fieldset>
+<legend>Preview as which friend?</legend>
+<div class="option-list">
+<div class="option-row">
+<input type="radio" id="preview-friend-alice" name="preview-friend" checked>
+<label for="preview-friend-alice">Alice</label>
+</div>
+<div class="option-row">
+<input type="radio" id="preview-friend-ben" name="preview-friend">
+<label for="preview-friend-ben">Ben</label>
+</div>
+<div class="option-row">
+<input type="radio" id="preview-friend-grace" name="preview-friend">
+<label for="preview-friend-grace">Grace</label>
+</div>
+<div class="option-row">
+<input type="radio" id="preview-friend-henry" name="preview-friend">
+<label for="preview-friend-henry">Henry</label>
+</div>
+<div class="option-row">
+<input type="radio" id="preview-friend-mom" name="preview-friend">
+<label for="preview-friend-mom">Mom</label>
+</div>
+<div class="option-row">
+<input type="radio" id="preview-friend-nadia" name="preview-friend">
+<label for="preview-friend-nadia">Nadia</label>
+</div>
+<div class="option-row">
+<input type="radio" id="preview-friend-sofia" name="preview-friend">
+<label for="preview-friend-sofia">Sofia</label>
+</div>
+<div class="option-row">
+<input type="radio" id="preview-friend-tom" name="preview-friend">
+<label for="preview-friend-tom">Tom</label>
+</div>
+</div>
+</fieldset>
+<p class="session-note">The same alphabetical list as <a href="friends.html">the friends
+page</a> — a picker over the friend list is exactly right here, per §9.5, because a friend list
+is the owner's own to see. Contrast <a href="preview-as-fof.html">the friend-of-friend mode</a>,
+where no such picker exists at all.</p>
+
+<div class="notice">
+<p><strong>Preview — viewing as Alice.</strong> Read-only: nothing here is saved, sent, or
+visible to anyone but David. <a href="profile.html">Exit preview</a></p>
+</div>
+
+<h2>Profile, as Alice would see it</h2>
+<p>A friend sees everything: the full header and all four tabs, exactly as
+<a href="profile-blog.html">Alice's own view of David's profile</a> already renders in full — a
+friend's view of the profile does not vary by which friend is looking, so that page stands as
+the preview for this part and is not rebuilt a second time here. What genuinely varies per
+friend, and is new content, is the contact card below.</p>
+
+<header class="profile-header">
+<img class="profile-photo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNDAgMjQwIj48cmVjdCB3aWR0aD0iMjQwIiBoZWlnaHQ9IjI0MCIgZmlsbD0iI2U1ZTVlNSIvPjxjaXJjbGUgY3g9IjEyMCIgY3k9Ijk1IiByPSI0NSIgZmlsbD0iIzljOWM5YyIvPjxwYXRoIGQ9Ik00MCwyMzUgQzQwLDE3NSA3NSwxNTAgMTIwLDE1MCBDMTY1LDE1MCAyMDAsMTc1IDIwMCwyMzUgWiIgZmlsbD0iIzljOWM5YyIvPjwvc3ZnPg==" alt="David, smiling on a hiking trail in mid-afternoon light, slightly out of breath." width="120" height="120">
+<p class="profile-preview-name">David Dudek (formerly Dave Dudek)</p>
+<button type="button" class="button profile-report">Report this profile</button>
+</header>
+<p class="session-note">The name above renders as styled text, not a heading — this page's own
+single <code>&lt;h1&gt;</code> names the preview tool itself, and a preview of a profile is not
+a second profile page competing for that role. The report action still renders, because it is
+exactly what Alice herself would see in her own view of this header — preview-as changes who is
+looking, never what they would see (§9.5).</p>
+
+<h2>Contact card, as Alice would see it</h2>
+<p>David's contact card resolved through the full cascade of §10.3 for Alice specifically:
+default, then any group override, then any individual override — the individual override always
+winning last, in either direction.</p>
+
+<ul class="contact-card-preview">
+<li>
+<p class="contact-card-label">Phone</p>
+<p class="contact-card-value">07700 900123</p>
+<p class="session-note">On by default for all friends; nothing overrides it for Alice.</p>
+</li>
+<li>
+<p class="contact-card-label">Personal email</p>
+<p class="contact-card-value">david@example.invalid</p>
+<p class="session-note">Off by default, but an individual override turns it on for Alice
+specifically — an override that touches only her card.</p>
+</li>
+<li>
+<p class="contact-card-label">WhatsApp</p>
+<p class="contact-card-value">wa dot me slash [David's WhatsApp link]</p>
+<p class="session-note">Off by default, but on for everyone in the "Hiking crew" group (see
+<a href="composer.html">the composer's group-save suggestion</a>, §6), which Alice belongs to —
+a group override, not an individual one.</p>
+</li>
+</ul>
+<p class="session-note">Signal is on by default for friends generally, but David has set an
+individual override turning it off specifically for Alice — "always wins, in either direction"
+(§10.3) — so it does not appear on her card at all, not greyed out, not listed as withheld: an
+item Alice may not see is simply absent, the same absence rule §9.2 uses for hidden posts. The
+card is otherwise capped at <code>CONTACT_ITEMS_MAX</code> = 12 items total; three are shown
+here as a worked example of the cascade, not the whole of David's card.</p>

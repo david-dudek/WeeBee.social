@@ -1,0 +1,116 @@
+{{var title=David Dudek — Blog, tagged friend-of-friend view}}
+<p>David's profile, as seen by <strong>Priya</strong> — the same friend-of-friend of David's
+introduced in <a href="post-profile-tagged.html">the single-post view of this exact post</a>
+(M2), who matched on #hiking through her friend Alice. This page shows the same post again, but
+in place: reached by visiting David's own Blog tab rather than a permalink, with the rest of the
+tab's filtering rules around it.</p>
+
+<header class="profile-header">
+<img class="profile-photo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNDAgMjQwIj48cmVjdCB3aWR0aD0iMjQwIiBoZWlnaHQ9IjI0MCIgZmlsbD0iI2U1ZTVlNSIvPjxjaXJjbGUgY3g9IjEyMCIgY3k9Ijk1IiByPSI0NSIgZmlsbD0iIzljOWM5YyIvPjxwYXRoIGQ9Ik00MCwyMzUgQzQwLDE3NSA3NSwxNTAgMTIwLDE1MCBDMTY1LDE1MCAyMDAsMTc1IDIwMCwyMzUgWiIgZmlsbD0iIzljOWM5YyIvPjwvc3ZnPg==" alt="David, smiling on a hiking trail in mid-afternoon light, slightly out of breath." width="120" height="120">
+<h1>David Dudek (formerly Dave Dudek)</h1>
+<button type="button" class="button profile-report">Report this profile</button>
+</header>
+
+<nav class="profile-tabs" aria-label="Profile tabs">
+<ul>
+<li><a href="profile-fof-tagged-about.html">About</a></li>
+<li><a href="profile-fof-tagged.html" aria-current="page">Blog</a></li>
+</ul>
+</nav>
+<p class="session-note">Only two tabs, not the three the tagged tier can carry at most (§9.2):
+About is always available at this tier, and Blog qualifies because the post below matches. No
+Pinned tab appears — David's only pinned post ("We're moving to Lisbon…", see
+<a href="profile-pinned.html">the Pinned tab a friend sees</a>) carries no hashtag, so nothing of
+Priya's profile matches it there, and per §9.2 a tab with nothing to show is not rendered — not
+shown empty, not shown with a "no matches" message. Photos never appears for a non-friend at all
+(§9.2). The About tab itself is not built as a separate page this session — see
+<code>mockups/NOTES.md</code>.</p>
+
+<h2>Blog</h2>
+<p>Only David's posts carrying a hashtag Priya also carries on her own profile reach her here —
+every other post of his, tagged or not, stays invisible and leaves no trace that it exists
+(§9.2, §11.3). Feed posts never appear on this tab for a friend-of-friend at all, matched or
+not: §11.3 gates profile posts only (§9.1). Neither the fence-gate post, the sourdough post, nor
+the tomatoes photo post that a friend sees on <a href="profile-blog.html">this same tab</a> is
+present — none of them carry a hashtag, so nothing about them is visible to Priya at all, not
+even their existence.</p>
+
+<ol class="feed-list">
+
+<li>
+<article class="post" aria-label="Post by David, several days ago">
+<p class="post-meta">
+<span class="post-age">Several days ago</span>
+</p>
+<div class="post-body">
+<p>Back from three days on the Cornwall coast path — legs are done, but I'd do the whole thing again tomorrow. Already thinking about where next.</p>
+</div>
+<p class="post-visibility">Visible to: all of David's friends, and friends-of-friends with
+<strong>any of</strong> <a href="discover-tag.html">#hiking</a>, #jazz.</p>
+</article>
+
+<h3>Comments</h3>
+<ol class="comment-list">
+
+<li class="comment" aria-label="Comment by Alice, a few days ago">
+<p class="comment-meta">
+<span class="comment-author"><a href="profile.html">Alice</a></span>
+<span class="comment-age">A few days ago</span>
+</p>
+<div class="comment-body">
+<p>Cornwall content, finally! Send the photos when you're back at real wifi.</p>
+</div>
+</li>
+
+<li class="comment" aria-label="Comment by Tom, a few days ago">
+<p class="comment-meta">
+<span class="comment-author plain-name">Tom</span>
+<span class="comment-age">A few days ago</span>
+</p>
+<div class="comment-body">
+<p>That coast path destroyed my knees the one time I tried it. Respect.</p>
+</div>
+</li>
+
+<li class="comment" aria-label="Comment by Priya, a couple of days ago">
+<p class="comment-meta">
+<span class="comment-author">Priya</span>
+<span class="comment-age">A couple of days ago</span>
+</p>
+<div class="comment-body">
+<p>#hiking is exactly why this showed up for me — I did the Cornwall path two summers ago and still think about it. Worth every blister.</p>
+</div>
+<ul class="reaction-list" aria-label="Reactions to your comment">
+<li><span class="plain-name">Mom</span>: Congrats!</li>
+</ul>
+</li>
+
+</ol>
+<p class="session-note">Alice's name links, because Priya knows Alice directly. Tom's renders as
+plain text — Priya and Tom are strangers to each other, possible only on a hashtag-gated post
+where two viewers of the same post may share only the author as a connection (§8.1). Mom's
+reaction to Priya's own comment likewise renders as plain text, for the same reason: Priya has
+no connection to Mom at all (§8.2.2).</p>
+
+<h3>Add a comment</h3>
+<div class="field">
+<label for="comment-text">Comment</label>
+<textarea id="comment-text" name="comment-text" rows="3"></textarea>
+</div>
+<p class="comment-visibility">Your comment will be visible to the same people.</p>
+<button type="submit" class="button">Comment</button>
+
+</li>
+
+</ol>
+
+<p class="session-note">The gallery and the extended bio remain invisible to Priya no matter
+which tab she is on — neither is part of the basic tier, and the tagged tier only adds matching
+posts on top of it, never the gallery (§9.2).</p>
+
+<p class="session-note">A static mockup shows exactly one viewer's page at a time, which is a
+limit worth naming here rather than working around. §5.4's blocking rule can make one viewer's
+comment on this very post invisible to a second viewer while everyone else still sees it
+normally — a mutually invisible blocked pair, evaluated per viewer. This page cannot render two
+different versions of itself at once to show that difference, so it is not faked here; see
+<code>mockups/NOTES.md</code> for the fuller note.</p>

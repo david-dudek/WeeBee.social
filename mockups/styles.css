@@ -69,6 +69,14 @@ a {
   color: var(--color-link);
 }
 
+/* A config-constant name in running text (e.g. `REQUEST_HOLD_AFTER_PROFILE_
+   CHANGE_HOURS`) is a single unbroken token with no space or hyphen to wrap
+   at; left alone it forces horizontal scroll on a 320px viewport (1.4.10). */
+code {
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
 /* Focus visibility — never removed by a theme (ARCHITECTURE §3.8) */
 a:focus-visible,
 button:focus-visible,
@@ -777,3 +785,108 @@ legend {
    SPEC §7.2.1 / §16.3 require to scroll instead of wrapping. The
    profile tab strip and the gallery grid both use flex-wrap/auto-fill
    rather than a fixed track count so they reflow instead of scrolling. */
+
+/* The non-friend explanatory line reused verbatim on every visibility-set
+   page that needs it (SPEC §9.1) shares .profile-nonfriend-note, defined
+   above with the profile-header rules.
+
+   Discover page (M4, SPEC §11.4) */
+.discover-people-list {
+  list-style: none;
+  margin: 0 0 var(--space-3);
+  padding: 0;
+}
+
+.discover-people-list > li {
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.discover-people-list > li:last-child {
+  border-bottom: none;
+}
+
+.discover-people-list a {
+  font-weight: 700;
+}
+
+.discover-context {
+  margin: var(--space-1) 0 0;
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+}
+
+/* Friends page (M4, SPEC §11.6): plain alphabetical list, no ranking */
+.friends-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.friends-list li {
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.friends-list li:last-child {
+  border-bottom: none;
+}
+
+.friends-list a {
+  display: flex;
+  align-items: center;
+  min-height: var(--touch-min);
+  padding: var(--space-2) 0;
+  text-decoration: none;
+}
+
+.friends-list a:hover {
+  text-decoration: underline;
+}
+
+/* Preview-as (M4, SPEC §9.5): the previewed profile's name renders as
+   styled text, never a second heading — a page previewing another surface
+   still carries only the one <h1> the template smoke test checks for
+   (§16.5). Sized to read like the real profile header's <h1>. */
+.profile-preview-name {
+  margin: 0;
+  flex: 1 1 auto;
+  min-width: 10rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+/* A value a preview cannot compute for real — mode 2's generic
+   mutual-friend block, mode 4's per-recipient fields (§9.5) — not the
+   "hidden content" placeholder §9.2 forbids elsewhere, since nothing real
+   is being concealed: there is no real viewer to conceal it from. Marked
+   by real bracket text and style, never colour alone. */
+.placeholder-field {
+  color: var(--color-text-secondary);
+  font-style: italic;
+}
+
+/* Contact-card preview (M4, SPEC §10.2, §10.3) */
+.contact-card-preview {
+  list-style: none;
+  margin: 0 0 var(--space-3);
+  padding: 0;
+}
+
+.contact-card-preview > li {
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.contact-card-preview > li:last-child {
+  border-bottom: none;
+}
+
+.contact-card-label {
+  margin: 0;
+  font-weight: 700;
+}
+
+.contact-card-value {
+  margin: 0.15rem 0 0;
+}

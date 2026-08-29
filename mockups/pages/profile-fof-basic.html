@@ -1,0 +1,56 @@
+{{var title=David Dudek — About, friend-of-friend view}}
+<p>David's profile, as seen by <strong>Jordan</strong> — a friend-of-friend of David's, not a
+friend. Jordan knows both Alice and Tom, David's own friends, which is enough on its own to
+unlock the basic tier (§9.2); Jordan shares no profile hashtag with David, so nothing is added
+on top of it (contrast <a href="profile-fof-tagged.html">the tagged friend-of-friend view</a>,
+where a shared hashtag does add filtered posts).</p>
+
+<header class="profile-header">
+<img class="profile-photo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNDAgMjQwIj48cmVjdCB3aWR0aD0iMjQwIiBoZWlnaHQ9IjI0MCIgZmlsbD0iI2U1ZTVlNSIvPjxjaXJjbGUgY3g9IjEyMCIgY3k9Ijk1IiByPSI0NSIgZmlsbD0iIzljOWM5YyIvPjxwYXRoIGQ9Ik00MCwyMzUgQzQwLDE3NSA3NSwxNTAgMTIwLDE1MCBDMTY1LDE1MCAyMDAsMTc1IDIwMCwyMzUgWiIgZmlsbD0iIzljOWM5YyIvPjwvc3ZnPg==" alt="David, smiling on a hiking trail in mid-afternoon light, slightly out of breath." width="120" height="120">
+<h1>David Dudek (formerly Dave Dudek)</h1>
+<button type="button" class="button profile-report">Report this profile</button>
+</header>
+
+<p class="session-note">No tab strip appears below the header, and this is deliberate rather
+than missing markup. Jordan qualifies for exactly one tab's worth of content — About — and §9.1
+is explicit about what happens then: "a tab is rendered only where this viewer has something in
+it, and when only one tab qualifies, no tab strip is drawn at all — a lone tab reads as a broken
+interface."</p>
+
+<h2>About</h2>
+
+<h3>Short bio</h3>
+<p>Dad, hiker, mediocre baker who peaked at loaf six. Up for coffee or a walk most weekends.
+Find the rest of the story at weebee dash social dot com.</p>
+<p class="session-note">The same short bio a friend sees (compare
+<a href="profile-about.html">Alice's About tab</a>) — the short bio lives at the basic tier, so
+unlike posts it does not vary by viewer tier (§9.2, §9.4). It stays plain, unobfuscated text
+with nothing to click, exactly as it does for a friend.</p>
+
+<h3>Interests</h3>
+<ul class="hashtag-list">
+<li><a href="discover-tag.html">#hiking</a></li>
+<li><a href="discover.html">#jazz</a></li>
+<li><a href="discover.html">#cornwall</a></li>
+<li><a href="discover.html">#baking</a></li>
+</ul>
+<p class="session-note">Profile hashtags are visible at the basic tier regardless of whether the
+viewer shares any of them (§9.2) — Jordan sees all four even though none match. Clicking one
+opens the discover page filtered to that tag (§11.2); only #hiking has a filtered example built
+this session, so it alone links to <a href="discover-tag.html">discover-tag.html</a> — the other
+three link to the unfiltered discover page as a placeholder target, the same forward-reference
+convention this track has used since M1's nav.</p>
+
+<h3>People you both know</h3>
+<p>Knows Alice and Tom.</p>
+<p class="session-note">The specific mutual friends Jordan and David share, named rather than
+counted, exactly two so the "and others" overflow form does not apply here (§9.2, §11.5).
+David's other friends, and anything about them, stay invisible to Jordan.</p>
+
+<p class="profile-nonfriend-note">You and David are not friends. Friends see his posts, photos
+and about section.</p>
+<p class="session-note">This line renders unconditionally, whether or not David has ever posted
+(§9.1), and sits below the content rather than above it — leading with it "makes the page read
+as a refusal rather than a profile." No gallery and no extended bio appear anywhere above, and
+nothing marks their absence: a placeholder for hidden content would tell Jordan there is
+something to miss (§9.2).</p>

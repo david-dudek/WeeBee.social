@@ -1,0 +1,60 @@
+{{var title=Preview as a friend-of-friend}}
+<h1>Preview — as a friend-of-friend</h1>
+<p>SPEC §9.5, mode 2: the basic tier, exactly as any friend-of-friend with a mutual friend but no
+shared hashtag would see it — the same content <a href="profile-fof-basic.html">Jordan's actual
+page</a> already renders for one real example. What this preview cannot show for real is
+<em>which</em> mutual friends a given friend-of-friend shares with David, since that depends on
+who they turn out to be — David cannot enumerate his own friends-of-friends (§9.5) — so that one
+line is a placeholder here, and only here.</p>
+
+<div class="notice">
+<p><strong>Preview — viewing as a generic friend-of-friend.</strong> Read-only: nothing here is
+saved, sent, or visible to anyone but David. <a href="profile.html">Exit preview</a></p>
+</div>
+
+<h2>Profile, as a friend-of-friend would see it</h2>
+
+<header class="profile-header">
+<img class="profile-photo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNDAgMjQwIj48cmVjdCB3aWR0aD0iMjQwIiBoZWlnaHQ9IjI0MCIgZmlsbD0iI2U1ZTVlNSIvPjxjaXJjbGUgY3g9IjEyMCIgY3k9Ijk1IiByPSI0NSIgZmlsbD0iIzljOWM5YyIvPjxwYXRoIGQ9Ik00MCwyMzUgQzQwLDE3NSA3NSwxNTAgMTIwLDE1MCBDMTY1LDE1MCAyMDAsMTc1IDIwMCwyMzUgWiIgZmlsbD0iIzljOWM5YyIvPjwvc3ZnPg==" alt="David, smiling on a hiking trail in mid-afternoon light, slightly out of breath." width="120" height="120">
+<p class="profile-preview-name">David Dudek (formerly Dave Dudek)</p>
+<button type="button" class="button profile-report">Report this profile</button>
+</header>
+<p class="session-note">No tab strip appears, for the same reason it does not on
+<a href="profile-fof-basic.html">Jordan's actual page</a>: a plain friend-of-friend qualifies
+for exactly one tab's worth of content, and §9.1 draws no strip at all for a lone tab. The
+report action still renders — it is exactly what a real friend-of-friend would see in this
+header, and preview-as changes who is looking, never what they would see (§9.5).</p>
+
+<h3>About</h3>
+
+<h4>Short bio</h4>
+<p>Dad, hiker, mediocre baker who peaked at loaf six. Up for coffee or a walk most weekends.
+Find the rest of the story at weebee dash social dot com.</p>
+
+<h4>Interests</h4>
+<ul class="hashtag-list">
+<li><a href="discover-tag.html">#hiking</a></li>
+<li><a href="discover.html">#jazz</a></li>
+<li><a href="discover.html">#cornwall</a></li>
+<li><a href="discover.html">#baking</a></li>
+</ul>
+
+<h4>People you both know</h4>
+<p class="placeholder-field">[The specific mutual friends would appear here, by name — which
+names depends on which friend-of-friend is actually looking]</p>
+<p class="session-note">This bracketed text is a preview-tool placeholder, not the "hidden
+content" placeholder §9.2 forbids on a real profile: nothing real is being concealed here,
+because there is no real viewer on the other end of a preview — David is rehearsing a
+hypothetical one. On <a href="profile-fof-basic.html">Jordan's real page</a> this line is not a
+placeholder at all; it names Alice and Tom outright.</p>
+
+<p class="profile-nonfriend-note">You and David are not friends. Friends see his posts, photos
+and about section.</p>
+
+<h2>There is no "preview as a specific friend-of-friend" mode</h2>
+<p>Deliberately absent, per SPEC §9.5: "the owner cannot enumerate their FoFs, and offering that
+picker would leak a friend list in the opposite direction." A picker here would ask David to
+name someone he is not permitted to know exists as a distinct person — the platform enforces
+that boundary by never offering the control, not by asking him not to use it. Contrast
+<a href="preview-as-friend.html">preview as a friend</a>, where a picker over the friend list is
+exactly right, because a friend list is the owner's own to see in the first place.</p>

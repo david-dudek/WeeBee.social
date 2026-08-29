@@ -1,0 +1,60 @@
+{{var title=Preview — friend request card}}
+<h1>Preview — friend request card</h1>
+<p>SPEC §9.5, mode 4: not a profile view, but the highest-consequence view of the short bio and
+photo — the card §5.2 pushes to up to 20 people a day who never asked for it, shown here exactly
+as one of them would see it. Session M5 builds the card as its recipient actually receives it
+(with the accept/decline controls); this page is only David's own preview of that same card.</p>
+
+<div class="notice">
+<p><strong>Preview — as a friend request would appear to its recipient.</strong> Read-only:
+nothing here is saved, sent, or visible to anyone but David. <a href="profile.html">Exit
+preview</a></p>
+</div>
+
+<h2>The card, as a recipient would see it</h2>
+<p>Per §9.1's field table, this card is a deliberate mix of frozen and live fields — "a security
+boundary, not a rendering detail." Each field below is labelled with its source rather than
+leaving the split to be inferred.</p>
+
+<div class="profile-header">
+<img class="profile-photo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNDAgMjQwIj48cmVjdCB3aWR0aD0iMjQwIiBoZWlnaHQ9IjI0MCIgZmlsbD0iI2U1ZTVlNSIvPjxjaXJjbGUgY3g9IjEyMCIgY3k9Ijk1IiByPSI0NSIgZmlsbD0iIzljOWM5YyIvPjxwYXRoIGQ9Ik00MCwyMzUgQzQwLDE3NSA3NSwxNTAgMTIwLDE1MCBDMTY1LDE1MCAyMDAsMTc1IDIwMCwyMzUgWiIgZmlsbD0iIzljOWM5YyIvPjwvc3ZnPg==" alt="David, smiling on a hiking trail in mid-afternoon light, slightly out of breath." width="120" height="120">
+<p class="profile-preview-name">David Dudek (formerly Dave Dudek)</p>
+<button type="button" class="button profile-report">Report this profile</button>
+</div>
+<p class="session-note"><strong>Profile photo — frozen at send time (§5.2).</strong> A stored
+copy from the moment this request would be sent, not a pointer to the current image; a later
+photo change never reaches a card already delivered. <strong>Display name — live</strong>,
+rendered through the shared helper (§4.5.1); names are never stored on content, so the dual
+"(formerly …)" form here tracks David's real, current transition state, not whatever it was at
+send time. <strong>Report action — live</strong>, targeting David's current profile rather than
+the frozen snapshot (§13.2) — it renders here because it is exactly what a real recipient would
+see on this card, not because David could ever see it on his own profile otherwise.</p>
+
+<h3>Short bio</h3>
+<p>Dad, hiker, mediocre baker who peaked at loaf six. Up for coffee or a walk most weekends.
+Find the rest of the story at weebee dash social dot com.</p>
+<p class="session-note"><strong>Frozen at send time (§5.2).</strong> The same reason as the
+photo: a later bio edit does not rewrite a request already sent. This is also the field
+<code>REQUEST_HOLD_AFTER_PROFILE_CHANGE_HOURS</code> (§13.6) holds sending after — the card is
+frozen at the far end and the sender is held at the near end, so neither a stale card nor a
+freshly rewritten one can exist.</p>
+
+<h3>Shared profile hashtags</h3>
+<p class="placeholder-field">[The hashtags David and the recipient have in common would appear
+here — which ones depends on the recipient's own profile]</p>
+<p class="session-note"><strong>Live (§9.1).</strong> Computed against the recipient's own
+current profile hashtags at view time, which is exactly why no concrete example can be shown
+here: there is no real recipient in a preview, only a hypothetical one.</p>
+
+<h3>Mutual friends</h3>
+<p class="placeholder-field">[The mutual friends David and the recipient share would appear
+here, by name — which names depends on the recipient, and is subject to §5.4]</p>
+<p class="session-note"><strong>Live (§9.1).</strong> Computed per recipient at view time, and
+subject to blocking (§5.4) — the same reason mode 2's and mode 3's mutual-friend lines are
+placeholders here rather than real names.</p>
+
+<p class="session-note">The frozen pair above — photo and short bio — is exactly the pair
+§13.6's send hold covers, and for the same reason stated in §9.1: they are the only
+author-controlled content the platform pushes at someone who has not yet agreed to be David's
+friend. Nothing else on this card can be rewritten between batches of requests, so nothing else
+needs freezing.</p>

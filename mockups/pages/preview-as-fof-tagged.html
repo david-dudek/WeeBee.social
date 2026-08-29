@@ -1,0 +1,110 @@
+{{var title=Preview as a tagged friend-of-friend}}
+<h1>Preview — as a friend-of-friend carrying a hashtag</h1>
+<p>SPEC §9.5, mode 3: a picker over "the tags present on the owner's own profile and pinned
+posts" — the only set that can change the result, since any other tag collapses to mode 2. Shows
+Blog and Pinned filtered exactly as §11.3 filters them for a real viewer. "This is the tier
+nobody can compute unaided," per §9.5, and was missing from every version of this document
+before v1.16.</p>
+
+<fieldset>
+<legend>Preview as a friend-of-friend carrying which hashtag?</legend>
+<div class="option-list">
+<div class="option-row">
+<input type="radio" id="preview-tag-hiking" name="preview-tag" checked>
+<label for="preview-tag-hiking">#hiking</label>
+</div>
+<div class="option-row">
+<input type="radio" id="preview-tag-jazz" name="preview-tag">
+<label for="preview-tag-jazz">#jazz</label>
+</div>
+<div class="option-row">
+<input type="radio" id="preview-tag-cornwall" name="preview-tag">
+<label for="preview-tag-cornwall">#cornwall</label>
+</div>
+<div class="option-row">
+<input type="radio" id="preview-tag-baking" name="preview-tag">
+<label for="preview-tag-baking">#baking</label>
+</div>
+</div>
+</fieldset>
+<p class="session-note">Exactly the four tags on David's own profile; his one pinned post
+carries none of its own, so the picker adds nothing beyond them this time. A static page can
+only render one selected state — #hiking is shown checked below, matching
+<a href="profile-fof-tagged.html">Priya's own real page</a>, which happens to carry the same
+tag. Choosing #jazz, #cornwall or #baking here would filter to whichever of David's posts (if
+any) carry that tag instead; none of the posts in this mockup's small cast of content happen to.</p>
+
+<div class="notice">
+<p><strong>Preview — viewing as a friend-of-friend carrying #hiking.</strong> Read-only: nothing
+here is saved, sent, or visible to anyone but David. <a href="profile.html">Exit preview</a></p>
+</div>
+
+<h2>Profile, as a #hiking friend-of-friend would see it</h2>
+
+<header class="profile-header">
+<img class="profile-photo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNDAgMjQwIj48cmVjdCB3aWR0aD0iMjQwIiBoZWlnaHQ9IjI0MCIgZmlsbD0iI2U1ZTVlNSIvPjxjaXJjbGUgY3g9IjEyMCIgY3k9Ijk1IiByPSI0NSIgZmlsbD0iIzljOWM5YyIvPjxwYXRoIGQ9Ik00MCwyMzUgQzQwLDE3NSA3NSwxNTAgMTIwLDE1MCBDMTY1LDE1MCAyMDAsMTc1IDIwMCwyMzUgWiIgZmlsbD0iIzljOWM5YyIvPjwvc3ZnPg==" alt="David, smiling on a hiking trail in mid-afternoon light, slightly out of breath." width="120" height="120">
+<p class="profile-preview-name">David Dudek (formerly Dave Dudek)</p>
+<button type="button" class="button profile-report">Report this profile</button>
+</header>
+
+<p class="session-note">A real tab strip does not appear here: on the live profile, About and
+Blog would be two separate tab URLs, exactly as they are two separate tabs on
+<a href="profile-fof-tagged.html">Priya's real page</a> (§9.1 requires tabs to be links to
+separate URLs, never a scripted widget). This single preview page shows both sections stacked
+instead, so that choosing a tag above and reading its effect below can happen on one screen.
+Pinned is not rendered at all, in preview or in reality: David's only pinned post carries no
+hashtag, so nothing of a #hiking viewer's profile matches it there, and a tab with nothing to
+show is not rendered — the same omission Priya's real page demonstrates. This preview does not
+invent a pinned match just to show a third section; it reflects the true current state of
+David's own content, which is the entire point of previewing it.</p>
+
+<h3>About</h3>
+
+<h4>Short bio</h4>
+<p>Dad, hiker, mediocre baker who peaked at loaf six. Up for coffee or a walk most weekends.
+Find the rest of the story at weebee dash social dot com.</p>
+
+<h4>Interests</h4>
+<ul class="hashtag-list">
+<li><a href="discover-tag.html">#hiking</a></li>
+<li><a href="discover.html">#jazz</a></li>
+<li><a href="discover.html">#cornwall</a></li>
+<li><a href="discover.html">#baking</a></li>
+</ul>
+
+<h4>People you both know</h4>
+<p class="placeholder-field">[The specific mutual friends would appear here, by name — which
+names depends on which friend-of-friend is actually looking]</p>
+<p class="session-note">A placeholder for the same reason mode 2's is: no real viewer exists to
+compute this against (§9.5). On Priya's own real page this line names Alice outright.</p>
+
+<h3>Blog</h3>
+<p>Only David's posts carrying #hiking reach a #hiking-carrying friend-of-friend — filtered
+exactly as §11.3 filters them for Priya's real page.</p>
+
+<ol class="feed-list">
+<li>
+<article class="post" aria-label="Post by David, several days ago">
+<p class="post-meta">
+<span class="post-age">Several days ago</span>
+</p>
+<div class="post-body">
+<p>Back from three days on the Cornwall coast path — legs are done, but I'd do the whole thing again tomorrow. Already thinking about where next.</p>
+</div>
+<p class="post-visibility">Visible to: all of David's friends, and friends-of-friends with
+<strong>any of</strong> <a href="discover-tag.html">#hiking</a>, #jazz.</p>
+</article>
+<p class="session-note">The same post, and the same filtering rule, that
+<a href="profile-fof-tagged.html">Priya's real page</a> renders — this preview and that real page
+should always agree, since both come from the one component §9.1's basic-tier invariant
+requires, fed from the owner's own live rows either way (§9.1: "§9.5's preview-as mode 4 is the
+same component fed from live rows, and is the standing proof that it takes either source" —
+true of mode 3 here as well).</p>
+</li>
+</ol>
+
+<p class="session-note">Comments and reactions are not reproduced in this preview. What a
+#hiking-carrying friend-of-friend would see there is exactly what
+<a href="profile-fof-tagged.html">Priya's own page</a> already demonstrates in full — a plain
+text name for anyone this hypothetical viewer has no connection to (§8.1) — and it is not
+duplicated a second time here.</p>

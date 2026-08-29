@@ -74,7 +74,34 @@ alone carries Previous/Next controls (SPEC §7.2.2, §9.4, §16.3).</li>
 
 <div class="session-group">
 <h2>M4 — Non-friend profile views, discover, friends, preview-as</h2>
-<p class="not-built">Not yet built.</p>
+<ul>
+<li><a href="profile-fof-basic.html">Profile — a plain friend-of-friend's view</a> — the basic
+tier only, header plus About, and nothing else: no tab strip at all, since a lone qualifying tab
+draws none; the unconditional "you and David are not friends" line below the content, never
+above it; no gallery, no extended bio, and no placeholder marking either absence (SPEC §9.1,
+§9.2).</li>
+<li><a href="profile-fof-tagged.html">Profile — a hashtag-matched friend-of-friend's view</a> —
+basic tier plus the one profile post that carries a shared hashtag, filtered with no placeholder
+for what doesn't match; a two-tab strip (About, Blog) with Pinned itself omitted because
+nothing pinned matches; comments visible with a commenter's name rendering as plain text where
+this viewer has no connection to them (SPEC §9.2, §11.3, §8.1).</li>
+<li><a href="discover.html">Discover</a> and <a href="discover-tag.html">Discover, filtered to
+a tag</a> — the one dedicated, pull-only discovery surface: friend-of-friend people suggestions
+with auto-context, hashtag-gated matched posts, and the viewer-scoped tag filter reached by
+clicking a tag anywhere; no counts, no global tag browsing, and nothing pushed to the feed or
+announced to anyone (SPEC §11.2, §11.3, §11.4).</li>
+<li><a href="friends.html">Friends</a> — the user's own friend list, alphabetical by display
+name and no other order, with a filter box carrying the required visible label "Filter your
+friends"; no friend count anywhere on the page (SPEC §11.6, §17).</li>
+<li><a href="preview-as-friend.html">Preview-as — a specific friend</a>,
+<a href="preview-as-fof.html">a generic friend-of-friend</a>,
+<a href="preview-as-fof-tagged.html">a friend-of-friend carrying a chosen hashtag</a>, and
+<a href="preview-as-request-card.html">the friend-request card</a> — all four required
+preview-as modes, each marked with a persistent real-text banner and an "Exit preview" link; the
+per-friend contact-card cascade; the deliberately absent "as a specific friend-of-friend" mode,
+explained rather than built; and the frozen-versus-live field split on the request card, stated
+field by field (SPEC §9.5, §10.3, §5.2).</li>
+</ul>
 </div>
 
 <div class="session-group">

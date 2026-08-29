@@ -1,0 +1,56 @@
+{{var title=Discover}}
+<h1>Discover</h1>
+<p>SPEC §11.4: "One dedicated page the user must deliberately visit." Pull-only — nothing here
+is pushed anywhere else. No suggestion, match or visit is ever mentioned in the feed, nothing is
+ever announced to anyone, and there is no "someone viewed you" in either direction (§11.4).</p>
+
+<h2>People you may know</h2>
+<p>Friends-of-friends only — never a stranger three hops away, which is a permanent ceiling, not
+a setting (§11.1). Each is ranked by shared mutual friends and shared profile hashtags and shown
+with auto-context, exactly in the form SPEC's own example gives: "knows Alice and Tom · shares
+#hiking."</p>
+<ul class="discover-people-list">
+<li>
+<a href="profile.html">Priya</a>
+<p class="discover-context">Knows Alice · shares <a href="discover-tag.html">#hiking</a></p>
+</li>
+<li>
+<a href="profile.html">Jordan</a>
+<p class="discover-context">Knows Alice and Tom</p>
+</li>
+</ul>
+<p class="session-note">No rank number, match score, or count is shown for either suggestion —
+none exists anywhere on this page (§17). Jordan's context line carries no "shares #x" clause at
+all, because Jordan and David share no hashtag: the auto-context states only what is actually
+true, never a placeholder for a match that isn't there.</p>
+
+<h2>Matched posts</h2>
+<p>Hashtag-gated profile posts from friends-of-friends who share a tag with David (§11.3) — the
+same gate that governs <a href="profile-fof-tagged.html">what Priya sees on David's own
+profile</a>, running in the other direction.</p>
+<ol class="feed-list">
+
+<li>
+<article class="post" aria-label="Post by Priya, a few days ago">
+<p class="post-meta">
+<span class="post-author">Priya</span>
+<span class="post-age">A few days ago</span>
+</p>
+<div class="post-body">
+<p>Did the coast path again this weekend, other direction this time. Still brutal, still worth it.</p>
+</div>
+<p class="post-visibility">Visible to: all of Priya's friends, and friends-of-friends with
+<strong>any of</strong> <a href="discover-tag.html">#hiking</a>.</p>
+</article>
+<p class="session-note">David sees this because he and Priya are friends-of-friends through
+Alice, Priya tagged the post #hiking, and #hiking is one of David's own profile hashtags —
+exactly the §11.3 rule that let Priya see David's Cornwall post, evaluated the other way.</p>
+</li>
+
+</ol>
+
+<p class="session-note">Nothing above is a count, a rank, or a "you matched!" moment. Nothing on
+this page suggests a push, a notification, or that anyone has been told David visited (§11.4).
+There is also no way to browse #jazz, #cornwall or #baking globally from here, or from anywhere
+else on the platform — the only tag view that exists is the viewer-scoped filter below, reached
+by clicking a tag, never a standing "all posts" list (§11.2, §17).</p>

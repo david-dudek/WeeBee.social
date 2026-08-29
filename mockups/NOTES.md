@@ -319,3 +319,117 @@ for most other interface strings on the platform.
 per this track's standing rule for filling a gap the documents leave silent. Recorded because
 it is easy to mistake for a verbatim SPEC string when it is not — unlike, say, the friends
 page's "Filter your friends" (§11.6), which is quoted directly.
+
+---
+
+## 18. Priya's status contradicts itself between M2 and M3 — not a SPEC contradiction, a mockup-cast one
+
+**Session:** M4, discovered while building the pages this session depends on Priya for.
+**Surface:** `pages/profile-about.html` (M3) versus `pages/post-profile-tagged.html` (M2) and
+CRIB.md §3.
+
+M2 built Priya specifically as a **friend-of-friend** of David's, never a direct friend —
+NOTES.md's own entry 12 spends a full paragraph establishing why that departure from "every
+mockup renders David's view" was necessary, and CRIB.md's cast table describes her exactly that
+way. M3's `profile-about.html`, built later, lists David and Alice's mutual friends for the
+§11.5 "people you both know" line as "Tom, Mom and Priya" — which can only be true if Priya is
+herself a **direct friend** of David's, since a mutual friend of David and Alice must be friends
+with both of them. The two sessions' own established facts about the same named character
+disagree with each other. This is not a contradiction inside SPEC.md or ARCHITECTURE.md — it is
+one this track introduced across two of its own sessions, and the standing instruction to record
+a contradiction and build on regardless applies to it just the same.
+
+**Drawn:** M4 needed Priya to be a genuine friend-of-friend for its own pages to mean anything —
+§9.2's tagged tier is vacuous for a viewer who already holds full friend access — so M4
+**continues M2's characterization** rather than M3's: Priya remains connected to David through
+exactly one mutual friend, Alice, on every page this session builds
+(`profile-fof-tagged.html`, `discover.html`, `discover-tag.html`). M3's `profile-about.html` is
+outside this session's touched files and is not corrected here. A founder decision is needed on
+which of the two facts about Priya is the real one; until then, the two already-built mockups
+disagree about her, and this entry is the map of exactly where.
+
+---
+
+## 19. §5.4's mutually-invisible blocked pair cannot be shown as a page — captioned, not faked
+
+**Session:** M4. **Surface:** `pages/profile-fof-tagged.html`.
+
+§5.4 makes blocking fully mutually invisible per pair: a comment on a post can be visible to one
+viewer of that post and invisible to a second viewer, with every other viewer seeing it
+normally. Demonstrating that literally would require rendering the *same* post twice on the
+*same* page, once as each of two different blocked viewers would see it — which a static mockup
+showing one viewer's page at a time cannot do without either faking a second viewer's session or
+silently pretending the rule doesn't exist.
+
+**Drawn:** neither. `profile-fof-tagged.html` renders Priya's one real view in full, exactly as
+every other page in this track renders its one viewer, and carries a session-note captioning the
+limitation directly rather than fabricating a second rendering to illustrate it. Recorded here
+per the M4 prompt's own explicit instruction to caption this on the page rather than fake it.
+
+---
+
+## 20. `profile-fof-tagged.html` is a single file standing in for one tab of a three-tab tier
+
+**Session:** M4. **Surface:** `pages/profile-fof-tagged.html`, contrast M3's four separate
+per-tab files for the friend view.
+
+§9.2's third tier can carry up to three tabs (About, Blog, Pinned), and M3 built one file per
+tab for the friend tier it covered. The M4 prompt, by contrast, asks for exactly **one** file for
+this tier: `profile-fof-tagged.html`. Comments must be shown on a visible post for this page to
+satisfy its own requirements, and comments only exist on Blog/Pinned content, so a single file
+cannot be the About tab; it has to be one of the other two.
+
+**Drawn:** the one file renders the **Blog tab**, since that is where the established
+Cornwall-coast-path post and its comments (built in M2) already live, giving this session a real
+post to filter to rather than inventing a new one. Its tab strip links an About tab at
+`profile-fof-tagged-about.html`, not built this session — an assumed, forward-referenced
+filename in the same spirit as every other unbuilt link this track has carried since M1's nav
+(see CRIB.md §5). The Pinned tab is not linked at all: David's only pinned post carries no
+hashtag, so nothing of Priya's profile matches it, and per §9.2 a tab with nothing to show is not
+rendered. That happens to make the real, current-data case a **two**-tab strip (About, Blog)
+rather than the tier's three-tab ceiling — a truer demonstration of "each tab omitted if nothing
+matches" than inventing a matching pinned post would have been, and it is left that way rather
+than padded out to look like the maximum case.
+
+---
+
+## 21. The tag-filtered discover view is one hardcoded example, not a generic filter
+
+**Session:** M4. **Surface:** `pages/discover-tag.html`, and every hashtag link across this
+session's own new pages.
+
+§11.4's tag filter is, in the real product, a live view parameterized by whichever tag was
+clicked. A static mockup with no scripts and no server cannot build one page per vocabulary
+entry, and building even a handful of near-identical filtered pages would be padding, not
+fidelity — the same reasoning `post-preformatted.html` and other single-example pages in this
+track already rest on.
+
+**Drawn:** `discover-tag.html` is one concrete worked example, hardcoded to `#hiking` — the tag
+already load-bearing elsewhere in this track's cast (Priya's match, §11.3). Every hashtag link
+this session adds across its own new pages points to `discover-tag.html` when the tag is
+#hiking, and to the plain, already-established `discover.html` placeholder for #jazz, #cornwall
+and #baking, consistent with the forward-reference convention this track has used since M1's
+nav. M3's own hashtag links (`profile-about.html` and its siblings) are untouched, since they
+sit outside this session's files; they continue pointing every tag, #hiking included, at plain
+`discover.html`.
+
+---
+
+## 22. A preview-as page's own `<h1>` displaces the previewed profile's name from that role
+
+**Session:** M4. **Surface:** all four `preview-as-*.html` pages.
+
+§16.3 requires the real profile page's one `<h1>` to be the owner's display name, in the
+persistent header. A preview-as page is a different kind of page — a tool wrapped around a
+rendering of that same profile — and the standing accessibility checklist this track has
+followed since M1 requires exactly one `<h1>` per page. The two rules collide the moment a
+preview page needs to both name itself ("Preview — as a friend") and show what would, on the
+real page, be another `<h1>`.
+
+**Drawn:** each preview-as page's own `<h1>` names the preview tool itself; the previewed
+profile's display name renders as styled text sized and weighted to match a profile header's
+`<h1>` (`.profile-preview-name` in `styles.css`), not as a second heading of any level. This
+keeps every page's heading outline strictly nested (SPEC §16.3, WCAG 1.3.1) without contradicting
+the "exactly one `<h1>`" rule the smoke tests of §16.5 check for. Recorded because it is a
+structural choice specific to this new page type, not a literal instance of anything SPEC
+describes.

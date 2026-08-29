@@ -173,6 +173,29 @@ mutual friends for the About tab's §11.5 line are Tom, Mom and Priya (three, so
 "and others" form applies). Later sessions building another friend's view of a profile should
 either reuse Alice or record their own choice here.
 
+**M4 discovers, and does not resolve, a contradiction in Priya's own established status** — see
+NOTES.md's new entry on this. M2 built Priya explicitly as a **friend-of-friend**, not a friend
+(matched with David on #hiking through Alice); M3's About-tab mutual-friends line then listed
+Priya as one of *David and Alice's* mutual friends, which can only be true if Priya is David's
+direct friend. M4 needs Priya to be a FoF for its own pages to make sense (§9.2's tagged tier is
+meaningless for someone who already has full friend access), so **M4 continues M2's
+characterization**: Priya remains a friend-of-friend of David's, connected only through Alice,
+with exactly one mutual friend (Alice) between her and David. Priya's own profile carries
+#hiking, which is how she both matches David's Cornwall post (M2) and appears as a discover
+suggestion and a tagged-post author (M4, <code>discover.html</code>).
+
+**M4 adds a sixth name, Jordan**, a plain friend-of-friend of David's — knows both Alice and Tom
+(two mutual friends with David, the pair SPEC's own §9.2/§11.4 worked examples use verbatim:
+"knows Alice and Tom") but shares no profile hashtag with David, which is what keeps Jordan at
+the basic tier rather than the tagged one. Used on <code>profile-fof-basic.html</code> and as a
+no-hashtag-match discover suggestion on <code>discover.html</code>.
+
+**M4 adds five more names purely to give <code>friends.html</code>'s alphabetical list and
+filter box something real to sort and filter**: Ben, Grace, Henry, Nadia, Sofia — plain display
+names with no further backstory, listed alongside Alice, Mom and Tom. Priya and Jordan are not
+among them: both are friends-*of*-friends, never friends themselves, so neither belongs on
+David's own friend list.
+
 ---
 
 ## 4. Relative-age ladder (SPEC §7.5.1) — phrases in use
@@ -246,3 +269,20 @@ target is left unresolved, as entry 8 anticipated; M3 did not rename or retarget
 files. `profile-about.html`'s hashtag links point at the plain `discover.html` target already
 assumed by M1's nav (no filter query-string convention is established by any session yet — left
 for M4, which builds discover.html itself).
+
+**M4 builds nine pages** and establishes the filtered-tag-view convention `discover.html` left
+open: `profile-fof-basic.html`, `profile-fof-tagged.html`, `discover.html`, `discover-tag.html`,
+`friends.html`, `preview-as-friend.html`, `preview-as-fof.html`, `preview-as-fof-tagged.html`,
+`preview-as-request-card.html`. **The tag-filter convention**: since a static mockup cannot
+build a filtered view per tag, `discover-tag.html` is one concrete worked example, hardcoded to
+`#hiking`. A hashtag link elsewhere in this session's own new pages points to
+`discover-tag.html` when the tag is #hiking, and to the plain `discover.html` (same
+unbuilt-placeholder treatment as ever) for #jazz, #cornwall and #baking — this session did not
+retarget M3's own hashtag links, which stay on `discover.html` for every tag, since
+`profile-about.html` and its siblings are outside M4's touched files (same boundary M3 drew
+around M1/M2). **One more forward reference**: `profile-fof-tagged.html`'s tab strip links its
+About tab to `profile-fof-tagged-about.html`, not built this session — `profile-fof-tagged.html`
+itself is a single file standing in for the Blog-tab instance of the tagged friend-of-friend
+view (see NOTES.md), and the About-tab instance is left as an assumed filename for whichever
+session or founder decision picks it up, the same treatment M1's nav gave `friends.html` and
+`discover.html` themselves before this session existed.
