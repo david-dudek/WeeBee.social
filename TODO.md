@@ -377,6 +377,22 @@ where noted. Recorded here so they are not raised again as new.
   2 a.m. scenarios.)"* No reviewer answered it; prompt 04 did. ARCHITECTURE §7.2–§7.4 and
   §11.1 are the answer, and BUILD_PLAN §5.7, §16.6 and §17.3 are how it gets built. Recorded
   here so the question is not re-asked as though still open.
+- **Person-tagging: SPEC never addresses it (new, parked 2026-09-06, surfaced during
+  archetype-track planning).** Neither SPEC nor ARCHITECTURE describes any way to tag or
+  @-mention a person — in a post, in a photo, or by name — and every use of "tagged" in SPEC
+  means a hashtag; §17's non-goals list does not name it. This is a documentation gap, not a
+  proposal, and it is two questions rather than one: a **strong** version — a Facebook-style
+  tag that places the post on the tagged person's own profile and notifies their friends —
+  fails the No-Reach Test (§1.2) outright and is a one-line §17 entry; a **weak** version — a
+  label visible only to people who can already see the post, adding no audience, no
+  notification, no propagation — does *not* fail the No-Reach Test, so refusing it needs
+  different grounds: consent to have your name attached to someone else's content for up to
+  90 days (§7.5), and the §11.5 precedent against revealing a connection the viewer is not
+  already positioned to see. Entered here rather than left for `FINDINGS.md` as a deliberate
+  exception to `archetypes/PLAN.md` §10's rule that nothing routes into this file
+  automatically — the gap exists independent of whether the archetype track finishes,
+  `archetypes/PLAN.md` §9 already verified it directly against SPEC and ARCHITECTURE, and
+  several of the ten character reports are expected to reach it independently.
 
 ---
 
