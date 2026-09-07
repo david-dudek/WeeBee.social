@@ -44,10 +44,21 @@ Status values: `not run` · `in progress` · `done` · `deferred` · `dropped`
 | 10 | [Reactions: look, lifecycle, expiry](prompts/10-reactions.md) | SPEC §8.2, §7.6, §9.7, §14; ARCHITECTURE §4, §6 | 01 | done | 1.25 |
 | 11 | [Three internal contradictions in SPEC](prompts/11-spec-contradictions.md) | SPEC §9.1/§5.2, §7.9, §8.1, §8.2, §12.3, §7.5.1, §4.8; ARCHITECTURE Decision 4, §5, §9, §15 | 01 | done | 1.26 |
 | 12 | [What a ban actually does](prompts/12-moderation-outcomes.md) | SPEC §13.2 (new §13.2.1), §4.7, §4.8, §9.3, §12.1, §13.4 | 01 | done | 1.27 |
-| 09 | [The sync: ARCHITECTURE + BUILD_PLAN to current SPEC](prompts/09-sync-arch-and-buildplan.md) | ARCHITECTURE, BUILD_PLAN | **02–08, 10–12** | not run | |
+| 14 | [The gathering test](prompts/14-the-gathering-test.md) | SPEC §1.1/§1.3; README | — | not run | |
+| 13 | [The delegation principle & the link policy](prompts/13-delegation-and-link-policy.md) | SPEC §1.1/§1.3, §4.6.1, §7.2, §7.2.3, §7.8, §9.4, §10.2, §13.1, §14, §17; README; ARCHITECTURE §4, §7; BUILD_PLAN Steps 6.2a, 6.6, 8.1, 9.1, 13.3, 16.1 | 01, **14** | not run | |
+| 09 | [The sync: ARCHITECTURE + BUILD_PLAN to current SPEC](prompts/09-sync-arch-and-buildplan.md) | ARCHITECTURE, BUILD_PLAN | **02–08, 10–14** | not run | |
 
-**Run 09 last.** Prompts 02–08 and 10–12 may each amend SPEC and ARCHITECTURE; syncing
+**Run 09 last.** Prompts 02–08 and 10–14 may each amend SPEC and ARCHITECTURE; syncing
 BUILD_PLAN once against a settled SPEC means writing those build steps a single time.
+
+**Run 14 before 13.** Both add a **named principle** to SPEC §1.1/§1.3 and neither session can
+see what the other did. 14 is the smaller one and settles the shape — a numbered subsection in
+the manner of §1.2's No-Reach Test, or a §1.3 bullet — which 13 then matches. 13 also carries a
+follow-on for the `archetypes` branch (its §9) that is **not** a numbered prompt: the archetype
+interview track tells every character *"Links only from a list of approved sites"* and never
+mentions the door out, so `archetypes/PLAN.md` §4 fact 13 and `archetypes/BRIEF.md` §2 need
+restating and `archetypes/A7-susan.md` needs an interview-conduct rule before the remaining nine
+character prompts are written from it. **Do not re-run A7 before 13's decisions are made.**
 
 **Prompt 03 handed BUILD_PLAN work to 09 rather than doing it (1.19).** ARCHITECTURE §5 now
 specifies a larger engine than BUILD_PLAN describes — plural forms, a request-scoped memo,
