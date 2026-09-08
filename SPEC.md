@@ -1,7 +1,7 @@
 # WeeBee — Platform Specification
 
-**Project version:** 1.27 · 2026-08-18 · DRAFT — not yet founder-approved
-**This file last changed in:** 1.27 (new §13.2.1 defines the three moderation outcomes: a warning is an email and a record, a ban is §4.7's deactivation done to a person with an inert session that still reaches export and deletion, and neither deletes anything; §4.7, §4.8, §9.3, §12.1 and §13.4 follow)
+**Project version:** 1.28 · 2026-09-07 · DRAFT — not yet founder-approved
+**This file last changed in:** 1.28 (new §1.4 names the Gathering Test — the positive counterpart to §1.2's No-Reach Test: a question every feature must answer rather than a gate it must pass, bounded by the three features that already fail it and stay)
 **History:** see [CHANGELOG.md](CHANGELOG.md)
 **Purpose of this document:** The single authoritative description of what the platform is and how every feature behaves. It is written to be self-contained: a developer or an AI coding model with no access to prior conversations must be able to build from this document alone. Architecture, technology choices, and build steps live in separate documents (see §18).
 
@@ -34,6 +34,29 @@ What keeps it self-limiting rather than exploitable is that every hop must pay f
 - **Not a walled garden.** The platform does not try to own a relationship. Where a need is already well served by open, established channels — person-to-person messaging above all (§10.1) — WeeBee delegates rather than rebuilds, and makes the handoff cleanly. It aims to be one useful tool among many, never the place a user cannot leave (see also credible exit, §4.9).
 - **The platform never infers.** No behavioral profiling, no algorithmic ranking, no machine guesses about who matters to you. Users state their intent; the platform obeys it.
 - **Usable by everyone it invites.** Every surface conforms to WCAG 2.1 Level AA (§16). On an invite-only network of real friends and family, an inaccessible page does not inconvenience a user — it excludes a specific person from the specific people who vouched for them.
+
+### 1.4 The Gathering Test (v1.28)
+
+**The picture, in the founder's words:**
+
+> "When I envision WeeBee, I imagine being at a very large gathering of people, like a party, where there's ample space to move about the crowd and gather with small groups of people at a time, to have conversations. I think about what might be appropriate interactions in that situation. Showing a couple of photos of a vacation, the kids, your car, etc would be. Handing someone a stack of photo albums would not. I know that the large party gathering analogy doesn't hold everywhere in WeeBee, but I think it should be a guiding principle when discussing the features included."
+
+**The Gathering Test (apply to every current and future feature):** *Would this be a natural thing to do at that gathering?*
+
+**It asks; it does not refuse — and that is the one structural difference from §1.2.** The No-Reach Test is a gate: a feature that fails it is wrong for this platform, and there is nothing further to discuss. This is a question a feature must answer. **A feature that would be out of place at the gathering is not thereby wrong, but the reason for building it anyway must be written down in this document, beside the feature.** Three already are, below. That duty is what gives the test force without giving it a veto: it can never stop a decision, and it can stop an *undocumented* one — which is the failure this section exists to prevent, not the feature.
+
+**Two things it is not**, stated here because both misreadings are natural, both are damaging, and an unbounded analogy in a specification will be quoted later against something deliberate:
+
+- **It never argues that something absent ought to exist.** The test constrains the shape of a feature that has been proposed; it is not an inventory of a party to be filled in. "There is music at a party" is not an argument for audio hosting (§17), and "people step aside to talk privately at a party" is not an argument for direct messages — that question is settled by "not a walled garden" (§1.3) and §10.1, on entirely different grounds. A positive test read backwards becomes a feature generator, and this one is not.
+- **It governs what is appropriate to do, never the mechanics of delivery.** Nothing is pushed at you at a gathering; you walk up to a group. The feed is push, delivered to people who were not standing there at the time. That is not a failure of the test, and the feed is not an exception to it: §1.1 states that WeeBee exists for the times people *cannot* be together, so asynchrony is the platform's premise rather than a departure from its ethic.
+
+**Where it already fails, and the feature stays.** Naming these is what makes the principle safe to write down.
+
+- **The profile Blog tab (§9.1).** Nobody at a gathering maintains a standing display of their past remarks for others to browse later; that is a bulletin board in the lobby. It stays because "pull over push" (§1.3) requires somewhere for a broad audience to come *to* — a profile post has to live somewhere, and the only alternative is pushing it.
+- **Pinned posts (§7.6).** `PIN_LIMIT` = 10, exempt from expiry, and §7.6 calls pinning *"the deliberate, editorial act of preservation — the only one on the platform."* Knowingly not party behaviour, and knowingly kept.
+- **The contact card's per-item, per-friend visibility cascade (§10.3).** Exchanging numbers is squarely in the spirit; a three-level cascade with a deny-beats-allow conflict rule is far more deliberate and more granular than anything at a party. It stays for the reason §10.3 gives itself: accidental under-sharing is recoverable and accidental over-sharing is not, and the granularity is the price of that asymmetry.
+
+**What this section claims, and what it does not.** The analogy did not generate these decisions — they were made first and it accounts for them afterwards, which is weak evidence taken alone: one notices the cases an analogy fits and not the ones it is silent about. The narrower claim is the one worth having, and it is enough. A consistent intuition was already operating across §5.1, §7.1, §7.2, §8.2, §9.4 and §11.3, and it is now written down instead of being re-derived, feature by feature, in the local terms of whichever section happened to need it. That it independently locates the three departures above — each of which this document had already flagged as deliberate — and invents no fourth is the reason it earns a section rather than a sentence.
 
 ---
 

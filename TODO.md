@@ -44,8 +44,8 @@ Status values: `not run` · `in progress` · `done` · `deferred` · `dropped`
 | 10 | [Reactions: look, lifecycle, expiry](prompts/10-reactions.md) | SPEC §8.2, §7.6, §9.7, §14; ARCHITECTURE §4, §6 | 01 | done | 1.25 |
 | 11 | [Three internal contradictions in SPEC](prompts/11-spec-contradictions.md) | SPEC §9.1/§5.2, §7.9, §8.1, §8.2, §12.3, §7.5.1, §4.8; ARCHITECTURE Decision 4, §5, §9, §15 | 01 | done | 1.26 |
 | 12 | [What a ban actually does](prompts/12-moderation-outcomes.md) | SPEC §13.2 (new §13.2.1), §4.7, §4.8, §9.3, §12.1, §13.4 | 01 | done | 1.27 |
-| 14 | [The gathering test](prompts/14-the-gathering-test.md) | SPEC §1.1/§1.3; README | — | not run | |
-| 13 | [The delegation principle & the link policy](prompts/13-delegation-and-link-policy.md) | SPEC §1.1/§1.3, §4.6.1, §7.2, §7.2.3, §7.8, §9.4, §10.2, §13.1, §14, §17; README; ARCHITECTURE §4, §7; BUILD_PLAN Steps 6.2a, 6.6, 8.1, 9.1, 13.3, 16.1 | 01, **14** | not run | |
+| 14 | [The gathering test](prompts/14-the-gathering-test.md) | SPEC new §1.4; README | — | done | 1.28 |
+| 13 | [The delegation principle & the link policy](prompts/13-delegation-and-link-policy.md) | SPEC new §1.5 (shape set by §1.4), §4.6.1, §7.2, §7.2.3, §7.8, §9.4, §10.2, §13.1, §14, §17; README; ARCHITECTURE §4, §7; BUILD_PLAN Steps 6.2a, 6.6, 8.1, 9.1, 13.3, 16.1 | 01, **14 (done)** | not run | |
 | 09 | [The sync: ARCHITECTURE + BUILD_PLAN to current SPEC](prompts/09-sync-arch-and-buildplan.md) | ARCHITECTURE, BUILD_PLAN | **02–08, 10–14** | not run | |
 
 **Run 09 last.** Prompts 02–08 and 10–14 may each amend SPEC and ARCHITECTURE; syncing

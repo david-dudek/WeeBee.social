@@ -1,17 +1,35 @@
 # Prompt 13 — The delegation principle and the link policy
 
 > **Run in a fresh session.** Paste everything below the line.
-> **Touches:** SPEC §1.1/§1.3, §7.2, §7.2.3, §7.8, §9.4, §10.2, §4.6.1, §13.1, §14, §17;
+> **Touches:** SPEC new §1.5 + §1.3, §7.2, §7.2.3, §7.8, §9.4, §10.2, §4.6.1, §13.1, §14, §17;
 > README.md; ARCHITECTURE §4, §7; BUILD_PLAN Steps 6.2a, 6.6, 8.1, 9.1, 13.3, 16.1.
 > **Depends on:** 01. **Run BEFORE prompt 09** — 09 syncs ARCHITECTURE and BUILD_PLAN to the
 > current SPEC, and this prompt changes SPEC in several places 09 would otherwise have to
 > carry twice.
-> **Run AFTER prompt 14** (`14-the-gathering-test.md`). Both prompts add a **named principle**
-> to SPEC §1.1/§1.3, and neither can see what the other did. 14 is the smaller one and settles
-> the structural question — whether a named principle gets its own subsection in the shape of
-> §1.2's No-Reach Test, or a §1.3 bullet. Run it first and follow the shape it lands on, so §1
-> does not end up with two named principles in two different shapes for no reason. **Read §1.1
-> and §1.3 as they then stand before editing them here.**
+> **Prompt 14 has run (landed 1.28). The structural question is settled — here is the answer,
+> so this session does not have to re-derive it.** Both prompts add a named principle to SPEC §1;
+> 14 went first for exactly this reason.
+>
+> - **A named principle gets its own numbered subsection**, in the shape of §1.2's No-Reach Test —
+>   not a §1.3 bullet. 14's own reasoning for rejecting the bullet is the evidence already in the
+>   document: "not a walled garden" *is* a §1.3 bullet, and being one is why it went invisible.
+>   **That bullet is the thing this prompt exists to fix, so do not fix it by leaving it a bullet.**
+> - **Take §1.5.** §1.4 is the Gathering Test. §1.3 (Supporting principles) was deliberately *not*
+>   renumbered — doing so would have rewritten 17 live citations in SPEC, 2 in BUILD_PLAN and 5 in
+>   TODO, and broken six CHANGELOG entries. Do not renumber it now either; append at §1.5.
+> - **Match §1.4's form:** a short statement of the principle, then its binding strength stated
+>   **in the sentence rather than left to tone**, then the places it does not hold, named. §1.4 is
+>   a question a feature must answer, carrying a duty to write down the reason for any exception;
+>   §1.2 is a flat gate. **Decide explicitly which of those two the delegation principle is** — it
+>   may well be the gate, since unlike the gathering analogy it has no standing exceptions — and
+>   say so in the text. Two named principles in two shapes is fine when the shapes are *chosen*.
+> - **§1.3's "not a walled garden" bullet must not be left standing as a duplicate** of whatever
+>   §1.5 says. Replace it with a one-line pointer, or delete it and let §1.5 carry it.
+> - **README:** 14 added a positive-statement paragraph to "What the project is (60 seconds)" and
+>   a clause to "What is NOT up for review" that names the new principle while stating explicitly
+>   that it closes none of the caps. Follow that pattern rather than inventing a second one.
+>
+> **Read §1.1, §1.3 and the new §1.4 as they now stand before editing.**
 > **Expected outcome:** one design principle written down and named; the URL policy rewritten
 > around it; three downstream reconciliations made honestly; README given the paragraph it
 > is missing.
@@ -173,8 +191,11 @@ feature belongs — came out of the same conversation as everything else in this
 carried here in an early draft. **It is now `prompts/14-the-gathering-test.md`, to be discussed
 on its own.** Nothing in this prompt depends on it, and this session should not write it.
 
-The one thing to carry across: **prompt 14 also adds a named principle to SPEC §1.1/§1.3**, as
-§1 of this prompt does. Run 14 first and match the structure it settles on. See the header.
+**14 has now run and landed in 1.28**, as **SPEC §1.4 — the Gathering Test**. The structure it
+settled is in this prompt's header: a named principle takes its own numbered subsection, this one
+takes **§1.5**, §1.3 is not renumbered, and the binding strength goes in the sentence. Read §1.4
+before writing §1.5 — not to copy its argument, but so the two read as a pair rather than as two
+sessions that could not see each other.
 
 ## 5. The open decisions — put these to the founder first
 

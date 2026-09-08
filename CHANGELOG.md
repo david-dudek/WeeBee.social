@@ -105,6 +105,82 @@ no other trace.
 
 ---
 
+## 1.28 — 2026-09-07
+
+| File | Status |
+|---|---|
+| README.md | changed — the 60-second summary gains its first positive statement of what WeeBee is; "What is NOT up for review" names the new principle and states explicitly that it closes no cap |
+| SPEC.md | changed — new §1.4 names **the Gathering Test**, the positive counterpart to §1.2's No-Reach Test. No other section touched |
+| ARCHITECTURE.md | **unchanged** — version header only, and nothing is owed. See "Nothing downstream" below |
+| BUILD_PLAN.md | **unchanged** — version header only, and nothing is owed. See "Nothing downstream" below |
+| CHANGELOG.md | changed — this entry |
+
+From prompt 14. The founder, asked what guides his judgement about which features belong in WeeBee, described a mental model that appeared nowhere in any document: a very large gathering with room to move about and talk with small groups at a time, and the question of what is an appropriate thing to do there. Showing a couple of photos of a vacation is; handing someone a stack of photo albums is not. This entry writes it down.
+
+### Why it was worth a version
+
+SPEC already proved the mechanism. §1.2's **No-Reach Test** is cited by name in later sections, which then inherit its reasoning instead of re-deriving it. The counter-example sits in the same document: **"not a walled garden" (§1.3) is a real principle that was never named or given a test**, so §10.1, §17 and §7.2 each argue it again locally, and README never mentioned it at all. It was invisible enough that the founder had to say it out loud in conversation before anyone noticed it was missing. That is the failure this entry exists to avoid repeating — and prompt 13 exists to fix it for that principle specifically.
+
+The second reason is that **§1.2 can only reject.** Nothing in the documents helped decide what a feature should *look like*, only what disqualified it.
+
+### What was found before anything was written
+
+The retro-fit was checked against v1.27 rather than assumed, and one part of it came back stronger than the prompt claimed. Of the four numbers the analogy accounts for most directly:
+
+- **`FRIEND_CAP` = 300** — §5.1 is three mechanical lines and states **no rationale of any kind.** There is no Dunbar reference anywhere in the repository.
+- **`POST_AUDIENCE_MAX` = 30** — stated in §7.1, enforced in §7.3, listed in §14, and **nowhere justified.**
+- **At most one image per post** — §7.2 states it flatly, with no reason.
+- **`GALLERY_MAX` = 8** — the only one of the four carrying an argument (§9.7: a fixed eight-slot shelf cannot accumulate, so it is not an archive).
+
+So for three of the four, the analogy supplies not a second justification but **the only one available**. That is recorded here because it changes what a reviewer stress-testing §14 is arguing against; it settles no number, and §14 was not edited.
+
+### The four decisions
+
+**1. Its own numbered subsection, at §1.4, and not a §1.3 bullet.** A §1.3 bullet is precisely what happened to "not a walled garden," so that option was rejected on the evidence in the document. Folding it into §1.1 was the prompt's own recommendation and was declined: §1.1's "puts people in the same room" means the *real* room WeeBee exists to get people into, while the gathering is a metaphor for the platform — one word, two meanings, and blurring them costs more than the adjacency gains. §1.1 is also a purpose statement, not a decision procedure.
+
+**Seating it after §1.3 rather than between the two tests is a deliberate trade against tidiness.** Renumbering §1.3 → §1.4 to make the negative and positive tests adjacent would have rewritten **17 live citations in SPEC, 2 in BUILD_PLAN and 5 in TODO**, and left six entries in this file pointing at a §1.3 that had changed meaning — history that cannot be rewritten. The two tests are one short section apart and each names the other. **§1.5 is left free for prompt 13.**
+
+**2. Named the Gathering Test.** The founder's own word. "The Party Test" was the most vivid option and was declined as the one term that gets quoted back out of context; "The Room Test" collides with §1.1's room, as above.
+
+**3. It asks; it does not refuse — and the binding strength is in the sentence, not in the tone.** This was the decision most likely to go wrong. §1.2 is a gate and says so ("the feature is wrong for this platform"). §1.4 cannot be, because three shipped features fail it. It is written as **a question a feature must answer, carrying a duty: the reason for building something out of place at the gathering must be written down in the document beside it.** The duty is what gives the test force without a veto — it can never stop a decision, only an undocumented one. Written as a gate with three carve-outs, it would eventually have been quoted against a fourth feature the founder wanted.
+
+**4. README gets the paragraph.** README's "60 seconds" described WeeBee almost entirely by negation — a list of twelve absences — and now carries the shortest positive statement of what it is, including the founder's vacation-photos-versus-albums example, which is the part that lands.
+
+### Two guards written into §1.4 that the prompt did not ask for
+
+Both were added because the failure they prevent is worse than the one the prompt was worried about.
+
+- **A positive test read backwards is a feature generator.** §1.2 cannot be abused this way; a negative test has no generative direction. This one does: *"there is music at a party, so WeeBee needs audio"*; *"people step aside to talk privately, so DMs."* §1.4 states plainly that the test constrains the shape of a **proposed** feature and never argues that something absent ought to exist — the DM question is answered by §1.3 and §10.1, on entirely different grounds.
+- **There is a fourth place the analogy breaks, and it is resolved rather than listed.** Nothing is pushed at you at a gathering; you walk up to a group. **The feed is push**, delivered to people who were not standing there. Left unstated, the test could be turned against the single most load-bearing thing in the product. It is not a break: §1.1 already says WeeBee exists for the times people *cannot* be together, so asynchrony is the premise, not a departure. §1.4 therefore says the test governs **what is appropriate to do, never the mechanics of delivery**, once, rather than leaving it to be re-argued whenever someone notices.
+
+### Where it fails, written in the same breath
+
+§1.4 names all three, each with the reason it stays — because an unbounded analogy in a specification gets quoted later against something deliberate:
+
+- **The profile Blog tab (§9.1)** — a bulletin board in the lobby. Stays because "pull over push" (§1.3) requires somewhere for a broad audience to come *to*.
+- **Pinned posts (§7.6)** — `PIN_LIMIT` = 10, exempt from expiry, and §7.6 already calls pinning the only act of preservation on the platform.
+- **The contact card's cascade (§10.3)** — exchanging numbers is in the spirit; a three-level deny-beats-allow cascade is not. Stays for §10.3's own reason: over-sharing is the unrecoverable direction.
+
+**That the test rediscovers exactly the three departures the document had already flagged as deliberate, and invents no fourth, is the argument for having it.** §1.4 also says what it does *not* claim: the analogy did not generate these decisions, it accounts for them afterwards, and retro-fitting is weak evidence taken alone.
+
+### The back-references were offered and not taken
+
+Pointers from §7.6, §9.7 and §14 back to the new principle were put to the founder and declined. **The pointers therefore run outward from §1.4, which names its own three exceptions, rather than inward from each section** — a reader of §1.4 gets the whole picture, and no section outside §1 changed. Recorded so that a later session does not add them as a tidy-up; not adding them is the decision.
+
+### Nothing downstream — confirmed, not assumed
+
+Prompt 09 syncs ARCHITECTURE and BUILD_PLAN to the current SPEC and has not run. It needs nothing from this, and the check was run rather than reasoned:
+
+- `grep` for "No-Reach" in ARCHITECTURE.md and BUILD_PLAN.md returns **zero hits**; ARCHITECTURE cites SPEC §1.1 and §1.2 **zero times**. A named principle in SPEC §1 has never propagated downstream.
+- **BUILD_PLAN's own coverage-check procedure already states the rule, and uses §1.2 as its worked example.** §0.6, the standing conformance check, flags a SPEC section carrying no test — *unless* the section is argument rather than rule, given verbatim as *"no test, because §1.2 is a philosophical claim with nothing to assert."* §1.4 is the same kind of section. It asserts nothing a test could check, and adds no constant, no state and no surface.
+
+**No new constant. §14 is untouched.**
+
+### Working files (outside the record)
+
+`TODO.md`: prompt 14 marked done at 1.28. `prompts/13-delegation-and-link-policy.md`: the header now carries the shape 13 was written to inherit — a new numbered subsection at **§1.5**, matching §1.4's form, with the binding strength stated in the sentence rather than left to tone, and the reason §1.3 was not renumbered.
+
+---
 ## 1.27 — 2026-08-18
 
 | File | Status |

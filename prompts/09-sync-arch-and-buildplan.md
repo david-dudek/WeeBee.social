@@ -396,6 +396,27 @@ duration a ban depends on already existed.
 
 ---
 
+### R. SPEC §1.4, the Gathering Test — nothing to do (from prompt 14, landed in 1.28)
+
+**This section exists so that the sweep does not flag it.** SPEC gained a new §1.4 in 1.28 —
+a named design principle, the positive counterpart to §1.2's No-Reach Test. Your Method turns
+up a new SPEC section with no matching architecture or build step and calls that a finding.
+Here it is not one, and the check was run rather than reasoned:
+
+- `grep` for "No-Reach" in ARCHITECTURE.md and BUILD_PLAN.md returns **zero hits**, and
+  ARCHITECTURE cites SPEC §1.1 and §1.2 **zero times**. A named principle in SPEC §1 has never
+  propagated downstream, and §1.4 does not change that.
+- **BUILD_PLAN already states the rule, and uses §1.2 as its worked example.** BUILD_PLAN §0.6,
+  the standing conformance check, is the procedure that flags a SPEC section carrying no test —
+  and it says in the same breath that some sections are argument rather than rule, giving the
+  example verbatim: *"no test, because §1.2 is a philosophical claim with nothing to assert."*
+  §1.4 is exactly that kind of section, and §0.6 already knows what to do with it.
+- **It adds no constant, no state, no surface and no behaviour.** §14 was not touched, and no
+  section outside SPEC §1 changed.
+
+**Do not invent a mechanism for it.** If a later prompt gives the principle downstream teeth,
+that prompt hands them over here in the ordinary way.
+
 ## Verification before you finish
 
 - **Every SPEC §14 constant appears somewhere in BUILD_PLAN**, or is covered by §2.2's
