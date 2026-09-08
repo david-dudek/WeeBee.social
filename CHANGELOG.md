@@ -105,6 +105,99 @@ no other trace.
 
 ---
 
+## 1.29 — 2026-09-07
+
+| File | Status |
+|---|---|
+| README.md | changed — the 60-second summary says for the first time that the absences are *handoffs*, and names the Delegation Principle; "What is NOT up for review" adds it beside the Gathering Test and says which part of it stays open |
+| SPEC.md | changed — new **§1.5, the Delegation Principle**; **§7.2.3 rewritten** as two link lists with a per-row surface scope; **new §7.2.4**, the three link outcomes and the copy box; **§10.2 extended** with card link items and labels; §4.6.1, §13.1, §9.4, §7.5, §7.8, §10.1, §13.5, §14, §16.3 and §17 reconciled |
+| ARCHITECTURE.md | changed — §4 gains `url_blocklist`, a surface scope on `url_allowlist`, a `label` column on `contact_items` and a fifth single-source rendering helper; §7's link validator becomes a three-outcome classifier; §15 gains item 10 |
+| BUILD_PLAN.md | changed — Steps 6.2, 6.2a, 6.6, 8.1, 9.1, 13.3, 16.1 and Appendix rule 10. Step 9.1 carries a build gate |
+| CHANGELOG.md | changed — this entry |
+
+From prompt 13. The founder stated a principle that has governed WeeBee from the start and had never been written down as one: *"I didn't want it to try to add features that are better implemented elsewhere. WeeBee is meant to be used in concert with other services… Instead, links to other services that are approved can go on posts, and any other link can go on contact cards."* Checking that against the documents turned up two things — the principle was present only as the local justification for individual refusals, and **its last clause was not true of the documents as written.**
+
+### The principle: SPEC §1.5, the Delegation Principle
+
+**It existed and was invisible.** §1.3's *"not a walled garden"* bullet is the same principle in one sentence, with messaging as its only example, so it read as a footnote to §10.1 rather than as a rule anything cited. §10.1 carries its best statement anywhere — *"a platform that rebuilds messaging is not adding a capability — it is trying to own a relationship it did not create"* — and §7.2.3, §17 and §9.4 each re-argued it locally. README never mentioned it. 1.28 had already named this as the failure it was written to avoid repeating.
+
+**Three tests now sit in SPEC §1, and they are deliberately different instruments.** §1.2's No-Reach Test is a **gate**: fail it and the feature is wrong, full stop. §1.4's Gathering Test is a **question**: fail it and the feature may still be built, provided the reason is written down beside it. §1.5's Delegation Test is neither, because it is not asking whether the need belongs on WeeBee — it asks **who should serve it**, and a feature that fails it is **relocated, not refused**. The sentence that carries the force: *a refusal that does not name the door out is an incomplete application of this principle.*
+
+**The courtesy minimum is the half that would otherwise have been lost**, and the founder's own words for it are better than the framing the prompt arrived with — *"what we can offer for that is meager… we still have to provide what we do, because this will never get off the ground if users can't even post one photo."* So §1.5 states the limit on itself: *"that's better elsewhere"* is a complete argument for **not building a photo service** and never a complete argument for **refusing to hold a photo**. One photo per post and `GALLERY_MAX` = 8 are the delegation, not an oversight.
+
+**Two guards, on 1.28's pattern.** The test **read backwards becomes an argument for building nothing**, so §1.5 names what is never delegable — the friend graph, the audience model, the visibility rules, expiry, accessibility. And it is not a licence for minimalism as purity; the courtesy minimum bounds it. §1.3's bullet is kept and points at §1.5: the bullet is the summary, the section is the rule.
+
+### The link policy: one uniform rule, three outcomes
+
+**The change.** The allowlist used to govern **delivery** — a non-allowlisted URL was rejected at composition. It now governs **clickability**:
+
+| The link | What happens |
+|---|---|
+| Allowlisted, in scope for the surface | clickable hyperlink |
+| On neither list | inert **copy box** — the address in full, with a copy control |
+| **Blocklisted** | **refused**; the post cannot publish |
+
+The same rule on posts, comments, the extended bio and contact cards. **Only the third is an error** — SPEC §7.2.4 states, as a requirement rather than a nicety, that the copy box carries no warning, no apology and no error styling, because a platform that already says no to a lot cannot also scold the user each time it does.
+
+**Founder decision: the copy box over bare text (2026-09-07).** Bare text is the stronger friction against the drift the friction exists to prevent — *enough friction to keep WeeBee from devolving into link sharing* — and was rejected as needlessly punishing: a fiddly select-and-drag, or retyping thirty characters, falling hardest on the ordinary case of a member linking to the rest of their own photographs.
+
+**One claim in the prompt did not survive contact with the document, and §7.2.4 says the true thing instead.** The copy box was offered as the better *anti-phishing* control because "the link text cannot lie about where it goes." On this platform a hyperlink's text cannot lie either: posts are plain text (§7.2), there is no markup, and a URL is linkified as itself — both renderings disclose the true address. **The copy box's real gain is the deliberate act**, not disclosure: no accidental tap, no one-tap phish, and the address lands in the reader's own address bar where they see it again.
+
+**The honest limitation, recorded once, where the choice is made.** A platform with no counters (§1.2) **cannot measure whether a control on content shape is working.** No metric will tell the founder in three years whether feeds have drifted — only his own reading and the report queue. That is §1.2 working as intended rather than a flaw, but it means **this decision cannot be revisited on evidence.** What §7.2.4 does say is which direction is cheap: loosening takes nothing from anyone, tightening takes away something people have got used to.
+
+### The blocklist
+
+A second operator-curated table beside the allowlist, checked by the same shared function on **every save path, create and edit alike**. Three things are stated because they are the ways it gets built wrong:
+
+- **It is the *second* control to depend on SPEC §7.8 invariant 4, and the stakes went up.** A create-only validator used to mean a non-allowlisted link could be edited in after publication — bad, but never clickable. It now means a **blocklisted** domain can be, defeating the one outcome the platform actually forbids.
+- **Its contents are not a design question**, and the session did not litigate them. What is specified is the mechanism, where it is checked, and what the author is told — warned **before** publishing, with a message that says the fix is to remove the link.
+- **No appeal channel — decided, not omitted.** §13.5 accepts a proposal to *add* a domain to the allowlist, a judgment about purpose the three admitting categories make arguable. It does not accept blocklist removals: §13.5 sends no replies at all by design, so an appeal route would be a door that never opens, and §16.3 requires an error to state its **fix**, which here is "remove it."
+
+### Founder decision: messenger domains become card-only
+
+Allowlist rows gain a **surface scope** — posts-and-comments, cards, or both. **Messenger domains are the first card-only rows**: a WhatsApp link is a hyperlink on a contact card and a copy box in a post. The founder's reasoning, recorded with it: other person-identifying services may follow, **LinkedIn named as the likely next**.
+
+The test that decides it is written down **as a guideline and explicitly not as a test in the sense of §1.2, §1.4 or §1.5**: *a link that identifies a **person** belongs on the card; a link that identifies a **thing** belongs in a post.* A messenger handle is you; a map pin for a restaurant is a thing. It settles nothing by itself, and the operator may scope a row against it with a reason — its value is a principled first answer for payment handles and scheduling links rather than deciding each from scratch.
+
+### The principle's last clause was false, and §10.2 fixes it
+
+*"…and any other link can go on contact cards."* §10.2 permitted phone numbers, email addresses and messenger links from allowlisted domains — **an arbitrary URL was not a permitted card item.** Worse, §7.2.3's rejection message already told users that *"anything else can be shared through the contact methods on the user's contact card,"* and BUILD_PLAN Step 6.2a baked that wording into the composer. The document named a door out and bolted it.
+
+The consequence, worth stating because it is what the founder's sentence was reaching for: **there was nowhere durable in WeeBee to put "here is my photo album."** Not the card, not the short bio (no links at all), not a post or the extended bio (allowlisted domains only).
+
+**§7.2.4 dissolves most of that** — a post, a pinned post and the extended bio all now carry any address as a copy box. §10.2 does the rest: **link items of any URL, and a label on every item** (`CARD_ITEM_LABEL_MAX` = 40, screened against `NAME_BLOCKLIST` at every save, given the short bio's treatment because it is new free text on a surface that had none).
+
+**Founder decision: the link items are specified now and gated on prompt 15.** A contact card **is not a reportable object anywhere in SPEC** — §13.2's report actions cover posts, comments and profiles. That was tolerable while a card held a phone number and an allowlisted messenger link; it is not once a card carries an author-chosen address and an author-written label. It is the same gap v1.16 closed for the friend-request card, and the same rule applies: *a report the recipient cannot reach is not a defence.* The design is genuinely harder — **a card is per-requester** (§10.3), so the operator needs the version the reporter *received*, not the owner's current rows — so it became **`prompts/15-reporting-a-contact-card.md`** rather than being finished badly at the end of a long session. **SPEC §10.2 and BUILD_PLAN Step 9.1 both carry the gate**, which is a build gate rather than a version: phone, email and the label field ship; the `link` kind waits.
+
+### Three reconciliations, each an honest edit rather than a paper-over
+
+1. **§4.6.1 and §13.1 claimed something that stopped being true.** Both listed "a URL allowlist on every post and comment" among the controls closing the in-platform link-delivery vector. The allowlist no longer blocks delivery. The claim is narrowed to **no way to deliver a *clickable* deceptive link, and no unsolicited delivery at all** — and §4.6.1 now says which half was always the larger one: nothing on this platform pushes a link at anyone, and phishing at scale depends on unsolicited delivery. It also gains a control it never had: a blocklisted domain is refused outright.
+2. **§9.4's short bio contradicted its own stated reason.** v1.16 changed the short bio from inert-rendering to rejection-at-save on the general claim that *"an unclickable address is still readable and retypeable."* If that were true, §7.2.4 would be wrong about posts. **The outcome does not change and the reason had to:** the short bio is a **push surface**, delivered unasked to up to 20 people a day in a friend request, and a surface pushed at people who did not choose it gets the stricter rule. §13.1's restatement was corrected to match. The extended bio, being friends-only and pull-only, follows the ordinary rule — which is the same reasoning, applied consistently.
+3. **"Does expiry become decorative?"** — the sharpest fair challenge to the new policy, answered in §7.5 in a sentence rather than left to be discovered. If the album lives at the far end of a link and only the pointer expires, what is the 90-day promise worth? The same as it ever was: **the promise is about what the platform retains and could be compelled to produce**, never about what users choose to keep — the identical posture §1.2 takes on screenshots. A pointer that expires is not a weaker promise than a paragraph that expires.
+
+**And one distinction §7.2.4 records so it cannot be used to justify the next loosening:** off-platform re-propagation is *outbound leakage*, honestly conceded in §1.2 and §17; link policy is *inbound content shape*, entirely within the platform's control. Conceding the first is not an argument for the second. This change was made on its own merits.
+
+### Downstream — written here, not handed to prompt 09
+
+Unlike 1.19, 1.25 and 1.26, this session wrote its own ARCHITECTURE and BUILD_PLAN edits, because the change is a behaviour change on five surfaces rather than an internal one. Prompt 09 gains a new **§S** recording what is done, and one warning it specifically needs: **several ✅ cases changed direction.** What Step 6.2a used to assert as *refused* is now asserted as *`PLAIN`, and not an error* — a sweep that reads those as weakened tests and "restores" them rebuilds the pre-1.29 policy.
+
+- **ARCHITECTURE §7:** the validator becomes a **classifier** returning `CLICKABLE` / `PLAIN` / `REFUSED`, **taking the surface as an argument**. The parse, host-match and redirector rules are unchanged and still load-bearing — they now decide clickability rather than delivery. Blocklist checked **first**, so no ordering of later rules can produce a clickable blocklisted link. `http://` on an allowed host becomes `PLAIN` rather than an error.
+- **ARCHITECTURE §4:** `url_blocklist` as a **separate table** rather than a flag on the allowlist — the two lists answer different questions and nothing is ever on both, and one table with a tri-state column invites a row that is somehow neither. `contact_items` gains `label` and its `messenger-link` kind becomes `link`; **clickability is never stored on the item**, so re-scoping one allowlist row changes every existing card at once. A **fifth single-source rendering helper** joins the four: three outcomes across five surfaces is fifteen chances to render one of them slightly differently, and the failure that matters — a surface that linkifies what the classifier called `PLAIN` — is silent and looks right.
+- **ARCHITECTURE §15 item 10** records the decision, the alternative rejected (two functions, one per surface), and that **`PLAIN` is not an error condition anywhere in the stack** — no form error, no message, no logging.
+- **BUILD_PLAN** Steps 6.2, 6.2a, 6.6, 8.1, 9.1, 13.3, 16.1 and Appendix rule 10. New verifications worth naming: the **surface-scope pair** (a messenger domain in a post versus on a card — a classifier that ignores its surface argument passes every other case), **asserting the absence of an error** on every `PLAIN` case (the assertion that catches "built as a rejection with nicer wording"), and a **400-character URL at 320 px** not scrolling the page sideways.
+
+**One accessibility item was solved rather than inherited.** URLs offer no ordinary break opportunities, so a bare address is exactly the two-dimensional-scroll failure §16.3 forbids. §7.2.4 requires break-anywhere wrapping inside the box's own container, and states that **this does not create a second reflow exception** — §7.2.1's preformatted post remains the platform's single documented one, and a second arriving by accident, on a control that appears on ordinary posts, would be a bad trade. The copy control itself joins §16.3's repeated-controls rule beside "read more" and the reaction picker: a real button, a distinct accessible name saying which address it copies, keyboard-operable, with a polite live-region confirmation.
+
+**One new constant.** `CARD_ITEM_LABEL_MAX` = 40 ✎. The URL blocklist joins §14's operator-curated ✎ rows, and the allowlist row now records the surface scope.
+
+### Working files (outside the record)
+
+`TODO.md`: prompt 13 marked done at 1.29; **prompt 15 added to the queue** (depends on 13, blocks Step 9.1's `link` kind); 09's dependency list extended to 10–15; a new **"Work that is not a numbered prompt"** section carries the archetype follow-on. `prompts/09-sync-arch-and-buildplan.md`: new **§S**, on 1.28's §R pattern — what is already done, the two things deliberately left, and the changed-direction warning. `prompts/15-reporting-a-contact-card.md`: written.
+
+**The archetype follow-on is unblocked and is recorded rather than done.** The interview track tells every character *"Links only from a list of approved sites"* and never mentions the door out; the wording is in `archetypes/PLAN.md` §4 fact 13 and copied into `BRIEF.md` §2, so all ten characters inherit it. It surfaced in `07-susan.md`, where the family historian hits `GALLERY_MAX` = 8 against sixty reunion photographs and is never told she could host them elsewhere and post about it. Only the pilot has run and the other nine are copies of it, so this is the cheapest moment it will ever be to fix. TODO carries the four steps, including the guard that matters: `PROMPT.md` rule 9 forbids writing a character's conclusion, so the rule is **offer the delegation answer, then ask whether they would actually do it** — Susan is entitled to answer "then what am I here for," and if she does, that is the finding, not a failure. Note what 1.29 changed for her specifically: unless the photo host is allowlisted, what she gets is a copy box, not a one-tap link.
+
+---
+
 ## 1.28 — 2026-09-07
 
 | File | Status |

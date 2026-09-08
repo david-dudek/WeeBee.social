@@ -299,9 +299,10 @@ SPEC §8.2–§8.2.3 and ARCHITECTURE §15 item 8 first; this list is the map, n
 3. **Step 2.2 / the constants step** must not put `REACTION_SET` in `constants.py`. It is
    the `reaction_phrases` **table** (ARCHITECTURE §4, new in 1.25), with text, display
    order and an `active` flag. While there, check the same step against `HASHTAG_VOCAB`,
-   `NAME_BLOCKLIST` and the URL allowlist — ARCHITECTURE §4's new carve-out paragraph says
-   the operator-curated *sets* are all tables, and the constants step may currently say
-   otherwise.
+   `NAME_BLOCKLIST`, the URL allowlist and the **URL blocklist** (new in 1.29) — ARCHITECTURE §4's
+   carve-out paragraph says the operator-curated *sets* are all tables, and the constants step
+   may currently say otherwise. **`CARD_ITEM_LABEL_MAX` (new in 1.29) is an ordinary constant**
+   and belongs in `constants.py` like every other §14 number.
 4. **Step 13.3** already builds a `REACTION_SET` editor in the admin. It now has a rule to
    enforce: rows are **retired by clearing `active`, never deleted**, and a row's text may
    be corrected but never repurposed (SPEC §8.2.3). Same shape as the URL-allowlist
@@ -416,6 +417,41 @@ Here it is not one, and the check was run rather than reasoned:
 
 **Do not invent a mechanism for it.** If a later prompt gives the principle downstream teeth,
 that prompt hands them over here in the ordinary way.
+
+### S. The link policy — ARCHITECTURE and BUILD_PLAN are already done (from prompt 13, landed in 1.29)
+
+**This section exists so the sync does not redo work or reopen a settled decision.** Prompt 13
+rewrote SPEC's link policy — new §1.5 (the Delegation Principle), §7.2.3 rewritten as two link
+lists with a per-row surface scope, new §7.2.4 (three outcomes: clickable / copy box / refused),
+§10.2 extended with card links and labels — and, **unlike prompts 03, 10 and 11, it wrote its own
+downstream edits rather than handing them here.** ARCHITECTURE and BUILD_PLAN are at 1.29 and
+carry the change. Verify rather than reconstruct:
+
+- **ARCHITECTURE §4** — `url_allowlist` gained a **surface scope** column; **`url_blocklist` is a
+  new table**; the operator-curated-sets paragraph names it; `contact_items` gained a `label`
+  column and its `messenger-link` kind became `link`; the single-source-helpers table gained a
+  **link renderer** (five helpers now, not four).
+- **ARCHITECTURE §7** — the link *validator* is now a **classifier** returning
+  `CLICKABLE` / `PLAIN` / `REFUSED`, taking the surface as an argument. The parse/host/redirector
+  rules are unchanged and still load-bearing.
+- **ARCHITECTURE §15 item 10** — records the decision, the alternative rejected (two functions,
+  one per surface), and that `PLAIN` is not an error condition anywhere in the stack.
+- **BUILD_PLAN Steps 6.2, 6.2a, 6.6, 8.1, 9.1, 13.3, 16.1 and Appendix rule 10** — all rewritten.
+  **Several ✅ cases changed direction:** what 6.2a used to assert as *refused* is now asserted as
+  *`PLAIN`, and specifically as not an error.* If your sweep finds those and reads them as a
+  weakened test, they are not — re-asserting a refusal there rebuilds the pre-1.29 policy.
+
+**Two things are deliberately left, and neither is a gap:**
+
+- **`CARD_ITEM_LABEL_MAX` and the URL blocklist** need the ordinary §2.2 constants treatment —
+  folded into §O.3 above rather than repeated here.
+- **BUILD_PLAN Step 9.1 carries a 🚧 gate**: the `link` item kind does not ship until
+  `prompts/15-reporting-a-contact-card.md` runs. **Do not remove the gate**, and do not treat the
+  un-built `link` kind as a sync omission. Prompt 15 lifts it, in SPEC §10.2 and Step 9.1 together.
+
+**Nothing in SPEC §1.5 needs a build step**, for exactly the reason §R gives for §1.4: it is a
+named principle with no constant, no state and no surface, and BUILD_PLAN §0.6 already says what
+to do with a SPEC section that asserts nothing testable.
 
 ## Verification before you finish
 
