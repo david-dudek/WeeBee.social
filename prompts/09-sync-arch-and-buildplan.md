@@ -299,9 +299,10 @@ SPEC §8.2–§8.2.3 and ARCHITECTURE §15 item 8 first; this list is the map, n
 3. **Step 2.2 / the constants step** must not put `REACTION_SET` in `constants.py`. It is
    the `reaction_phrases` **table** (ARCHITECTURE §4, new in 1.25), with text, display
    order and an `active` flag. While there, check the same step against `HASHTAG_VOCAB`,
-   `NAME_BLOCKLIST` and the URL allowlist — ARCHITECTURE §4's new carve-out paragraph says
-   the operator-curated *sets* are all tables, and the constants step may currently say
-   otherwise.
+   `NAME_BLOCKLIST`, the URL allowlist and the **URL blocklist** (new in 1.29) — ARCHITECTURE §4's
+   carve-out paragraph says the operator-curated *sets* are all tables, and the constants step
+   may currently say otherwise. **`CARD_ITEM_LABEL_MAX` (new in 1.29) is an ordinary constant**
+   and belongs in `constants.py` like every other §14 number.
 4. **Step 13.3** already builds a `REACTION_SET` editor in the admin. It now has a rule to
    enforce: rows are **retired by clearing `active`, never deleted**, and a row's text may
    be corrected but never repurposed (SPEC §8.2.3). Same shape as the URL-allowlist
@@ -395,6 +396,104 @@ check the sender's state, and the deactivation step (14.1) has to void.
 duration a ban depends on already existed.
 
 ---
+
+### R. SPEC §1.4, the Gathering Test — nothing to do (from prompt 14, landed in 1.28)
+
+**This section exists so that the sweep does not flag it.** SPEC gained a new §1.4 in 1.28 —
+a named design principle, the positive counterpart to §1.2's No-Reach Test. Your Method turns
+up a new SPEC section with no matching architecture or build step and calls that a finding.
+Here it is not one, and the check was run rather than reasoned:
+
+- `grep` for "No-Reach" in ARCHITECTURE.md and BUILD_PLAN.md returns **zero hits**, and
+  ARCHITECTURE cites SPEC §1.1 and §1.2 **zero times**. A named principle in SPEC §1 has never
+  propagated downstream, and §1.4 does not change that.
+- **BUILD_PLAN already states the rule, and uses §1.2 as its worked example.** BUILD_PLAN §0.6,
+  the standing conformance check, is the procedure that flags a SPEC section carrying no test —
+  and it says in the same breath that some sections are argument rather than rule, giving the
+  example verbatim: *"no test, because §1.2 is a philosophical claim with nothing to assert."*
+  §1.4 is exactly that kind of section, and §0.6 already knows what to do with it.
+- **It adds no constant, no state, no surface and no behaviour.** §14 was not touched, and no
+  section outside SPEC §1 changed.
+
+**Do not invent a mechanism for it.** If a later prompt gives the principle downstream teeth,
+that prompt hands them over here in the ordinary way.
+
+### S. The link policy — ARCHITECTURE and BUILD_PLAN are already done (from prompt 13, landed in 1.29)
+
+**This section exists so the sync does not redo work or reopen a settled decision.** Prompt 13
+rewrote SPEC's link policy — new §1.5 (the Delegation Principle), §7.2.3 rewritten as two link
+lists with a per-row surface scope, new §7.2.4 (three outcomes: clickable / copy box / refused),
+§10.2 extended with card links and labels — and, **unlike prompts 03, 10 and 11, it wrote its own
+downstream edits rather than handing them here.** ARCHITECTURE and BUILD_PLAN are at 1.29 and
+carry the change. Verify rather than reconstruct:
+
+- **ARCHITECTURE §4** — `url_allowlist` gained a **surface scope** column; **`url_blocklist` is a
+  new table**; the operator-curated-sets paragraph names it; `contact_items` gained a `label`
+  column and its `messenger-link` kind became `link`; the single-source-helpers table gained a
+  **link renderer** (five helpers now, not four).
+- **ARCHITECTURE §7** — the link *validator* is now a **classifier** returning
+  `CLICKABLE` / `PLAIN` / `REFUSED`, taking the surface as an argument. The parse/host/redirector
+  rules are unchanged and still load-bearing.
+- **ARCHITECTURE §15 item 10** — records the decision, the alternative rejected (two functions,
+  one per surface), and that `PLAIN` is not an error condition anywhere in the stack.
+- **BUILD_PLAN Steps 6.2, 6.2a, 6.6, 8.1, 9.1, 13.3, 16.1 and Appendix rule 10** — all rewritten.
+  **Several ✅ cases changed direction:** what 6.2a used to assert as *refused* is now asserted as
+  *`PLAIN`, and specifically as not an error.* If your sweep finds those and reads them as a
+  weakened test, they are not — re-asserting a refusal there rebuilds the pre-1.29 policy.
+
+**Two things are deliberately left, and neither is a gap:**
+
+- **`CARD_ITEM_LABEL_MAX` and the URL blocklist** need the ordinary §2.2 constants treatment —
+  folded into §O.3 above rather than repeated here.
+- **BUILD_PLAN Step 9.1 carries a 🚧 gate**: the `link` item kind does not ship until
+  `prompts/15-reporting-a-contact-card.md` runs. **Do not remove the gate**, and do not treat the
+  un-built `link` kind as a sync omission. Prompt 15 lifts it, in SPEC §10.2 and Step 9.1 together.
+
+**Nothing in SPEC §1.5 needs a build step**, for exactly the reason §R gives for §1.4: it is a
+named principle with no constant, no state and no surface, and BUILD_PLAN §0.6 already says what
+to do with a SPEC section that asserts nothing testable.
+
+### T. The contact-card report — ARCHITECTURE and BUILD_PLAN are already done (from prompt 15, landed in 1.30)
+
+**This section exists so the sync does not redo work, undo a lifted gate, or re-add a stored card.**
+Prompt 15 made a contact card a reportable object — SPEC §13.2 gains "Reporting a contact card,"
+§10.4 was rewritten so the answered card is a **page** rather than a one-time reply, §13.2.1 defines
+delete-content on a card item, and §10.2's build gate on the `link` kind is lifted — and, like 13, it
+**wrote its own downstream edits rather than handing them here.** Verify rather than reconstruct:
+
+- **ARCHITECTURE §4** — `card_requests` corrected (it records *that* a card was answered, **never the
+  answer**); `contact_items` lost its "not reportable yet" note; `reports` gained the **contact-card
+  target type**, with the frozen copy specified as a value (ordered `{kind, value, label}` plus the
+  reported item's **position**) and explicitly no foreign key, no resolution trace, no clickability flag.
+- **ARCHITECTURE §5.1** — the freeze is a **caller of the engine**: one `visible_contact_card(reporter,
+  owner)` call at submit, reporter as viewer. Two named shortcuts are recorded as wrong.
+- **ARCHITECTURE §15 item 11** — the decision, the corrected `card_requests` wording, and the fact
+  that nothing new was added (no table, no job, no dependency, no infrastructure).
+- **BUILD_PLAN Steps 9.1, 9.2, 13.1, 13.3 and Appendix rule 11** — 9.1's gate lifted, 9.2 rewritten
+  around the card page, 13.1 and 13.3 given the card target and the delete-content behaviour.
+
+**Four things are deliberately as they are. Do not "fix" any of them:**
+
+- **Step 9.1's 🚧 gate is gone on purpose.** §S told you not to remove it; that instruction is spent.
+  1.30 lifted it in SPEC §10.2, in Step 9.1 and in README together. If your sweep finds the `link`
+  kind shipping with no gate, that is the current state, not an omission.
+- **`card_requests` deliberately stores no answer.** Its earlier wording ("what was auto-answered")
+  read as *store the resolved card*, which SPEC §10.4 now refuses in as many words. A sweep that
+  restores the old phrasing rebuilds the send-time freeze the design rejected.
+- **The card page is re-resolved on every visit, and a return visit writes nothing.** No
+  `card_requests` row, no notification, no rate-limit counter. Step 9.2's ✅ asserts the *absence* of
+  those; read it as the test it is, not as a weakened one.
+- **The report action on a card is rendered in Step 9.2 and wired in Step 13.1.** That split is
+  intentional and matches how the profile's report action already spans Steps 8.1 and 13.1. Two
+  steps mentioning one control is not a duplication to collapse.
+
+**One item is inherited, and it is the ordinary §2.2 kind:** nothing new in SPEC §14 (this design
+added no constant), so there is no constants work here at all — noted so you can tick it rather than
+go looking.
+
+**One correction 15 made in passing, so you do not make it twice:** BUILD_PLAN Appendix rule 11 said
+*"Four things are rendered by one shared helper each"* after 1.29 added a fifth (the link renderer).
+It now says five and names it.
 
 ## Verification before you finish
 
