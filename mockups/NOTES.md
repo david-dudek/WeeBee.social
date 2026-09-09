@@ -1081,3 +1081,134 @@ tried, then extended everywhere on request, and a founder reviewing this later s
 was never derived from any SPEC requirement (`THEME_SET` still names no members anywhere, per
 entry 29) — it is simply the founder's own pick for a legible link color, standing in until a
 real theme is chosen.
+
+
+---
+
+## The 1.27 → 1.30 re-sync (sessions R1–R5)
+
+The closing summary at the top of this file counts the log at 49 entries, which is where M8 and
+the founder's own click-through left it. Entries from 50 on come from the re-sync of the mockup
+track from project version 1.27 to 1.30 (`prompts/mockups/resync-to-1.30.md`), and are numbered
+on from there. The summary above is left exactly as M8 wrote it.
+
+---
+
+## 50. Three strings the re-sync had to invent, and what SPEC did and did not give for each
+
+**Session:** R1 (the 1.27 → 1.30 re-sync, first sitting — `CRIB.md` and this file only; no page
+was edited). **Surface:** none yet. All three are registered in `mockups/CRIB.md` §2 and get
+rendered later — by R2 on `composer.html`, `post-editor.html`, `post-feed.html`,
+`overlay-post.html` and `partials/_post.html`, and by R3 on the contact-card cluster.
+
+SPEC §7.2.4 is new in v1.29 and specifies the copy box and the blocklist refusal in unusual
+detail — what they must do, what they must not look like, which WCAG criteria they answer — but
+gives **no wording for any of the three strings the surface needs**. Each is this session's own
+invention, marked **INVENTED** in `CRIB.md` at the entry itself, so that a later reader cannot
+mistake it for a quotation.
+
+**1. The blocklisted-link refusal** — *"This address can't be posted on WeeBee. Remove the link
+to save your post."* (with the last clause naming whatever is being saved: *"… your comment."*,
+*"… this item."*)
+
+*What SPEC gives:* that the message *"says plainly that this address cannot be posted here and
+that the fix is to remove it"*; that *"It names no appeal, because there is none"*; that the check
+runs at composition and again at save, on the create and edit paths alike; and §16.3's general
+rule that an error is text, is tied to the offending field, and describes the fix.
+*What SPEC does not give:* the words. It also never says whether the message explains **why** a
+domain is blocked. It was written so that it does not — §7.2.3 states that what belongs on the
+blocklist is operational judgment the document deliberately declines to specify, so a message
+offering a reason would be inventing one.
+
+This is the string most worth the founder's own eye, for two reasons. It is the only one of the
+three that is an **error** at all — §7.2.4 is emphatic that a copy box is not one — and it is the
+one place on the platform where a refusal deliberately **names no door out**, which cuts against
+the Delegation Principle's habit of always naming one (§1.5). §7.2.3 argues that case explicitly
+and convincingly (a door that never opens is worse than no door), so the string is faithful to the
+document. It is nonetheless the sentence a user meets at the moment the platform is least able to
+help them, and it is worth reading aloud before it is settled.
+
+**2. The copy control's accessible name** — visible text *"Copy"*; accessible name *"Copy the
+address {the full address, verbatim}"*.
+
+*What SPEC gives:* that the control is a real `<button>` and not a bare icon; that §16.3 lists it
+among the repeated controls needing distinct accessible names; that the name *"has to say which
+address it copies"*; and that visible label text must match accessible names (2.5.3).
+*What SPEC does not give:* the words — including the visible label. Both are invented. The pattern
+is built so the accessible name **begins with the visible word**, which is what keeps 2.5.3 true;
+a name like "Copies this link" would not.
+
+**One judgment inside the invention, flagged because it is arguable:** the name embeds the **full
+address**, which is what §16.3 literally asks for and what actually distinguishes twelve controls
+from each other — but a long URL read aloud is long, and a shortened form (*"Copy the address at
+photos.example.com"*) would be easier to listen to while being a version of exactly the truncation
+§7.2.4 is wary of. The document settles this nowhere. The full address was chosen because §7.2.4
+insists the full address is what the control copies and must stay reachable as text; the trade is
+recorded here rather than buried.
+
+**3. The copy confirmation** — *"Address copied."*
+
+*What SPEC gives:* that the copy is *"confirmed in a polite live region"* (4.1.3), *"composing the
+existing status partial"*. That partial is `partials/_status.html`, which already exists and is
+already correct (`role="status" aria-live="polite"`), so **nothing about the mechanism was
+invented** — only the sentence inside it. *What SPEC does not give:* the sentence.
+
+**Drawn:** all three registered in `CRIB.md` §2, each headed **INVENTED** in its own entry, with
+the no-scolding constraint of §7.2.4 recorded beside them. No page renders any of them yet.
+None of the three should be read as settled wording — they are the plainest thing consistent with
+the rules around them, which is this track's standing answer to a document silence.
+
+---
+
+## 51. §10.4 closes the card page with "and nothing else" — and §10.5's section is sitting on it
+
+**Session:** R1. **Surface:** `mockups/pages/contact-card-received.html` (M5's), **deliberately
+not edited this session.** R3 rebuilds that page; this is for the founder to settle before it does.
+
+§10.4 was rewritten in v1.30. The answered card is no longer a one-time reply — it is a **page**,
+one per (owner, viewer) pair, at its own permission-checked address, resolved live on every visit
+and never stored. The section states what it carries as a closed list: the owner's display name
+through the shared helper (§4.5.1), *"the items the viewer may see, and nothing else."*
+
+The page as M5 built it carries a section headed *"Request more access (may ship in v1.1)"*,
+drawn from §10.5 — a real part of the design, marked deferred in SPEC itself.
+
+**The question, which this session does not answer:** does a v1.1 feature belong on a page whose
+own section closes with *"and nothing else"*? Both readings hold up. §10.4's list is plainly aimed
+at excluding a **message** — the three arguments beneath it are all about not storing and not
+delivering a reply — and on that reading "nothing else" forbids conversation, not controls, and
+§10.5's toggle is a control. But §10.4 also says of §10.5 specifically that its flags *"have
+always assumed this page without saying so"*, which is the document noticing that the two sections
+touch and, in the same breath, not adding the flags to §10.4's list.
+
+**Drawn:** nothing. The page is untouched by instruction. R3 rebuilds it against the rewritten
+§10.4 and will need this decided — or will need to record which reading it built on.
+
+---
+
+## 52. Two filenames left open, because naming a page belongs to the session that builds it
+
+**Session:** R1. **Surface:** `mockups/CRIB.md` §5 (read this session, and deliberately left
+exactly as found) and two pages R3 will touch.
+
+`CRIB.md` §5 registers the nav target filenames the track has assumed since M1, each session
+adding to it as it built. Two names are now genuinely open. R1 builds no page, so both are
+recorded here rather than picked:
+
+**1. Does the card page keep the name `contact-card-received.html`?** M5 chose that name for what
+§10.4 then described: a one-time reply, a thing Alice *receives*. Under v1.30 it is a page at its
+own permission-checked address (§9.3) that a friend returns to for as long as the friendship
+lasts, reached from the owner's About tab (§9.1) — so "received" now names the moment the card
+first arrived rather than what the surface is. Against a rename: `CRIB.md` §5 records the current
+name, M5's page set uses it, and this track's settled practice (entries 8, 16, 20, 21, 27, 37, 48)
+is to leave a filename alone rather than retarget links sitting in files outside the current
+session's own touched set.
+
+**2. What is the card report form called?** `prompts/mockups/resync-to-1.30.md` §3.2 proposes
+`report-card.html`, beside the existing `report-post.html` and `report-profile.html`. That is the
+obvious name and matches the pattern M6 set, but the page is not built, so it is not yet a fact,
+and nothing in `CRIB.md` §5 registers it.
+
+**Drawn:** nothing, and `CRIB.md` §5 was left untouched. Both names belong to R3, the session that
+builds those pages. Registering a filename here that R3 then declined to use would add a fourth
+entry to this log's existing run of filename mismatches rather than prevent one.
