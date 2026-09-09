@@ -453,6 +453,48 @@ carry the change. Verify rather than reconstruct:
 named principle with no constant, no state and no surface, and BUILD_PLAN §0.6 already says what
 to do with a SPEC section that asserts nothing testable.
 
+### T. The contact-card report — ARCHITECTURE and BUILD_PLAN are already done (from prompt 15, landed in 1.30)
+
+**This section exists so the sync does not redo work, undo a lifted gate, or re-add a stored card.**
+Prompt 15 made a contact card a reportable object — SPEC §13.2 gains "Reporting a contact card,"
+§10.4 was rewritten so the answered card is a **page** rather than a one-time reply, §13.2.1 defines
+delete-content on a card item, and §10.2's build gate on the `link` kind is lifted — and, like 13, it
+**wrote its own downstream edits rather than handing them here.** Verify rather than reconstruct:
+
+- **ARCHITECTURE §4** — `card_requests` corrected (it records *that* a card was answered, **never the
+  answer**); `contact_items` lost its "not reportable yet" note; `reports` gained the **contact-card
+  target type**, with the frozen copy specified as a value (ordered `{kind, value, label}` plus the
+  reported item's **position**) and explicitly no foreign key, no resolution trace, no clickability flag.
+- **ARCHITECTURE §5.1** — the freeze is a **caller of the engine**: one `visible_contact_card(reporter,
+  owner)` call at submit, reporter as viewer. Two named shortcuts are recorded as wrong.
+- **ARCHITECTURE §15 item 11** — the decision, the corrected `card_requests` wording, and the fact
+  that nothing new was added (no table, no job, no dependency, no infrastructure).
+- **BUILD_PLAN Steps 9.1, 9.2, 13.1, 13.3 and Appendix rule 11** — 9.1's gate lifted, 9.2 rewritten
+  around the card page, 13.1 and 13.3 given the card target and the delete-content behaviour.
+
+**Four things are deliberately as they are. Do not "fix" any of them:**
+
+- **Step 9.1's 🚧 gate is gone on purpose.** §S told you not to remove it; that instruction is spent.
+  1.30 lifted it in SPEC §10.2, in Step 9.1 and in README together. If your sweep finds the `link`
+  kind shipping with no gate, that is the current state, not an omission.
+- **`card_requests` deliberately stores no answer.** Its earlier wording ("what was auto-answered")
+  read as *store the resolved card*, which SPEC §10.4 now refuses in as many words. A sweep that
+  restores the old phrasing rebuilds the send-time freeze the design rejected.
+- **The card page is re-resolved on every visit, and a return visit writes nothing.** No
+  `card_requests` row, no notification, no rate-limit counter. Step 9.2's ✅ asserts the *absence* of
+  those; read it as the test it is, not as a weakened one.
+- **The report action on a card is rendered in Step 9.2 and wired in Step 13.1.** That split is
+  intentional and matches how the profile's report action already spans Steps 8.1 and 13.1. Two
+  steps mentioning one control is not a duplication to collapse.
+
+**One item is inherited, and it is the ordinary §2.2 kind:** nothing new in SPEC §14 (this design
+added no constant), so there is no constants work here at all — noted so you can tick it rather than
+go looking.
+
+**One correction 15 made in passing, so you do not make it twice:** BUILD_PLAN Appendix rule 11 said
+*"Four things are rendered by one shared helper each"* after 1.29 added a fifth (the link renderer).
+It now says five and names it.
+
 ## Verification before you finish
 
 - **Every SPEC §14 constant appears somewhere in BUILD_PLAN**, or is covered by §2.2's

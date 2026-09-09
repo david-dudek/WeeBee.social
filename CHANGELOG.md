@@ -105,6 +105,92 @@ no other trace.
 
 ---
 
+## 1.30 — 2026-09-07
+
+| File | Status |
+|---|---|
+| README.md | changed — **one clause** in the 60-second summary. It called the card report *"the single piece of this still to be designed"*; it is designed, so the sentence now says a card can be reported like a post or a profile. Nothing else in README was touched |
+| SPEC.md | changed — **§13.2 gains "Reporting a contact card"**, the fourth report target, with its frozen-copy field list and target categories; **§10.4 rewritten** — the answered card is a page, resolved live; §10.2's build gate on the `link` kind **lifted**; §13.2.1 defines delete-content on a card item; §13.1, §13.3, §9.1 and §16.3 reconciled |
+| ARCHITECTURE.md | changed — §4: `card_requests` corrected (it records *that* a card was answered, never the answer), `contact_items` loses its gate note, `reports` gains the card target type; §5.1: the freeze calls the engine; §15 item 11 |
+| BUILD_PLAN.md | changed — Step 9.1's gate lifted, Step 9.2 rewritten around the card page, Steps 13.1 and 13.3 gain the card report, Appendix rule 11 corrected |
+| CHANGELOG.md | changed — this entry |
+
+From prompt 15, which existed because 1.29 gave contact cards an author-chosen address and an author-written label and **a contact card was not a reportable object anywhere in SPEC.** The rule this entry inherits is v1.16's, stated when §13.2 put a report action on the friend-request card: *a report the recipient cannot reach is not a defence.*
+
+### The decision that unlocked the rest: a received card is a page
+
+The prompt framed the first question as "where does the report action live," and it could not be answered until a prior question was settled that §10.4 had never asked. §10.4 said the system **auto-replies** with the permitted version of the card. A reply is a moment. If that is all it is, the report action is reachable for as long as the reply is on screen and never again, which is not a report action at all.
+
+**So the answer is a page** — one per (owner, viewer) pair, reached from the owner's About tab, alive for as long as the friendship is. Three arguments decided it, and none of them is about reporting:
+
+- **A stored answer defeats §10.3.** The cascade's discipline is that over-sharing is unrecoverable, so withdrawal has to be free and immediate. An item the owner switches off must *disappear* for the person it was switched off for. A delivered copy cannot do that.
+- **A stored answer is a message**, and it would be the only one on the platform (§10.1).
+- **A card does not expire** (§9.7) — it is account state, not a statement — so a stored copy would have no clock at all.
+
+The page therefore **re-resolves on every visit**, and two consequences are written down rather than left to a builder: **a return visit is not a new request** (no notification, no rate-limit counter — otherwise a friend's second look at a phone number becomes an event in the owner's feed), and **a returning friend can tell that something changed**, because it did. Nothing announces it, exactly as a changed bio announces itself only to the next visitor.
+
+**This found a real defect one document down.** ARCHITECTURE §4 described `card_requests` as *"who asked whom, when, what was auto-answered"* — a sentence that reads as an instruction to **store the resolved card**, which is the send-time freeze this session rejected, arriving through the data model instead of through the design. Corrected.
+
+### The freeze: report time, and the reasoning was tested rather than inherited
+
+The prompt said report-time freezing was very probably right and asked for the argument. It holds, and the sharper half of it is not the storage cost:
+
+- **A card is auto-answered on request** (§10.4), so a send-time freeze means a copy of every card every friend ever asked for, held for the life of the friendship, against a report that will almost never come.
+- **The two freezes in the document defend different things.** §5.2's friend-request snapshot exists because that card is **pushed** at up to 20 people a day and its content must not be rewritten between batches. A contact card is **pulled**, by one friend, who asked. What needs protecting here is not the push but the **evidence**, and what threatens evidence is the owner editing the card the moment a report is filed — which is exactly what a report-time freeze answers.
+- **§13.2's profile report is the model** for the further reason that it freezes a **per-viewer** view: *the profile as it appeared to the reporter.* That is the shape of this problem.
+
+**What is frozen is stated as a field list**, on §9.1's precedent, because it is a security boundary: every delivered item's kind, value and label, verbatim; **the order** (twelve labels can be a sentence); **the position of the reported item** — never a pointer to a live row the owner can delete; the reason category and the note. **Live:** both display names (§4.5.1), and whether a link rendered as a hyperlink or a copy box, which is the platform's rendering decision rather than the author's content and is re-read from the allowlist. **Not captured at all: the cascade.** The operator needs what was *delivered*; how the overrides produced it is the owner's private configuration, and groups are private to their owner by rule (§6).
+
+**The whole delivered card is frozen, not only the reported item** — because `CARD_ITEM_LABEL_MAX` = 40 times `CONTACT_ITEMS_MAX` = 12 is up to 480 characters of free text, and what one label cannot carry, twelve can. An operator shown one label in isolation is judging the wrong question.
+
+**And a frozen card is text and nothing else.** Nothing on a card is an image, which is why §13.3's lifecycle absorbs it with nothing added — no new purge branch, no storage argument like the one §5.2's frozen photograph forced.
+
+### The sharpest thing in the entry: the freeze must call the engine, and why
+
+Card resolution is the visibility engine's `visible_contact_card` (ARCHITECTURE §5). The freeze calls it **once, at submit, with the reporter as the viewer.** Decision 4 is usually defended on drift — two implementations of a rule diverge. Here it is defended on something worse:
+
+> A report path that reads `contact_items` and `contact_overrides` and works the cascade out for itself captures **every item the owner has, including the ones that reporter was never shown**, and hands them to the operator as evidence. That is a report turned into a disclosure channel by an implementation detail.
+
+BUILD_PLAN Step 13.1 therefore carries it as a **test**, not only as a rule: seed an item hidden from the reporter by an individual override, file a report, assert the hidden item is absent from the frozen copy.
+
+### The other three decisions, briefly
+
+- **Per item, not per card.** A card may carry twelve items, and *"someone reported David's card"* leaves the operator guessing which. One button per row, each with a **distinct accessible name from the item's own label** — *"Report the item labelled 'My photos'"* — falling back to kind and position where the label is empty. That is §16.3's repeated-controls rule, which now names this control alongside the "read more" folds, the gallery controls, the reaction picker and the copy box. **An empty card carries no report action**; a complaint about the person is a profile report.
+- **Four target categories**, on the profile report's pattern, answering *which part is wrong* while the optional note answers *why*: **the label · the address or number · the card as a whole · this person's behaviour.** "The card as a whole" is reachable from any item's button and is the category for the twelve-labels-make-a-sentence case.
+- **Purge is §13.3's, unchanged, and both candidate exceptions were checked.** It must not end early when the owner deletes the item — §13.3 already keeps a frozen copy through author-deletion *solely so the report can be judged*, and deleting the reported item is the first move a reported person makes. It needs no extension either: a card item never expires, so there is no case where the frozen copy outlives a thing the platform itself destroyed.
+
+### Delete content on a card item, defined
+
+The gap §13.2.1 was written to close for posts, arriving one target type later: *"delete content"* on a card had no meaning anywhere. **The operator removes the whole item** — one row, gone from every version of the card at once, because there is only one item and the cascade merely decides who sees it.
+
+- **Never a partial edit.** Blanking an abusive label while keeping the number is the operator writing into somebody's account; the tools here are remove, warn and ban, and none of them is an edit. Where only the label is abusive the item still goes and the owner may add the number back — a card item costs one line to re-create.
+- **The collateral is close to nothing, which is the contrast with a post.** Deleting a post destroys its comments — other people's words. Deleting a card item destroys an address the owner typed and nobody else's anything.
+- **It is silent**, like a deleted post. If the operator wants the person to know, that is what **warn** is for, and the two compose: remove the item, warn the account.
+- **Already gone → the outcome is unavailable and the report can still be upheld** (§13.4's counter is the record); **changed since → the operator sees both** the frozen copy and the current row, and removing it is still correct, because the reported content existed and was delivered.
+
+### Two things added that the prompt did not ask for
+
+- **§13.1 gains a second honest qualification.** Layer 1 claims *no free-text messaging channel*, and since 1.29 a card carries up to 480 characters of author-written label. The layer should say so rather than let the claim absorb it. What makes it a far weaker vector than the friend-request card is that it is **pulled, not pushed** — the reader must already be a friend and must have asked — and it is governed by the cap, `NAME_BLOCKLIST` screening, and, from now, the report action. This is the same move v1.15 and v1.16 made for the friend-request surface, and §13.1 is where it belongs.
+- **No new rate limit, recorded as a decision.** Twelve buttons on one page is not a mass-report weapon, because §13.3 already removed the prize: reported content **stays live** while a report is open. Filing twelve reports censors nothing.
+
+### One correction found in passing
+
+BUILD_PLAN Appendix rule 11 still said **"Four things are rendered by one shared helper each"** after 1.29 added a fifth (the link renderer, ARCHITECTURE §4). Corrected here, with the fifth named, and flagged as a correction rather than folded in silently.
+
+### README carried the gate too, in different words
+
+The prompt's closing checklist named two places that said the `link` kind was waiting — SPEC §10.2 and BUILD_PLAN Step 9.1 — and warned that leaving either saying so afterwards is the failure the checklist exists to prevent. There was a third. README's 60-second summary called the card report *"the single piece of this still to be designed."* Same statement, different document, and the one most likely to be read by someone the founder shares the repository with. **Fixed to the same standard as the other two**, as one clause and nothing else: README was not otherwise reviewed against 1.30, and its "This file last changed in" line says exactly what changed.
+
+### Scope: what was not touched
+
+**§14 gains no constant** — this design needed none. **No new table, no new column beyond the report's own frozen copy, no new job, no new dependency, no new infrastructure.** 1.29's decisions were not reopened: the three link outcomes, the label and its cap, and the card-only messenger scope all stand exactly as written.
+
+### Working files (outside the record)
+
+`TODO.md`: prompt 15 marked **done at 1.30**; the Step 9.1 gate recorded as **lifted**. `prompts/09-sync-arch-and-buildplan.md`: new **§T**, on the §R/§S pattern — what 15 already did downstream, what the sync must not undo (Step 9.1's gate is gone on purpose; `card_requests` stores no answer), and the one item it inherits.
+
+---
+
 ## 1.29 — 2026-09-07
 
 | File | Status |

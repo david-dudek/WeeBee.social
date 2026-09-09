@@ -46,11 +46,15 @@ Status values: `not run` · `in progress` · `done` · `deferred` · `dropped`
 | 12 | [What a ban actually does](prompts/12-moderation-outcomes.md) | SPEC §13.2 (new §13.2.1), §4.7, §4.8, §9.3, §12.1, §13.4 | 01 | done | 1.27 |
 | 14 | [The gathering test](prompts/14-the-gathering-test.md) | SPEC new §1.4; README | — | done | 1.28 |
 | 13 | [The delegation principle & the link policy](prompts/13-delegation-and-link-policy.md) | SPEC new §1.5, §7.2.3 rewritten, new §7.2.4, §4.6.1, §7.2, §7.5, §7.8, §9.4, §10.1, §10.2, §13.1, §13.5, §14, §16.3, §17; README; ARCHITECTURE §4, §7, §15; BUILD_PLAN Steps 6.2, 6.2a, 6.6, 8.1, 9.1, 13.3, 16.1, Appendix | 01, **14 (done)** | done | 1.29 |
-| 15 | [Reporting a contact card](prompts/15-reporting-a-contact-card.md) | SPEC §10.2–10.4, §13.2–13.4; ARCHITECTURE §4; BUILD_PLAN Steps 9.1, 9.2, 13.3 | **13 (done)** | not run | |
+| 15 | [Reporting a contact card](prompts/15-reporting-a-contact-card.md) | SPEC §10.2–10.4, §13.1–13.4, §9.1, §16.3; README; ARCHITECTURE §4, §5, §15; BUILD_PLAN Steps 9.1, 9.2, 13.1, 13.3, Appendix | **13 (done)** | done | 1.30 |
 | 09 | [The sync: ARCHITECTURE + BUILD_PLAN to current SPEC](prompts/09-sync-arch-and-buildplan.md) | ARCHITECTURE, BUILD_PLAN | **02–08, 10–15** | not run | |
 
 **Run 09 last.** Prompts 02–08 and 10–15 may each amend SPEC and ARCHITECTURE; syncing
 BUILD_PLAN once against a settled SPEC means writing those build steps a single time.
+
+**09's dependencies are now all met (1.30), and 09 is the only prompt left in the queue.** Every
+prompt it waits on — 02–08 and 10–15 — is `done`. Nothing in the queue blocks it, and SPEC is as
+settled as this process is going to make it before the build starts.
 
 **14 and 13 both ran, in that order, and the ordering paid off.** 14 settled the shape — a named
 principle takes its own numbered subsection, §1.3 is not renumbered, and the binding strength goes
@@ -66,6 +70,17 @@ scope, with the person/thing test recorded as a **guideline** and LinkedIn named
 second card-only category; **card link items are specified now and gated on prompt 15**, which
 designs the report path a card has never had. Also decided, not asked: **§13.5 accepts no
 blocklist appeals**, so the refusal message names no door.
+
+**15 ran, and the Step 9.1 build gate is LIFTED (1.30).** A contact card is now a reportable object: SPEC §13.2 gains "Reporting a contact card," and the `link` item kind ships with the rest of the card. Three places had said it was waiting and all three were cleared — **SPEC §10.2, BUILD_PLAN Step 9.1, and README's 60-second summary**, which carried the same statement in different words and was the one the prompt's checklist did not name.
+
+**15's decisions, for anyone reading a downstream prompt:**
+- **A received card is a page, not a one-time reply** (SPEC §10.4, rewritten). One per (owner, viewer) pair, reached from the About tab, **re-resolved live on every visit and never stored**. This was the prior question the report action depended on, and it decided itself on §10.3 rather than on reporting: a stored answer cannot lose an item the owner switches off. A return visit is not a new request — no notification, no rate-limit counter.
+- **The freeze is taken at report time**, from **one call to the engine with the reporter as the viewer**. A report path that resolves the cascade itself captures items the reporter was never shown and files them as evidence — a disclosure, not a drift. BUILD_PLAN Step 13.1 carries it as a test.
+- **The report action is per item**, with a distinct accessible name from the item's own label; **four target categories** (*the label · the address or number · the card as a whole · this person's behaviour*); **§13.3's purge lifecycle unchanged**, both candidate exceptions checked.
+- **Delete content on a card item removes the whole row** — never a partial edit, never a blanked label (SPEC §13.2.1).
+- Also decided, not asked: **§13.1 gains a second honest qualification** about the label as free text on a pulled surface, and **no new rate limit** for reports (§13.3's stays-live rule already removes the prize).
+
+**15 wrote its own ARCHITECTURE and BUILD_PLAN edits**, on 13's precedent rather than handing them to 09; `prompts/09-sync-arch-and-buildplan.md` gains a new **§T** recording what is done and what the sync must not undo.
 
 **13's archetype follow-on is unblocked, and is not a numbered prompt** — see below.
 
