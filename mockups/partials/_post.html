@@ -8,7 +8,7 @@
   the class names below are the ones styles.css targets, so a page that
   follows this shape gets the same look with no extra CSS.
 
-  Required parts, per SPEC §7.5, §7.5.1, §7.6, §7.8, §7.9:
+  Required parts, per SPEC §7.5, §7.5.1, §7.6, §7.8, §7.9, §7.2.4, §16.3:
     - the author's name (omitted on Blog/Pinned tabs, SPEC §9.1)
     - the relative age, as a literal ladder phrase (§7.5.1) — never a
       title attribute, never a datetime attribute
@@ -22,6 +22,22 @@
       way
     - an "edited" marker with the relative time of the edit, if edited
       (§7.8) — real text beside the age, no version history
+    - a copy box for every address in the body that is on neither link
+      list (§7.2.4). The address renders in full and verbatim — never
+      truncated in the value itself, never re-written, never resolved —
+      beside a real <button> whose visible text is "Copy" and whose
+      accessible name names that address, via visually-hidden text in
+      exactly the way the read-more control above already does it. The
+      name begins with the visible word, which is what keeps 2.5.3 true
+      (§16.3). An allowlisted address in scope for this surface is an
+      ordinary <a> instead, and a blocklisted one never reaches a post
+      at all — it is refused in the composer (§7.2.3, composer.html).
+      A copy box is NOT an error: no aria-invalid, no .field-error, no
+      warning, no apology, no error styling, no "this link is not
+      approved" note beside it (§7.2.4).
+    - the copy confirmation, which composes partials/_status.html — the
+      polite live region §7.2.4 requires (4.1.3). That partial is
+      already correct; compose it, do not write a second one.
 -->
 <article class="post" aria-label="Post by [Author], [relative age]">
   <p class="post-meta">
@@ -32,6 +48,10 @@
   <div class="post-body">
     <p>[Post text — folded at the surface's fold threshold, cut at a
        whitespace boundary, when longer than that threshold.]</p>
+    <!-- <div class="copy-box">
+           <span class="copy-box-address">[the full address, verbatim]</span>
+           <button class="copy-box-button" type="button">Copy<span class="visually-hidden"> the address [the same full address, verbatim]</span></button>
+         </div> -->
   </div>
   <!-- <button class="read-more" type="button" aria-expanded="false">
          Read more<span class="visually-hidden"> of [Author]'s post from [relative age]</span>

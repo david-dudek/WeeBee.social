@@ -28,8 +28,14 @@ through — just the fact that it changed, and about when.</p>
 <button type="submit" class="button">Save changes</button>
 <p class="commentary">SPEC §7.8: the "edited" marker is permanent, real text, with no version
 history and no diff — "this is not an archive." Saving here re-runs every content check a new
-post would (length caps, the URL allowlist, whitespace rules) but does not re-notify anyone,
-reset the 90-day expiry clock, or move the post in the feed's order (§7.8's five invariants).
+post would (length caps, whitespace rules, and the whole link policy — <em>both</em> lists: the
+allowlist that decides what becomes a clickable link, and the blocklist that refuses a domain
+outright) but does not re-notify anyone, reset the 90-day expiry clock, or move the post in the
+feed's order (§7.8's five invariants). Both lists are checked by the same shared validator on
+every save path, create and edit alike — §7.8's invariant 4 calls that security-critical, since
+a create-only validator would let an author publish clean text and then edit a blocklisted
+domain into it afterwards, and §7.2.3 says in terms that "a create-only implementation is a
+defective implementation of this section" (§7.2.3, §7.2.4, both v1.29).
 This post carries no hashtags of its own; see sections 3 and 4 below for what editing hashtags
 does on a post where they matter — a profile post. On a feed post like this one, any hashtags
 are decorative ranking signals only (SPEC §11.2) and editing them here would not move the

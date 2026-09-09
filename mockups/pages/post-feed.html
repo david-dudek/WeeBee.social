@@ -11,9 +11,39 @@ or the feed itself.</p>
 </p>
 <div class="post-body">
 <p>Small dinner this Friday if anyone's free — nothing fancy, just good company and too much pasta. Let me know and I'll set a place for you.</p>
+<p>Photos from the last one are still up here:</p>
+<div class="copy-box">
+<span class="copy-box-address">https://photos.example.com/albums/2026-06-dinner/s/aG92ZXJpbmdvdmVydGhlcGFzdGE5MjM0</span>
+<button class="copy-box-button" type="button">Copy<span class="visually-hidden"> the address https://photos.example.com/albums/2026-06-dinner/s/aG92ZXJpbmdvdmVydGhlcGFzdGE5MjM0</span></button>
+</div>
+<p>And the pasta everyone kept asking about afterwards:</p>
+<div class="copy-box">
+<span class="copy-box-address">https://recipes.example.org/walnut-pesto-rigatoni</span>
+<button class="copy-box-button" type="button">Copy<span class="visually-hidden"> the address https://recipes.example.org/walnut-pesto-rigatoni</span></button>
+</div>
 </div>
 <p class="post-visibility">Visible to: the friends David sent this to.</p>
 </article>
+
+<p class="status-message" role="status" aria-live="polite">Address copied.</p>
+<p class="commentary">Four copy boxes render on this page — two in the post above, one on Tom's
+comment, one on David's own. SPEC §7.2.4: an address on neither link list is delivered as an
+inert copy box showing the address <em>in full and verbatim</em>, never truncated in the value,
+never re-written, never resolved. None of them is flagged, because none of them is a problem —
+§7.2.4 forbids <em>"a warning, an apology, error styling, or a 'this link is not approved'
+note beside it"</em> here, and this post is the exact reader that rule exists to protect: an
+ordinary member linking to the rest of their own photographs. §16.3 names this control among the
+repeated ones needing distinct accessible names, <em>"of which a single feed page may carry
+many"</em>, so each button reads "Copy" but is named for its own address through visually hidden
+text, in the same way the read-more folds above are — which is also what keeps 2.5.3's
+visible-label-matches-accessible-name rule true, since every name begins with the visible word.
+The single polite live region above is the copy confirmation §7.2.4 requires (4.1.3), composing
+<code>partials/_status.html</code> unchanged; its wording is invented (see
+<code>mockups/CRIB.md</code> §2 and <code>mockups/NOTES.md</code>). These mockups carry no
+scripts, so it is shown already populated, as if a reader had just used one of the four
+controls. The addresses themselves sit on the reserved documentation domains
+<code>example.com</code>, <code>example.org</code> and <code>example.net</code>, so none names a
+real site or implies anything about what either operator list actually carries.</p>
 
 <ul class="reaction-list" aria-label="Reactions to your post">
 <li>Alice: Love it!</li>
@@ -56,7 +86,11 @@ or the feed itself.</p>
 <span class="comment-age">About a day ago</span>
 </p>
 <div class="comment-body">
-<p>Count me in, bringing dessert.</p>
+<p>Count me in, bringing dessert. Attempting this one, wish me luck:</p>
+<div class="copy-box">
+<span class="copy-box-address">https://recipes.example.org/hazelnut-torte</span>
+<button class="copy-box-button" type="button">Copy<span class="visually-hidden"> the address https://recipes.example.org/hazelnut-torte</span></button>
+</div>
 </div>
 <details class="react-control" open>
 <summary>Reacted: Agreed!<span class="visually-hidden"> to Tom's comment</span></summary>
@@ -78,7 +112,11 @@ or the feed itself.</p>
 <span class="comment-age">A few hours ago</span>
 </p>
 <div class="comment-body">
-<p>Perfect — see everyone Friday around 7.</p>
+<p>Perfect — see everyone Friday around 7. Bread is coming from the place I keep going on about:</p>
+<div class="copy-box">
+<span class="copy-box-address">https://bakery.example.net/east-street</span>
+<button class="copy-box-button" type="button">Copy<span class="visually-hidden"> the address https://bakery.example.net/east-street</span></button>
+</div>
 </div>
 <ul class="reaction-list" aria-label="Reactions to your comment">
 <li>Mom: Thinking of you</li>

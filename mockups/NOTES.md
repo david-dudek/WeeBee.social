@@ -1212,3 +1212,195 @@ and nothing in `CRIB.md` §5 registers it.
 **Drawn:** nothing, and `CRIB.md` §5 was left untouched. Both names belong to R3, the session that
 builds those pages. Registering a filename here that R3 then declined to use would add a fourth
 entry to this log's existing run of filename mismatches rather than prevent one.
+
+---
+
+## 53. §9.4 settles the extended-bio link question R1 could not: the About tab's anchor is wrong as built
+
+**Session:** R2 (the 1.27 → 1.30 re-sync, second sitting — the link cluster). **Surface:**
+`mockups/pages/profile-about.html`, line 39, **deliberately not edited this session.** R3 owns
+that page and makes the fix.
+
+`prompts/mockups/resync-to-1.30.md` §9 carries this as its first unverified item: the extended
+bio renders `<a href="https://www.openstreetmap.org/">here's the stretch</a>` — anchor text that
+is not the URL — and the plan could not say whether the extended bio falls under the same link
+rule as a post, because §9.4 had not been read.
+
+**It has now, and §9.4 says so directly.** The extended bio *"follows the uniform link rule of
+§7.2.4 — allowlisted links clickable, anything else an inert copy box, blocklisted domains
+refused,"* a change made in v1.29; before that only allowlisted links were permitted and
+everything else was rejected at save. So the line is wrong as built **on the first count
+regardless of the second**. §7.2.4 states of this rule that *"a URL is linkified as itself, and
+there is no markup with which link text could ever lie about where it goes"* — which is the
+whole reason the copy box's gain over a hyperlink is *"not disclosure — it is the deliberate
+act."* Anchor text reading "here's the stretch" over an address the reader cannot see is exactly
+the markup §7.2.4 says does not exist on this platform.
+
+Whether `openstreetmap.org` is allowlisted decides only **which** corrected rendering is right —
+a clickable hyperlink showing the address as its own text, or an inert copy box. That half stays
+open: §7.2.3 names Google Maps and Apple Maps as examples of the Convening category, not as an
+exhaustive list, and the allowlist's actual contents are an operator table this track cannot
+read. Either way the anchor text goes.
+
+Two things next to it are **not** wrong and should survive the fix. The short bio above it is
+correctly plain, unclickable text — §9.4 keeps the stricter rule there, and v1.29 restated its
+*reason* (the short bio is a **push surface**, delivered unasked to up to 20 people a day in a
+friend request) without changing the outcome. And that section's own commentary already says as
+much. The commentary on the extended bio, however, says *"allowlisted links are permitted
+(§7.2.3)"*, which is the pre-1.29 rule and needs the same correction as the markup.
+
+**Drawn:** nothing on the page. `profile-about.html` is R3's — §3.1 of the plan already owes it
+the friends-only contact-card control of §9.1 — and the plan's own claim that steps 3 and 4 are
+independent and may be swapped holds only if no file belongs to both. This one does. Recording
+the finding here rather than fixing it lets R3 make both changes in a single pass, which is also
+this track's settled practice for a line sitting in a file outside the current session's own
+touched set (entries 8, 16, 20, 21, 27, 37, 48).
+
+---
+
+## 54. `post-profile-tagged.html` gets no copy box, and the reason is that two other pages already carry one
+
+**Session:** R2. **Surface:** `mockups/pages/post-profile-tagged.html`, **left untouched.**
+
+The plan's §9 carries this as an open question: the page *"may or may not need a copy box. One
+post view demonstrating the rendering may be enough; confirm in step 3 rather than changing it on
+spec."* Confirmed, and the answer is no.
+
+After this session the copy box renders on **two** post views —
+`post-feed.html`, which carries four of them (two in the post body, one on Tom's comment, one on
+David's own), and `overlay-post.html`, which carries one. Between them they demonstrate every
+part of §7.2.4 and §16.3 the rendering owes: the address in full and verbatim, the absence of any
+error affordance, the distinct accessible name per control, and the polite live region that
+confirms the copy. A third instance would repeat, not add.
+
+There is also a positive reason to leave this page alone. It is the one page in the track whose
+viewer is **Priya**, a friend-of-friend, and it exists to demonstrate two things that need that
+viewer: the react control on someone else's post (§8.2.2) and the two different name renderings
+of §8.1/§8.2.2. Those are already dense. Adding a fourth mechanism to it would blur the page's
+own subject for no gain.
+
+**Drawn:** nothing. The page is byte-identical to how M2 left it.
+
+---
+
+## 55. The copy box's first layout collision: the image overlay's inert backdrop — and a page swap that followed from it
+
+**Session:** R2. **Surface:** `mockups/pages/overlay-post.html` and `mockups/pages/post-feed.html`.
+
+`prompts/mockups/resync-to-1.30.md` §3.2 assigns the **many-copy-controls** demonstration to
+`overlay-post.html`, on the reasoning that *"a single-post view is where many copy controls
+collect."* The reasoning is right and the file is wrong: `overlay-post.html` is built around the
+image overlay dialog — two sections, *"The page behind the dialog"* and *"The dialog, open"* —
+and carries no comments at all. The single-post view that actually carries comments is
+`post-feed.html`. **The two assignments were swapped**, so the many-controls demonstration is on
+`post-feed.html` (post body ×2, Tom's comment, David's comment — four distinct accessible names)
+and the single ordinary copy box is on `overlay-post.html`.
+
+**The collision the swap surfaced is the more interesting half.** `overlay-post.html`'s only post
+body sits inside `<div class="modal-backdrop-content" aria-hidden="true">`, and until this
+session that region held **no focusable element**: M3 flattened even the gallery grid's real
+`<button>`s down to plain `<img>`s there, which is why the problem had not arisen before. A copy
+box is the first control §7.2.4 puts inside an ordinary post body, and a focusable `<button>`
+inside an `aria-hidden` region is a 4.1.2 failure rather than a drawing of anything.
+
+The two sections genuinely do collide, and honestly: §7.2.4 requires the copy control to be
+*"operable by keyboard alone"* (2.1.1), while §16.3 requires the image overlay to be a modal
+dialog whose focus is *trapped* inside it. Both hold. The resolution is that the control is
+keyboard-operable **when the dialog is closed**, and unreachable while it is open, exactly as
+every other control on the page behind a modal is.
+
+**Drawn:** the copy box renders as the canonical markup, and the backdrop container gained
+`inert` alongside the `aria-hidden` it already carried — verified in a browser: the button cannot
+take focus. This is not new behaviour invented for the mockup; that section's own commentary has
+said *"Dimmed and inert while the dialog is open"* since M3, so the attribute makes the markup
+state what the page already claimed. `overlay-gallery.html` has the same backdrop and still holds
+no focusable element, so it needs nothing and was not touched. **For the founder:** this is worth
+knowing because the real implementation has to do the same thing, and the failure mode is silent
+— a copy button behind an open overlay that is still in the tab order is a defect no visual
+review catches.
+
+---
+
+## 56. Unresolved: what happens when a fold boundary falls inside a URL
+
+**Session:** R2. **Surface:** `mockups/pages/post-feed.html` (Alice's folded comment), and every
+folding surface in the track. **Nothing was drawn for it, deliberately.**
+
+The second collision, and this one has no answer in either document. §7.7 folds a post or comment
+at its surface's `*_FOLD_CHARS` threshold, *"cut at a whitespace boundary."* §7.2.4 requires a
+copy box to show the address *"in full and verbatim — never truncated in the value itself, never
+re-written, never resolved."* Neither section mentions the other, and they meet whenever an
+address sits past the fold:
+
+- If the fold cuts the body **before** the address, the copy box is hidden until the reader
+  expands — which is fine, but it means the "read more" control now hides a *control*, not only
+  text, and the folded state's accessible name says nothing about that.
+- If the fold's whitespace boundary lands **inside** a URL — a URL contains no whitespace, so the
+  boundary can only fall before or after it, but a `COMMENT_FOLD_CHARS` = 300 cut immediately
+  after an address that begins at character 280 leaves a copy box in the visible part and its
+  sentence in the hidden part.
+- A URL long enough to exceed the fold threshold on its own has **no** whitespace boundary to cut
+  at anywhere inside it, so the rule as written offers the fold no legal cut point at all.
+
+None of these is hypothetical: `COMMENT_FOLD_CHARS` is 300 and the address on the post above is
+83 characters.
+
+**Drawn:** nothing, and the collision was kept out of the rendering rather than resolved into it.
+Alice's comment on `post-feed.html` is the page's one folded body and was left exactly as M2
+wrote it, with no address in it, so no mockup here shows a half-address or asserts a fold rule
+neither document states. All four copy boxes on that page sit in unfolded bodies. **For the
+founder:** the safe implementation is almost certainly that a copy box never splits — the fold
+takes the whole box or none of it — but that is a rule §7.7 does not currently contain.
+
+---
+
+## 57. The blocklisted-link example is a stand-in, because SPEC deliberately does not say what the blocklist holds
+
+**Session:** R2. **Surface:** `mockups/pages/composer.html`, section 10.
+
+Section 9 of that page used to be a single section headed *"A rejected link"* which refused
+`https://bit.ly/3xyz9` with `aria-invalid` and a `.field-error`. Under v1.29 that was wrong
+twice: an address on neither list is **not refused at all**, and a URL shortener specifically can
+**never** be the allowlist example of a refusal, because §7.2.3 says a shortener is *never
+allowlistable* — which makes it permanently a copy box, not a refusal, unless the operator has
+separately blocklisted it. The section is now two: **9. An unapproved link** (`bit.ly`, a copy
+box, no error affordance of any kind) and **10. A blocklisted link** (genuinely refused). What
+followed renumbered: *"Switching destination"* is now 11.
+
+**The blocklisted example needed a domain, and there is no honest real one to use.** §7.2.3
+states that what belongs on the blocklist *"is not specified here and is not a design
+question — it is operational judgment exercised case by case,"* the same way `NAME_BLOCKLIST`'s
+contents are. Naming any real site in a mockup would therefore invent a policy neither document
+states, and would put a real business's name beside the words "can't be posted on WeeBee" in a
+document the founder may show people.
+
+**Drawn:** `https://blocklisted.example.com/thread/8812`, on the reserved documentation domain
+`example.com` (RFC 2606), which the track already uses for David's email addresses (entry in
+`CRIB.md` §3, M8). The subdomain is self-labelling on purpose: a reader should be unable to
+mistake it for a claim about a real site. The page's commentary says so in as many words. The
+same reasoning governs the four copy-box addresses added this session on `post-feed.html` and
+`overlay-post.html` — all on `example.com`, `example.org` and `example.net`, so that no mockup
+implies a domain is or is not on either operator list. The refusal wording itself is the invented
+string registered at `CRIB.md` §2 and recorded in entry 50 above; it is rendered verbatim and
+nothing was added to it.
+
+---
+
+## 58. `index.html` still describes composer.html as showing "a rejected URL"
+
+**Session:** R2. **Surface:** `mockups/pages/index.html`, the M2 group's `composer.html` row,
+**not edited this session.**
+
+The review index summarises `composer.html` as showing, among other states, *"a rejected
+URL."* After this session the composer shows **two** link states and only one of them is a
+rejection; the other is the case §7.2.4 exists to say is *not* an error. The row's SPEC citation
+list (§7.1, §7.2.1, §7.2.3, §7.3, §7.9, §11.2, §6) is also now missing **§7.2.4**, the section
+that governs both new states.
+
+Checked and clear: the row quotes **no section number of the page's own**, so this session's
+renumbering (old 10 → 11) broke nothing. That was verified before renumbering rather than after.
+
+**Drawn:** nothing. `index.html` is outside this session's four permitted pages, and the plan's
+§3.2 already assigns it to close-out (step 6), which owes it a `report-card.html` row and a
+rewritten M5 description in the same pass. This entry is so that pass does not have to
+rediscover the stale phrase.
