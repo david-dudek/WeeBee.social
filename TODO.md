@@ -4,7 +4,7 @@ Tracker for the design conversations still to be held. Each numbered item has a
 self-contained prompt file in `prompts/`, written to be pasted into a **fresh**
 session (BUILD_PLAN §0.2 rule 4: long chats degrade; prompts carry their own context).
 
-**This file was written at project version 1.16; the project is now at 1.26.** Under the
+**This file was written at project version 1.16; the project is now at 1.31.** Under the
 scheme prompt 01 introduced, the version number belongs to the whole project, not to
 individual files.
 
@@ -44,10 +44,47 @@ Status values: `not run` · `in progress` · `done` · `deferred` · `dropped`
 | 10 | [Reactions: look, lifecycle, expiry](prompts/10-reactions.md) | SPEC §8.2, §7.6, §9.7, §14; ARCHITECTURE §4, §6 | 01 | done | 1.25 |
 | 11 | [Three internal contradictions in SPEC](prompts/11-spec-contradictions.md) | SPEC §9.1/§5.2, §7.9, §8.1, §8.2, §12.3, §7.5.1, §4.8; ARCHITECTURE Decision 4, §5, §9, §15 | 01 | done | 1.26 |
 | 12 | [What a ban actually does](prompts/12-moderation-outcomes.md) | SPEC §13.2 (new §13.2.1), §4.7, §4.8, §9.3, §12.1, §13.4 | 01 | done | 1.27 |
-| 09 | [The sync: ARCHITECTURE + BUILD_PLAN to current SPEC](prompts/09-sync-arch-and-buildplan.md) | ARCHITECTURE, BUILD_PLAN | **02–08, 10–12** | not run | |
+| 14 | [The gathering test](prompts/14-the-gathering-test.md) | SPEC new §1.4; README | — | done | 1.28 |
+| 13 | [The delegation principle & the link policy](prompts/13-delegation-and-link-policy.md) | SPEC new §1.5, §7.2.3 rewritten, new §7.2.4, §4.6.1, §7.2, §7.5, §7.8, §9.4, §10.1, §10.2, §13.1, §13.5, §14, §16.3, §17; README; ARCHITECTURE §4, §7, §15; BUILD_PLAN Steps 6.2, 6.2a, 6.6, 8.1, 9.1, 13.3, 16.1, Appendix | 01, **14 (done)** | done | 1.29 |
+| 15 | [Reporting a contact card](prompts/15-reporting-a-contact-card.md) | SPEC §10.2–10.4, §13.1–13.4, §9.1, §16.3; README; ARCHITECTURE §4, §5, §15; BUILD_PLAN Steps 9.1, 9.2, 13.1, 13.3, Appendix | **13 (done)** | done | 1.30 |
+| 16 | [What "and nothing else" bounds on the card page](prompts/16-card-page-nothing-else-scope.md) | SPEC §10.4 (one clarifying sentence) | **15 (done)** | done | 1.31 |
+| 09 | [The sync: ARCHITECTURE + BUILD_PLAN to current SPEC](prompts/09-sync-arch-and-buildplan.md) | ARCHITECTURE, BUILD_PLAN | **02–08, 10–15** | not run | |
 
-**Run 09 last.** Prompts 02–08 and 10–12 may each amend SPEC and ARCHITECTURE; syncing
+**Run 09 last.** Prompts 02–08 and 10–15 may each amend SPEC and ARCHITECTURE; syncing
 BUILD_PLAN once against a settled SPEC means writing those build steps a single time.
+
+**09's own dependencies (02–08, 10–15) are all met, and 16 has now landed too (1.31).** 16 was
+never one of 09's formal dependencies, but it closed a reading question in §10.4 — whether the
+page may carry §10.5's request-more-access control — before 09 could sync an unresolved one into
+ARCHITECTURE/BUILD_PLAN. Nothing else is queued; 09 is next.
+
+**14 and 13 both ran, in that order, and the ordering paid off.** 14 settled the shape — a named
+principle takes its own numbered subsection, §1.3 is not renumbered, and the binding strength goes
+in the sentence rather than the tone — and 13 wrote §1.5 to match, so §1.4 and §1.5 read as a pair.
+The three tests now in SPEC §1 differ deliberately: §1.2 is a **gate** (fail it and the feature is
+wrong), §1.4 a **question** (fail it and write down why you built it anyway), §1.5 a decision about
+**who provides it** (fail it and the feature moves outside, with WeeBee carrying the link).
+
+**13's decisions, for anyone reading a downstream prompt** — all founder calls, 2026-09-07:
+a non-allowlisted URL renders as a **copy box** (one click plus a paste) rather than bare text;
+**messenger domains become card-only clickable links**, the first use of the new per-row surface
+scope, with the person/thing test recorded as a **guideline** and LinkedIn named as the likely
+second card-only category; **card link items are specified now and gated on prompt 15**, which
+designs the report path a card has never had. Also decided, not asked: **§13.5 accepts no
+blocklist appeals**, so the refusal message names no door.
+
+**15 ran, and the Step 9.1 build gate is LIFTED (1.30).** A contact card is now a reportable object: SPEC §13.2 gains "Reporting a contact card," and the `link` item kind ships with the rest of the card. Three places had said it was waiting and all three were cleared — **SPEC §10.2, BUILD_PLAN Step 9.1, and README's 60-second summary**, which carried the same statement in different words and was the one the prompt's checklist did not name.
+
+**15's decisions, for anyone reading a downstream prompt:**
+- **A received card is a page, not a one-time reply** (SPEC §10.4, rewritten). One per (owner, viewer) pair, reached from the About tab, **re-resolved live on every visit and never stored**. This was the prior question the report action depended on, and it decided itself on §10.3 rather than on reporting: a stored answer cannot lose an item the owner switches off. A return visit is not a new request — no notification, no rate-limit counter.
+- **The freeze is taken at report time**, from **one call to the engine with the reporter as the viewer**. A report path that resolves the cascade itself captures items the reporter was never shown and files them as evidence — a disclosure, not a drift. BUILD_PLAN Step 13.1 carries it as a test.
+- **The report action is per item**, with a distinct accessible name from the item's own label; **four target categories** (*the label · the address or number · the card as a whole · this person's behaviour*); **§13.3's purge lifecycle unchanged**, both candidate exceptions checked.
+- **Delete content on a card item removes the whole row** — never a partial edit, never a blanked label (SPEC §13.2.1).
+- Also decided, not asked: **§13.1 gains a second honest qualification** about the label as free text on a pulled surface, and **no new rate limit** for reports (§13.3's stays-live rule already removes the prize).
+
+**15 wrote its own ARCHITECTURE and BUILD_PLAN edits**, on 13's precedent rather than handing them to 09; `prompts/09-sync-arch-and-buildplan.md` gains a new **§T** recording what is done and what the sync must not undo.
+
+**13's archetype follow-on is unblocked, and is not a numbered prompt** — see below.
 
 **Prompt 03 handed BUILD_PLAN work to 09 rather than doing it (1.19).** ARCHITECTURE §5 now
 specifies a larger engine than BUILD_PLAN describes — plural forms, a request-scoped memo,
@@ -207,6 +244,49 @@ and ARCHITECTURE version numbers — "SPEC.md v1.15", "ARCHITECTURE.md v1.7" —
 documents are, and deleting that before the sync would make a stale document look current.
 **09 clears them when the sync is actually done**, replacing each with a plain "deliverable (b)
 / (c) per SPEC §18" and letting the version header carry the rest.
+
+---
+
+## Work that is not a numbered prompt
+
+Design work with a real owner and no prompt file. It lives here because the queue above is for
+sessions that edit the four law documents, and this is not that.
+
+**The archetype track teaches half the product (from prompt 13, 1.29) — unblocked, do this
+before writing the remaining nine characters.** On the `archetypes` branch. The interview track
+tells every character *"Links only from a list of approved sites"* and **never mentions the door
+out** — that the intended answer to a hosting limit is to host it elsewhere and link or announce
+it here. The wording originates in `archetypes/PLAN.md` §4 fact 13 and is copied into
+`archetypes/BRIEF.md` §2, so **every character inherits the blind spot**, not just the one where
+it was noticed.
+
+It surfaced in `archetypes/07-susan.md` (the family historian): she hits `GALLERY_MAX` = 8 against
+sixty reunion photographs and the interviewer never once suggests hosting them elsewhere and
+posting about it. Her verdict — that WeeBee cannot use an archivist — may well be right, but it
+was reached **without her being told the whole product.**
+
+Only the pilot has run. Nine character prompts and the synthesis are unwritten, and `PLAN.md` §13
+says they are copies of `A7-susan.md`, so **this is the cheapest moment it will ever be to fix.**
+The session should:
+
+1. Restate fact 13 in `PLAN.md` and `BRIEF.md` **with both halves** — the limit *and* the door out.
+   1.29 supplies the words: SPEC §1.5 (delegation, and the courtesy minimum that says why the
+   platform holds any photos at all), and §7.2.4's composer copy — *"WeeBee holds one photo per
+   post. If you have sixty, they live somewhere else — link to them here."*
+2. Add an **interview-conduct rule** to `A7-susan.md`, which then copies into the other nine: when a
+   character hits a hosting wall, the interviewer offers the delegation answer and **records the
+   reaction.**
+3. **Guard it against becoming a rescue.** `archetypes/PROMPT.md` rule 9 forbids writing a
+   character's conclusion, so the rule is *offer it, then ask whether they would actually do it.*
+   Susan is entitled to answer "then what am I here for" — **and if she does, that is the finding.**
+4. Then **re-run A7.**
+
+**The blocker is gone:** the instruction was not to re-run A7 before prompt 13's decisions were
+made, and 13 landed in 1.29. Note the one thing 1.29 changed for Susan specifically: a photo-host
+link in a post is now an **inert copy box** unless the host is allowlisted, so what the interviewer
+offers her is *"post about the album and paste the address, and your family copies it"* — not a
+one-tap link. Whether that is good enough for her is exactly the question the interview should ask
+rather than assume.
 
 ---
 
@@ -377,6 +457,22 @@ where noted. Recorded here so they are not raised again as new.
   2 a.m. scenarios.)"* No reviewer answered it; prompt 04 did. ARCHITECTURE §7.2–§7.4 and
   §11.1 are the answer, and BUILD_PLAN §5.7, §16.6 and §17.3 are how it gets built. Recorded
   here so the question is not re-asked as though still open.
+- **Person-tagging: SPEC never addresses it (new, parked 2026-09-06, surfaced during
+  archetype-track planning).** Neither SPEC nor ARCHITECTURE describes any way to tag or
+  @-mention a person — in a post, in a photo, or by name — and every use of "tagged" in SPEC
+  means a hashtag; §17's non-goals list does not name it. This is a documentation gap, not a
+  proposal, and it is two questions rather than one: a **strong** version — a Facebook-style
+  tag that places the post on the tagged person's own profile and notifies their friends —
+  fails the No-Reach Test (§1.2) outright and is a one-line §17 entry; a **weak** version — a
+  label visible only to people who can already see the post, adding no audience, no
+  notification, no propagation — does *not* fail the No-Reach Test, so refusing it needs
+  different grounds: consent to have your name attached to someone else's content for up to
+  90 days (§7.5), and the §11.5 precedent against revealing a connection the viewer is not
+  already positioned to see. Entered here rather than left for `FINDINGS.md` as a deliberate
+  exception to `archetypes/PLAN.md` §10's rule that nothing routes into this file
+  automatically — the gap exists independent of whether the archetype track finishes,
+  `archetypes/PLAN.md` §9 already verified it directly against SPEC and ARCHITECTURE, and
+  several of the ten character reports are expected to reach it independently.
 
 ---
 

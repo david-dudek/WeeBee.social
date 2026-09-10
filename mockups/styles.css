@@ -280,6 +280,58 @@ button:hover,
   margin: var(--space-2) 0;
 }
 
+/* A link's copy box (SPEC §7.2.4, §16.3) — an address on neither list,
+   rendered in full beside a control that copies it.
+
+   It is deliberately NOT shaped like .field-error above. §7.2.4: a copy
+   box is "a different rendering, not a refusal" — "no warning, no
+   apology, no error styling, no 'this link is not approved' note beside
+   it." So this is ordinary post furniture and reads as such: the same
+   neutral alt surface and light border used elsewhere in the set, plain
+   body weight, and never --color-link. A copy box is not a link, so it
+   must not borrow the one palette exception the header comment names.
+
+   Reflow: the address wraps break-anywhere inside this container and the
+   container never scrolls sideways. The `code` rule near the top of this
+   file (overflow-wrap/word-break: break-word) is NOT enough here, and
+   this was measured at 320px rather than assumed. break-word lets a long
+   token wrap, but it does not shrink the element's min-content width, so
+   as a flex item the address keeps its automatic min-width — the full
+   unbroken URL — and pushed the page to 398px against a 320px viewport.
+   break-all (with overflow-wrap: anywhere) reduces min-content too, which
+   is what "the address wraps break-anywhere inside its own container"
+   actually requires; min-width: 0 below is the belt to that braces.
+   §7.2.4 is explicit that a copy box quietly acquiring a horizontal
+   scrollbar would be a second 1.4.10 reflow exception arriving by
+   accident, and §7.2.1's preformatted post stays the platform's single
+   documented one — so no overflow-x here, ever.
+
+   The copy control is a real <button>, so it already inherits the
+   44x44 touch target from the button rule above. */
+.copy-box {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  margin: var(--space-2) 0;
+  padding: var(--space-2);
+  max-width: 100%;
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-border-light);
+  border-radius: 0.25rem;
+}
+
+.copy-box-address {
+  flex: 1 1 8rem;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  word-break: break-all;
+}
+
+.copy-box-button {
+  flex: 0 0 auto;
+}
+
 /* A notification row: distinguished from a post by a left border and a
    lighter background — the plainest available distinction, since SPEC
    §7.7 does not specify one (see mockups/NOTES.md). */
@@ -925,6 +977,31 @@ body:has(#commentary-toggle:not(:checked)) .commentary {
 
 .contact-card-value {
   margin: 0.15rem 0 0;
+}
+
+/* A URL rendered as itself, outside a copy box — a card item's value, or a
+   linkified address in the extended bio (§7.2.4: "a URL is linkified as
+   itself"). §7.2.4 specifies break-anywhere wrapping for the copy box only,
+   but a linkified or plain-text URL is exactly as long and exactly as
+   unwrappable, and at 320px it is the same 1.4.10 reflow failure — verified
+   in R3, where both overflowed. Same two properties as .copy-box-address, for
+   the same reason, and no horizontal scrollbar is introduced, so this is not
+   a second reflow exception. Recorded in mockups/NOTES.md as a gap §7.2.4
+   does not cover. */
+.contact-card-value,
+.url-inline {
+  overflow-wrap: anywhere;
+  word-break: break-all;
+}
+
+/* A card row on the card page (SPEC §10.4, §13.2): a label, a value and a
+   per-item report button. Twelve of these is the densest repeated-control
+   surface in the track, so the row stacks rather than columns — a label, a
+   long address and a 44x44 button will not sit side by side at 320px
+   without forcing the two-dimensional scroll §16.3 forbids. Any copy box
+   inside the row keeps its own break-anywhere container (§7.2.4). */
+.contact-card-item > button {
+  margin-top: var(--space-2);
 }
 
 /* Friendship and contact flows (M5, SPEC §5.2, §5.5, §10.2, §10.3) */

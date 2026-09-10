@@ -1,0 +1,106 @@
+{{var title=Report this item — WeeBee mockup}}
+<h1>Report this item</h1>
+<p>If something on someone's contact card is a problem — what it's labelled, the address or
+number itself, or how the person has behaved — you can report it. The card stays exactly as it is
+while the operator looks into it; reporting doesn't hide or change anything by itself.</p>
+<p class="commentary">SPEC §13.2, §13.3. Rendered as <strong>Alice</strong>'s view of David's
+card, the same viewer <a href="report-profile.html">report-profile.html</a> already established.
+Reached from one item's <em>"Report this item"</em> button on
+<a href="contact-card-received.html">the card page</a>; it sits beside
+<a href="report-post.html">report-post.html</a> and report-profile.html, which are
+<strong>unchanged</strong> — §13.2 added a fourth report target, it did not alter the first
+three, and their reason lists are untouched.</p>
+
+<h2>The item you're reporting</h2>
+<ul class="contact-card-preview">
+<li class="contact-card-item">
+<p class="contact-card-label">My photos</p>
+<div class="copy-box">
+<span class="copy-box-address">https://photos.example.com/david/cornwall-2026</span>
+<button class="copy-box-button" type="button">Copy<span class="visually-hidden"> the address https://photos.example.com/david/cornwall-2026</span></button>
+</div>
+</li>
+</ul>
+<p class="commentary">Shown back so the reporter can see which of up to
+<code>CONTACT_ITEMS_MAX</code> = 12 items they picked. §13.2 argues the per-item placement in
+exactly these terms: an operator opening <em>"someone reported David's card"</em> would have to
+guess which of the twelve, and naming the item is most of what makes the report actionable. This
+item carries no report button of its own here — the report action lives on the card page, and
+this is the form it opens.</p>
+
+<h2>What's wrong?</h2>
+<fieldset>
+<legend>What does this report concern?</legend>
+<div class="option-list">
+<div class="option-row"><input type="radio" id="report-card-label" name="report-card-target"><label for="report-card-label">The label</label></div>
+<div class="option-row"><input type="radio" id="report-card-address" name="report-card-target" checked><label for="report-card-address">The address or number</label></div>
+<div class="option-row"><input type="radio" id="report-card-whole" name="report-card-target"><label for="report-card-whole">The card as a whole</label></div>
+<div class="option-row"><input type="radio" id="report-card-behaviour" name="report-card-target"><label for="report-card-behaviour">This person's behaviour</label></div>
+</div>
+</fieldset>
+<div class="field">
+<label for="report-card-note">Anything else you'd like the operator to know (optional)</label>
+<textarea id="report-card-note" name="report-card-note" rows="3"></textarea>
+</div>
+<button type="submit" class="button">Send report</button>
+<p class="commentary">Categories verbatim from SPEC §13.2: the label · the address or number ·
+the card as a whole · this person's behaviour. <strong>"The card as a whole" is reachable from
+any item's button</strong> — it is the category for the case where no single item is the
+complaint, which is why it needs no control of its own on the card page. <strong>"This person's
+behaviour"</strong> is the same last entry the profile list carries, for a card that is a symptom
+rather than the thing wrong. The free-text note is the same optional note every report already
+carries, and is not an exception to the platform's no-free-text rule between users — "a report
+reaches the operator alone."</p>
+
+<h2>What this report captures</h2>
+<p class="commentary">§13.2 states the frozen/live split as a field table rather than describing
+it, because it is a security boundary rather than a rendering detail. Three of its rows are
+decisions rather than bookkeeping, and they are the three worth naming here.</p>
+
+<p class="commentary"><strong>The whole delivered card is frozen, not only the reported
+item.</strong> Every delivered item's kind, value, label and <em>order</em> is captured, along
+with which position the report points at — a position in the frozen list, never a live pointer
+to a row the owner can still edit or delete. §13.2's reason is specific: twelve labels of
+<code>CARD_ITEM_LABEL_MAX</code> = 40 characters are up to 480 characters of author-written free
+text on a surface that had none before v1.29, and what one label cannot carry, twelve can. An
+operator shown a single label in isolation would be judging the wrong question.</p>
+
+<p class="commentary"><strong>The cascade is not evidence, and is not captured at all.</strong>
+What the operator needs is what was <em>delivered</em>; how §10.3's cascade arrived at it is the
+owner's private configuration, and groups are private to their owner by rule — members never know
+they are in one (§6). Capturing the resolution would disclose David's group structure to answer a
+question nobody asked.</p>
+
+<p class="commentary"><strong>The freeze is taken at report time, not send time</strong> — and
+this is where a card report differs from §5.2's friend-request card, which freezes at send.
+§13.2 tested the two rather than inheriting one: a card is auto-answered on request (§10.4), so a
+send-time freeze would mean storing a copy of every card every friend ever asked for, kept for as
+long as the friendship lasts, against a report that will almost never come — re-introducing, in a
+place no user can see, exactly the stored answer §10.4 refuses. The two freezes also defend
+different things: §5.2's exists because the friend-request card is <em>pushed</em> at up to 20
+people a day who never asked for it, while a contact card is <em>pulled</em>, by one friend, who
+asked. What has to survive here is the evidence, and what endangers it is the owner editing the
+card the moment a report is filed.</p>
+
+<p class="commentary">Two rows stay <strong>live</strong> and are worth naming for the same
+reason: either party's <strong>display name</strong>, through the shared helper, because names
+are never stored on content (§4.5.1); and <strong>whether a link item rendered as a hyperlink or
+as a copy box</strong>, read from the allowlist at view time (§7.2.4) — that is the platform's
+rendering decision, not the author's content, and freezing it would freeze a judgment the
+operator is meant to be able to change by editing one row.</p>
+
+<p class="commentary">The freeze lifecycle is <strong>§13.3's, unchanged</strong>: dismissed and
+it is purged at once, upheld and it is purged 30 days after, 90 days the hard cap however
+unreviewed. It must not end early when the owner deletes the item or the friendship lapses —
+deleting the reported item is the first thing a reported person does — and it needs no extension
+either, because a card item never expires (§9.7). A frozen card is text and nothing else, so it
+carries none of the storage cost §5.2's frozen photograph does.</p>
+
+<p class="commentary">The button above reuses <em>"Send report"</em>, the label already
+established on <a href="report-post.html">report-post.html</a> and
+<a href="report-profile.html">report-profile.html</a> — SPEC gives no verbatim text for it, and
+it is reused here rather than restated differently. No new form and no new queue: §13.2 makes a
+card item <strong>a new target type in the one operator queue</strong> (§13.5), on the one report
+form, with no notification to anybody. Reports are deliberately <strong>not</strong> rate-limited
+(§13.6): §13.3 has already removed the prize, since reported content stays live while a report is
+open.</p>

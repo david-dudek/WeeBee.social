@@ -1081,3 +1081,564 @@ tried, then extended everywhere on request, and a founder reviewing this later s
 was never derived from any SPEC requirement (`THEME_SET` still names no members anywhere, per
 entry 29) — it is simply the founder's own pick for a legible link color, standing in until a
 real theme is chosen.
+
+
+---
+
+## The 1.27 → 1.30 re-sync (sessions R1–R5)
+
+The closing summary at the top of this file counts the log at 49 entries, which is where M8 and
+the founder's own click-through left it. Entries from 50 on come from the re-sync of the mockup
+track from project version 1.27 to 1.30 (`prompts/mockups/resync-to-1.30.md`), and are numbered
+on from there. The summary above is left exactly as M8 wrote it.
+
+---
+
+## 50. Three strings the re-sync had to invent, and what SPEC did and did not give for each
+
+**Session:** R1 (the 1.27 → 1.30 re-sync, first sitting — `CRIB.md` and this file only; no page
+was edited). **Surface:** none yet. All three are registered in `mockups/CRIB.md` §2 and get
+rendered later — by R2 on `composer.html`, `post-editor.html`, `post-feed.html`,
+`overlay-post.html` and `partials/_post.html`, and by R3 on the contact-card cluster.
+
+SPEC §7.2.4 is new in v1.29 and specifies the copy box and the blocklist refusal in unusual
+detail — what they must do, what they must not look like, which WCAG criteria they answer — but
+gives **no wording for any of the three strings the surface needs**. Each is this session's own
+invention, marked **INVENTED** in `CRIB.md` at the entry itself, so that a later reader cannot
+mistake it for a quotation.
+
+**1. The blocklisted-link refusal** — *"This address can't be posted on WeeBee. Remove the link
+to save your post."* (with the last clause naming whatever is being saved: *"… your comment."*,
+*"… this item."*)
+
+*What SPEC gives:* that the message *"says plainly that this address cannot be posted here and
+that the fix is to remove it"*; that *"It names no appeal, because there is none"*; that the check
+runs at composition and again at save, on the create and edit paths alike; and §16.3's general
+rule that an error is text, is tied to the offending field, and describes the fix.
+*What SPEC does not give:* the words. It also never says whether the message explains **why** a
+domain is blocked. It was written so that it does not — §7.2.3 states that what belongs on the
+blocklist is operational judgment the document deliberately declines to specify, so a message
+offering a reason would be inventing one.
+
+This is the string most worth the founder's own eye, for two reasons. It is the only one of the
+three that is an **error** at all — §7.2.4 is emphatic that a copy box is not one — and it is the
+one place on the platform where a refusal deliberately **names no door out**, which cuts against
+the Delegation Principle's habit of always naming one (§1.5). §7.2.3 argues that case explicitly
+and convincingly (a door that never opens is worse than no door), so the string is faithful to the
+document. It is nonetheless the sentence a user meets at the moment the platform is least able to
+help them, and it is worth reading aloud before it is settled.
+
+**2. The copy control's accessible name** — visible text *"Copy"*; accessible name *"Copy the
+address {the full address, verbatim}"*.
+
+*What SPEC gives:* that the control is a real `<button>` and not a bare icon; that §16.3 lists it
+among the repeated controls needing distinct accessible names; that the name *"has to say which
+address it copies"*; and that visible label text must match accessible names (2.5.3).
+*What SPEC does not give:* the words — including the visible label. Both are invented. The pattern
+is built so the accessible name **begins with the visible word**, which is what keeps 2.5.3 true;
+a name like "Copies this link" would not.
+
+**One judgment inside the invention, flagged because it is arguable:** the name embeds the **full
+address**, which is what §16.3 literally asks for and what actually distinguishes twelve controls
+from each other — but a long URL read aloud is long, and a shortened form (*"Copy the address at
+photos.example.com"*) would be easier to listen to while being a version of exactly the truncation
+§7.2.4 is wary of. The document settles this nowhere. The full address was chosen because §7.2.4
+insists the full address is what the control copies and must stay reachable as text; the trade is
+recorded here rather than buried.
+
+**3. The copy confirmation** — *"Address copied."*
+
+*What SPEC gives:* that the copy is *"confirmed in a polite live region"* (4.1.3), *"composing the
+existing status partial"*. That partial is `partials/_status.html`, which already exists and is
+already correct (`role="status" aria-live="polite"`), so **nothing about the mechanism was
+invented** — only the sentence inside it. *What SPEC does not give:* the sentence.
+
+**Drawn:** all three registered in `CRIB.md` §2, each headed **INVENTED** in its own entry, with
+the no-scolding constraint of §7.2.4 recorded beside them. No page renders any of them yet.
+None of the three should be read as settled wording — they are the plainest thing consistent with
+the rules around them, which is this track's standing answer to a document silence.
+
+---
+
+## 51. §10.4 closes the card page with "and nothing else" — and §10.5's section is sitting on it
+
+**Session:** R1. **Surface:** `mockups/pages/contact-card-received.html` (M5's), **deliberately
+not edited this session.** R3 rebuilds that page; this is for the founder to settle before it does.
+
+§10.4 was rewritten in v1.30. The answered card is no longer a one-time reply — it is a **page**,
+one per (owner, viewer) pair, at its own permission-checked address, resolved live on every visit
+and never stored. The section states what it carries as a closed list: the owner's display name
+through the shared helper (§4.5.1), *"the items the viewer may see, and nothing else."*
+
+The page as M5 built it carries a section headed *"Request more access (may ship in v1.1)"*,
+drawn from §10.5 — a real part of the design, marked deferred in SPEC itself.
+
+**The question, which this session does not answer:** does a v1.1 feature belong on a page whose
+own section closes with *"and nothing else"*? Both readings hold up. §10.4's list is plainly aimed
+at excluding a **message** — the three arguments beneath it are all about not storing and not
+delivering a reply — and on that reading "nothing else" forbids conversation, not controls, and
+§10.5's toggle is a control. But §10.4 also says of §10.5 specifically that its flags *"have
+always assumed this page without saying so"*, which is the document noticing that the two sections
+touch and, in the same breath, not adding the flags to §10.4's list.
+
+**Drawn:** nothing. The page is untouched by instruction. R3 rebuilds it against the rewritten
+§10.4 and will need this decided — or will need to record which reading it built on.
+
+---
+
+## 52. Two filenames left open, because naming a page belongs to the session that builds it
+
+**Session:** R1. **Surface:** `mockups/CRIB.md` §5 (read this session, and deliberately left
+exactly as found) and two pages R3 will touch.
+
+`CRIB.md` §5 registers the nav target filenames the track has assumed since M1, each session
+adding to it as it built. Two names are now genuinely open. R1 builds no page, so both are
+recorded here rather than picked:
+
+**1. Does the card page keep the name `contact-card-received.html`?** M5 chose that name for what
+§10.4 then described: a one-time reply, a thing Alice *receives*. Under v1.30 it is a page at its
+own permission-checked address (§9.3) that a friend returns to for as long as the friendship
+lasts, reached from the owner's About tab (§9.1) — so "received" now names the moment the card
+first arrived rather than what the surface is. Against a rename: `CRIB.md` §5 records the current
+name, M5's page set uses it, and this track's settled practice (entries 8, 16, 20, 21, 27, 37, 48)
+is to leave a filename alone rather than retarget links sitting in files outside the current
+session's own touched set.
+
+**2. What is the card report form called?** `prompts/mockups/resync-to-1.30.md` §3.2 proposes
+`report-card.html`, beside the existing `report-post.html` and `report-profile.html`. That is the
+obvious name and matches the pattern M6 set, but the page is not built, so it is not yet a fact,
+and nothing in `CRIB.md` §5 registers it.
+
+**Drawn:** nothing, and `CRIB.md` §5 was left untouched. Both names belong to R3, the session that
+builds those pages. Registering a filename here that R3 then declined to use would add a fourth
+entry to this log's existing run of filename mismatches rather than prevent one.
+
+---
+
+## 53. §9.4 settles the extended-bio link question R1 could not: the About tab's anchor is wrong as built
+
+**Session:** R2 (the 1.27 → 1.30 re-sync, second sitting — the link cluster). **Surface:**
+`mockups/pages/profile-about.html`, line 39, **deliberately not edited this session.** R3 owns
+that page and makes the fix.
+
+`prompts/mockups/resync-to-1.30.md` §9 carries this as its first unverified item: the extended
+bio renders `<a href="https://www.openstreetmap.org/">here's the stretch</a>` — anchor text that
+is not the URL — and the plan could not say whether the extended bio falls under the same link
+rule as a post, because §9.4 had not been read.
+
+**It has now, and §9.4 says so directly.** The extended bio *"follows the uniform link rule of
+§7.2.4 — allowlisted links clickable, anything else an inert copy box, blocklisted domains
+refused,"* a change made in v1.29; before that only allowlisted links were permitted and
+everything else was rejected at save. So the line is wrong as built **on the first count
+regardless of the second**. §7.2.4 states of this rule that *"a URL is linkified as itself, and
+there is no markup with which link text could ever lie about where it goes"* — which is the
+whole reason the copy box's gain over a hyperlink is *"not disclosure — it is the deliberate
+act."* Anchor text reading "here's the stretch" over an address the reader cannot see is exactly
+the markup §7.2.4 says does not exist on this platform.
+
+Whether `openstreetmap.org` is allowlisted decides only **which** corrected rendering is right —
+a clickable hyperlink showing the address as its own text, or an inert copy box. That half stays
+open: §7.2.3 names Google Maps and Apple Maps as examples of the Convening category, not as an
+exhaustive list, and the allowlist's actual contents are an operator table this track cannot
+read. Either way the anchor text goes.
+
+Two things next to it are **not** wrong and should survive the fix. The short bio above it is
+correctly plain, unclickable text — §9.4 keeps the stricter rule there, and v1.29 restated its
+*reason* (the short bio is a **push surface**, delivered unasked to up to 20 people a day in a
+friend request) without changing the outcome. And that section's own commentary already says as
+much. The commentary on the extended bio, however, says *"allowlisted links are permitted
+(§7.2.3)"*, which is the pre-1.29 rule and needs the same correction as the markup.
+
+**Drawn:** nothing on the page. `profile-about.html` is R3's — §3.1 of the plan already owes it
+the friends-only contact-card control of §9.1 — and the plan's own claim that steps 3 and 4 are
+independent and may be swapped holds only if no file belongs to both. This one does. Recording
+the finding here rather than fixing it lets R3 make both changes in a single pass, which is also
+this track's settled practice for a line sitting in a file outside the current session's own
+touched set (entries 8, 16, 20, 21, 27, 37, 48).
+
+---
+
+## 54. `post-profile-tagged.html` gets no copy box, and the reason is that two other pages already carry one
+
+**Session:** R2. **Surface:** `mockups/pages/post-profile-tagged.html`, **left untouched.**
+
+The plan's §9 carries this as an open question: the page *"may or may not need a copy box. One
+post view demonstrating the rendering may be enough; confirm in step 3 rather than changing it on
+spec."* Confirmed, and the answer is no.
+
+After this session the copy box renders on **two** post views —
+`post-feed.html`, which carries four of them (two in the post body, one on Tom's comment, one on
+David's own), and `overlay-post.html`, which carries one. Between them they demonstrate every
+part of §7.2.4 and §16.3 the rendering owes: the address in full and verbatim, the absence of any
+error affordance, the distinct accessible name per control, and the polite live region that
+confirms the copy. A third instance would repeat, not add.
+
+There is also a positive reason to leave this page alone. It is the one page in the track whose
+viewer is **Priya**, a friend-of-friend, and it exists to demonstrate two things that need that
+viewer: the react control on someone else's post (§8.2.2) and the two different name renderings
+of §8.1/§8.2.2. Those are already dense. Adding a fourth mechanism to it would blur the page's
+own subject for no gain.
+
+**Drawn:** nothing. The page is byte-identical to how M2 left it.
+
+---
+
+## 55. The copy box's first layout collision: the image overlay's inert backdrop — and a page swap that followed from it
+
+**Session:** R2. **Surface:** `mockups/pages/overlay-post.html` and `mockups/pages/post-feed.html`.
+
+`prompts/mockups/resync-to-1.30.md` §3.2 assigns the **many-copy-controls** demonstration to
+`overlay-post.html`, on the reasoning that *"a single-post view is where many copy controls
+collect."* The reasoning is right and the file is wrong: `overlay-post.html` is built around the
+image overlay dialog — two sections, *"The page behind the dialog"* and *"The dialog, open"* —
+and carries no comments at all. The single-post view that actually carries comments is
+`post-feed.html`. **The two assignments were swapped**, so the many-controls demonstration is on
+`post-feed.html` (post body ×2, Tom's comment, David's comment — four distinct accessible names)
+and the single ordinary copy box is on `overlay-post.html`.
+
+**The collision the swap surfaced is the more interesting half.** `overlay-post.html`'s only post
+body sits inside `<div class="modal-backdrop-content" aria-hidden="true">`, and until this
+session that region held **no focusable element**: M3 flattened even the gallery grid's real
+`<button>`s down to plain `<img>`s there, which is why the problem had not arisen before. A copy
+box is the first control §7.2.4 puts inside an ordinary post body, and a focusable `<button>`
+inside an `aria-hidden` region is a 4.1.2 failure rather than a drawing of anything.
+
+The two sections genuinely do collide, and honestly: §7.2.4 requires the copy control to be
+*"operable by keyboard alone"* (2.1.1), while §16.3 requires the image overlay to be a modal
+dialog whose focus is *trapped* inside it. Both hold. The resolution is that the control is
+keyboard-operable **when the dialog is closed**, and unreachable while it is open, exactly as
+every other control on the page behind a modal is.
+
+**Drawn:** the copy box renders as the canonical markup, and the backdrop container gained
+`inert` alongside the `aria-hidden` it already carried — verified in a browser: the button cannot
+take focus. This is not new behaviour invented for the mockup; that section's own commentary has
+said *"Dimmed and inert while the dialog is open"* since M3, so the attribute makes the markup
+state what the page already claimed. `overlay-gallery.html` has the same backdrop and still holds
+no focusable element, so it needs nothing and was not touched. **For the founder:** this is worth
+knowing because the real implementation has to do the same thing, and the failure mode is silent
+— a copy button behind an open overlay that is still in the tab order is a defect no visual
+review catches.
+
+---
+
+## 56. Unresolved: what happens when a fold boundary falls inside a URL
+
+**Session:** R2. **Surface:** `mockups/pages/post-feed.html` (Alice's folded comment), and every
+folding surface in the track. **Nothing was drawn for it, deliberately.**
+
+The second collision, and this one has no answer in either document. §7.7 folds a post or comment
+at its surface's `*_FOLD_CHARS` threshold, *"cut at a whitespace boundary."* §7.2.4 requires a
+copy box to show the address *"in full and verbatim — never truncated in the value itself, never
+re-written, never resolved."* Neither section mentions the other, and they meet whenever an
+address sits past the fold:
+
+- If the fold cuts the body **before** the address, the copy box is hidden until the reader
+  expands — which is fine, but it means the "read more" control now hides a *control*, not only
+  text, and the folded state's accessible name says nothing about that.
+- If the fold's whitespace boundary lands **inside** a URL — a URL contains no whitespace, so the
+  boundary can only fall before or after it, but a `COMMENT_FOLD_CHARS` = 300 cut immediately
+  after an address that begins at character 280 leaves a copy box in the visible part and its
+  sentence in the hidden part.
+- A URL long enough to exceed the fold threshold on its own has **no** whitespace boundary to cut
+  at anywhere inside it, so the rule as written offers the fold no legal cut point at all.
+
+None of these is hypothetical: `COMMENT_FOLD_CHARS` is 300 and the address on the post above is
+83 characters.
+
+**Drawn:** nothing, and the collision was kept out of the rendering rather than resolved into it.
+Alice's comment on `post-feed.html` is the page's one folded body and was left exactly as M2
+wrote it, with no address in it, so no mockup here shows a half-address or asserts a fold rule
+neither document states. All four copy boxes on that page sit in unfolded bodies. **For the
+founder:** the safe implementation is almost certainly that a copy box never splits — the fold
+takes the whole box or none of it — but that is a rule §7.7 does not currently contain.
+
+---
+
+## 57. The blocklisted-link example is a stand-in, because SPEC deliberately does not say what the blocklist holds
+
+**Session:** R2. **Surface:** `mockups/pages/composer.html`, section 10.
+
+Section 9 of that page used to be a single section headed *"A rejected link"* which refused
+`https://bit.ly/3xyz9` with `aria-invalid` and a `.field-error`. Under v1.29 that was wrong
+twice: an address on neither list is **not refused at all**, and a URL shortener specifically can
+**never** be the allowlist example of a refusal, because §7.2.3 says a shortener is *never
+allowlistable* — which makes it permanently a copy box, not a refusal, unless the operator has
+separately blocklisted it. The section is now two: **9. An unapproved link** (`bit.ly`, a copy
+box, no error affordance of any kind) and **10. A blocklisted link** (genuinely refused). What
+followed renumbered: *"Switching destination"* is now 11.
+
+**The blocklisted example needed a domain, and there is no honest real one to use.** §7.2.3
+states that what belongs on the blocklist *"is not specified here and is not a design
+question — it is operational judgment exercised case by case,"* the same way `NAME_BLOCKLIST`'s
+contents are. Naming any real site in a mockup would therefore invent a policy neither document
+states, and would put a real business's name beside the words "can't be posted on WeeBee" in a
+document the founder may show people.
+
+**Drawn:** `https://blocklisted.example.com/thread/8812`, on the reserved documentation domain
+`example.com` (RFC 2606), which the track already uses for David's email addresses (entry in
+`CRIB.md` §3, M8). The subdomain is self-labelling on purpose: a reader should be unable to
+mistake it for a claim about a real site. The page's commentary says so in as many words. The
+same reasoning governs the four copy-box addresses added this session on `post-feed.html` and
+`overlay-post.html` — all on `example.com`, `example.org` and `example.net`, so that no mockup
+implies a domain is or is not on either operator list. The refusal wording itself is the invented
+string registered at `CRIB.md` §2 and recorded in entry 50 above; it is rendered verbatim and
+nothing was added to it.
+
+---
+
+## 58. `index.html` still describes composer.html as showing "a rejected URL"
+
+**Session:** R2. **Surface:** `mockups/pages/index.html`, the M2 group's `composer.html` row,
+**not edited this session.**
+
+The review index summarises `composer.html` as showing, among other states, *"a rejected
+URL."* After this session the composer shows **two** link states and only one of them is a
+rejection; the other is the case §7.2.4 exists to say is *not* an error. The row's SPEC citation
+list (§7.1, §7.2.1, §7.2.3, §7.3, §7.9, §11.2, §6) is also now missing **§7.2.4**, the section
+that governs both new states.
+
+Checked and clear: the row quotes **no section number of the page's own**, so this session's
+renumbering (old 10 → 11) broke nothing. That was verified before renumbering rather than after.
+
+**Drawn:** nothing. `index.html` is outside this session's four permitted pages, and the plan's
+§3.2 already assigns it to close-out (step 6), which owes it a `report-card.html` row and a
+rewritten M5 description in the same pass. This entry is so that pass does not have to
+rediscover the stale phrase.
+
+---
+
+## 59. §10.4's "and nothing else" — built on SPEC's own reading, not on a recommendation, because 1.31 settled it first
+
+**Session:** R3 (the 1.27 → 1.30 re-sync, fourth sitting — the card cluster). **Surface:**
+`mockups/pages/contact-card-received.html`, the "Request more access" section.
+
+`prompts/mockups/resync-3-card-cluster.md` §6a asked this session to decide whether §10.5's
+request-more-access section belongs on a page whose own section closes with *"and nothing
+else,"* to build it in **on a recommendation**, and to record that the reading was *"chosen on a
+recommendation rather than derived from the document, and never settled by the founder,"*
+leaving entry 51 open. It also deferred to whatever was decided first: *"if it is answered
+before this session runs, that answer wins over what follows."*
+
+**It was answered before this session ran.** Prompt 16 landed as project version **1.31**, and
+§10.4 now carries a sentence that says so directly: *"'And nothing else' bounds disclosure, not
+controls (v1.31). It closes the list of what the page discloses — the owner's name and the items
+resolved for this viewer — not the list of what the page may carry. The §13.2 report action
+below and §10.5's request-more-access flag are both controls rather than disclosed data or a
+reply, and neither is excluded by this sentence."*
+
+So the section is on the page **on the strength of the document**, not on a recommendation, and
+the record should not say otherwise. **Entry 51 is resolved** — by SPEC at 1.31, which is what
+the CHANGELOG's 1.31 entry says it is doing, naming entry 51 and §6a explicitly. SPEC's own
+*"may ship in v1.1"* hedge stays visible on the page, word for word, because 1.31 settled the
+reading and explicitly did not touch the roadmap.
+
+**One thing this session had to notice on its own:** R3's preflight requires README to read
+**1.30** and it reads **1.31**. That check was stale by one deliberate bump, not broken.
+
+**Drawn:** the section is kept, the hedge is kept, and the page's commentary cites §10.4 v1.31
+rather than hedging. Entry 51 is answered rather than left open.
+
+---
+
+## 60. Two filenames: `report-card.html` is new, `contact-card-received.html` is kept — and the reason is a third linking file the prompt did not count
+
+**Session:** R3. **Surface:** `mockups/CRIB.md` §5, and every link written this session.
+
+Entry 52 left both names to this session because it builds the pages.
+
+**The report form is `report-card.html`**, as `prompts/mockups/resync-to-1.30.md` §3.2 proposed
+and matching the pattern M6 set with `report-post.html` and `report-profile.html`. Nothing
+argued against it. Registered in `CRIB.md` §5.
+
+**The card page keeps `contact-card-received.html`**, and the deciding fact is one the prompt
+got slightly wrong. §6b says that leaving a filename alone is this track's settled practice
+*"though here both linking files are in your touched set, which is the one thing that has
+changed."* There are **three** linking files, not two: `contact-card-editor.html` (twice) and
+`preview-as-friend.html` are in R3's touched set, but **`index.html:126` is not** — the prompt
+names `index.html` among the pages R3 must not touch, and close-out already owes it a
+`report-card.html` row and a rewritten M5 description (entry 58). Renaming would have left a
+broken link in a file this session was forbidden to fix, which is exactly the situation entries
+8, 16, 20, 21, 27, 37 and 48 established the practice for.
+
+**The rename is still available and still cheap**, and close-out is where it costs least: that
+sitting opens `index.html` anyway. A founder who wants it should say so then. "Received" does
+now name the moment the card was first asked for rather than what the surface is, so the
+objection is real — it is the cost of not renaming, not an argument that the name is good.
+
+**Drawn:** `report-card.html` created and registered; `contact-card-received.html` kept, with
+its framing rebuilt so that nothing *inside* the page describes a delivery. Both registered in
+`CRIB.md` §5.
+
+---
+
+## 61. `openstreetmap.org` is rendered as a hyperlink, and the extended bio's surface scope is a gap
+
+**Session:** R3. **Surface:** `mockups/pages/profile-about.html`, the extended bio.
+
+Entry 53 settled that the anchor text had to go and left open **which** corrected rendering is
+right — a clickable hyperlink showing the address as its own text, or an inert copy box — because
+whether `openstreetmap.org` is allowlisted is an operator table this track cannot read.
+
+**Built as a hyperlink.** §7.2.3's first admitting category is **Convening**, and its first
+example is *"Maps (Google Maps, Apple Maps)"* — named as examples, not as an exhaustive list.
+OpenStreetMap is the official domain of a large, stable, non-deceptive map service, so it clears
+the anti-phishing bar on its face: not a shortener, no known redirector path. The sentence's own
+use is convening — two people planning to walk a stretch of coast path together.
+
+**The reasoning that decided it is comparative, and worth stating.** Both renderings assert
+something this track cannot verify. The copy box asserts that a mainstream map service is
+*absent* from a list whose first named category is Maps, which is the **stronger** and less
+likely claim. The hyperlink also leaves the extended bio demonstrating the outcome nothing else
+on the page demonstrates; R2 already built three copy boxes elsewhere, and a fourth would have
+left §9.4's three-outcome rule showing only one outcome across the whole profile.
+
+**The gap, which is genuinely open.** §7.2.3 scopes every allowlist row to *"posts and comments,
+contact cards, or both."* **The extended bio is neither.** §9.4 imports §7.2.4's rule wholesale
+— *"allowlisted links clickable, anything else an inert copy box, blocklisted domains refused"* —
+but §7.2.3's scopes have no row for a bio, so a builder must decide whether a bio takes the
+posts-and-comments scope or a third one. This session assumed posts-and-comments, on the reading
+that the scope split exists to keep messenger handles off posts rather than to enumerate
+surfaces. **Not resolved here.** If the answer is a third scope, the rendering may change.
+
+**Drawn:** the anchor text is now the address itself, carrying `.url-inline`; the section's
+commentary no longer says *"allowlisted links are permitted (§7.2.3)"*, the pre-1.29 rule. The
+short bio above is untouched and stays plain, unclickable text (§9.4, push surface).
+
+---
+
+## 62. The per-item report action's layout collision — and two 320 px reflow failures that were found only by measuring
+
+**Session:** R3. **Surface:** `mockups/pages/contact-card-received.html`,
+`preview-as-friend.html`, `profile-about.html`, `contact-card-editor.html`, `mockups/styles.css`.
+
+Twelve rows each carrying a label, a value and a 44 × 44 button is the densest repeated-control
+surface this track has drawn, so the row was built to **stack** rather than column: a label, a
+long address and a button will not sit side by side at 320 px. That much was expected. Two
+things were not, and **both were invisible until the pages were measured in a browser at 320 px**
+— neither shows up in markup review, and one of them does not show up in element geometry either.
+
+**a. A URL rendered outside a copy box has no wrapping rule anywhere in SPEC.** §7.2.4 specifies
+break-anywhere wrapping, in detail and with its 1.4.10 reasoning, **for the copy box only**. But
+the same section says of the clickable outcome that *"a URL is linkified as itself"*, and §10.2
+puts a bare address in a card item's value. A linkified URL and a card value are exactly as long
+and exactly as unwrappable as the address in a copy box. Measured at 320 px before the fix:
+`profile-about.html` scrolled to **407 px** on the OpenStreetMap anchor, and
+`contact-card-editor.html` to **334 px** on the "My photos" value. Both are the two-dimensional
+scroll §16.3 forbids, arriving through the door §7.2.4 left open.
+
+**The trap inside the trap:** the card-value overflow is **invisible to `getBoundingClientRect`**.
+The `<p>` box stays 288 px wide and reports no overflow; it is the *text* that paints past it, so
+only `scrollWidth` on an ancestor reveals it. A check written against element rectangles — the
+obvious way to write one — reports the page clean. It is worth knowing that this track's reflow
+checks have to be written against `scrollWidth`.
+
+**b. Fixed in `styles.css`, deliberately, and this is the session's one CSS addition** beyond the
+card row's own spacing: `.contact-card-value` and a new `.url-inline` take the same two
+properties `.copy-box-address` already has, for the same reason. No horizontal scrollbar is
+introduced, so §7.2.1's preformatted post remains the platform's single documented reflow
+exception — §7.2.4 is explicit that a second one arriving by accident is the thing to avoid.
+
+**Verified after the fix:** all five pages at 320 px report `scrollWidth === clientWidth === 320`,
+no element overflowing the viewport, no copy box with an internal horizontal scrollbar, and no
+button under 44 × 44. The only inner overflow remaining is the 1 px clip on `.visually-hidden`,
+which is that pattern working as designed.
+
+**Drawn:** `.contact-card-item > button` spacing and the `.contact-card-value, .url-inline`
+wrapping rule, both commented in place with their SPEC reasoning. **This is a finding about
+SPEC, not only about CSS:** §7.2.4's wrapping requirement is written as a property of the copy
+box and needs to be a property of *an address*, wherever one is rendered.
+
+---
+
+## 63. SPEC's own two strings for the report button cannot both be satisfied under §16.3
+
+**Session:** R3. **Surface:** `mockups/pages/contact-card-received.html`,
+`preview-as-friend.html`. **Not resolved — built to the rule, recorded here.**
+
+§13.2 gives the report action's **visible text** verbatim — *"Report this item"* — and its
+**accessible name** verbatim, in two forms: *"Report the item labelled 'My photos'"* and
+*"Report the third item, a phone number."* Both are registered in `CRIB.md` §2 as quotations.
+
+**They are mutually inconsistent under §16.3's own requirement.** §16.3 requires *"Visible label
+text matches accessible names"* (2.5.3), which is satisfied when the visible string is contained
+in the accessible name. *"Report this item"* is **not** contained in *"Report the item labelled
+'My photos'"* — "this item" against "the item". A page that renders both strings exactly as SPEC
+gives them fails 2.5.3 on every one of up to twelve controls.
+
+**Built as a composition**, on the pattern `CRIB.md` already registers for the copy control,
+whose accessible name *"begins with the visible word 'Copy'"* for precisely this reason:
+
+> `Report this item` + visually-hidden `, the item labelled 'My photos'`
+> `Report this item` + visually-hidden `, the fourth item, a phone number`
+
+SPEC's naming phrase survives intact as the tail; the visible text leads, so 2.5.3 holds. Five
+controls on each page, five distinct accessible names, verified.
+
+**A second, smaller mismatch in the same place.** SPEC's empty-label example says *"the **third**
+item."* The ordinal is a property of the card being rendered, not a fixed string: on Alice's card
+the unlabelled item is the **fourth**, because her individual override removes Signal from a list
+where the appended items land after it. Rendering "third" would have named the wrong row on a
+report control — worse than deviating from the example. Reaching "third" would have required
+reordering items the prompt directed this session to leave alone.
+
+**Drawn:** the composition above on both pages, and a note on the card page telling a reader why
+the ordinal differs from SPEC's example. **Not resolved:** if the founder wants SPEC's accessible
+name rendered literally, the visible text has to change — *"Report"* alone would make both quoted
+forms 2.5.3-clean at once, and is the smaller edit.
+
+---
+
+## 64. §10.2 says every item carries a label; §13.2 specifies what happens when one is empty
+
+**Session:** R3. **Surface:** `mockups/pages/contact-card-editor.html`,
+`contact-card-received.html`. **Recorded, not resolved.**
+
+§10.2: *"**Every item carries a label**, up to `CARD_ITEM_LABEL_MAX`."* §13.2, three sections
+later: *"An item whose label is empty is named by kind and position instead: 'Report the third
+item, a phone number.'"*
+
+Both cannot be strictly true. Either the label is mandatory and §13.2's empty case is
+unreachable, or it is optional and §10.2's "every" is a description of the field's existence
+rather than a constraint on its contents. **Built the second way**, because §13.2 specifies real
+behaviour for the empty case and a rule with a defined fallback reads as optional; an item with
+no label is rendered on both pages.
+
+This decides something the editor needed and neither section states: **whether the label field
+blocks saving when empty.** It is built as not blocking. If §10.2's "every" is meant as a hard
+requirement, the editor needs a required-field error that no section currently specifies, and
+§13.2's empty-label naming form becomes dead.
+
+**Drawn:** one unlabelled item on the card and in the editor, with a note in place on both.
+
+---
+
+## 65. What §10.2's label field forced on the editor that §10.2 does not specify
+
+**Session:** R3. **Surface:** `mockups/pages/contact-card-editor.html`.
+
+§10.2 gives the label a hard cap (`CARD_ITEM_LABEL_MAX` = 40), `NAME_BLOCKLIST` screening at
+every save, and the reasoning for both. It gives **no interface** for any of it. Four things had
+to be decided to draw the field at all, and none is in the document:
+
+1. **The refusal wording** when screening rejects a label. Handled by reusing M7's registered
+   string with one noun changed rather than inventing a fourth — see `CRIB.md` §2. R3 was
+   licensed to invent one string and used the licence on nothing.
+2. **The cap-overrun state.** Reused `composer.html`'s `.char-count.over-limit`, the pattern
+   already established for `POST_LENGTH_MAX`. §10.2 says the label gets "the short bio's
+   treatment" but the short bio's *interface* is nowhere specified either, so the composer is
+   the nearest thing to a precedent this track has.
+3. **Whether the two failures are one state or two.** Built as two, because they have different
+   fixes — shorten it, versus choose a different one — and §16.3 requires an error to state its
+   fix. A merged state could not.
+4. **The label's own hint text.** *"What friends will see this called"* is this session's
+   wording for a field §10.2 describes only by its purpose. It is interface copy rather than a
+   registered string, so it is not in `CRIB.md`; flagged here so a later session can change it
+   without thinking it quotes something.
+
+**One more, from §13.2 rather than §10.2:** the delivered **order** of items is frozen evidence
+in a card report, so where a new item is appended is not cosmetic. R3's two new items are
+appended after Signal rather than inserted, which is what fixes the resolved order on Alice's
+card.
+
+**Drawn:** the label field, its character count, its cap-overrun state and its screening-refusal
+state, all on `contact-card-editor.html`, each with its provenance in commentary beside it.

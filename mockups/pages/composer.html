@@ -201,21 +201,61 @@ over the limit. Shorten the text before you can publish.</p>
 </div>
 
 <div class="composer-section">
-<h2>9. A rejected link</h2>
-<p class="commentary">URLs are permitted only from the operator-curated allowlist (SPEC
-§7.2.3).</p>
+<h2>9. An unapproved link</h2>
 <div class="field">
-<label for="post-link">Post text</label>
-<input type="url" id="post-link" name="post-link" value="https://bit.ly/3xyz9" aria-describedby="post-link-error" aria-invalid="true">
+<label for="post-unapproved-link">Post text</label>
+<textarea id="post-unapproved-link" name="post-unapproved-link" rows="5">Finally finished scanning the whole box of old family photos. The lot of them is here if anyone wants a look: https://bit.ly/3xyz9</textarea>
 </div>
-<p id="post-link-error" class="field-error">That link isn't allowed in a WeeBee post. The
-allowlist only carries links that help people meet up in person, host video or audio WeeBee
-doesn't, or hand a conversation off to a messenger — and a shortened link can't be checked
-against it at all. Anything else can be shared through your contact card.</p>
+<p class="commentary">Nothing above this line is missing. SPEC §7.2.4 gives a link three
+possible outcomes, and only one of them is an error: an allowlisted address in scope for this
+surface becomes a clickable link, a <strong>blocklisted</strong> address is refused (section 10
+below), and an address on <strong>neither</strong> list — this one — is simply delivered
+differently, as an inert copy box in the published post. §7.2.4 is emphatic that this is
+<em>"a different rendering, not a refusal"</em>, with <em>"no warning, no apology, no error
+styling, no 'this link is not approved' note beside it."</em> So this section carries no
+<code>aria-invalid</code>, no <code>.field-error</code> and no hint: the composer says nothing,
+because there is nothing to say. §7.2.4 explains why the silence is load-bearing — on a
+platform that already says no to a great deal, a system that also scolds each time is
+experienced as scolding generally, and the person who feels scolded is the ordinary member
+posting a link to their own photo album, which is exactly the post above.
+<code>bit.ly</code> is the honest example here rather than in section 10: §7.2.3 says a URL
+shortener is <em>never allowlistable</em>, because it makes the destination unknowable — which
+makes it permanently a copy box, not a refusal, unless the operator has separately blocklisted
+it. For the rendering this produces once published, see
+<a href="post-feed.html">a feed post</a> and <code>mockups/partials/_post.html</code>. Before
+v1.29 this section refused this address outright, and its commentary stated the rule that the
+allowlist governs delivery; the allowlist now governs <strong>clickability</strong>, and
+delivery is governed by the blocklist alone.</p>
 </div>
 
 <div class="composer-section">
-<h2>10. Switching destination</h2>
+<h2>10. A blocklisted link</h2>
+<p class="commentary">The one link outcome that really is an error, and the only one that keeps
+an error affordance. §7.2.4: the author is warned <em>before</em> the post is published, not
+after — the check runs at composition and again at save, on the create and edit paths alike
+(§7.8's invariant 4). The message is the wording registered in <code>mockups/CRIB.md</code> §2,
+which is <strong>invented</strong>: §7.2.4 says what it must do — say plainly that the address
+cannot be posted here and that the fix is to remove it, and <em>"name no appeal, because there
+is none"</em> — and gives no words for it (see <code>mockups/NOTES.md</code>). It offers no
+reason for the block and no route to contest it, both deliberately.</p>
+<div class="field">
+<label for="post-blocklisted-link">Post text</label>
+<textarea id="post-blocklisted-link" name="post-blocklisted-link" rows="5" aria-describedby="post-blocklisted-link-error" aria-invalid="true">Someone sent me this and I have no idea what to make of it: https://blocklisted.example.com/thread/8812</textarea>
+</div>
+<p id="post-blocklisted-link-error" class="field-error">This address can't be posted on WeeBee.
+Remove the link to save your post.</p>
+<p class="commentary"><code>blocklisted.example.com</code> is a stand-in on the reserved
+documentation domain <code>example.com</code>, not a real site being accused of anything.
+§7.2.3 states that what belongs on the blocklist <em>"is not specified here"</em> — it is
+operational judgment the operator exercises case by case, in the same way
+<code>NAME_BLOCKLIST</code>'s contents are — so naming any real domain here would invent a
+policy neither document states. The list itself is an operator-maintained table, never a
+constant in code, which is why it is written in plain words above rather than as a code-style
+constant name.</p>
+</div>
+
+<div class="composer-section">
+<h2>11. Switching destination</h2>
 <p class="commentary">A draft may switch type freely. Both notices are text, not modal
 interruptions (SPEC §7.1).</p>
 <p class="notice">Switching to a blog post clears the audience you picked — a blog post has no

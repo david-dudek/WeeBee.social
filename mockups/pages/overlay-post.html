@@ -8,8 +8,18 @@ between.</p>
 
 <div class="overlay-demo-section">
 <h2>The page behind the dialog</h2>
-<p class="commentary">Dimmed and inert while the dialog is open.</p>
-<div class="modal-backdrop-content" aria-hidden="true">
+<p class="commentary">Dimmed and inert while the dialog is open. The post below carries the
+ordinary, uneventful case of SPEC §7.2.4 — one address on neither link list, rendered as an
+inert copy box with the address in full and verbatim, no hyperlink, and nothing flagged. It also
+shows what the overlay does to that control: §16.3 traps focus inside the dialog while it is
+open, so the copy button here is genuinely unreachable until the dialog closes. That is why this
+container carries <code>inert</code> alongside the <code>aria-hidden</code> it already had —
+until this session the backdrop held no focusable element at all, and a focusable control inside
+an <code>aria-hidden</code> region on its own would be a 4.1.2 failure rather than a faithful
+drawing of a focus trap (see <code>mockups/NOTES.md</code>). The many-controls demonstration
+§16.3 asks for lives on <a href="post-feed.html">the feed-post view</a> instead, which is the
+single-post view that actually carries comments; this page is the image overlay.</p>
+<div class="modal-backdrop-content" aria-hidden="true" inert>
 <header class="profile-header">
 <img class="profile-photo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNDAgMjQwIj48cmVjdCB3aWR0aD0iMjQwIiBoZWlnaHQ9IjI0MCIgZmlsbD0iI2U1ZTVlNSIvPjxjaXJjbGUgY3g9IjEyMCIgY3k9Ijk1IiByPSI0NSIgZmlsbD0iIzljOWM5YyIvPjxwYXRoIGQ9Ik00MCwyMzUgQzQwLDE3NSA3NSwxNTAgMTIwLDE1MCBDMTY1LDE1MCAyMDAsMTc1IDIwMCwyMzUgWiIgZmlsbD0iIzljOWM5YyIvPjwvc3ZnPg==" alt="" width="80" height="80">
 <h3>David Dudek (formerly Dave Dudek)</h3>
@@ -21,6 +31,11 @@ between.</p>
 <div class="post-body">
 <p>Tomatoes finally came in after what felt like the longest June on record. Sending this to the usual suspects before Mom asks for the fifth time whether they're &quot;actually ripe yet or just red.&quot;</p>
 <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgNDAwIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgZmlsbD0iI2U3ZTdlNyIvPjxlbGxpcHNlIGN4PSIyMDAiIGN5PSIyNjAiIHJ4PSIxNTAiIHJ5PSI2MCIgZmlsbD0iIzllOWU5ZSIvPjxlbGxpcHNlIGN4PSIyOTAiIGN5PSIyMzAiIHJ4PSI0MCIgcnk9IjMwIiBmaWxsPSIjN2Y3ZjdmIi8+PC9zdmc+" alt="A handful of ripe tomatoes on the vine, morning dew still on a couple of the leaves." width="200" height="200">
+<p>The rest of the beds are here, for anyone who wants the full tour:</p>
+<div class="copy-box">
+<span class="copy-box-address">https://photos.example.com/albums/2026-garden</span>
+<button class="copy-box-button" type="button">Copy<span class="visually-hidden"> the address https://photos.example.com/albums/2026-garden</span></button>
+</div>
 </div>
 <p class="post-visibility">Visible to: the friends David sent this to.</p>
 </article>

@@ -77,28 +77,64 @@ specifically: default, then any group override, then any individual override —
 override always winning last, in either direction.</p>
 
 <ul class="contact-card-preview">
-<li>
+<li class="contact-card-item">
 <p class="contact-card-label">Phone</p>
 <p class="contact-card-value">07700 900123</p>
+<button type="button" class="button">Report this item<span class="visually-hidden">, the item labelled 'Phone'</span></button>
 <p class="commentary">On by default for all friends; nothing overrides it for Alice.</p>
 </li>
-<li>
+<li class="contact-card-item">
 <p class="contact-card-label">Personal email</p>
 <p class="contact-card-value">david@example.invalid</p>
+<button type="button" class="button">Report this item<span class="visually-hidden">, the item labelled 'Personal email'</span></button>
 <p class="commentary">Off by default, but an individual override turns it on for Alice
 specifically — an override that touches only her card.</p>
 </li>
-<li>
+<li class="contact-card-item">
 <p class="contact-card-label">WhatsApp</p>
-<p class="contact-card-value">wa dot me slash [David's WhatsApp link]</p>
+<p class="contact-card-value"><a class="url-inline" href="https://wa.me/447700900123">https://wa.me/447700900123</a></p>
+<button type="button" class="button">Report this item<span class="visually-hidden">, the item labelled 'WhatsApp'</span></button>
 <p class="commentary">Off by default, but on for everyone in the "Hiking crew" group (see
 <a href="composer.html">the composer's group-save suggestion</a>, §6), which Alice belongs to —
 a group override, not an individual one.</p>
 </li>
+<li class="contact-card-item">
+<p class="contact-card-value">07700 900124</p>
+<button type="button" class="button">Report this item<span class="visually-hidden">, the fourth item, a phone number</span></button>
+<p class="commentary">On by default for all friends. David left this item's label empty, so its
+report action is named by kind and position instead of by label (§13.2).</p>
+</li>
+<li class="contact-card-item">
+<p class="contact-card-label">My photos</p>
+<div class="copy-box">
+<span class="copy-box-address">https://photos.example.com/david/cornwall-2026</span>
+<button class="copy-box-button" type="button">Copy<span class="visually-hidden"> the address https://photos.example.com/david/cornwall-2026</span></button>
+</div>
+<button type="button" class="button">Report this item<span class="visually-hidden">, the item labelled 'My photos'</span></button>
+<p class="commentary">On by default for all friends. An ordinary link item, rendered as a copy
+box because photo hosts are allowlisted for posts and comments rather than for cards (§7.2.3).</p>
+</li>
 </ul>
+<p class="status-message" role="status" aria-live="polite">Address copied.</p>
+
+<p class="commentary"><strong>The report actions render, and they do nothing</strong> — §13.2 in
+terms: <em>"In preview-as the action renders and does nothing."</em> The preview is a truthful
+rendering of the surface a friend sees, so hiding them would misrepresent it, and preview mode is
+already strictly read-only; §9.5 adds no special case. <strong>Note what looks like a
+contradiction and is not:</strong> §13.2 says the report action is never shown to the card's
+owner, and this page shows it to David. It is not a violation, because David is
+<em>previewing</em> rather than reporting — the buttons are Alice's, rendered so David can see
+what she sees. Preview-as changes who is looking, never what they would see.</p>
+
+<p class="commentary">The last two items are new in R3, matching
+<a href="contact-card-received.html">the card page</a> item for item — the two pages must not
+disagree about what the same card looks like. The <strong>WhatsApp item is now a real
+hyperlink</strong>: messenger domains are allowlisted with card scope as of v1.29 (§7.2.3), so
+the same address in a post would be a copy box. M4 rendered it as the obfuscated string
+<code>wa dot me slash […]</code>, which was the pre-1.29 rendering.</p>
 <p class="commentary">Signal is on by default for friends generally, but David has set an
 individual override turning it off specifically for Alice — "always wins, in either direction"
 (§10.3) — so it does not appear on her card at all, not greyed out, not listed as withheld: an
 item Alice may not see is simply absent, the same absence rule §9.2 uses for hidden posts. The
-card is otherwise capped at <code>CONTACT_ITEMS_MAX</code> = 12 items total; three are shown
+card is otherwise capped at <code>CONTACT_ITEMS_MAX</code> = 12 items total; five are shown
 here as a worked example of the cascade, not the whole of David's card.</p>

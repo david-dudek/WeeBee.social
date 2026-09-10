@@ -1,7 +1,7 @@
 # WeeBee — Design Documents
 
-**Project version:** 1.27 · 2026-08-18 · DRAFT — not yet founder-approved
-**This file last changed in:** 1.18 (the 90-day line now states the 30-day backup window)
+**Project version:** 1.31 · 2026-09-09 · DRAFT — not yet founder-approved
+**This file last changed in:** 1.30 (one clause: the contact-card report exists, so the 60-second summary no longer calls it the piece still to be designed)
 **History:** see [CHANGELOG.md](CHANGELOG.md)
 
 **WeeBee** (`weebee.social`) is a **small, private, deliberately anti-viral social network**. This repository holds its complete design documents. The platform has not been built yet — these documents come first, on purpose, so that the thinking is settled before the first line of code, when changes are cheapest.
@@ -16,11 +16,17 @@ The core thesis: the reshare/repost button is the original sin of social media. 
 
 Concretely: invite-only membership (permanently), a hard cap of 300 friends, posts pushed to at most 30 hand-picked people, every post and comment auto-deleted after 90 days (and purged from the last encrypted backup within 30 days after that), no DMs (structured contact-card exchange instead), no likes or counters of any kind, no algorithmic feed, no tracking of any kind, no ads, no API. Friend discovery works only through mutual friends and shared interests — never beyond friends-of-friends. One server, one database, server-rendered pages, everything self-hosted except outbound email.
 
+**That list is all absences — and most of them are deliberate handoffs rather than things WeeBee couldn't manage.** WeeBee is built to be used *alongside* the services people already have: texting, email, Google Maps, Evite, Dropbox. Where a need is already well served somewhere else, the platform's job is the handoff, not the capability — so there are no DMs because messengers exist, and no events system because Evite exists. That is **the Delegation Principle** (SPEC §1.5), and its point is that a refusal here is supposed to name the door out: an approved service's link is clickable on a post, and any other link can still be posted — as an address you copy rather than tap. A contact card carries anything too — and since 1.30 a card can be reported, like a post or a profile, which is the piece that had to exist first (SPEC §13.2). The one thing it does *not* license is minimalism for its own sake — WeeBee still holds one photo per post and eight on a profile, because a social platform where you can't post a single picture without an account somewhere else never gets off the ground. Enough to work; never enough to be your photo library.
+
+**The other positive version is one picture:** WeeBee should feel like a large gathering where there is room to move about and talk with small groups at a time. Showing a couple of photos of a vacation or the kids belongs there; handing someone a stack of photo albums does not. That is **the Gathering Test** (SPEC §1.4) — and it is a question every feature has to answer, not a gate it has to pass: three features deliberately fail it and stay, and §1.4 names all three.
+
 **On the 90 days, precisely:** what expires is what you *say*. What you *are* — your profile photo, your bio, your gallery of eight pictures — stays until you change it. **Statements expire; descriptions do not** (SPEC §9.7). The one deliberate exception on the other side is a pinned post: up to ten, kept for as long as you keep them pinned, which is the only act of preservation the platform offers. And one honest caveat in the other direction: deletion is immediate and permanent in the live system, but nightly encrypted backups exist, so a deleted thing survives there until the backup ages out — **30 days at most** (SPEC §7.5, §4.7). Claiming instantaneous total erasure while running backups would be a lie; the documents say the true thing instead.
 
 ## What is NOT up for review
 
 The **product philosophy is decided.** I know invite-only limits growth, that people love DMs, that 90-day expiry is radical, and that no-virality means no explosive adoption. These are the bets the project exists to make. Comments arguing the vision will be read with interest but won't change it — please don't spend your effort there.
+
+The **Gathering Test** (SPEC §1.4) and the **Delegation Principle** (SPEC §1.5) are part of that philosophy: each names an intuition that has guided the project from the start rather than adding a new one. What they do *not* close is any particular number they happen to support — the caps below stay open for review exactly as described there. **What is open about delegation is where the line falls**, feature by feature: the principle says WeeBee builds only the least it must and links out for the rest, and "the least it must" is a judgment call worth arguing with.
 
 Also decided: the rejection of blockchain/federation (AT Protocol), the 18+ rule, the tracking ban, and **WCAG 2.1 Level AA conformance** (SPEC §16) — an invite-only network of real friends and family cannot have a door some of them can't open. *How* to hit AA is very much open to review; *whether* is not.
 

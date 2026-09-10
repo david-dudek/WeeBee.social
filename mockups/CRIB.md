@@ -4,7 +4,7 @@ Built in session M1. Sessions M2–M8 read this instead of re-deriving constants
 strings, the sample cast, and the relative-age ladder from SPEC.md each time. Add to it as
 later sessions need more of any of these — do not remove or renumber existing entries.
 
-All citations are to SPEC.md at project version 1.27 unless marked ARCHITECTURE.
+All citations are to SPEC.md at project version 1.31 unless marked ARCHITECTURE.
 
 ---
 
@@ -37,9 +37,21 @@ All citations are to SPEC.md at project version 1.27 unless marked ARCHITECTURE.
 | Pending friend-request expiry | 90 days (matches `CONTENT_TTL_DAYS`; destroys the frozen card with it) | §5.2 |
 | Re-request cooldown after a declined friend request | 90 days | §5.2 |
 | Daily rate limits, suggested | 20 friend requests, 10 introductions (per account per day) | §13.6, §14 |
+| `CARD_ITEM_LABEL_MAX` | 40 characters (v1.29; the label on a contact-card item — new free text on a surface that had none, so it is capped hard *and* screened against `NAME_BLOCKLIST` at every save) | §10.2, §14 |
+| URL allowlist | operator-curated; each row carries an **admitting category** and a **surface scope** — posts and comments, contact cards, or both (v1.29). Messenger domains are **card-only** | §7.2.3, §14 |
+| URL blocklist | operator-curated, **new in v1.29** — domains refused outright, in any form, on every surface. Checked by the same shared validator as the allowlist, on **every save path, create and edit alike**. Retired by deactivating, never deleting; **no appeal channel** | §7.2.3, §7.2.4 |
 
-Full table: SPEC §14 (lines ~898–953 at v1.27). Pull in more rows here as later sessions need
+Full table: SPEC §14 (lines 1082–1141 at v1.30). Pull in more rows here as later sessions need
 them rather than re-reading §14 whole.
+
+**The last three rows were added in the 1.27 → 1.30 re-sync (session R1).** Two of them are not
+constants at all: the **URL allowlist and URL blocklist are operator-maintained tables**, kept in
+the operator console beside each other, and §7.2.3 says of the blocklist in terms that it is *"a
+table, maintained by the operator in the console alongside the allowlist … never a constant in
+code."* §14 marks both ✎, as it marks `CARD_ITEM_LABEL_MAX`. They carry no backticks in the rows
+above for that reason, and **a page must never render either as a code-style constant** — no
+`URL_BLOCKLIST`, no monospace, no invented constant name. `CARD_ITEM_LABEL_MAX` is an ordinary
+code constant and keeps its backticks.
 
 **M7 adds:**
 
@@ -216,6 +228,21 @@ have permission to see it"* (`errors.html`) and *"That name isn't allowed on Wee
 a different one"* (`invite-redeem.html`) — flagged as invented rather than quoted, in
 `mockups/NOTES.md`.
 
+### §10.2 — The card label refused by `NAME_BLOCKLIST` — **reuse, not a new invention (R3)**
+
+§10.2 screens every card item's label against `NAME_BLOCKLIST` at every save and, like §4.5
+before it, **gives no wording for the refusal**. R3 was licensed to invent one string and did
+not need to: M7's already-registered wording for a blocked display name is the same list
+refusing the same shape of thing, so it is reused with one noun changed.
+
+> *"That label isn't allowed on WeeBee. Please choose a different one."*
+
+M7's original, unchanged and still in use on `invite-redeem.html`, is *"That name isn't allowed
+on WeeBee. Please choose a different one"* — registered in the §9.3/§4.5 entry above. Rendered
+on `contact-card-editor.html` as a field error on the label field (§16.3, 3.3.1 / 3.3.3).
+**R3 registered no new invented string**, so the number of entries marked as invented in this
+file is unchanged at three. Recorded in `mockups/NOTES.md`.
+
 ### §9.4 — The gallery reorder controls' naming pattern (M6)
 
 *"Move '[alternative text]' up"* / *"Move '[alternative text]' down"* — SPEC's own worked
@@ -230,6 +257,15 @@ private information · **the tags don't match this post** (profile posts only) �
 else.* The tag-mismatch reason only ever appears on a tagged profile post. Profile reports:
 *the photo · the name · the short bio · the about section · the gallery · this person's
 behaviour.* Both rendered on M6's `report-post.html` and `report-profile.html`.
+
+**Contact-card reports (v1.30, added in R1):** *the label · the address or number · the card as
+a whole · this person's behaviour.* **"The card as a whole" is reachable from any item's button**
+— it is the category for the case where no single item is the complaint — and *"this person's
+behaviour"* is the same last entry the profile list carries, for a card that is a symptom rather
+than the thing wrong. Plus the same optional short note to the operator every report already
+carries. To be rendered on the new `report-card.html`, which R3 builds; not built here. **The two
+lists above are unchanged** — 1.30 added a fourth report target, it did not alter the existing
+three.
 
 ### §13.5 — Operator request categories, verbatim (M6)
 
@@ -254,6 +290,103 @@ post's own age. No version history, no diff.
 `REACTION_SET` examples given in SPEC: "Agreed!", "Love it!", "So proud!", "Thinking of you",
 "Congrats!", "Ha!".
 
+### §7.2.3 — Composer and help copy for the two hosting categories (v1.29, R1)
+
+SPEC says the stated purpose in composer and help copy *"stays exactly that"*, so these two are
+quotations rather than paraphrases. Copy them character for character:
+
+> *"WeeBee doesn't host video or audio. This is where your own recording lives."*
+
+> *"WeeBee holds one photo per post. If you have sixty, they live somewhere else — link to them
+> here."*
+
+The first belongs wherever the composer explains video and audio; the second wherever it explains
+the one-photo-per-post limit (`GALLERY_MAX` = 8 on a profile).
+
+### §7.2.4 — The three link outcomes, and the rule that only one of them is an error (v1.29, R1)
+
+SPEC's own table, copied:
+
+| The link | What happens |
+|---|---|
+| On the **allowlist**, in scope for this surface (§7.2.3) | Renders as a **clickable hyperlink** |
+| **On neither list** | Renders as an inert **copy box** — the address in full, with a copy control, no hyperlink |
+| On the **blocklist** | **Refused.** The post, comment or card item cannot be saved |
+
+One rule, identical on posts, comments and contact-card items (§10.2).
+
+**A copy box is not an error, and this constrains every string in the four entries below.**
+§7.2.4: a copy box is *"a different rendering, not a refusal"* — *no warning, no apology, no
+error styling, no "this link is not approved" note beside it.* Only the blocklisted case is an
+error. **If a string written for a copy box reads as a telling-off, it is wrong.**
+
+### §7.2.4 — The blocklisted-link refusal — **INVENTED; SPEC gives no wording**
+
+§7.2.4 states what this message must do and gives no words for it: it *"says plainly that this
+address cannot be posted here and that the fix is to remove it"*, and *"**It names no appeal**,
+because there is none"*. §16.3's rule that an error states its fix is the constraint. This
+session's own wording, to be used as-is:
+
+> *"This address can't be posted on WeeBee. Remove the link to save your post."*
+
+The last clause names the thing being saved, so the same string on the other two surfaces reads
+*"… to save your comment."* and *"… to save this item."* (a contact-card item, §10.2).
+
+**Invented, not quoted** — recorded in `mockups/NOTES.md`. Two things must not be added to it:
+**no appeal route** of any kind (no "contact the operator", no "request a review" — §7.2.3 rules
+the channel out, and an error gesturing at a door that does not open is worse than one that names
+no door), and **no explanation of why the domain is blocked**, which SPEC does not offer and the
+operator's table does not publish. It is a field error on the offending field (§16.3, 3.3.1 /
+3.3.3), shown at composition and again at save, on the create and edit paths alike.
+
+### §7.2.4 and §16.3 — The copy control: visible text and accessible name — **INVENTED pattern**
+
+§16.3 names the copy control among the repeated controls that must carry a distinct accessible
+name, and requires that name to say **which address it copies** — *"a single feed page may carry
+many"*, and an element list reading "Copy" twelve times is the dead end the rule exists to
+prevent. SPEC requires only that the control be a real `<button>` and not a bare icon; it gives
+no wording for either the visible text or the name. Both below are this session's own, written in
+the shape of §16.3's existing worked example *"Read more of David's post from a few days ago"*:
+
+> Visible text: *"Copy"*
+> Accessible name: *"Copy the address {the full address, verbatim}"* — e.g. *"Copy the address
+> https://photos.example.com/cornwall-2026"*
+
+The naming text is visually hidden, exactly as the "read more" folds do it. The accessible name
+**begins with the visible word "Copy"**, which is what keeps §16.3's *"Visible label text matches
+accessible names"* (2.5.3) true. The address in the example is illustrative, not registered cast
+content. **Invented, not quoted** — recorded in `mockups/NOTES.md`.
+
+### §7.2.4 — The copy confirmation — **INVENTED wording; the live region itself is not invented**
+
+§7.2.4 requires that the copy be *"confirmed in a polite live region"* (4.1.3), *"composing the
+existing status partial"*. That partial is **`partials/_status.html`, which is already correct** —
+`<p class="status-message" role="status" aria-live="polite">`. Compose it; **do not write a second
+one**. SPEC gives no wording for the message. This session's:
+
+> *"Address copied."*
+
+**Invented, not quoted** — recorded in `mockups/NOTES.md`. It is a confirmation and nothing else:
+no apology, no instruction, and nothing about approval or safety, per the no-scolding rule above.
+
+### §13.2 — The contact-card report button (v1.30, R1)
+
+**Visible text, given verbatim by SPEC:** *"Report this item"*. A real `<button>`, never an
+unlabelled icon (§16.4). One action per item.
+
+Its accessible name must name its own item, and SPEC gives both forms verbatim:
+
+> *"Report the item labelled 'My photos'"* — taken from the item's label.
+> *"Report the third item, a phone number."* — for an item whose label is empty, named by kind
+> and position instead.
+
+Placement and availability, all from §13.2: the action lives on the **card page** (§10.4); it is
+available to anyone that page is available to — a current friend whose request has been answered
+— and **not to the card's owner**, exactly as the profile report is not. **An empty card carries
+no report action at all**, because there is nothing on it to report and a complaint about the
+person rather than the card is a profile report. In preview-as (§9.5) *"the action renders and
+does nothing."*
+
 ### §16.3 — Worked accessibility examples
 
 - Repeated-control accessible name: *"Read more of David's post from a few days ago"*
@@ -261,6 +394,14 @@ post's own age. No version history, no diff.
   §9.1, which names the same landing tab "Blog," not "Posts." Recorded as a contradiction in
   NOTES.md; not resolved here per the standing instruction to log and build on regardless.
 - Post `<article>` accessible label pattern: *"Post by David, a few days ago"*
+- **Copy control on a link's copy box** (§7.2.4, v1.29) — §16.3 names it explicitly as a repeated
+  control, *"of which a single feed page may carry many"*, whose accessible name *"has to say which
+  address it copies"*, with the copy confirmed in a polite live region. SPEC gives the requirement
+  and no wording; the invented pattern is registered in this section's copy-control entry above.
+- **Per-item report action on a contact card** (§13.2, v1.30) — §16.3 names this one explicitly
+  too, *"of which one page may carry `CONTACT_ITEMS_MAX` = 12"*, named from the item's own label
+  and, where there is none, from its kind and position. Here SPEC does give the wording; both
+  forms are quoted in the §13.2 report-button entry above.
 
 ---
 
@@ -479,6 +620,20 @@ in progress (it shows the grace-period banner), which isn't the state either lin
 Per the precedent M3, M4 and M6 already set for a link in a file outside the current session's
 touched set (see entries 8, 16, 20, 21, 27 in `mockups/NOTES.md`), `settings.html` is left as
 found; see `mockups/NOTES.md` for the full entry.
+
+**R3 builds one page and keeps one filename** (the 1.27 → 1.30 re-sync, fourth sitting — the
+card cluster). The new page is **`report-card.html`**, the card report form, matching the
+pattern M6 set with `report-post.html` and `report-profile.html`; it is linked from
+`contact-card-received.html` and introduces no forward reference of its own.
+
+**`contact-card-received.html` keeps its name**, though "received" now names the moment the card
+was first asked for rather than what the surface is (§10.4 makes it a page, v1.30). Three files
+link to it, not two: `contact-card-editor.html` (twice) and `preview-as-friend.html` are in R3's
+touched set, but **`index.html:126` is not** — it is explicitly outside R3's permitted pages and
+belongs to close-out, which already owes it a `report-card.html` row and a rewritten M5
+description (`NOTES.md` entry 58). Renaming would have broken a link in a file R3 could not fix,
+which is the precedent entries 8, 16, 20, 21, 27, 37 and 48 already set. If the founder wants the
+rename, close-out is the cheap moment: it touches `index.html` anyway. See `NOTES.md` entry 60.
 
 **M8 builds ten templates in a new directory, `pages/emails/`**, each as an `.html` + `.txt`
 pair: `invite`, `verify-code`, `reset-code`, `email-change-code`, `email-change-notice`,

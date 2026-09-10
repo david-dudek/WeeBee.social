@@ -105,6 +105,300 @@ no other trace.
 
 ---
 
+## 1.31 — 2026-09-09
+
+| File | Status |
+|---|---|
+| README.md | **unchanged** — version header only |
+| SPEC.md | changed — **§10.4 gains one clarifying sentence.** "And nothing else" is now stated to bound what the card page *discloses*, not what it *carries*: the owner's name and the items resolved for the viewer are the closed list; the §13.2 report action and §10.5's request-more-access flag are controls, and neither is excluded |
+| ARCHITECTURE.md | **unchanged** — version header only, and nothing is owed. See "Scope" below |
+| BUILD_PLAN.md | **unchanged** — version header only, and nothing is owed. See "Scope" below |
+| CHANGELOG.md | changed — this entry |
+
+From prompt 16, and it resolves a question the mockup re-sync's R1 session raised on purpose and declined to answer: `mockups/NOTES.md` entry 51, written against §10.4 as v1.30 left it. §10.4 closes its list of what the card page carries with *"and nothing else,"* and the page also carries a request-more-access section drawn from §10.5 — a real part of the design, marked deferred to v1.1. Entry 51 laid out both readings and picked neither. `prompts/mockups/resync-3-card-cluster.md` §6a, drafted for the session that rebuilds that page, carried a recommendation rather than a decision — *keep the section, and record that the reading was chosen on a recommendation rather than derived from the document* — and explicitly deferred to whatever the founder settled first. This entry is that settling.
+
+### The reading, and why it holds
+
+**"And nothing else" was never a bound on the page's controls.** The three arguments §10.4 gives immediately beneath the sentence — a stored answer would defeat §10.3's cascade, a stored answer would be a message, a card has no clock to expire against — are all arguments against *storing or delivering a reply*. None of them says anything about what else the page may render.
+
+Two things already in the document, neither newly discovered, confirm the same reading:
+
+- **The very next substantive thing §10.4 does is put a report control on this page** (§13.2) — a third element that is neither the owner's name nor a shared item. No prior version of this document, and nobody working from it, has ever read that placement as violating "nothing else." The phrase is already applied in practice as a bound on *disclosed data*, not on every element the page renders.
+- **§10.4 already says of §10.5 that its flags "have always assumed this page without saying so"** — offered as a confirmation that the page-based redesign was compatible with the flag, not as a conflict flagged for later resolution. If the closing sentence had been meant to exclude the flag, that is the sentence that would have said so, and it says the opposite.
+
+§10.1's message ban and §13.1's free-text-vector accounting were checked and point the same way: both govern *content a user composes and another user reads*, which is what "nothing else" is doing the work of excluding. A toggle control is neither.
+
+### What this does and does not settle
+
+**It settles the reading, not the roadmap.** Whether §10.5 ships in v1.0 or v1.1 is untouched — the "may ship in v1.1" hedge stays exactly where v1.30 put it, word for word. What changes is narrower: a builder reading §10.4 alone can now tell that the page is allowed to carry the control *when the time comes*, without cross-referencing `NOTES.md` or a mockup-track prompt to find out that the question was ever open.
+
+**Nothing settled by prompt 15 was reopened.** The live-resolution decision, its three grounds, the report action's placement and shape, and §10.5's own v1.1 deferral all stand exactly as v1.30 wrote them. This is a reading of one existing sentence, not a new decision layered beside it.
+
+### Scope: one section, on purpose
+
+**Nothing here is new behavior**, so nothing pulls at ARCHITECTURE.md or BUILD_PLAN.md — both carry the version bump and nothing else, exactly as 1.28's Gathering Test entry did for the same reason. Cross-document sync is prompt 09's job, not this one's.
+
+### Working files (outside the record)
+
+`TODO.md`: prompt 16 marked **done at 1.31**. This also resolves `mockups/NOTES.md` entry 51 and lets `prompts/mockups/resync-3-card-cluster.md` §6a be read, next time the mockup track runs, as a settled decision rather than a recommendation — no edit to either mockup file was made by this session; the mockup track's own rule keeps SPEC changes out of its scope, and it picks this reading up the next time it runs.
+
+---
+
+## 1.30 — 2026-09-07
+
+| File | Status |
+|---|---|
+| README.md | changed — **one clause** in the 60-second summary. It called the card report *"the single piece of this still to be designed"*; it is designed, so the sentence now says a card can be reported like a post or a profile. Nothing else in README was touched |
+| SPEC.md | changed — **§13.2 gains "Reporting a contact card"**, the fourth report target, with its frozen-copy field list and target categories; **§10.4 rewritten** — the answered card is a page, resolved live; §10.2's build gate on the `link` kind **lifted**; §13.2.1 defines delete-content on a card item; §13.1, §13.3, §9.1 and §16.3 reconciled |
+| ARCHITECTURE.md | changed — §4: `card_requests` corrected (it records *that* a card was answered, never the answer), `contact_items` loses its gate note, `reports` gains the card target type; §5.1: the freeze calls the engine; §15 item 11 |
+| BUILD_PLAN.md | changed — Step 9.1's gate lifted, Step 9.2 rewritten around the card page, Steps 13.1 and 13.3 gain the card report, Appendix rule 11 corrected |
+| CHANGELOG.md | changed — this entry |
+
+From prompt 15, which existed because 1.29 gave contact cards an author-chosen address and an author-written label and **a contact card was not a reportable object anywhere in SPEC.** The rule this entry inherits is v1.16's, stated when §13.2 put a report action on the friend-request card: *a report the recipient cannot reach is not a defence.*
+
+### The decision that unlocked the rest: a received card is a page
+
+The prompt framed the first question as "where does the report action live," and it could not be answered until a prior question was settled that §10.4 had never asked. §10.4 said the system **auto-replies** with the permitted version of the card. A reply is a moment. If that is all it is, the report action is reachable for as long as the reply is on screen and never again, which is not a report action at all.
+
+**So the answer is a page** — one per (owner, viewer) pair, reached from the owner's About tab, alive for as long as the friendship is. Three arguments decided it, and none of them is about reporting:
+
+- **A stored answer defeats §10.3.** The cascade's discipline is that over-sharing is unrecoverable, so withdrawal has to be free and immediate. An item the owner switches off must *disappear* for the person it was switched off for. A delivered copy cannot do that.
+- **A stored answer is a message**, and it would be the only one on the platform (§10.1).
+- **A card does not expire** (§9.7) — it is account state, not a statement — so a stored copy would have no clock at all.
+
+The page therefore **re-resolves on every visit**, and two consequences are written down rather than left to a builder: **a return visit is not a new request** (no notification, no rate-limit counter — otherwise a friend's second look at a phone number becomes an event in the owner's feed), and **a returning friend can tell that something changed**, because it did. Nothing announces it, exactly as a changed bio announces itself only to the next visitor.
+
+**This found a real defect one document down.** ARCHITECTURE §4 described `card_requests` as *"who asked whom, when, what was auto-answered"* — a sentence that reads as an instruction to **store the resolved card**, which is the send-time freeze this session rejected, arriving through the data model instead of through the design. Corrected.
+
+### The freeze: report time, and the reasoning was tested rather than inherited
+
+The prompt said report-time freezing was very probably right and asked for the argument. It holds, and the sharper half of it is not the storage cost:
+
+- **A card is auto-answered on request** (§10.4), so a send-time freeze means a copy of every card every friend ever asked for, held for the life of the friendship, against a report that will almost never come.
+- **The two freezes in the document defend different things.** §5.2's friend-request snapshot exists because that card is **pushed** at up to 20 people a day and its content must not be rewritten between batches. A contact card is **pulled**, by one friend, who asked. What needs protecting here is not the push but the **evidence**, and what threatens evidence is the owner editing the card the moment a report is filed — which is exactly what a report-time freeze answers.
+- **§13.2's profile report is the model** for the further reason that it freezes a **per-viewer** view: *the profile as it appeared to the reporter.* That is the shape of this problem.
+
+**What is frozen is stated as a field list**, on §9.1's precedent, because it is a security boundary: every delivered item's kind, value and label, verbatim; **the order** (twelve labels can be a sentence); **the position of the reported item** — never a pointer to a live row the owner can delete; the reason category and the note. **Live:** both display names (§4.5.1), and whether a link rendered as a hyperlink or a copy box, which is the platform's rendering decision rather than the author's content and is re-read from the allowlist. **Not captured at all: the cascade.** The operator needs what was *delivered*; how the overrides produced it is the owner's private configuration, and groups are private to their owner by rule (§6).
+
+**The whole delivered card is frozen, not only the reported item** — because `CARD_ITEM_LABEL_MAX` = 40 times `CONTACT_ITEMS_MAX` = 12 is up to 480 characters of free text, and what one label cannot carry, twelve can. An operator shown one label in isolation is judging the wrong question.
+
+**And a frozen card is text and nothing else.** Nothing on a card is an image, which is why §13.3's lifecycle absorbs it with nothing added — no new purge branch, no storage argument like the one §5.2's frozen photograph forced.
+
+### The sharpest thing in the entry: the freeze must call the engine, and why
+
+Card resolution is the visibility engine's `visible_contact_card` (ARCHITECTURE §5). The freeze calls it **once, at submit, with the reporter as the viewer.** Decision 4 is usually defended on drift — two implementations of a rule diverge. Here it is defended on something worse:
+
+> A report path that reads `contact_items` and `contact_overrides` and works the cascade out for itself captures **every item the owner has, including the ones that reporter was never shown**, and hands them to the operator as evidence. That is a report turned into a disclosure channel by an implementation detail.
+
+BUILD_PLAN Step 13.1 therefore carries it as a **test**, not only as a rule: seed an item hidden from the reporter by an individual override, file a report, assert the hidden item is absent from the frozen copy.
+
+### The other three decisions, briefly
+
+- **Per item, not per card.** A card may carry twelve items, and *"someone reported David's card"* leaves the operator guessing which. One button per row, each with a **distinct accessible name from the item's own label** — *"Report the item labelled 'My photos'"* — falling back to kind and position where the label is empty. That is §16.3's repeated-controls rule, which now names this control alongside the "read more" folds, the gallery controls, the reaction picker and the copy box. **An empty card carries no report action**; a complaint about the person is a profile report.
+- **Four target categories**, on the profile report's pattern, answering *which part is wrong* while the optional note answers *why*: **the label · the address or number · the card as a whole · this person's behaviour.** "The card as a whole" is reachable from any item's button and is the category for the twelve-labels-make-a-sentence case.
+- **Purge is §13.3's, unchanged, and both candidate exceptions were checked.** It must not end early when the owner deletes the item — §13.3 already keeps a frozen copy through author-deletion *solely so the report can be judged*, and deleting the reported item is the first move a reported person makes. It needs no extension either: a card item never expires, so there is no case where the frozen copy outlives a thing the platform itself destroyed.
+
+### Delete content on a card item, defined
+
+The gap §13.2.1 was written to close for posts, arriving one target type later: *"delete content"* on a card had no meaning anywhere. **The operator removes the whole item** — one row, gone from every version of the card at once, because there is only one item and the cascade merely decides who sees it.
+
+- **Never a partial edit.** Blanking an abusive label while keeping the number is the operator writing into somebody's account; the tools here are remove, warn and ban, and none of them is an edit. Where only the label is abusive the item still goes and the owner may add the number back — a card item costs one line to re-create.
+- **The collateral is close to nothing, which is the contrast with a post.** Deleting a post destroys its comments — other people's words. Deleting a card item destroys an address the owner typed and nobody else's anything.
+- **It is silent**, like a deleted post. If the operator wants the person to know, that is what **warn** is for, and the two compose: remove the item, warn the account.
+- **Already gone → the outcome is unavailable and the report can still be upheld** (§13.4's counter is the record); **changed since → the operator sees both** the frozen copy and the current row, and removing it is still correct, because the reported content existed and was delivered.
+
+### Two things added that the prompt did not ask for
+
+- **§13.1 gains a second honest qualification.** Layer 1 claims *no free-text messaging channel*, and since 1.29 a card carries up to 480 characters of author-written label. The layer should say so rather than let the claim absorb it. What makes it a far weaker vector than the friend-request card is that it is **pulled, not pushed** — the reader must already be a friend and must have asked — and it is governed by the cap, `NAME_BLOCKLIST` screening, and, from now, the report action. This is the same move v1.15 and v1.16 made for the friend-request surface, and §13.1 is where it belongs.
+- **No new rate limit, recorded as a decision.** Twelve buttons on one page is not a mass-report weapon, because §13.3 already removed the prize: reported content **stays live** while a report is open. Filing twelve reports censors nothing.
+
+### One correction found in passing
+
+BUILD_PLAN Appendix rule 11 still said **"Four things are rendered by one shared helper each"** after 1.29 added a fifth (the link renderer, ARCHITECTURE §4). Corrected here, with the fifth named, and flagged as a correction rather than folded in silently.
+
+### README carried the gate too, in different words
+
+The prompt's closing checklist named two places that said the `link` kind was waiting — SPEC §10.2 and BUILD_PLAN Step 9.1 — and warned that leaving either saying so afterwards is the failure the checklist exists to prevent. There was a third. README's 60-second summary called the card report *"the single piece of this still to be designed."* Same statement, different document, and the one most likely to be read by someone the founder shares the repository with. **Fixed to the same standard as the other two**, as one clause and nothing else: README was not otherwise reviewed against 1.30, and its "This file last changed in" line says exactly what changed.
+
+### Scope: what was not touched
+
+**§14 gains no constant** — this design needed none. **No new table, no new column beyond the report's own frozen copy, no new job, no new dependency, no new infrastructure.** 1.29's decisions were not reopened: the three link outcomes, the label and its cap, and the card-only messenger scope all stand exactly as written.
+
+### Working files (outside the record)
+
+`TODO.md`: prompt 15 marked **done at 1.30**; the Step 9.1 gate recorded as **lifted**. `prompts/09-sync-arch-and-buildplan.md`: new **§T**, on the §R/§S pattern — what 15 already did downstream, what the sync must not undo (Step 9.1's gate is gone on purpose; `card_requests` stores no answer), and the one item it inherits.
+
+---
+
+## 1.29 — 2026-09-07
+
+| File | Status |
+|---|---|
+| README.md | changed — the 60-second summary says for the first time that the absences are *handoffs*, and names the Delegation Principle; "What is NOT up for review" adds it beside the Gathering Test and says which part of it stays open |
+| SPEC.md | changed — new **§1.5, the Delegation Principle**; **§7.2.3 rewritten** as two link lists with a per-row surface scope; **new §7.2.4**, the three link outcomes and the copy box; **§10.2 extended** with card link items and labels; §4.6.1, §13.1, §9.4, §7.5, §7.8, §10.1, §13.5, §14, §16.3 and §17 reconciled |
+| ARCHITECTURE.md | changed — §4 gains `url_blocklist`, a surface scope on `url_allowlist`, a `label` column on `contact_items` and a fifth single-source rendering helper; §7's link validator becomes a three-outcome classifier; §15 gains item 10 |
+| BUILD_PLAN.md | changed — Steps 6.2, 6.2a, 6.6, 8.1, 9.1, 13.3, 16.1 and Appendix rule 10. Step 9.1 carries a build gate |
+| CHANGELOG.md | changed — this entry |
+
+From prompt 13. The founder stated a principle that has governed WeeBee from the start and had never been written down as one: *"I didn't want it to try to add features that are better implemented elsewhere. WeeBee is meant to be used in concert with other services… Instead, links to other services that are approved can go on posts, and any other link can go on contact cards."* Checking that against the documents turned up two things — the principle was present only as the local justification for individual refusals, and **its last clause was not true of the documents as written.**
+
+### The principle: SPEC §1.5, the Delegation Principle
+
+**It existed and was invisible.** §1.3's *"not a walled garden"* bullet is the same principle in one sentence, with messaging as its only example, so it read as a footnote to §10.1 rather than as a rule anything cited. §10.1 carries its best statement anywhere — *"a platform that rebuilds messaging is not adding a capability — it is trying to own a relationship it did not create"* — and §7.2.3, §17 and §9.4 each re-argued it locally. README never mentioned it. 1.28 had already named this as the failure it was written to avoid repeating.
+
+**Three tests now sit in SPEC §1, and they are deliberately different instruments.** §1.2's No-Reach Test is a **gate**: fail it and the feature is wrong, full stop. §1.4's Gathering Test is a **question**: fail it and the feature may still be built, provided the reason is written down beside it. §1.5's Delegation Test is neither, because it is not asking whether the need belongs on WeeBee — it asks **who should serve it**, and a feature that fails it is **relocated, not refused**. The sentence that carries the force: *a refusal that does not name the door out is an incomplete application of this principle.*
+
+**The courtesy minimum is the half that would otherwise have been lost**, and the founder's own words for it are better than the framing the prompt arrived with — *"what we can offer for that is meager… we still have to provide what we do, because this will never get off the ground if users can't even post one photo."* So §1.5 states the limit on itself: *"that's better elsewhere"* is a complete argument for **not building a photo service** and never a complete argument for **refusing to hold a photo**. One photo per post and `GALLERY_MAX` = 8 are the delegation, not an oversight.
+
+**Two guards, on 1.28's pattern.** The test **read backwards becomes an argument for building nothing**, so §1.5 names what is never delegable — the friend graph, the audience model, the visibility rules, expiry, accessibility. And it is not a licence for minimalism as purity; the courtesy minimum bounds it. §1.3's bullet is kept and points at §1.5: the bullet is the summary, the section is the rule.
+
+### The link policy: one uniform rule, three outcomes
+
+**The change.** The allowlist used to govern **delivery** — a non-allowlisted URL was rejected at composition. It now governs **clickability**:
+
+| The link | What happens |
+|---|---|
+| Allowlisted, in scope for the surface | clickable hyperlink |
+| On neither list | inert **copy box** — the address in full, with a copy control |
+| **Blocklisted** | **refused**; the post cannot publish |
+
+The same rule on posts, comments, the extended bio and contact cards. **Only the third is an error** — SPEC §7.2.4 states, as a requirement rather than a nicety, that the copy box carries no warning, no apology and no error styling, because a platform that already says no to a lot cannot also scold the user each time it does.
+
+**Founder decision: the copy box over bare text (2026-09-07).** Bare text is the stronger friction against the drift the friction exists to prevent — *enough friction to keep WeeBee from devolving into link sharing* — and was rejected as needlessly punishing: a fiddly select-and-drag, or retyping thirty characters, falling hardest on the ordinary case of a member linking to the rest of their own photographs.
+
+**One claim in the prompt did not survive contact with the document, and §7.2.4 says the true thing instead.** The copy box was offered as the better *anti-phishing* control because "the link text cannot lie about where it goes." On this platform a hyperlink's text cannot lie either: posts are plain text (§7.2), there is no markup, and a URL is linkified as itself — both renderings disclose the true address. **The copy box's real gain is the deliberate act**, not disclosure: no accidental tap, no one-tap phish, and the address lands in the reader's own address bar where they see it again.
+
+**The honest limitation, recorded once, where the choice is made.** A platform with no counters (§1.2) **cannot measure whether a control on content shape is working.** No metric will tell the founder in three years whether feeds have drifted — only his own reading and the report queue. That is §1.2 working as intended rather than a flaw, but it means **this decision cannot be revisited on evidence.** What §7.2.4 does say is which direction is cheap: loosening takes nothing from anyone, tightening takes away something people have got used to.
+
+### The blocklist
+
+A second operator-curated table beside the allowlist, checked by the same shared function on **every save path, create and edit alike**. Three things are stated because they are the ways it gets built wrong:
+
+- **It is the *second* control to depend on SPEC §7.8 invariant 4, and the stakes went up.** A create-only validator used to mean a non-allowlisted link could be edited in after publication — bad, but never clickable. It now means a **blocklisted** domain can be, defeating the one outcome the platform actually forbids.
+- **Its contents are not a design question**, and the session did not litigate them. What is specified is the mechanism, where it is checked, and what the author is told — warned **before** publishing, with a message that says the fix is to remove the link.
+- **No appeal channel — decided, not omitted.** §13.5 accepts a proposal to *add* a domain to the allowlist, a judgment about purpose the three admitting categories make arguable. It does not accept blocklist removals: §13.5 sends no replies at all by design, so an appeal route would be a door that never opens, and §16.3 requires an error to state its **fix**, which here is "remove it."
+
+### Founder decision: messenger domains become card-only
+
+Allowlist rows gain a **surface scope** — posts-and-comments, cards, or both. **Messenger domains are the first card-only rows**: a WhatsApp link is a hyperlink on a contact card and a copy box in a post. The founder's reasoning, recorded with it: other person-identifying services may follow, **LinkedIn named as the likely next**.
+
+The test that decides it is written down **as a guideline and explicitly not as a test in the sense of §1.2, §1.4 or §1.5**: *a link that identifies a **person** belongs on the card; a link that identifies a **thing** belongs in a post.* A messenger handle is you; a map pin for a restaurant is a thing. It settles nothing by itself, and the operator may scope a row against it with a reason — its value is a principled first answer for payment handles and scheduling links rather than deciding each from scratch.
+
+### The principle's last clause was false, and §10.2 fixes it
+
+*"…and any other link can go on contact cards."* §10.2 permitted phone numbers, email addresses and messenger links from allowlisted domains — **an arbitrary URL was not a permitted card item.** Worse, §7.2.3's rejection message already told users that *"anything else can be shared through the contact methods on the user's contact card,"* and BUILD_PLAN Step 6.2a baked that wording into the composer. The document named a door out and bolted it.
+
+The consequence, worth stating because it is what the founder's sentence was reaching for: **there was nowhere durable in WeeBee to put "here is my photo album."** Not the card, not the short bio (no links at all), not a post or the extended bio (allowlisted domains only).
+
+**§7.2.4 dissolves most of that** — a post, a pinned post and the extended bio all now carry any address as a copy box. §10.2 does the rest: **link items of any URL, and a label on every item** (`CARD_ITEM_LABEL_MAX` = 40, screened against `NAME_BLOCKLIST` at every save, given the short bio's treatment because it is new free text on a surface that had none).
+
+**Founder decision: the link items are specified now and gated on prompt 15.** A contact card **is not a reportable object anywhere in SPEC** — §13.2's report actions cover posts, comments and profiles. That was tolerable while a card held a phone number and an allowlisted messenger link; it is not once a card carries an author-chosen address and an author-written label. It is the same gap v1.16 closed for the friend-request card, and the same rule applies: *a report the recipient cannot reach is not a defence.* The design is genuinely harder — **a card is per-requester** (§10.3), so the operator needs the version the reporter *received*, not the owner's current rows — so it became **`prompts/15-reporting-a-contact-card.md`** rather than being finished badly at the end of a long session. **SPEC §10.2 and BUILD_PLAN Step 9.1 both carry the gate**, which is a build gate rather than a version: phone, email and the label field ship; the `link` kind waits.
+
+### Three reconciliations, each an honest edit rather than a paper-over
+
+1. **§4.6.1 and §13.1 claimed something that stopped being true.** Both listed "a URL allowlist on every post and comment" among the controls closing the in-platform link-delivery vector. The allowlist no longer blocks delivery. The claim is narrowed to **no way to deliver a *clickable* deceptive link, and no unsolicited delivery at all** — and §4.6.1 now says which half was always the larger one: nothing on this platform pushes a link at anyone, and phishing at scale depends on unsolicited delivery. It also gains a control it never had: a blocklisted domain is refused outright.
+2. **§9.4's short bio contradicted its own stated reason.** v1.16 changed the short bio from inert-rendering to rejection-at-save on the general claim that *"an unclickable address is still readable and retypeable."* If that were true, §7.2.4 would be wrong about posts. **The outcome does not change and the reason had to:** the short bio is a **push surface**, delivered unasked to up to 20 people a day in a friend request, and a surface pushed at people who did not choose it gets the stricter rule. §13.1's restatement was corrected to match. The extended bio, being friends-only and pull-only, follows the ordinary rule — which is the same reasoning, applied consistently.
+3. **"Does expiry become decorative?"** — the sharpest fair challenge to the new policy, answered in §7.5 in a sentence rather than left to be discovered. If the album lives at the far end of a link and only the pointer expires, what is the 90-day promise worth? The same as it ever was: **the promise is about what the platform retains and could be compelled to produce**, never about what users choose to keep — the identical posture §1.2 takes on screenshots. A pointer that expires is not a weaker promise than a paragraph that expires.
+
+**And one distinction §7.2.4 records so it cannot be used to justify the next loosening:** off-platform re-propagation is *outbound leakage*, honestly conceded in §1.2 and §17; link policy is *inbound content shape*, entirely within the platform's control. Conceding the first is not an argument for the second. This change was made on its own merits.
+
+### Downstream — written here, not handed to prompt 09
+
+Unlike 1.19, 1.25 and 1.26, this session wrote its own ARCHITECTURE and BUILD_PLAN edits, because the change is a behaviour change on five surfaces rather than an internal one. Prompt 09 gains a new **§S** recording what is done, and one warning it specifically needs: **several ✅ cases changed direction.** What Step 6.2a used to assert as *refused* is now asserted as *`PLAIN`, and not an error* — a sweep that reads those as weakened tests and "restores" them rebuilds the pre-1.29 policy.
+
+- **ARCHITECTURE §7:** the validator becomes a **classifier** returning `CLICKABLE` / `PLAIN` / `REFUSED`, **taking the surface as an argument**. The parse, host-match and redirector rules are unchanged and still load-bearing — they now decide clickability rather than delivery. Blocklist checked **first**, so no ordering of later rules can produce a clickable blocklisted link. `http://` on an allowed host becomes `PLAIN` rather than an error.
+- **ARCHITECTURE §4:** `url_blocklist` as a **separate table** rather than a flag on the allowlist — the two lists answer different questions and nothing is ever on both, and one table with a tri-state column invites a row that is somehow neither. `contact_items` gains `label` and its `messenger-link` kind becomes `link`; **clickability is never stored on the item**, so re-scoping one allowlist row changes every existing card at once. A **fifth single-source rendering helper** joins the four: three outcomes across five surfaces is fifteen chances to render one of them slightly differently, and the failure that matters — a surface that linkifies what the classifier called `PLAIN` — is silent and looks right.
+- **ARCHITECTURE §15 item 10** records the decision, the alternative rejected (two functions, one per surface), and that **`PLAIN` is not an error condition anywhere in the stack** — no form error, no message, no logging.
+- **BUILD_PLAN** Steps 6.2, 6.2a, 6.6, 8.1, 9.1, 13.3, 16.1 and Appendix rule 10. New verifications worth naming: the **surface-scope pair** (a messenger domain in a post versus on a card — a classifier that ignores its surface argument passes every other case), **asserting the absence of an error** on every `PLAIN` case (the assertion that catches "built as a rejection with nicer wording"), and a **400-character URL at 320 px** not scrolling the page sideways.
+
+**One accessibility item was solved rather than inherited.** URLs offer no ordinary break opportunities, so a bare address is exactly the two-dimensional-scroll failure §16.3 forbids. §7.2.4 requires break-anywhere wrapping inside the box's own container, and states that **this does not create a second reflow exception** — §7.2.1's preformatted post remains the platform's single documented one, and a second arriving by accident, on a control that appears on ordinary posts, would be a bad trade. The copy control itself joins §16.3's repeated-controls rule beside "read more" and the reaction picker: a real button, a distinct accessible name saying which address it copies, keyboard-operable, with a polite live-region confirmation.
+
+**One new constant.** `CARD_ITEM_LABEL_MAX` = 40 ✎. The URL blocklist joins §14's operator-curated ✎ rows, and the allowlist row now records the surface scope.
+
+### Working files (outside the record)
+
+`TODO.md`: prompt 13 marked done at 1.29; **prompt 15 added to the queue** (depends on 13, blocks Step 9.1's `link` kind); 09's dependency list extended to 10–15; a new **"Work that is not a numbered prompt"** section carries the archetype follow-on. `prompts/09-sync-arch-and-buildplan.md`: new **§S**, on 1.28's §R pattern — what is already done, the two things deliberately left, and the changed-direction warning. `prompts/15-reporting-a-contact-card.md`: written.
+
+**The archetype follow-on is unblocked and is recorded rather than done.** The interview track tells every character *"Links only from a list of approved sites"* and never mentions the door out; the wording is in `archetypes/PLAN.md` §4 fact 13 and copied into `BRIEF.md` §2, so all ten characters inherit it. It surfaced in `07-susan.md`, where the family historian hits `GALLERY_MAX` = 8 against sixty reunion photographs and is never told she could host them elsewhere and post about it. Only the pilot has run and the other nine are copies of it, so this is the cheapest moment it will ever be to fix. TODO carries the four steps, including the guard that matters: `PROMPT.md` rule 9 forbids writing a character's conclusion, so the rule is **offer the delegation answer, then ask whether they would actually do it** — Susan is entitled to answer "then what am I here for," and if she does, that is the finding, not a failure. Note what 1.29 changed for her specifically: unless the photo host is allowlisted, what she gets is a copy box, not a one-tap link.
+
+---
+
+## 1.28 — 2026-09-07
+
+| File | Status |
+|---|---|
+| README.md | changed — the 60-second summary gains its first positive statement of what WeeBee is; "What is NOT up for review" names the new principle and states explicitly that it closes no cap |
+| SPEC.md | changed — new §1.4 names **the Gathering Test**, the positive counterpart to §1.2's No-Reach Test. No other section touched |
+| ARCHITECTURE.md | **unchanged** — version header only, and nothing is owed. See "Nothing downstream" below |
+| BUILD_PLAN.md | **unchanged** — version header only, and nothing is owed. See "Nothing downstream" below |
+| CHANGELOG.md | changed — this entry |
+
+From prompt 14. The founder, asked what guides his judgement about which features belong in WeeBee, described a mental model that appeared nowhere in any document: a very large gathering with room to move about and talk with small groups at a time, and the question of what is an appropriate thing to do there. Showing a couple of photos of a vacation is; handing someone a stack of photo albums is not. This entry writes it down.
+
+### Why it was worth a version
+
+SPEC already proved the mechanism. §1.2's **No-Reach Test** is cited by name in later sections, which then inherit its reasoning instead of re-deriving it. The counter-example sits in the same document: **"not a walled garden" (§1.3) is a real principle that was never named or given a test**, so §10.1, §17 and §7.2 each argue it again locally, and README never mentioned it at all. It was invisible enough that the founder had to say it out loud in conversation before anyone noticed it was missing. That is the failure this entry exists to avoid repeating — and prompt 13 exists to fix it for that principle specifically.
+
+The second reason is that **§1.2 can only reject.** Nothing in the documents helped decide what a feature should *look like*, only what disqualified it.
+
+### What was found before anything was written
+
+The retro-fit was checked against v1.27 rather than assumed, and one part of it came back stronger than the prompt claimed. Of the four numbers the analogy accounts for most directly:
+
+- **`FRIEND_CAP` = 300** — §5.1 is three mechanical lines and states **no rationale of any kind.** There is no Dunbar reference anywhere in the repository.
+- **`POST_AUDIENCE_MAX` = 30** — stated in §7.1, enforced in §7.3, listed in §14, and **nowhere justified.**
+- **At most one image per post** — §7.2 states it flatly, with no reason.
+- **`GALLERY_MAX` = 8** — the only one of the four carrying an argument (§9.7: a fixed eight-slot shelf cannot accumulate, so it is not an archive).
+
+So for three of the four, the analogy supplies not a second justification but **the only one available**. That is recorded here because it changes what a reviewer stress-testing §14 is arguing against; it settles no number, and §14 was not edited.
+
+### The four decisions
+
+**1. Its own numbered subsection, at §1.4, and not a §1.3 bullet.** A §1.3 bullet is precisely what happened to "not a walled garden," so that option was rejected on the evidence in the document. Folding it into §1.1 was the prompt's own recommendation and was declined: §1.1's "puts people in the same room" means the *real* room WeeBee exists to get people into, while the gathering is a metaphor for the platform — one word, two meanings, and blurring them costs more than the adjacency gains. §1.1 is also a purpose statement, not a decision procedure.
+
+**Seating it after §1.3 rather than between the two tests is a deliberate trade against tidiness.** Renumbering §1.3 → §1.4 to make the negative and positive tests adjacent would have rewritten **17 live citations in SPEC, 2 in BUILD_PLAN and 5 in TODO**, and left six entries in this file pointing at a §1.3 that had changed meaning — history that cannot be rewritten. The two tests are one short section apart and each names the other. **§1.5 is left free for prompt 13.**
+
+**2. Named the Gathering Test.** The founder's own word. "The Party Test" was the most vivid option and was declined as the one term that gets quoted back out of context; "The Room Test" collides with §1.1's room, as above.
+
+**3. It asks; it does not refuse — and the binding strength is in the sentence, not in the tone.** This was the decision most likely to go wrong. §1.2 is a gate and says so ("the feature is wrong for this platform"). §1.4 cannot be, because three shipped features fail it. It is written as **a question a feature must answer, carrying a duty: the reason for building something out of place at the gathering must be written down in the document beside it.** The duty is what gives the test force without a veto — it can never stop a decision, only an undocumented one. Written as a gate with three carve-outs, it would eventually have been quoted against a fourth feature the founder wanted.
+
+**4. README gets the paragraph.** README's "60 seconds" described WeeBee almost entirely by negation — a list of twelve absences — and now carries the shortest positive statement of what it is, including the founder's vacation-photos-versus-albums example, which is the part that lands.
+
+### Two guards written into §1.4 that the prompt did not ask for
+
+Both were added because the failure they prevent is worse than the one the prompt was worried about.
+
+- **A positive test read backwards is a feature generator.** §1.2 cannot be abused this way; a negative test has no generative direction. This one does: *"there is music at a party, so WeeBee needs audio"*; *"people step aside to talk privately, so DMs."* §1.4 states plainly that the test constrains the shape of a **proposed** feature and never argues that something absent ought to exist — the DM question is answered by §1.3 and §10.1, on entirely different grounds.
+- **There is a fourth place the analogy breaks, and it is resolved rather than listed.** Nothing is pushed at you at a gathering; you walk up to a group. **The feed is push**, delivered to people who were not standing there. Left unstated, the test could be turned against the single most load-bearing thing in the product. It is not a break: §1.1 already says WeeBee exists for the times people *cannot* be together, so asynchrony is the premise, not a departure. §1.4 therefore says the test governs **what is appropriate to do, never the mechanics of delivery**, once, rather than leaving it to be re-argued whenever someone notices.
+
+### Where it fails, written in the same breath
+
+§1.4 names all three, each with the reason it stays — because an unbounded analogy in a specification gets quoted later against something deliberate:
+
+- **The profile Blog tab (§9.1)** — a bulletin board in the lobby. Stays because "pull over push" (§1.3) requires somewhere for a broad audience to come *to*.
+- **Pinned posts (§7.6)** — `PIN_LIMIT` = 10, exempt from expiry, and §7.6 already calls pinning the only act of preservation on the platform.
+- **The contact card's cascade (§10.3)** — exchanging numbers is in the spirit; a three-level deny-beats-allow cascade is not. Stays for §10.3's own reason: over-sharing is the unrecoverable direction.
+
+**That the test rediscovers exactly the three departures the document had already flagged as deliberate, and invents no fourth, is the argument for having it.** §1.4 also says what it does *not* claim: the analogy did not generate these decisions, it accounts for them afterwards, and retro-fitting is weak evidence taken alone.
+
+### The back-references were offered and not taken
+
+Pointers from §7.6, §9.7 and §14 back to the new principle were put to the founder and declined. **The pointers therefore run outward from §1.4, which names its own three exceptions, rather than inward from each section** — a reader of §1.4 gets the whole picture, and no section outside §1 changed. Recorded so that a later session does not add them as a tidy-up; not adding them is the decision.
+
+### Nothing downstream — confirmed, not assumed
+
+Prompt 09 syncs ARCHITECTURE and BUILD_PLAN to the current SPEC and has not run. It needs nothing from this, and the check was run rather than reasoned:
+
+- `grep` for "No-Reach" in ARCHITECTURE.md and BUILD_PLAN.md returns **zero hits**; ARCHITECTURE cites SPEC §1.1 and §1.2 **zero times**. A named principle in SPEC §1 has never propagated downstream.
+- **BUILD_PLAN's own coverage-check procedure already states the rule, and uses §1.2 as its worked example.** §0.6, the standing conformance check, flags a SPEC section carrying no test — *unless* the section is argument rather than rule, given verbatim as *"no test, because §1.2 is a philosophical claim with nothing to assert."* §1.4 is the same kind of section. It asserts nothing a test could check, and adds no constant, no state and no surface.
+
+**No new constant. §14 is untouched.**
+
+### Working files (outside the record)
+
+`TODO.md`: prompt 14 marked done at 1.28. `prompts/13-delegation-and-link-policy.md`: the header now carries the shape 13 was written to inherit — a new numbered subsection at **§1.5**, matching §1.4's form, with the binding strength stated in the sentence rather than left to tone, and the reason §1.3 was not renumbered.
+
+---
 ## 1.27 — 2026-08-18
 
 | File | Status |
