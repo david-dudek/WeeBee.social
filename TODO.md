@@ -47,14 +47,16 @@ Status values: `not run` · `in progress` · `done` · `deferred` · `dropped`
 | 14 | [The gathering test](prompts/14-the-gathering-test.md) | SPEC new §1.4; README | — | done | 1.28 |
 | 13 | [The delegation principle & the link policy](prompts/13-delegation-and-link-policy.md) | SPEC new §1.5, §7.2.3 rewritten, new §7.2.4, §4.6.1, §7.2, §7.5, §7.8, §9.4, §10.1, §10.2, §13.1, §13.5, §14, §16.3, §17; README; ARCHITECTURE §4, §7, §15; BUILD_PLAN Steps 6.2, 6.2a, 6.6, 8.1, 9.1, 13.3, 16.1, Appendix | 01, **14 (done)** | done | 1.29 |
 | 15 | [Reporting a contact card](prompts/15-reporting-a-contact-card.md) | SPEC §10.2–10.4, §13.1–13.4, §9.1, §16.3; README; ARCHITECTURE §4, §5, §15; BUILD_PLAN Steps 9.1, 9.2, 13.1, 13.3, Appendix | **13 (done)** | done | 1.30 |
+| 16 | [What "and nothing else" bounds on the card page](prompts/16-card-page-nothing-else-scope.md) | SPEC §10.4 (one clarifying sentence) | **15 (done)** | not run | |
 | 09 | [The sync: ARCHITECTURE + BUILD_PLAN to current SPEC](prompts/09-sync-arch-and-buildplan.md) | ARCHITECTURE, BUILD_PLAN | **02–08, 10–15** | not run | |
 
 **Run 09 last.** Prompts 02–08 and 10–15 may each amend SPEC and ARCHITECTURE; syncing
 BUILD_PLAN once against a settled SPEC means writing those build steps a single time.
 
-**09's dependencies are now all met (1.30), and 09 is the only prompt left in the queue.** Every
-prompt it waits on — 02–08 and 10–15 — is `done`. Nothing in the queue blocks it, and SPEC is as
-settled as this process is going to make it before the build starts.
+**09's own dependencies (02–08, 10–15) are all met**, but 16 was added after that milestone and
+is not one of them — it does not block 09 formally. It is still worth running first: 16 closes a
+reading question in §10.4 that 09 would otherwise sync into ARCHITECTURE/BUILD_PLAN unresolved,
+and 16 is a one-sentence addition, not a section it needs to re-derive. Nothing else is queued.
 
 **14 and 13 both ran, in that order, and the ordering paid off.** 14 settled the shape — a named
 principle takes its own numbered subsection, §1.3 is not renumbered, and the binding strength goes
