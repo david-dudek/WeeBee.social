@@ -4,7 +4,7 @@ Tracker for the design conversations still to be held. Each numbered item has a
 self-contained prompt file in `prompts/`, written to be pasted into a **fresh**
 session (BUILD_PLAN §0.2 rule 4: long chats degrade; prompts carry their own context).
 
-**This file was written at project version 1.16; the project is now at 1.29.** Under the
+**This file was written at project version 1.16; the project is now at 1.31.** Under the
 scheme prompt 01 introduced, the version number belongs to the whole project, not to
 individual files.
 
@@ -47,16 +47,16 @@ Status values: `not run` · `in progress` · `done` · `deferred` · `dropped`
 | 14 | [The gathering test](prompts/14-the-gathering-test.md) | SPEC new §1.4; README | — | done | 1.28 |
 | 13 | [The delegation principle & the link policy](prompts/13-delegation-and-link-policy.md) | SPEC new §1.5, §7.2.3 rewritten, new §7.2.4, §4.6.1, §7.2, §7.5, §7.8, §9.4, §10.1, §10.2, §13.1, §13.5, §14, §16.3, §17; README; ARCHITECTURE §4, §7, §15; BUILD_PLAN Steps 6.2, 6.2a, 6.6, 8.1, 9.1, 13.3, 16.1, Appendix | 01, **14 (done)** | done | 1.29 |
 | 15 | [Reporting a contact card](prompts/15-reporting-a-contact-card.md) | SPEC §10.2–10.4, §13.1–13.4, §9.1, §16.3; README; ARCHITECTURE §4, §5, §15; BUILD_PLAN Steps 9.1, 9.2, 13.1, 13.3, Appendix | **13 (done)** | done | 1.30 |
-| 16 | [What "and nothing else" bounds on the card page](prompts/16-card-page-nothing-else-scope.md) | SPEC §10.4 (one clarifying sentence) | **15 (done)** | not run | |
+| 16 | [What "and nothing else" bounds on the card page](prompts/16-card-page-nothing-else-scope.md) | SPEC §10.4 (one clarifying sentence) | **15 (done)** | done | 1.31 |
 | 09 | [The sync: ARCHITECTURE + BUILD_PLAN to current SPEC](prompts/09-sync-arch-and-buildplan.md) | ARCHITECTURE, BUILD_PLAN | **02–08, 10–15** | not run | |
 
 **Run 09 last.** Prompts 02–08 and 10–15 may each amend SPEC and ARCHITECTURE; syncing
 BUILD_PLAN once against a settled SPEC means writing those build steps a single time.
 
-**09's own dependencies (02–08, 10–15) are all met**, but 16 was added after that milestone and
-is not one of them — it does not block 09 formally. It is still worth running first: 16 closes a
-reading question in §10.4 that 09 would otherwise sync into ARCHITECTURE/BUILD_PLAN unresolved,
-and 16 is a one-sentence addition, not a section it needs to re-derive. Nothing else is queued.
+**09's own dependencies (02–08, 10–15) are all met, and 16 has now landed too (1.31).** 16 was
+never one of 09's formal dependencies, but it closed a reading question in §10.4 — whether the
+page may carry §10.5's request-more-access control — before 09 could sync an unresolved one into
+ARCHITECTURE/BUILD_PLAN. Nothing else is queued; 09 is next.
 
 **14 and 13 both ran, in that order, and the ordering paid off.** 14 settled the shape — a named
 principle takes its own numbered subsection, §1.3 is not renumbered, and the binding strength goes

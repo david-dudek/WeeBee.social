@@ -1,6 +1,6 @@
 # Architecture & Technology Stack — WeeBee
 
-**Project version:** 1.30 · 2026-09-07 · DRAFT — not yet founder-approved
+**Project version:** 1.31 · 2026-09-09 · DRAFT — not yet founder-approved
 **This file last changed in:** 1.30 (§4: `card_requests` stores that a card was answered and never the answer, `contact_items` loses its report gate, `reports` gains the card-item target type; §5.1: the card freeze calls the engine; §15 item 11)
 **History:** see [CHANGELOG.md](CHANGELOG.md)
 **Companion to:** SPEC.md v1.15 (deliverable b per SPEC §18)

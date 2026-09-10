@@ -1,6 +1,6 @@
 # Build Plan — WeeBee
 
-**Project version:** 1.30 · 2026-09-07 · DRAFT — not yet founder-approved
+**Project version:** 1.31 · 2026-09-09 · DRAFT — not yet founder-approved
 **This file last changed in:** 1.30 (Step 9.1's link gate lifts; Step 9.2 builds the card *page*; Steps 13.1 and 13.3 gain the contact-card report target; Appendix rule 11 corrected to five helpers)
 **History:** see [CHANGELOG.md](CHANGELOG.md)
 **Companion to:** SPEC.md v1.15 (§7.5.1, §7.8, §9.4, §12) and ARCHITECTURE.md v1.7 (§3.8, §4, §7). This is deliverable (c) per SPEC §18. The actual AI-coding prompts are deliverable (d); every `[AI]` step below will have a matching numbered prompt there.

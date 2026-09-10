@@ -1,7 +1,7 @@
 # WeeBee — Platform Specification
 
-**Project version:** 1.30 · 2026-09-07 · DRAFT — not yet founder-approved
-**This file last changed in:** 1.30 (**a contact card becomes a reportable object**: §10.4 makes the answered card a page rather than a one-time reply, §13.2 gains the card-item report and its frozen copy, §13.2.1 defines delete-content on a card item, and §10.2's build gate on the `link` kind lifts; §9.1, §13.1, §13.3 and §16.3 reconciled)
+**Project version:** 1.31 · 2026-09-09 · DRAFT — not yet founder-approved
+**This file last changed in:** 1.31 (§10.4 gains one clarifying sentence: "and nothing else" bounds what the card page discloses, not the controls it carries, so the §13.2 report action and §10.5's request-more-access flag are both unambiguously in scope for the page)
 **History:** see [CHANGELOG.md](CHANGELOG.md)
 **Purpose of this document:** The single authoritative description of what the platform is and how every feature behaves. It is written to be self-contained: a developer or an AI coding model with no access to prior conversations must be able to build from this document alone. Architecture, technology choices, and build steps live in separate documents (see §18).
 
@@ -759,7 +759,7 @@ v1.29 therefore specified the link and label rules and **gated the `link` item k
 3. **Individual override:** a per-friend setting that **always wins**, in either direction.
 Conflict rule between multiple groups containing the same friend: **the more restrictive setting wins** (deny beats allow). Accidental under-sharing is recoverable (see request flags); accidental over-sharing is not.
 
-### 10.4 Requesting a card, and the card page (amended v1.30)
+### 10.4 Requesting a card, and the card page (amended v1.30 and v1.31)
 - A friend requests the card via a picker (no text); the system **auto-replies** with exactly the version of the card that requester is permitted to see (possibly empty).
 
 **The answer is a page, not a one-time reply (v1.30).** The auto-reply opens a **card page** — one per (owner, viewer) pair, at its own permission-checked address (§9.3), reached from the owner's About tab (§9.1) — and that page stays reachable for as long as the friendship lasts. It carries the owner's **display name**, rendered live through the shared helper (§4.5.1), the items the viewer may see, and nothing else.
@@ -771,6 +771,8 @@ Conflict rule between multiple groups containing the same friend: **the more res
 - **A card does not expire** (§9.7): it is account state, not a statement. So a stored copy would be a copy with no clock at all.
 
 A fourth argument is not a reason but a confirmation: **§10.5's request-more-access flags have always assumed this page without saying so.** A requester who can toggle a flag on and *off at any time* needs somewhere to return to; deferred to v1.1 as that feature is, it was written against a surface this document had never specified.
+
+**"And nothing else" bounds disclosure, not controls (v1.31).** It closes the list of what the page *discloses* — the owner's name and the items resolved for this viewer — not the list of what the page may carry. The §13.2 report action below and §10.5's request-more-access flag are both controls rather than disclosed data or a reply, and neither is excluded by this sentence.
 
 **Returning to the page is not a new request.** It generates no notification — §12.1's contact-card-request notification fires on the request, not on a visit — consumes no rate-limit allowance (§13.6), and tells the owner nothing. Without this the obvious implementation — treat every view as a request — would make a friend's second look at a phone number an event in the owner's feed.
 

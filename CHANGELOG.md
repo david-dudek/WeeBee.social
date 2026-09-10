@@ -105,6 +105,45 @@ no other trace.
 
 ---
 
+## 1.31 — 2026-09-09
+
+| File | Status |
+|---|---|
+| README.md | **unchanged** — version header only |
+| SPEC.md | changed — **§10.4 gains one clarifying sentence.** "And nothing else" is now stated to bound what the card page *discloses*, not what it *carries*: the owner's name and the items resolved for the viewer are the closed list; the §13.2 report action and §10.5's request-more-access flag are controls, and neither is excluded |
+| ARCHITECTURE.md | **unchanged** — version header only, and nothing is owed. See "Scope" below |
+| BUILD_PLAN.md | **unchanged** — version header only, and nothing is owed. See "Scope" below |
+| CHANGELOG.md | changed — this entry |
+
+From prompt 16, and it resolves a question the mockup re-sync's R1 session raised on purpose and declined to answer: `mockups/NOTES.md` entry 51, written against §10.4 as v1.30 left it. §10.4 closes its list of what the card page carries with *"and nothing else,"* and the page also carries a request-more-access section drawn from §10.5 — a real part of the design, marked deferred to v1.1. Entry 51 laid out both readings and picked neither. `prompts/mockups/resync-3-card-cluster.md` §6a, drafted for the session that rebuilds that page, carried a recommendation rather than a decision — *keep the section, and record that the reading was chosen on a recommendation rather than derived from the document* — and explicitly deferred to whatever the founder settled first. This entry is that settling.
+
+### The reading, and why it holds
+
+**"And nothing else" was never a bound on the page's controls.** The three arguments §10.4 gives immediately beneath the sentence — a stored answer would defeat §10.3's cascade, a stored answer would be a message, a card has no clock to expire against — are all arguments against *storing or delivering a reply*. None of them says anything about what else the page may render.
+
+Two things already in the document, neither newly discovered, confirm the same reading:
+
+- **The very next substantive thing §10.4 does is put a report control on this page** (§13.2) — a third element that is neither the owner's name nor a shared item. No prior version of this document, and nobody working from it, has ever read that placement as violating "nothing else." The phrase is already applied in practice as a bound on *disclosed data*, not on every element the page renders.
+- **§10.4 already says of §10.5 that its flags "have always assumed this page without saying so"** — offered as a confirmation that the page-based redesign was compatible with the flag, not as a conflict flagged for later resolution. If the closing sentence had been meant to exclude the flag, that is the sentence that would have said so, and it says the opposite.
+
+§10.1's message ban and §13.1's free-text-vector accounting were checked and point the same way: both govern *content a user composes and another user reads*, which is what "nothing else" is doing the work of excluding. A toggle control is neither.
+
+### What this does and does not settle
+
+**It settles the reading, not the roadmap.** Whether §10.5 ships in v1.0 or v1.1 is untouched — the "may ship in v1.1" hedge stays exactly where v1.30 put it, word for word. What changes is narrower: a builder reading §10.4 alone can now tell that the page is allowed to carry the control *when the time comes*, without cross-referencing `NOTES.md` or a mockup-track prompt to find out that the question was ever open.
+
+**Nothing settled by prompt 15 was reopened.** The live-resolution decision, its three grounds, the report action's placement and shape, and §10.5's own v1.1 deferral all stand exactly as v1.30 wrote them. This is a reading of one existing sentence, not a new decision layered beside it.
+
+### Scope: one section, on purpose
+
+**Nothing here is new behavior**, so nothing pulls at ARCHITECTURE.md or BUILD_PLAN.md — both carry the version bump and nothing else, exactly as 1.28's Gathering Test entry did for the same reason. Cross-document sync is prompt 09's job, not this one's.
+
+### Working files (outside the record)
+
+`TODO.md`: prompt 16 marked **done at 1.31**. This also resolves `mockups/NOTES.md` entry 51 and lets `prompts/mockups/resync-3-card-cluster.md` §6a be read, next time the mockup track runs, as a settled decision rather than a recommendation — no edit to either mockup file was made by this session; the mockup track's own rule keeps SPEC changes out of its scope, and it picks this reading up the next time it runs.
+
+---
+
 ## 1.30 — 2026-09-07
 
 | File | Status |

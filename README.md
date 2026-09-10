@@ -1,6 +1,6 @@
 # WeeBee — Design Documents
 
-**Project version:** 1.30 · 2026-09-07 · DRAFT — not yet founder-approved
+**Project version:** 1.31 · 2026-09-09 · DRAFT — not yet founder-approved
 **This file last changed in:** 1.30 (one clause: the contact-card report exists, so the 60-second summary no longer calls it the piece still to be designed)
 **History:** see [CHANGELOG.md](CHANGELOG.md)
 
