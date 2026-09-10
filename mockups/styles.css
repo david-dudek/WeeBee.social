@@ -979,6 +979,31 @@ body:has(#commentary-toggle:not(:checked)) .commentary {
   margin: 0.15rem 0 0;
 }
 
+/* A URL rendered as itself, outside a copy box — a card item's value, or a
+   linkified address in the extended bio (§7.2.4: "a URL is linkified as
+   itself"). §7.2.4 specifies break-anywhere wrapping for the copy box only,
+   but a linkified or plain-text URL is exactly as long and exactly as
+   unwrappable, and at 320px it is the same 1.4.10 reflow failure — verified
+   in R3, where both overflowed. Same two properties as .copy-box-address, for
+   the same reason, and no horizontal scrollbar is introduced, so this is not
+   a second reflow exception. Recorded in mockups/NOTES.md as a gap §7.2.4
+   does not cover. */
+.contact-card-value,
+.url-inline {
+  overflow-wrap: anywhere;
+  word-break: break-all;
+}
+
+/* A card row on the card page (SPEC §10.4, §13.2): a label, a value and a
+   per-item report button. Twelve of these is the densest repeated-control
+   surface in the track, so the row stacks rather than columns — a label, a
+   long address and a 44x44 button will not sit side by side at 320px
+   without forcing the two-dimensional scroll §16.3 forbids. Any copy box
+   inside the row keeps its own break-anywhere container (§7.2.4). */
+.contact-card-item > button {
+  margin-top: var(--space-2);
+}
+
 /* Friendship and contact flows (M5, SPEC §5.2, §5.5, §10.2, §10.3) */
 
 /* A row of adjacent action buttons — accept/decline, agree/decline,

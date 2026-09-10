@@ -1,36 +1,86 @@
 {{var title=Your contact card}}
 <h1>Your contact card</h1>
-<p>This card is how friends reach you elsewhere — phone, email, a messenger — not a rebuilt
+<p>This card is how friends reach you elsewhere — a number, an address, a link — not a rebuilt
 inbox. Your login email is never included unless you deliberately add it as its own item below;
 it's a credential, not a card entry.</p>
 <p class="commentary">SPEC §10.1: WeeBee has no free-text direct messaging, which is why this
 handoff card exists. The login email is governed separately, at §4.6.</p>
 
 <h2>The card starts empty</h2>
-<p>Until you add something, there's nothing here to share. A friend who requests an empty card
-gets exactly that back, not an error.</p>
-<p class="commentary">See <a href="contact-card-received.html">the empty case, as a requester
-receives it</a>.</p>
+<p>Until you add something, there's nothing here to share. A friend who asks for an empty card
+opens a page that says so plainly — not an error.</p>
+<p class="commentary">See <a href="contact-card-received.html">the empty case, on the card
+page itself</a>.</p>
 
 <h2>Add an item</h2>
-<p>Up to 12 items total, drawn from phone numbers, email addresses, and messenger links. A
-messenger link is only accepted from the official domain of a recognized messenger — WhatsApp,
-Signal, Telegram and the like — never a bare URL.</p>
-<p class="commentary"><code>CONTACT_ITEMS_MAX</code> = 12 (§10.2).</p>
+<p>Up to 12 items total, drawn from phone numbers, email addresses, and links. A link can be any
+address you like — your photos, a file you're sharing, your own site, a messenger. Whether it
+ends up as something friends can tap or as an address they copy depends on the address itself,
+not on you.</p>
+<p class="commentary"><code>CONTACT_ITEMS_MAX</code> = 12 (§10.2). <strong>Two corrections from
+v1.29, both substantive.</strong> §10.2 previously drew items from <em>"phone numbers, email
+addresses, and messenger links"</em> and now says <em>"phone numbers, email addresses, and
+links."</em> And a link item was previously <em>"only accepted from the official domain of a
+recognized messenger … never a bare URL"</em> — now false: <strong>a link item may carry any
+URL</strong>, under the uniform rule of §7.2.4. Clickable if the domain is allowlisted with card
+scope, an inert copy box otherwise, refused only if blocklisted. The copy for this is written to
+§7.2.4's no-scolding rule: an address that renders as a copy box is <em>a different rendering,
+not a refusal</em>, so nothing here flags it as a problem.</p>
 <fieldset>
 <legend>What kind of item?</legend>
 <div class="option-list">
 <div class="option-row"><input type="radio" id="item-type-phone" name="item-type" checked><label for="item-type-phone">Phone number</label></div>
 <div class="option-row"><input type="radio" id="item-type-email" name="item-type"><label for="item-type-email">Email address</label></div>
-<div class="option-row"><input type="radio" id="item-type-messenger" name="item-type"><label for="item-type-messenger">Messenger link</label></div>
+<div class="option-row"><input type="radio" id="item-type-link" name="item-type"><label for="item-type-link">Link</label></div>
 </div>
 </fieldset>
+<div class="field">
+<label for="item-label">Label</label>
+<input type="text" id="item-label" name="item-label" aria-describedby="item-label-count" value="Work mobile">
+</div>
+<p id="item-label-count" class="char-count">11 / 40 characters</p>
+<p class="field-hint-inline">What friends will see this called — "Work mobile", "My photos".</p>
 <div class="field">
 <label for="item-value">Phone number</label>
 <input type="tel" id="item-value" name="item-value">
 </div>
-<p class="field-hint-inline">4 of 12 items used.</p>
+<p class="field-hint-inline">6 of 12 items used.</p>
 <button type="button" class="button">Add to card</button>
+<p class="commentary"><strong>The label is new in v1.29</strong> (§10.2): every item carries one,
+<em>"so that an item is never a naked address."</em> §10.2's own reasoning is worth rendering
+rather than paraphrasing — the label is <strong>new free text on a surface that had none</strong>,
+and the document is rightly hostile to that, so it gets the short bio's treatment: a
+<strong>hard length cap</strong> of <code>CARD_ITEM_LABEL_MAX</code> = 40 characters, and
+<strong><code>NAME_BLOCKLIST</code> screening at every save</strong> (§4.5, §9.4). It carries no
+links of its own: a URL typed into a label is text in a label, and a label is not a delivery
+channel.</p>
+
+<h3>When the label runs past the cap</h3>
+<div class="field">
+<label for="item-label-overlimit">Label</label>
+<input type="text" id="item-label-overlimit" name="item-label-overlimit" aria-describedby="item-label-overlimit-count" aria-invalid="true" value="My photographs from the Cornwall reunion">
+</div>
+<p id="item-label-overlimit-count" class="char-count over-limit">41 / 40 characters — 1 over the
+limit. Shorten the label before you can save this item.</p>
+<p class="commentary">The cap-overrun state reuses <a href="composer.html">the composer's</a>
+established <code>.char-count.over-limit</code> pattern (<code>POST_LENGTH_MAX</code>), for the
+same reason it exists there: text is never silently truncated, and the overrun is reported
+honestly with its own fix named (§16.3, 3.3.1 / 3.3.3).</p>
+
+<h3>When the label is refused by screening</h3>
+<div class="field">
+<label for="item-label-blocked">Label</label>
+<input type="text" id="item-label-blocked" name="item-label-blocked" aria-describedby="item-label-blocked-error" aria-invalid="true">
+</div>
+<p id="item-label-blocked-error" class="field-error">That label isn't allowed on WeeBee. Please
+choose a different one.</p>
+<p class="commentary">§10.2 sends the label through <code>NAME_BLOCKLIST</code> at every save and
+gives no wording for the refusal. This is <strong>not a new invented string</strong>: it is M7's
+already-registered wording for a blocked display name — <em>"That name isn't allowed on WeeBee.
+Please choose a different one"</em> (<code>invite-redeem.html</code>, <code>CRIB.md</code> §2) —
+with the one noun changed, because it is the same screening list refusing the same shape of
+thing. Recorded as a reuse in <code>CRIB.md</code> §2 and <code>mockups/NOTES.md</code> rather
+than registered as a second invention.</p>
 
 <h2>Your items</h2>
 <p>Each item carries its own visibility, set through a three-level cascade: a default for all
@@ -39,7 +89,7 @@ direction. Where a friend belongs to two groups with conflicting settings for th
 more restrictive one wins — deny beats allow. <strong>Accidental under-sharing is recoverable
 (see request flags); accidental over-sharing is not.</strong></p>
 <p class="commentary">§10.3's own reasoning, quoted verbatim above. The request flags it
-mentions are demonstrated on <a href="contact-card-received.html">the received card</a>.</p>
+mentions are demonstrated on <a href="contact-card-received.html">the card page</a>.</p>
 
 <div class="contact-item-editor">
 <h3>Phone</h3>
@@ -99,7 +149,7 @@ that touches only her card.</p>
 
 <div class="contact-item-editor">
 <h3>WhatsApp</h3>
-<p class="contact-card-value">wa dot me slash [David's WhatsApp link]</p>
+<p class="contact-card-value">https://wa.me/447700900123</p>
 <div class="button-row">
 <button type="button" class="button">Edit</button>
 <button type="button" class="button">Remove</button>
@@ -142,7 +192,7 @@ group-save suggestion</a> (§6); deny-beats-allow is §10.3's rule.</p>
 
 <div class="contact-item-editor">
 <h3>Signal</h3>
-<p class="contact-card-value">signal dot me slash [David's Signal link]</p>
+<p class="contact-card-value">https://signal.me/#p/+447700900123</p>
 <div class="button-row">
 <button type="button" class="button">Edit</button>
 <button type="button" class="button">Remove</button>
@@ -163,11 +213,56 @@ all: not greyed out, not listed as withheld, simply absent.</p>
 same absence rule §9.2 uses for hidden posts.</p>
 </div>
 
-<p class="commentary">These are the same four items and the same cascade settings
+<div class="contact-item-editor">
+<h3>Phone number</h3>
+<p class="contact-card-value">07700 900124</p>
+<div class="button-row">
+<button type="button" class="button">Edit</button>
+<button type="button" class="button">Remove</button>
+</div>
+<div class="option-row">
+<input type="checkbox" id="mobile2-default" checked>
+<label for="mobile2-default">On for all friends by default</label>
+</div>
+<p class="field-hint-inline">David added this number and left its label empty, so friends see the
+number on its own. Adding a label would name it for them.</p>
+<p class="commentary">Added in R3 to render the empty-label case, which §13.2 handles explicitly:
+an item with no label is named by <strong>kind and position</strong> in its report action rather
+than by label. Note the tension, recorded in <code>mockups/NOTES.md</code> and not resolved here:
+§10.2 says <em>"every item carries a label,"</em> while §13.2 specifies the behaviour for an item
+<em>"whose label is empty."</em></p>
+</div>
+
+<div class="contact-item-editor">
+<h3>My photos</h3>
+<p class="contact-card-value">https://photos.example.com/david/cornwall-2026</p>
+<div class="button-row">
+<button type="button" class="button">Edit</button>
+<button type="button" class="button">Remove</button>
+</div>
+<div class="option-row">
+<input type="checkbox" id="photos-default" checked>
+<label for="photos-default">On for all friends by default</label>
+</div>
+<p class="field-hint-inline">On for every friend — nothing overrides it.</p>
+<p class="commentary">Added in R3, and it is <strong>the whole reason §10.2 was amended in
+v1.29</strong>: before it, WeeBee had nowhere durable to put <em>"here is my photo album"</em> —
+not the card, not the short bio, not a post. A photo-host link is an ordinary card item and
+renders on <a href="contact-card-received.html">the card page</a> as a
+<strong>copy box</strong>, not a hyperlink, because photo hosts are allowlisted for posts and
+comments rather than for cards (§7.2.3's surface scope). A card with no such item would not show
+what changed.</p>
+</div>
+
+<p class="commentary">The first four items and their cascade settings are the same ones
 <a href="preview-as-friend.html">M4's preview-as-friend.html</a> already established for Alice's
 view of David's card — this page is the owner's side of that same data, plus the "Book club"
-group, added this session purely to demonstrate the deny-beats-allow conflict rule for Tom, who
-was not previously placed in any group. Real checkboxes throughout, each with a visible label, so
+group, added in M5 purely to demonstrate the deny-beats-allow conflict rule for Tom, who
+was not previously placed in any group. The last two items are R3's, for the reasons beside each.
+<strong>Order is load-bearing here</strong>: §13.2 freezes the delivered order in a card report,
+and the two new items are appended rather than inserted so that Alice's resolved card — Signal
+removed by her individual override — reads phone, email, WhatsApp, the unlabelled number, then
+"My photos". Real checkboxes throughout, each with a visible label, so
 the whole cascade is keyboard-operable end to end (§16.3 2.1.1; ARCHITECTURE §3.8) — there is no
 tri-state control anywhere: an override either exists as its own listed row with its own on/off
 checkbox, or it does not exist at all, which is what "use the default" means.</p>

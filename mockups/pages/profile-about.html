@@ -36,13 +36,21 @@ a day to prove, a garden that ignores my schedule entirely, a trail up the ridge
 gotten any shorter since I was twenty. None of it is efficient and I've stopped apologizing for
 that.</p>
 <p>We keep saying we'll finally walk the whole coast path together instead of just the one
-weekend a year we manage — <a href="https://www.openstreetmap.org/">here's the stretch</a> I'm
-angling for next spring, no excuses this time. Always happy to talk baking disasters, terrible
-garden puns, or where to find decent coffee near the ridge trailhead.</p>
-<p class="commentary">Friends only (§9.2) — visible here because Alice, this page's viewer,
-is David's friend. Unlike the short bio, allowlisted links are permitted (§7.2.3), and neither
-bio above carries an "edited" marker or history: a bio is a current description, not a
-statement made at a moment (§9.4, §9.7).</p>
+weekend a year we manage — <a class="url-inline" href="https://www.openstreetmap.org/#map=12/50.24/-5.05">https://www.openstreetmap.org/#map=12/50.24/-5.05</a>
+is the stretch I'm angling for next spring, no excuses this time. Always happy to talk baking
+disasters, terrible garden puns, or where to find decent coffee near the ridge trailhead.</p>
+<p class="commentary">Friends only (§9.2) — visible here because Alice, this page's viewer, is
+David's friend. Neither bio carries an "edited" marker or history: a bio is a current
+description, not a statement made at a moment (§9.4, §9.7). <strong>Two corrections here, both
+from v1.29.</strong> The commentary previously read <em>"allowlisted links are permitted
+(§7.2.3)"</em>, which is the pre-1.29 rule; §9.4 now says the extended bio <em>"follows the
+uniform link rule of §7.2.4 — allowlisted links clickable, anything else an inert copy box,
+blocklisted domains refused."</em> And the line previously rendered <code>&lt;a
+href="…openstreetmap.org/"&gt;here's the stretch&lt;/a&gt;</code> — anchor text that is not the
+URL, which §7.2.4 says cannot exist here: <em>"a URL is linkified as itself, and there is no
+markup with which link text could ever lie about where it goes."</em> The address is now its own
+anchor text. See <code>mockups/NOTES.md</code> for why the hyperlink rendering was chosen over a
+copy box, which this track cannot settle from the documents alone.</p>
 
 <h3>Interests</h3>
 <ul class="hashtag-list">
@@ -60,3 +68,33 @@ built (session M4), so these links resolve once it lands.</p>
 <p class="commentary">Only the friends Alice and David have in common — rendered as names,
 never as a count (§11.5). David and Alice actually share three mutual friends here (Tom, Mom
 and Priya); the idiom names two and folds the rest into "and others," never "and 1 other."</p>
+
+<h3>Contact card</h3>
+<p><a href="contact-card-received.html">See David's contact card</a></p>
+<p class="commentary"><strong>The contact-card control (§9.1, v1.30), in the second of its two
+states.</strong> The About tab's row in §9.1's tab table now reads: short bio, extended bio,
+interest hashtags, the people you both know, <em>"and — friends only — the contact-card control:
+the request, or the link to the card once it has been answered (§10.4, v1.30)."</em> It was
+missing from this page entirely. Alice has already asked, so she gets the link; the state before
+that is below. Both are drawn because the row names both, and a mockup showing one of two states
+shows half a feature.</p>
+
+<h4>Before Alice has asked</h4>
+<p><button type="button" class="button">Request contact card</button></p>
+<p class="field-hint-inline">Nothing to write — asking is the whole of it.</p>
+<p class="commentary">The request is a picker with no text field (§10.4). Answering is automatic,
+and what it opens is a page Alice can return to for as long as the friendship lasts, not a reply
+she is handed once. This second state is rendered here only to show the control's other face; a
+real About tab carries one or the other, never both at once.</p>
+
+<p class="commentary"><strong>Why this was safe to add, and it is worth not making a later reader
+re-derive it.</strong> §9.1 states that <em>"the contact-card control is a control, not a field,
+and the basic-tier invariant below is unaffected."</em> That invariant is load-bearing: the
+header plus About minus the extended bio must stay <strong>exactly</strong> §9.2's basic tier and
+<strong>exactly</strong> what §5.2's friend-request card shows, all three rendered from one
+component with one friends-only flag — if they drift apart, the screening arguments of §5.2 and
+§13.1 quietly stop being true. A control adds <strong>no field</strong> to the About tab and
+appears on <strong>none</strong> of the three surfaces the invariant governs, so the invariant is
+untouched. It sits here rather than in the header because the card is per-friend (§10.3) and the
+request has to live somewhere a friend will find it — and because §9.1's header is closed: the
+photo, the name and the report action, and nothing else.</p>

@@ -4,7 +4,7 @@ Built in session M1. Sessions M2–M8 read this instead of re-deriving constants
 strings, the sample cast, and the relative-age ladder from SPEC.md each time. Add to it as
 later sessions need more of any of these — do not remove or renumber existing entries.
 
-All citations are to SPEC.md at project version 1.30 unless marked ARCHITECTURE.
+All citations are to SPEC.md at project version 1.31 unless marked ARCHITECTURE.
 
 ---
 
@@ -227,6 +227,21 @@ document. Both are this session's own invented wording — *"This page isn't her
 have permission to see it"* (`errors.html`) and *"That name isn't allowed on WeeBee. Please choose
 a different one"* (`invite-redeem.html`) — flagged as invented rather than quoted, in
 `mockups/NOTES.md`.
+
+### §10.2 — The card label refused by `NAME_BLOCKLIST` — **reuse, not a new invention (R3)**
+
+§10.2 screens every card item's label against `NAME_BLOCKLIST` at every save and, like §4.5
+before it, **gives no wording for the refusal**. R3 was licensed to invent one string and did
+not need to: M7's already-registered wording for a blocked display name is the same list
+refusing the same shape of thing, so it is reused with one noun changed.
+
+> *"That label isn't allowed on WeeBee. Please choose a different one."*
+
+M7's original, unchanged and still in use on `invite-redeem.html`, is *"That name isn't allowed
+on WeeBee. Please choose a different one"* — registered in the §9.3/§4.5 entry above. Rendered
+on `contact-card-editor.html` as a field error on the label field (§16.3, 3.3.1 / 3.3.3).
+**R3 registered no new invented string**, so the number of entries marked as invented in this
+file is unchanged at three. Recorded in `mockups/NOTES.md`.
 
 ### §9.4 — The gallery reorder controls' naming pattern (M6)
 
@@ -605,6 +620,20 @@ in progress (it shows the grace-period banner), which isn't the state either lin
 Per the precedent M3, M4 and M6 already set for a link in a file outside the current session's
 touched set (see entries 8, 16, 20, 21, 27 in `mockups/NOTES.md`), `settings.html` is left as
 found; see `mockups/NOTES.md` for the full entry.
+
+**R3 builds one page and keeps one filename** (the 1.27 → 1.30 re-sync, fourth sitting — the
+card cluster). The new page is **`report-card.html`**, the card report form, matching the
+pattern M6 set with `report-post.html` and `report-profile.html`; it is linked from
+`contact-card-received.html` and introduces no forward reference of its own.
+
+**`contact-card-received.html` keeps its name**, though "received" now names the moment the card
+was first asked for rather than what the surface is (§10.4 makes it a page, v1.30). Three files
+link to it, not two: `contact-card-editor.html` (twice) and `preview-as-friend.html` are in R3's
+touched set, but **`index.html:126` is not** — it is explicitly outside R3's permitted pages and
+belongs to close-out, which already owes it a `report-card.html` row and a rewritten M5
+description (`NOTES.md` entry 58). Renaming would have broken a link in a file R3 could not fix,
+which is the precedent entries 8, 16, 20, 21, 27, 37 and 48 already set. If the founder wants the
+rename, close-out is the cheap moment: it touches `index.html` anyway. See `NOTES.md` entry 60.
 
 **M8 builds ten templates in a new directory, `pages/emails/`**, each as an `.html` + `.txt`
 pair: `invite`, `verify-code`, `reset-code`, `email-change-code`, `email-change-notice`,

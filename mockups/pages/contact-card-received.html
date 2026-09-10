@@ -1,50 +1,127 @@
-{{var title=Requesting a contact card}}
-<h1>Requesting a contact card</h1>
-<p class="commentary">SPEC §10.4: a friend requests another friend's contact card via a picker
-— no text — and the system auto-replies with exactly the version of the card that requester is
-permitted to see, resolved through the full visibility cascade of §10.3. This page renders what
-two different requesters get back from David's card, and the request-more-access flags §10.5
-adds on top.</p>
+{{var title=David's contact card}}
+<h1>David's contact card</h1>
+<p>This is where David's contact details live for you. It has its own address, and you reach it
+from the About tab on his profile. Come back to it whenever you need it — for as long as you and
+David are friends, it will be here.</p>
+<p>Nothing here is a copy. Every time you open this page, it is worked out fresh from what David
+is sharing with you right now.</p>
+<p class="commentary">SPEC §10.4, rewritten in v1.30 and clarified in v1.31. This page is
+<strong>one card page per (owner, viewer) pair</strong>, at its own permission-checked address
+(§9.3), reached from the owner's About tab (§9.1), <strong>resolved live on every visit and never
+stored</strong>. It is not a reply, and nothing about it is delivered: the auto-reply of §10.4
+<em>opens</em> this page rather than handing over a copy of it. M5 built this file against the
+pre-1.30 §10.4, which described a one-time reply; R3 rebuilt it rather than editing it, because
+the framing was the thing that was wrong.</p>
 
-<h2>What Alice receives</h2>
-<p>Alice taps "Request contact card" on David's profile — no text field, nothing to type — and
-the system replies immediately with this:</p>
+<h2>What Alice sees</h2>
+<p class="commentary">David's card resolved through the full §10.3 cascade for
+<strong>Alice</strong> specifically — the same viewer, the same cascade settings and the same
+owner-side data as <a href="contact-card-editor.html">the editor</a> and
+<a href="preview-as-friend.html">M4's preview-as-friend.html</a>. Signal is absent because David
+has an individual override turning it off for her alone; an item a viewer may not see is simply
+absent, not greyed out and not listed as withheld.</p>
+
+<p class="profile-preview-name">David Dudek (formerly Dave Dudek)</p>
+<p class="commentary">The owner's display name, rendered live through the shared helper of
+§4.5.1 — never stored on content, so the "(formerly …)" tag renders here exactly as it does in
+the profile header for the rest of <code>NAME_TRANSITION_DAYS</code> = 90 days.</p>
+
 <ul class="contact-card-preview">
-<li>
+<li class="contact-card-item">
 <p class="contact-card-label">Phone</p>
 <p class="contact-card-value">07700 900123</p>
+<button type="button" class="button">Report this item<span class="visually-hidden">, the item labelled 'Phone'</span></button>
 </li>
-<li>
+<li class="contact-card-item">
 <p class="contact-card-label">Personal email</p>
 <p class="contact-card-value">david@example.invalid</p>
+<button type="button" class="button">Report this item<span class="visually-hidden">, the item labelled 'Personal email'</span></button>
 </li>
-<li>
+<li class="contact-card-item">
 <p class="contact-card-label">WhatsApp</p>
-<p class="contact-card-value">wa dot me slash [David's WhatsApp link]</p>
+<p class="contact-card-value"><a class="url-inline" href="https://wa.me/447700900123">https://wa.me/447700900123</a></p>
+<button type="button" class="button">Report this item<span class="visually-hidden">, the item labelled 'WhatsApp'</span></button>
+</li>
+<li class="contact-card-item">
+<p class="contact-card-value">07700 900124</p>
+<button type="button" class="button">Report this item<span class="visually-hidden">, the fourth item, a phone number</span></button>
+</li>
+<li class="contact-card-item">
+<p class="contact-card-label">My photos</p>
+<div class="copy-box">
+<span class="copy-box-address">https://photos.example.com/david/cornwall-2026</span>
+<button class="copy-box-button" type="button">Copy<span class="visually-hidden"> the address https://photos.example.com/david/cornwall-2026</span></button>
+</div>
+<button type="button" class="button">Report this item<span class="visually-hidden">, the item labelled 'My photos'</span></button>
 </li>
 </ul>
-<p class="commentary">The same three items, resolved the same way, as
-<a href="preview-as-friend.html">M4's preview-as-friend.html</a> already showed for David
-previewing Alice's view — Signal is absent because David has an individual override turning it
-off for her specifically (see <a href="contact-card-editor.html">the editor</a>). This is that
-same auto-reply, framed here as what Alice's own request actually returns rather than David's
-preview of it.</p>
+<p class="status-message" role="status" aria-live="polite">Address copied.</p>
 
-<h2>The empty case</h2>
-<p>Henry requests David's card the same way. David has individually turned off both Phone and
-Signal for Henry — the only two items that default on for friends generally — so nothing else on
-the card applies to him either. Henry gets this back:</p>
+<p class="commentary">Three renderings, one rule — §7.2.4, identical on posts, comments and card
+items. <strong>The WhatsApp item is a clickable hyperlink</strong>: messenger domains are
+allowlisted with <strong>card scope</strong> as of v1.29 (§7.2.3), so the same address in a post
+would be a copy box and here it is a link. <strong>"My photos" is an ordinary card item and
+renders as a copy box</strong> — a photo-host link is admitted nowhere on the allowlist's card
+rows, and §10.2 names this case explicitly as the thing v1.29 was amended to make possible. M5
+rendered the WhatsApp item as the obfuscated string <code>wa dot me slash […]</code>, which was
+the pre-1.29 rendering and is now wrong. The copy box, its control's accessible name and the
+polite live region above all compose R2's established markup from
+<code>partials/_post.html</code>; they are not re-invented here.</p>
+
+<p class="commentary"><strong>Every item carries a label</strong> (§10.2), so an item is never a
+naked address — except the fourth, whose label David left empty. That is why its report action is
+named by kind and position instead. Note the ordinal: SPEC's own worked example reads
+<em>"Report the third item, a phone number."</em>, but the position is a property of the card
+being rendered, and on Alice's card this item is the fourth. See <code>mockups/NOTES.md</code>
+for the 2.5.3 composition the visible text forces on both naming forms.</p>
+
+<h2>Coming back to it</h2>
+<p>You can open this page as often as you like. David isn't told when you do, and it doesn't
+count as asking him again.</p>
+<p>If he changes what he shares with you, this page changes with it. Something that was here last
+month may not be here now, and nothing will point that out — the page simply shows what he is
+sharing today.</p>
+<p class="commentary">§10.4, both halves. <strong>Returning is not a new request:</strong> no
+notification — §12.1's contact-card-request notification fires on the request, not on a visit —
+no rate-limit consumption (§13.6), and the owner is told nothing. §10.4 says why the obvious
+implementation matters: treating every view as a request would make a friend's second look at a
+phone number an event in the owner's feed. <strong>The honest consequence</strong> is rendered
+above as real user-facing copy rather than only as commentary, because §10.4 states it plainly
+and it is the cost of live resolution: a friend who returns can tell that something changed,
+because it did, and nothing announces it.</p>
+
+<p class="commentary"><strong>Why the resolution is live, and never stored</strong> — §10.4
+gives three separate grounds. A stored answer would defeat §10.3, whose whole discipline is that
+over-sharing is unrecoverable, so an item switched off has to <em>disappear</em> from the person
+it was switched off for. A stored answer would be <strong>a message</strong>, and the only one on
+the platform — §10.1 refuses the category. And a card does not expire (§9.7), so a stored copy
+would be a copy with no clock at all.</p>
+
+<h2>What Henry sees</h2>
 <p>You haven't shared anything on your contact card with Henry.</p>
-<p class="commentary">Not an error — a real, honest empty state, exactly as the prompt for this
-session asks it to be treated. The specific overrides that produce it are a constructed worked
-example, the same kind of deliberate fact this track has invented before purely to demonstrate a
-mechanism (see NOTES.md on Jordan's characterization) — they say nothing about David and Henry's
-actual relationship.</p>
+<p class="commentary">The empty case, and it is not an error — a real, honest empty state. David
+has individually turned off all four items that default on for friends generally — the phone,
+the unlabelled second number, Signal and "My photos" — and the remaining two are off by default
+and never switched on for him. <strong>An empty card carries no report action at all</strong>
+(§13.2): there is nothing on it to report, and a complaint about the person rather than the card
+is a profile report. The specific overrides producing this are a
+constructed worked example, the same kind of deliberate fact this track has invented before to
+demonstrate a mechanism — they say nothing about David and Henry's actual relationship.</p>
+
+<p class="commentary"><strong>The report action, and its three placement rules</strong> (§13.2,
+v1.30). One real <code>&lt;button&gt;</code> <strong>per item</strong>, never one for the card,
+with the visible text <em>"Report this item"</em> given verbatim by SPEC. It is available to
+anyone this page is available to — a current friend whose request has been answered — and
+<strong>never to the card's owner</strong>, exactly as the profile report is not. §13.2 argues
+the per-item placement in terms: a card may carry <code>CONTACT_ITEMS_MAX</code> = 12 items, and
+an operator opening <em>"someone reported David's card"</em> would have to guess which of the
+twelve. <em>"The card as a whole"</em> is a <strong>reason category</strong> on
+<a href="report-card.html">the report form</a>, reachable from any item's button — not a separate
+control on this page.</p>
 
 <div class="notice">
 <h2>Request more access <em>(may ship in v1.1)</em></h2>
-<p>If the card that comes back isn't enough, the requester can ask for more — without composing
-any text.</p>
+<p>If what's here isn't enough, you can ask David for more — without writing him anything.</p>
 
 <h3>What Henry can do</h3>
 <fieldset>
@@ -72,6 +149,17 @@ it on. No repeat notifications, no nagging.</p>
 visible on Henry's own profile page, to David only, for as long as Henry keeps it on.</p>
 </div>
 
-<p class="commentary">This whole section carries SPEC's own hedge, "may ship in v1.1" (§10.5),
-and is labelled with it here rather than presented as settled v1 — everything above it on this
-page is the v1 card-request flow itself.</p>
+<p class="commentary">This section carries SPEC's own hedge, <em>"may ship in v1.1"</em> (§10.5),
+shown here rather than presented as settled v1 — everything above it is the v1 card page.
+<strong>It stays on this page on the strength of §10.4's v1.31 clarification</strong>, which
+settles a question <code>mockups/NOTES.md</code> entry 51 raised and declined to answer: <em>"and
+nothing else" bounds what the page discloses — the owner's name and the items resolved for this
+viewer — not the controls it carries</em>, and names both the §13.2 report action and §10.5's
+flag as controls rather than disclosed data. §10.4 also observes that these flags <em>"have
+always assumed this page without saying so."</em> A requester who can toggle a flag off at any
+time needs somewhere to return to.</p>
+
+<p class="commentary">The flag's own control is rendered for <strong>Henry</strong>, whose card
+is empty, which is the case §10.5 exists for — under-sharing is the recoverable direction
+(§10.3). Alice's card above carries no such section, because nothing is missing from it that she
+has asked for.</p>
