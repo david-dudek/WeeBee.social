@@ -61,17 +61,22 @@ All fifteen were present when this prompt was written. If one is missing, say so
 
 Read these, and nothing else. In particular **do not read `SPEC.md` or `ARCHITECTURE.md` end to
 end** — the sections you need are already quoted into this prompt, and the two documents are
-223 KB and 139 KB.
+267 KB and 155 KB.
 
 1. **The fifteen core pages** in `mockups/site/`, in full. They are 4–19 KB each. These are what
    you are describing in `BRIEF.md` §5, and you cannot describe them without opening them.
    `index.html` is a map of the whole mockup set and is worth reading first.
-2. **`mockups/CRIB.md` §2**, "Verbatim interface strings" (roughly lines 66–265). This is the
+2. **`mockups/CRIB.md` §2**, "Verbatim interface strings" (lines 78–407). This is the
    source for `BRIEF.md` §6. Do not re-read §1; its constants are already transcribed into this
    prompt in Step 3.
-3. **`SPEC.md` §1.1–§1.3** (lines 10–38) and **§17** (lines 1122–1128), for the mission and the
+3. **`SPEC.md` §1.1–§1.3** (lines 12–37) and **§17** (lines 1310–1317), for the mission and the
    non-goals list, if you want the primary text behind §2 and §4 of the brief. Optional — both
-   are already summarised below.
+   are already summarised below. Line numbers are correct at 1.31; the section number is
+   authoritative if the file has moved.
+4. **`SPEC.md` §1.5, The Delegation Principle** (lines 63–86), which is newer than this prompt
+   and is what fact 13 now carries: WeeBee's refusals are handoffs, and *"a refusal that does not
+   name the door out is an incomplete application of this principle."* Optional, but it is the
+   one section that explains why fact 13 reads as it does.
 
 **Note on reading the pages.** Every mockup page carries two kinds of sentence: *simulated
 content* — what WeeBee would actually say to a user — and *commentary*, build notes to the
@@ -95,7 +100,8 @@ prevent.
 ### `# BRIEF.md — shared reference for the archetype track`
 
 Open with two or three lines of your own: what this file is, that it was built in session A0,
-and that it is written against project version 1.27 and the mockup set as built through M8.
+and that it is written against project version 1.31 and the mockup set as re-synced through the
+card cluster.
 
 ### `## 0. How to use this file`
 
@@ -171,15 +177,24 @@ Then, verbatim:
 >     carry up to 10 on your profile. Putting one on a blog post is what lets a friend-of-friend
 >     carrying the same interest see that post — so tagging is an audience decision, not filing.
 >     There is no way to browse everything tagged with anything. (§11.2, §11.3)
-> 12. **There are no private messages.** Instead you keep a contact card — up to 12 phone numbers,
->     email addresses and messenger links — and decide, item by item and friend by friend, who
->     sees what. A friend requests it with a button and the system replies with exactly their
->     version. The conversation itself happens somewhere else. (§10)
-> 13. **One image per post, and no video or audio at all.** Links only from a list of approved
->     sites, and even then as plain clickable links, never embedded players or preview cards. No
->     polls. Location data is stripped from every image on upload. Every image asks you to
->     describe it in your own words — and in your gallery that description *is* the caption,
->     because there is no separate caption field. (§7.2, §7.2.2, §9.4, §16.3)
+> 12. **There are no private messages.** Instead you keep a contact card — up to 12 items, each
+>     one a phone number, an email address or a link, each with a short label you write — and
+>     decide, item by item and friend by friend, who sees what. A friend asks for it with a
+>     button, with nothing to type, and that opens a page they can come back to for as long as
+>     you are friends. It is worked out fresh every time they open it: switch an item off and it
+>     is simply gone from their page, and nothing announces the change. The conversation itself
+>     happens somewhere else. (§10)
+> 13. **One image per post, and no video or audio at all.** You can put any web address here, and
+>     what happens to it depends on the address: ones from a short list WeeBee approves — maps,
+>     ticketing, photo and video hosts — become links your friends can tap; anything else arrives
+>     as an address they copy, with no fuss made about it and nothing suggesting you did anything
+>     wrong; a very few are refused outright. No polls. Location data is stripped from every image
+>     on upload. Every image asks you to describe it in your own words — and in your gallery that
+>     description *is* the caption, because there is no separate caption field. **And where WeeBee
+>     stops, it tells you where to go instead:** what it cannot hold, it expects you to keep
+>     wherever you already keep it and link to from here — *"WeeBee holds one photo per post. If
+>     you have sixty, they live somewhere else — link to them here."*
+>     (§1.5, §7.2, §7.2.2, §7.2.4, §9.4, §16.3)
 > 14. **It is a website, and it is for individual people.** No phone app in version one. No
 >     business, brand, organisation or bot accounts. There are no ads and no tracking of any
 >     kind, and mandatory subscriptions are ruled out. (§2, §15.2, §15.3, §15.4, §17)
@@ -191,7 +206,7 @@ Close the section with this line, verbatim:
 
 ### `## 3. The constants that bite`
 
-*(~650 words.)* Copy this table. Every row was verified against `SPEC.md` v1.27 via
+*(~650 words.)* Copy this table. Every row was verified against `SPEC.md` v1.31 via
 `mockups/CRIB.md` §1. You may add a row if a core page shows you a constant that matters and is
 missing here; do not remove one, and do not change a value.
 
@@ -209,7 +224,7 @@ missing here; do not remove one, and do not change a value.
 | `PROFILE_HASHTAG_MAX` | 10 | §11.2 | Interests on a profile. |
 | `CONTACT_ITEMS_MAX` | 12 | §10.2 | Items on a contact card. |
 | `BIO_SHORT_MAX` | 200 chars | §9.4 | Short bio. Visible to friends-of-friends; never renders a clickable link. |
-| `BIO_EXTENDED_MAX` | 2,000 chars | §9.4 | Extended bio. Friends only; allowlisted links permitted. |
+| `BIO_EXTENDED_MAX` | 2,000 chars | §9.4 | Extended bio. Friends only, and it follows the uniform link rule of §7.2.4 — allowlisted links clickable, anything else an inert copy box, blocklisted domains refused. |
 | `POST_LENGTH_MAX` | 10,000 chars | §7.2.1 | |
 | `COMMENT_LENGTH_MAX` | 2,000 chars | §8.1 | Comments are flat — one linear list per post, no nested replies. |
 | `FEED_FOLD_CHARS` | 500 | §7.7 | Long posts fold in the feed and on the Pinned tab, with a "read more" that expands in place. |
@@ -229,6 +244,17 @@ missing here; do not remove one, and do not change a value.
 | `NAME_TRANSITION_DAYS` | 90 | §4.5.1 | A changed display name shows as "New (formerly Old)" for 90 days. |
 | `INACTIVITY_DELETE_DAYS` | 730 | §4.8 | Two years without a login deletes the account, after email warnings at 180, 365, 670 and 700 days. |
 | `DELETE_GRACE_DAYS` | 30 | §4.7 | A user-deleted account is recoverable for 30 days. |
+| `CARD_ITEM_LABEL_MAX` | 40 chars | §10.2 | The short label on every contact-card item — *"My photos"*, *"Work mobile"* — so an item is never a naked address. Capped hard and screened against `NAME_BLOCKLIST` at every save. |
+| URL allowlist | operator-curated | §7.2.3 | Decides what becomes a **clickable link**. Three admitting categories: convening (maps, invitations and RSVPs, calendars, ticketing, venue and restaurant pages); hosting what WeeBee holds none of or only a courtesy minimum of (video, audio, photographs); and handoff (official messenger domains). Every row also carries a **surface scope** — posts and comments, contact cards, or both. Messenger domains are card-only; maps, ticketing, media and photo hosts are posts-and-comments. |
+| URL blocklist | operator-curated | §7.2.3, §7.2.4 | Domains refused outright, in any form, on every surface. Checked by the same validator as the allowlist, on every save path, create and edit alike. Retired by deactivating a row, never deleting it. There is no appeal channel, and that is a decision rather than an omission. |
+
+**Two of those rows are not constants at all, and `BRIEF.md` must not render them as if they
+were.** The URL allowlist and the URL blocklist are **operator-maintained tables**, kept in the
+operator console beside each other — §7.2.3 says of the blocklist in terms that it is *"a table,
+maintained by the operator in the console alongside the allowlist … never a constant in code,"*
+and `mockups/CRIB.md` §1 carries the same warning. Write them in plain words with **no
+backticks**: never `URL_BLOCKLIST`, never monospace, never an invented constant name.
+`CARD_ITEM_LABEL_MAX` is an ordinary code constant and keeps its backticks.
 
 ### `## 4. What is absent`
 
@@ -302,6 +328,13 @@ might plausibly read aloud or react to. Include at minimum, verbatim:
 - The reaction line idiom *"Alice: Love it! · Mom: So proud!"* and the react control's two states,
   *"React"* and *"Reacted: Love it!"* (§8.2, §8.2.2).
 - The notification wordings of §12.2, including the *"and others"* overflow form.
+- The two §7.2.3 hosting lines — the one about video and audio, and the one about photographs.
+  Both are registered verbatim in `mockups/CRIB.md` §2, which notes that SPEC requires them to
+  stay exactly as written, so they are quotations rather than paraphrases. **Copy them from
+  `CRIB.md` §2, character for character.**
+- The §13.2 contact-card report strings: the button's visible text, and both of its
+  accessible-name forms — the one taken from an item's own label, and the one for an item whose
+  label is empty, named by kind and position instead. All are in `mockups/CRIB.md` §2.
 
 Add any others you find on the pages. Mark each with its SPEC section.
 

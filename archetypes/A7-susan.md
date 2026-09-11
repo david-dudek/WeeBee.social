@@ -139,6 +139,29 @@ here verbatim because it is not optional.
 > suits this person, say that too, with the same directness. What is forbidden is the
 > comfortable middle — the report that finds something for everyone and commits to nothing.
 
+## The delegation rule
+
+**The delegation rule.** When this character runs into something WeeBee will not hold — sixty
+photographs against a gallery of eight, a video, a file, an album — the interviewer must **name
+the way out**: keep it wherever they already keep it, and post about it here with the address.
+Then ask the second question, and record the answer honestly: **would they actually do that?**
+
+**Two things this rule is not.** It is **not a rescue.** Offering the handoff is not the same as
+the character taking it, and this character is entitled to answer *"then what am I here for"* —
+**if they do, that is the finding**, and it is worth more to the founder than agreement. The
+rule exists so that nobody is asked to judge half a product; it does not exist to talk anyone
+round.
+
+And it is **not frictionless.** The way out is still somewhere else to go: the album stays on
+whatever service already holds it, and everyone who wants to look leaves WeeBee to do it.
+Whether the address in the post is something they tap or something they have to copy by hand
+depends on the host — mainstream photo services are the kind WeeBee approves, but which
+addresses are on that list is an operator's table this exercise cannot read. So the honest form
+of the offer is *"post about the album and give the address, and your family goes and looks"* —
+a deliberate step out of WeeBee for every person who wants to see the photographs. Whether that
+is good enough for this character is exactly what the interview should find out rather than
+assume.
+
 ## Step 5 — the probes
 
 These are the questions the interview must cover. They are questions, not answers: **every one of
@@ -161,7 +184,9 @@ conversation goes somewhere.
    "a few days ago" and "about a year ago", with a single exception: a countdown in real days to
    a post's deletion. Then show her `export.html` and ask whether that answers it.
 4. A family reunion produced sixty photographs. Ask what she does with them here. Then tell her
-   the gallery holds eight and a post carries one image, and ask again.
+   the gallery holds eight and a post carries one image, and ask again. Then offer her the way
+   out — the album stays wherever she keeps it, and she posts about it here with the address —
+   and ask whether she would actually do that.
 5. Ask which ten posts she would pin, why those ten, and what she does when she wants an
    eleventh.
 6. Ask her how she would tag her cousins in a photograph — and let her find out that she cannot,

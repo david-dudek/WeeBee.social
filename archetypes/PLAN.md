@@ -1,7 +1,8 @@
 # archetypes/PLAN.md — the track design
 
-Written in the planning session on the `archetypes` branch, against project version 1.27 and
-the mockup set as built through M8. This file is the design of the exercise: the file list, the
+Written in the planning session on the `archetypes` branch, against project version 1.27, and
+re-synced to **1.31** by a later session on the same branch; the mockup set is as re-synced
+through the card cluster. This file is the design of the exercise: the file list, the
 report skeleton, what goes in the shared brief, the running order, and the budget. It is **not**
 a session prompt and nothing in the track reads it except the founder and whoever writes the
 nine remaining character prompts.
@@ -107,7 +108,7 @@ One explanation, adapted per person. A0 writes this into `BRIEF.md` §2. Each ch
 language than Mike does; neither is told about a different product, and neither is spared a
 fact they would object to.
 
-Verified against SPEC.md at v1.27. Citations are SPEC unless marked.
+Verified against SPEC.md at v1.31. Citations are SPEC unless marked.
 
 1. **You cannot join on your own.** The only way in is a personal invitation from someone
    already on WeeBee, sent by email as a single-use code that expires in 14 days. When you
@@ -158,15 +159,24 @@ Verified against SPEC.md at v1.27. Citations are SPEC unless marked.
     carry up to 10 on your profile. Putting one on a blog post is what lets a friend-of-friend
     carrying the same interest see that post — so tagging is an audience decision, not filing.
     There is no way to browse everything tagged with anything. (§11.2, §11.3)
-12. **There are no private messages.** Instead you keep a contact card — up to 12 phone numbers,
-    email addresses and messenger links — and decide, item by item and friend by friend, who
-    sees what. A friend requests it with a button and the system replies with exactly their
-    version. The conversation itself happens somewhere else. (§10)
-13. **One image per post, and no video or audio at all.** Links only from a list of approved
-    sites, and even then as plain clickable links, never embedded players or preview cards. No
-    polls. Location data is stripped from every image on upload. Every image asks you to
-    describe it in your own words — and in your gallery that description *is* the caption,
-    because there is no separate caption field. (§7.2, §7.2.2, §9.4, §16.3)
+12. **There are no private messages.** Instead you keep a contact card — up to 12 items, each
+    one a phone number, an email address or a link, each with a short label you write — and
+    decide, item by item and friend by friend, who sees what. A friend asks for it with a
+    button, with nothing to type, and that opens a page they can come back to for as long as
+    you are friends. It is worked out fresh every time they open it: switch an item off and it
+    is simply gone from their page, and nothing announces the change. The conversation itself
+    happens somewhere else. (§10)
+13. **One image per post, and no video or audio at all.** You can put any web address here, and
+    what happens to it depends on the address: ones from a short list WeeBee approves — maps,
+    ticketing, photo and video hosts — become links your friends can tap; anything else arrives
+    as an address they copy, with no fuss made about it and nothing suggesting you did anything
+    wrong; a very few are refused outright. No polls. Location data is stripped from every image
+    on upload. Every image asks you to describe it in your own words — and in your gallery that
+    description *is* the caption, because there is no separate caption field. **And where WeeBee
+    stops, it tells you where to go instead:** what it cannot hold, it expects you to keep
+    wherever you already keep it and link to from here — *"WeeBee holds one photo per post. If
+    you have sixty, they live somewhere else — link to them here."*
+    (§1.5, §7.2, §7.2.2, §7.2.4, §9.4, §16.3)
 14. **It is a website, and it is for individual people.** No phone app in version one. No
     business, brand, organisation or bot accounts. There are no ads and no tracking of any
     kind, and mandatory subscriptions are ruled out. (§2, §15.2, §15.3, §15.4, §17)
@@ -311,6 +321,12 @@ tokens each. Every filename below was verified present in `mockups/site/` during
 | 9 | Lisa | `post-editor.html`, `preview-as-fof-tagged.html` | curation after the fact; the widest audience she can reach |
 | 10 | Mike | `invites.html`, `friend-requests-sent.html`, `introduction-broker.html` | every mechanism he would use to collect, and every ceiling on it |
 
+**One page that did not exist when this table was written.** `report-card.html` — the
+contact-card report form (§13.2, added in v1.30) — is now in the mockup set. It is a plausible
+extra for whoever writes A5, since Karen is the character pointed at the report flows. **It is
+deliberately not added to her row**: choosing a character's pages is one of the four things §7
+reserves to the prompt that builds that character.
+
 **One addition to the founder's proposed list, flagged rather than made silently:**
 `export.html` is added to Susan's extras. Her central collision is the 90-day expiry, and the
 export is the only answer the platform has to it — `export.html` states in its own copy that the
@@ -322,7 +338,8 @@ the answer. Extras are not exclusive; Tyler keeps it too.
 
 ## 9. The constraints that do the work
 
-Every constant verified against `SPEC.md` v1.27 and `mockups/CRIB.md` §1 during planning. This
+Every constant verified against `SPEC.md` v1.31 and `mockups/CRIB.md` §1 — during planning at
+v1.27, and re-checked for the link and contact-card rows in the 1.31 re-sync. This
 table is raw material for writing A1–A6 and A8–A10 — **it is not copied into `BRIEF.md`**, which
 stays neutral about the ten.
 
@@ -330,12 +347,12 @@ stays neutral about the ten.
 |---|---|---|
 | 1 Joe Blah | Feed is strictly reverse-chronological with no ranking, no suggested content, no inserted people — there is no algorithm to put anything in front of him; reactions are author-private so his silence is unreadable either way; no view counts or "seen by"; invite-only and no public content mean he cannot lurk without an account and a vouching friend; `INACTIVITY_DELETE_DAYS` = 730 never touches a daily visitor | §7.7, §8.2, §17, §4.1, §2, §4.8 |
 | 2 Mary Jane | `POST_AUDIENCE_MAX` = 30 per feed post; `POST_MIN_INTERVAL_MINUTES` ≈ 10 between them; `FRIEND_CAP` = 300 ceiling; no reshare; no counts of any kind; reactions are ~6 fixed phrases only she sees; comments *do* exist and are real feedback; preview-as lets her check exactly what her boss sees; **no way to tag a person** (verified absent) ends "tags people in old photos" | §7.1, §13.6, §5.1, §1.2, §17, §8.2, §8.1, §9.5 |
-| 3 Dorothy | No reshare or forward button of any kind — her entire mode of use has no control; the URL allowlist rejects non-approved links **at composition time with an honest error**; only friends-of-friends may send friend requests, so "hundreds of friends she has never met" cannot form; `FRIEND_CAP` = 300; hashtags cannot be free-typed; every image asks for a description she writes (the glare photos); `GALLERY_MAX` = 8 | §1.2, §7.2, §7.2.3, §5.2, §5.1, §11.2, §16.3, §9.4 |
+| 3 Dorothy | No reshare or forward button of any kind — her entire mode of use has no control; a non-approved link is **no longer refused** — it is delivered as an inert copy box rather than a tappable link, with no error and nothing telling her off, and only a blocklisted domain is refused at all; only friends-of-friends may send friend requests, so "hundreds of friends she has never met" cannot form; `FRIEND_CAP` = 300; hashtags cannot be free-typed; every image asks for a description she writes (the glare photos); `GALLERY_MAX` = 8 | §1.2, §7.2, §7.2.3, §7.2.4, §5.2, §5.1, §11.2, §16.3, §9.4 |
 | 4 Jim Roxx | `POST_MIN_INTERVAL_MINUTES` ≈ 10 stops the flyer going up six times in an evening; **no person-tagging** (verified absent) ends "personally tags everyone"; no business or brand accounts, so The Afterburners cannot have a page; no video or audio hosting, and allowlisted media links never embed as players; one image per post; no events system; groups capped at `GROUP_SIZE_MAX` = 30, which is exactly a valid post audience; profile hashtags gating FoF visibility genuinely works in his favour | §13.6, §15.4, §7.2, §17, §6, §11.3 |
 | 5 Karen | Comments are flat — no nested replies, so a 47-response thread is a single column; `COMMENT_LENGTH_MAX` = 2,000 and `COMMENT_FOLD_CHARS` = 300; **the post's author can delete any comment on their post** and can never edit one; unfriending and blocking are both silent; report reasons are a fixed list; on a profile post her words are readable by all the author's friends, who may be strangers to her; the whole thread evaporates at 90 days; there is no public content and nothing trending to have an opinion *about* — only what her friends chose to send her | §8.1, §5.3, §5.4, §13.2, §7.5, §7.7 |
 | 6 Tyler | **No video or audio at all** — his medium is absent; nothing is counted, so "deletes what doesn't get enough engagement" has no input to run on; no reshare and no virality; no public or logged-out pages, so nothing he makes can reach a non-member; no business accounts and no sponsorship surface; no trending and no global hashtag browsing; `FRIEND_CAP` = 300 is the ceiling on any audience he can ever build; 90-day expiry deletes the portfolio, `PIN_LIMIT` = 10 is the whole exemption; export is the exit | §7.2, §17, §1.2, §2, §15.4, §11.2, §5.1, §7.5, §7.6, §4.9 |
 | 7 Susan | `CONTENT_TTL_DAYS` = 90; `PIN_LIMIT` = 10, and **pinning preserves her post but never the comments or reactions on it, with nothing marking that they existed**; `GALLERY_MAX` = 8 with no album concept; one image per post; **no person-tagging** (verified absent); no gallery captions — the description is the caption; **no absolute dates anywhere in the interface** and no date-based archive; **"you have memories!" is named in SPEC as the banned example of an engagement-bait notification**; minimum age 18, so grandchildren cannot be on it; the data export is the one place exact timestamps live | §7.5, §7.6, §9.4, §7.2, §17, §7.5.1, §7.7.1, §12.2, §4.4, §4.9 |
-| 8 Dave Crypto | The URL allowlist rejects the basement-video link at composition with an honest error naming the alternative; no reshare; **there are no strangers to argue with** — only FoFs may friend-request, and only people who can see a post may comment on it; no public content, no global search, no global hashtag browsing; discovery stops permanently at one hop, so a community of the like-minded cannot assemble; one image per post caps the screenshot-and-chart habit; the three operator outcomes are defined — delete content, warn by email with no link, or ban, which hides everything reversibly and **hides his words rather than deleting them**; the invite tree records who let him in | §7.2.3, §1.2, §5.2, §8.1, §17, §11.1, §7.2, §13.2.1, §4.3 |
+| 8 Dave Crypto | The basement-video link is **not refused** — an address on neither operator list is delivered as an inert copy box with no error and no reproach, and only a blocklisted domain is refused at composition; no reshare; **there are no strangers to argue with** — only FoFs may friend-request, and only people who can see a post may comment on it; no public content, no global search, no global hashtag browsing; discovery stops permanently at one hop, so a community of the like-minded cannot assemble; one image per post caps the screenshot-and-chart habit; the three operator outcomes are defined — delete content, warn by email with no link, or ban, which hides everything reversibly and **hides his words rather than deleting them**; the invite tree records who let him in | §7.2.3, §7.2.4, §1.2, §5.2, §8.1, §17, §11.1, §7.2, §13.2.1, §4.3 |
 | 9 Lisa | Nothing is counted, so the mirror returns nothing; preview-as is the feature built for exactly her instinct; profile state — photo, both bios, gallery, interests — **does not expire**, which is the half of the platform that suits her; posts do, at 90 days, with 10 pins as the exemption; `GALLERY_MAX` = 8; hashtag-gated FoF visibility is the only route by which a non-friend ever sees anything of hers; a blog post reaches all 300 friends by pull; **no person-tagging** (verified absent) | §17, §9.5, §9.7, §7.5, §7.6, §9.4, §11.3, §7.1 |
 | 10 Mike | `FRIEND_CAP` = 300 against 4,800, and an action that would breach it **fails with a clear, honest error, never silently**; only FoFs may request, so the gaming-community contacts cannot be added at all; invites are `INVITE_BANK_MAX` = 5, +1 per 30 days, 2 for a new account; 20 friend requests and 10 introductions a day; an introduction needs **both** parties to accept; no DMs — a contact card instead; the friend list sorts alphabetically and nothing else, with a filter box labelled "Filter your friends"; unfriending is silent, so churn beneath the cap is invisible in both directions | §5.1, §5.2, §4.2, §13.6, §5.5, §10, §11.6, §5.3 |
 
